@@ -13,10 +13,12 @@
   "dependencies": {
     "@tailwindcss/vite": "^4.0.0",
     "@tanstack/react-query": "^5.64.2",
+    "@xstate/react": "^5.0.2",
     "lucide-react": "^0.473.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "tailwindcss": "^4.0.0"
+    "tailwindcss": "^4.0.0",
+    "xstate": "^5.19.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
