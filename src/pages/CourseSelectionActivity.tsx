@@ -1,25 +1,21 @@
 import { AppScreen } from '@stackflow/plugin-basic-ui';
 import { ActivityComponentType } from '@stackflow/react';
+import AppBar from '../components/AppBar';
 import { useFlow } from '../stackflow';
 
-interface CourseSelectionParams {
-  title: string;
-}
-
-const CourseSelectionActivity: ActivityComponentType<CourseSelectionParams> = ({
-  params: { title },
-}) => {
-  const { pop } = useFlow();
+const CourseSelectionActivity: ActivityComponentType = () => {
+  const { push } = useFlow();
 
   const handleClickButton = () => {
-    pop();
+    push('OnboardingActivity', {});
   };
 
   return (
     <AppScreen>
-      <div className="min-h-screen px-2 py-8">
+      <div className="min-h-screen py-12">
+        <AppBar progress={100} />
         <div className="flex flex-col items-center">
-          <h1>{title}</h1>
+          <div>CourseSelection Page</div>
           <button onClick={handleClickButton}>Go to Onboarding page</button>
         </div>
       </div>
