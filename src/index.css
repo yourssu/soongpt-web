@@ -2,5 +2,19 @@
 
 @theme {
   --font-pretendard: 'Pretendard Variable', sans-serif;
+  --color-primary: #674fd0;
   --color-progress-bar: #6b5cff;
+  --color-basic-light: #f7f8f8;
+  --color-list: #686868;
+  --color-ring: hsl(240 5% 64.9%);
+}
+
+@layer base {
+  body {
+    color: #292929;
+  }
+
+  input::placeholder {
+    color: #cfcfcf;
+  }
 }
