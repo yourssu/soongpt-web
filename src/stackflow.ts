@@ -16,5 +16,5 @@ export const { Stack, useFlow } = stackflow({
     OnboardingActivity,
     CourseSelectionActivity,
   },
-  initialActivity: () => 'OnboardingActivity',
+  initialActivity: () => 'CourseSelectionActivity',
 });
