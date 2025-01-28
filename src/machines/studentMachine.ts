@@ -1,9 +1,11 @@
 import { assign, setup } from 'xstate';
 
+export type Grade = 1 | 2 | 3 | 4 | 5;
+
 interface Context {
   department: string; // 학과
   admissionYear: number; // 입학년도
-  grade: 1 | 2 | 3 | 4 | 5; // 학년
+  grade: Grade; // 학년
   chapel: boolean; // 채플 수강 여부
 }
 
