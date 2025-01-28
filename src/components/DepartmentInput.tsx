@@ -1,5 +1,5 @@
 import { Check } from 'lucide-react';
-import { motion } from 'motion/react';
+import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
 
 const allDepartments = [
@@ -43,13 +43,12 @@ const DepartmentInput = ({ onNext }: DepartmentInputProps) => {
 
     // 라벨 보이기
     setShowLabel(true);
-
     // 다음 단계로 넘어가기
     onNext(department);
   };
 
   return (
-    <>
+    <div className="relative">
       {showLabel && <label className="mb-1.5 block text-sm">학과</label>}
       <input
         type="text"
@@ -58,33 +57,36 @@ const DepartmentInput = ({ onNext }: DepartmentInputProps) => {
         className="bg-basic-light text-primary focus-visible:ring-ring w-full rounded-lg px-4 py-3 text-lg font-semibold focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-none"
         placeholder="학과"
       />
-      {matchingDepartments.length > 0 && (
-        <motion.ul
-          initial={{
-            opacity: 0,
-            y: -10,
-          }}
-          animate={{
-            opacity: 1,
-            y: 0,
-          }}
-          transition={{ duration: 0.3 }}
-          className="bg-basic-light mt-2 rounded-lg border border-gray-200 shadow-sm"
-        >
-          {matchingDepartments.map((dept, index) => (
-            <li key={index}>
-              <button
-                className="text-list flex w-full items-center justify-between rounded-lg px-4 py-3 text-lg font-semibold hover:bg-gray-100"
-                onClick={() => handleDepartmentSelect(dept)}
-              >
-                {dept}
-                {department === dept && <Check className="size-4 text-green-500" />}
-              </button>
-            </li>
-          ))}
-        </motion.ul>
-      )}
-    </>
+      <AnimatePresence>
+        {matchingDepartments.length > 0 && (
+          <motion.ul
+            initial={{
+              opacity: 0,
+              y: -10,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+            className="bg-basic-light absolute z-10 mt-2 w-full rounded-lg border border-gray-200 shadow-sm"
+          >
+            {matchingDepartments.map((dept, index) => (
+              <li key={index}>
+                <button
+                  className="text-list flex w-full items-center justify-between rounded-lg px-4 py-2 text-lg font-semibold hover:bg-gray-100"
+                  onClick={() => handleDepartmentSelect(dept)}
+                >
+                  {dept}
+                  {department === dept && <Check className="size-4 text-green-500" />}
+                </button>
+              </li>
+            ))}
+          </motion.ul>
+        )}
+      </AnimatePresence>
+    </div>
   );
 };
 
