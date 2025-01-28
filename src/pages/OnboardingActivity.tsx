@@ -18,8 +18,8 @@ const OnboardingActivity: ActivityComponentType = () => {
         <AppBar progress={100} />
         <div className="mt-15 flex flex-col items-center">
           <h2 className="text-[28px] font-semibold">사용자님에 대해 알려주세요!</h2>
-          <span className="mt-2 font-light">시간표를 만들기 위한 최소한의 정보가 필요해요.</span>
-          <div className="mt-15 flex w-full flex-col gap-6 px-12">
+          <span className="mt-1 font-light">시간표를 만들기 위한 최소한의 정보가 필요해요.</span>
+          <div className="mt-12 flex w-full flex-col gap-6 px-12">
             {state.matches('채플수강여부입력') && <ChapelInput />}
 
             {(state.matches('학년입력') || state.matches('채플수강여부입력')) && (
@@ -50,6 +50,14 @@ const OnboardingActivity: ActivityComponentType = () => {
               onNext={(department) => send({ type: '학과입력완료', payload: { department } })}
             />
           </div>
+          {state.matches('채플수강여부입력') && (
+            <button
+              type="button"
+              className="bg-progress-bar mt-14 w-50 rounded-2xl py-3.5 font-semibold text-white"
+            >
+              다 입력했어요
+            </button>
+          )}
         </div>
       </div>
     </AppScreen>
