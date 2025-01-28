@@ -42,11 +42,12 @@ const AdmissionYearInput = ({ onNext }: AdmissionYearInputProps) => {
           className="bg-basic-light focus-visible:ring-ring flex w-full items-center justify-between rounded-lg px-4 py-3 focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-none"
           onClick={() => setShowDropdown(!showDropdown)}
         >
-          <span
+          <button
+            type="button"
             className={`text-lg font-semibold ${admissionYear ? 'text-primary' : 'text-placeholder'}`}
           >
             {admissionYear ?? '입학년도(학번)'}
-          </span>
+          </button>
           <ChevronDown className="size-4" />
         </div>
         <AnimatePresence>
@@ -69,6 +70,7 @@ const AdmissionYearInput = ({ onNext }: AdmissionYearInputProps) => {
               {admissionYears.map((year) => (
                 <li key={year}>
                   <button
+                    type="button"
                     className="text-list flex w-full items-center justify-between rounded-lg px-4 py-2 text-lg font-semibold hover:bg-gray-100"
                     onClick={() => {
                       handleAdmissionYearSelect(year);

@@ -75,6 +75,7 @@ const DepartmentInput = ({ onNext }: DepartmentInputProps) => {
             {matchingDepartments.map((dept, index) => (
               <li key={index}>
                 <button
+                  type="button"
                   className="text-list flex w-full items-center justify-between rounded-lg px-4 py-2 text-lg font-semibold hover:bg-gray-100"
                   onClick={() => handleDepartmentSelect(dept)}
                 >
