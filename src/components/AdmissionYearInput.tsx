@@ -53,7 +53,7 @@ const AdmissionYearInput = ({ onNext }: AdmissionYearInputProps) => {
         <AnimatePresence>
           {showDropdown && (
             <motion.ul
-              className="bg-basic-light absolute z-10 mt-2 max-h-44 w-full overflow-y-auto rounded-lg border border-gray-200 shadow-sm"
+              className="bg-basic-light absolute z-10 mt-2 max-h-55 w-full overflow-y-auto rounded-lg border border-gray-200 shadow-sm"
               initial={{ opacity: 0, y: -10 }}
               animate={{
                 opacity: 1,
