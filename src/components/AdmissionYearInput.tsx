@@ -1,6 +1,7 @@
 import { Check, ChevronDown } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
+import { useDropdown } from '../hooks/useDropDown';
 
 const admissionYears = [25, 24, 23, 22, 21, 20, 19, 18];
 
@@ -10,22 +11,8 @@ interface AdmissionYearInputProps {
 
 const AdmissionYearInput = ({ onNext }: AdmissionYearInputProps) => {
   const [admissionYear, setAdmissionYear] = useState<number>();
-  const [showDropdown, setShowDropdown] = useState(false);
   const [showLabel, setShowLabel] = useState(false);
-  const dropDownRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropDownRef.current && !dropDownRef.current.contains(event.target as Node)) {
-        setShowDropdown(false);
-      }
-    };
-
-    document.addEventListener('click', handleClickOutside);
-    return () => {
-      document.removeEventListener('click', handleClickOutside);
-    };
-  });
+  const [showDropdown, setShowDropdown, dropDownRef] = useDropdown();
 
   const handleAdmissionYearSelect = (year: number) => {
     setAdmissionYear(year);
