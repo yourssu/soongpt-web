@@ -8,6 +8,7 @@
   --color-list: #686868;
   --color-ring: hsl(240 5% 64.9%);
   --color-placeholder: #cfcfcf;
+  --color-hint: #b5b9c4;
 }
 
 @layer base {
