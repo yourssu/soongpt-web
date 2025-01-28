@@ -1,4 +1,4 @@
-import { Check, ChevronDown } from 'lucide-react';
+import { Check, ChevronDown, Info } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
 import { useDropdown } from '../hooks/useDropDown';
@@ -43,9 +43,12 @@ const GradeInput = ({ onNext }: GradeInputProps) => {
           className="bg-basic-light focus-visible:ring-ring flex w-full items-center justify-between rounded-lg px-4 py-3 focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-none"
           onClick={() => setShowDropdown(!showDropdown)}
         >
-          <span className={`text-lg font-semibold ${grade ? 'text-primary' : 'text-placeholder'}`}>
+          <button
+            type="button"
+            className={`text-lg font-semibold ${grade ? 'text-primary' : 'text-placeholder'}`}
+          >
             {grade ?? '학년'}
-          </span>
+          </button>
           <ChevronDown className="size-4" />
         </div>
         <AnimatePresence>
@@ -68,6 +71,7 @@ const GradeInput = ({ onNext }: GradeInputProps) => {
               {grades.map((gradeOption) => (
                 <li key={gradeOption}>
                   <button
+                    type="button"
                     className="text-list flex w-full items-center justify-between rounded-lg px-4 py-2 text-lg font-semibold hover:bg-gray-100"
                     onClick={() => {
                       handleGradeSelect(gradeOption);
@@ -81,6 +85,10 @@ const GradeInput = ({ onNext }: GradeInputProps) => {
             </motion.ul>
           )}
         </AnimatePresence>
+        <div className="text-hint mt-1.5 flex items-center gap-2">
+          <Info className="size-3" />
+          <span className="text-xs">이번 학기에 이수 예정인 학년을 선택해주세요.</span>
+        </div>
       </div>
     </motion.div>
   );
