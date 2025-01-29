@@ -9,6 +9,12 @@
   --color-ring: hsl(240 5% 64.9%);
   --color-placeholder: #cfcfcf;
   --color-hint: #b5b9c4;
+
+  --spacing-h-course-item: 72px;
+  --spacing-gap-course-item: 14px;
+
+  --spacing-h-course-list-3: calc(3 * var(--spacing-h-course-item) + 2 * var(--spacing-gap-course-item));
+  --spacing-h-course-list-4: calc(4 * var(--spacing-h-course-item) + 3 * var(--spacing-gap-course-item));
 }
 
 @layer base {

@@ -9,8 +9,11 @@ import ChapelInput from '../components/ChapelInput';
 import DepartmentInput from '../components/DepartmentInput';
 import GradeInput from '../components/GradeInput';
 import { default as studentMachine } from '../machines/studentMachine';
+import { useFlow } from '../stackflow.ts';
 
 const OnboardingActivity: ActivityComponentType = () => {
+  const { push } = useFlow();
+
   const [state, send] = useMachine(studentMachine);
   const [progress, setProgress] = useState(0);
 
@@ -24,6 +27,10 @@ const OnboardingActivity: ActivityComponentType = () => {
 
     setProgress(stateProgressMap[state.value]);
   }, [state.value]);
+
+  const handleClickButton = () => {
+    push('CourseSelectionActivity', {});
+  };
 
   return (
     <AppScreen>
@@ -77,6 +84,7 @@ const OnboardingActivity: ActivityComponentType = () => {
             <button
               type="button"
               className="bg-progress-bar mt-14 w-50 rounded-2xl py-3.5 font-semibold text-white"
+              onClick={handleClickButton}
             >
               다 입력했어요
             </button>
