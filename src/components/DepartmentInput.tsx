@@ -21,11 +21,12 @@ const allDepartments = [
 ];
 
 interface DepartmentInputProps {
+  initialValue: string | undefined;
   onNext: (department: string) => void;
 }
 
-const DepartmentInput = ({ onNext }: DepartmentInputProps) => {
-  const [department, setDepartment] = useState('');
+const DepartmentInput = ({ onNext, initialValue }: DepartmentInputProps) => {
+  const [department, setDepartment] = useState(initialValue);
   const [matchingDepartments, setMatchingDepartments] = useState<string[]>([]);
   const [showLabel, setShowLabel] = useState(false);
 
@@ -48,13 +49,24 @@ const DepartmentInput = ({ onNext }: DepartmentInputProps) => {
   };
 
   return (
-    <div className="relative">
+    <motion.div
+      className="relative"
+      initial={{
+        opacity: 0,
+        y: -20,
+      }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{
+        duration: 0.3,
+        ease: 'easeOut',
+      }}
+    >
       {showLabel && <label className="mb-1.5 block text-sm">학과</label>}
       <input
         type="text"
         value={department}
         onChange={handleInputChange}
-        className="bg-basic-light text-primary focus-visible:ring-ring w-full rounded-lg px-4 py-3 text-lg font-semibold focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-none"
+        className="bg-basic-light text-primary focus-visible:ring-ring w-full rounded-xl px-4 py-3 text-lg font-semibold focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-none"
         placeholder="학과"
       />
       <AnimatePresence>
@@ -70,13 +82,13 @@ const DepartmentInput = ({ onNext }: DepartmentInputProps) => {
             }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
-            className="bg-basic-light absolute z-10 mt-2 w-full rounded-lg border border-gray-200 shadow-sm"
+            className="bg-basic-light absolute z-10 mt-2 w-full rounded-xl border border-gray-200 shadow-sm"
           >
             {matchingDepartments.map((dept, index) => (
               <li key={index}>
                 <button
                   type="button"
-                  className="text-list flex w-full items-center justify-between rounded-lg px-4 py-2 text-lg font-semibold hover:bg-gray-100"
+                  className="text-list flex w-full items-center justify-between rounded-xl px-4 py-2 text-lg font-semibold hover:bg-gray-100"
                   onClick={() => handleDepartmentSelect(dept)}
                 >
                   {dept}
@@ -87,7 +99,7 @@ const DepartmentInput = ({ onNext }: DepartmentInputProps) => {
           </motion.ul>
         )}
       </AnimatePresence>
-    </div>
+    </motion.div>
   );
 };
 
