@@ -14,6 +14,9 @@ importers:
       '@stackflow/plugin-basic-ui':
         specifier: ^1.11.1
         version: 1.11.1(@stackflow/core@1.1.1)(@stackflow/react@1.4.2(@stackflow/config@1.2.1)(@stackflow/core@1.1.1)(@types/react@18.3.18)(react@18.3.1))(@types/react@18.3.18)(react@18.3.1)
+      '@stackflow/plugin-history-sync':
+        specifier: ^1.7.1
+        version: 1.7.1(@stackflow/config@1.2.1)(@stackflow/core@1.1.1)(@stackflow/react@1.4.2(@stackflow/config@1.2.1)(@stackflow/core@1.1.1)(@types/react@18.3.18)(react@18.3.1))(@types/react@18.3.18)(react@18.3.1)
       '@stackflow/plugin-renderer-basic':
         specifier: ^1.1.13
         version: 1.1.13(@stackflow/core@1.1.1)(@stackflow/react@1.4.2(@stackflow/config@1.2.1)(@stackflow/core@1.1.1)(@types/react@18.3.18)(react@18.3.1))(@types/react@18.3.18)(react@18.3.1)
@@ -527,6 +530,15 @@ packages:
   '@stackflow/plugin-basic-ui@1.11.1':
     resolution: {integrity: sha512-lN8nNI42eSqUX7PqAVszCrMKm5vw3JwpiOiHFqBcjGcNIX1trIxsZotPK9t3CErJb8ZLIT0YmghnxOPJ31MQ9A==}
     peerDependencies:
+      '@stackflow/core': ^1.1.0-canary.0
+      '@stackflow/react': ^1.3.2-canary.0
+      '@types/react': '>=16.8.0'
+      react: '>=16.8.0'
+
+  '@stackflow/plugin-history-sync@1.7.1':
+    resolution: {integrity: sha512-qgmqil2We1Hjcg6pu5jvrOUAi98hbdQF2/d3KGnOurCUc8PYxl8o0JKbyTkoOMBRDeBOVgtQBwpHEYB3t3jwvQ==}
+    peerDependencies:
+      '@stackflow/config': ^1.0.1-canary.0
       '@stackflow/core': ^1.1.0-canary.0
       '@stackflow/react': ^1.3.2-canary.0
       '@types/react': '>=16.8.0'
@@ -2052,6 +2064,17 @@ snapshots:
       react: 18.3.1
     transitivePeerDependencies:
       - babel-plugin-macros
+
+  '@stackflow/plugin-history-sync@1.7.1(@stackflow/config@1.2.1)(@stackflow/core@1.1.1)(@stackflow/react@1.4.2(@stackflow/config@1.2.1)(@stackflow/core@1.1.1)(@types/react@18.3.18)(react@18.3.1))(@types/react@18.3.18)(react@18.3.1)':
+    dependencies:
+      '@stackflow/config': 1.2.1
+      '@stackflow/core': 1.1.1
+      '@stackflow/react': 1.4.2(@stackflow/config@1.2.1)(@stackflow/core@1.1.1)(@types/react@18.3.18)(react@18.3.1)
+      '@types/react': 18.3.18
+      flatted: 3.3.2
+      history: 5.3.0
+      react: 18.3.1
+      url-pattern: 1.0.3
 
   '@stackflow/plugin-renderer-basic@1.1.13(@stackflow/core@1.1.1)(@stackflow/react@1.4.2(@stackflow/config@1.2.1)(@stackflow/core@1.1.1)(@types/react@18.3.18)(react@18.3.1))(@types/react@18.3.18)(react@18.3.1)':
     dependencies:
