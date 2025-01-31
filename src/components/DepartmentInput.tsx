@@ -28,7 +28,7 @@ interface DepartmentInputProps {
 const DepartmentInput = ({ onNext, initialValue }: DepartmentInputProps) => {
   const [department, setDepartment] = useState(initialValue);
   const [matchingDepartments, setMatchingDepartments] = useState<string[]>([]);
-  const [showLabel, setShowLabel] = useState(false);
+  const [showLabel, setShowLabel] = useState(initialValue !== undefined);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value.trim();

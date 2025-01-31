@@ -12,7 +12,7 @@ interface AdmissionYearInputProps {
 
 const AdmissionYearInput = ({ onNext, initialValue }: AdmissionYearInputProps) => {
   const [admissionYear, setAdmissionYear] = useState(initialValue);
-  const [showLabel, setShowLabel] = useState(false);
+  const [showLabel, setShowLabel] = useState(admissionYear !== undefined);
   const [showDropdown, setShowDropdown, dropDownRef] = useDropdown();
 
   const handleAdmissionYearSelect = (year: number) => {
