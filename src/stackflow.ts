@@ -1,4 +1,5 @@
 import { basicUIPlugin } from '@stackflow/plugin-basic-ui';
+import { historySyncPlugin } from '@stackflow/plugin-history-sync';
 import { basicRendererPlugin } from '@stackflow/plugin-renderer-basic';
 import { stackflow } from '@stackflow/react';
 import CourseSelectionActivity from './pages/CourseSelectionActivity';
@@ -12,11 +13,18 @@ export const { Stack, useFlow } = stackflow({
     basicUIPlugin({
       theme: 'cupertino',
     }),
+    historySyncPlugin({
+      routes: {
+        OnboardingActivity: '/',
+        CourseSelectionActivity: '/course-selection',
+        DesiredCreditActivity: '/desired-credit',
+      },
+      fallbackActivity: () => 'OnboardingActivity',
+    }),
   ],
   activities: {
     OnboardingActivity,
     CourseSelectionActivity,
     DesiredCreditActivity,
   },
-  initialActivity: () => 'OnboardingActivity',
 });

@@ -13,6 +13,7 @@
   "dependencies": {
     "@stackflow/core": "^1.1.1",
     "@stackflow/plugin-basic-ui": "^1.11.1",
+    "@stackflow/plugin-history-sync": "^1.7.1",
     "@stackflow/plugin-renderer-basic": "^1.1.13",
     "@stackflow/react": "^1.4.2",
     "@tailwindcss/vite": "^4.0.0",
