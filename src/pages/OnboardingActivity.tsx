@@ -10,6 +10,7 @@ import ChapelInput from '../components/ChapelInput';
 import DepartmentInput from '../components/DepartmentInput';
 import GradeInput from '../components/GradeInput';
 import studentMachine from '../machines/studentMachine';
+import { useFlow } from '../stackflow';
 
 const OnboardingActivity: ActivityComponentType = () => {
   // localStorage에 저장된 state를 가져옴
@@ -22,6 +23,7 @@ const OnboardingActivity: ActivityComponentType = () => {
     snapshot: restoredState,
   });
   const [progress, setProgress] = useState(0);
+  const { push } = useFlow();
 
   useEffect(() => {
     const stateProgressMap = {
@@ -40,6 +42,11 @@ const OnboardingActivity: ActivityComponentType = () => {
     // localStorage에 state를 저장
     localStorage.setItem('student', JSON.stringify(persistedState));
     console.log(state.context);
+    push('DesiredCreditActivity', {
+      majorRequired: 6,
+      majorElective: 5,
+      generalRequired: 4,
+    });
   };
 
   return (
