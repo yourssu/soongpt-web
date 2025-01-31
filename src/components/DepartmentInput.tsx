@@ -3,22 +3,62 @@ import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
 
 const allDepartments = [
-  '컴퓨터학부',
-  '전자공학과',
-  '기계공학과',
-  '화학공학과',
-  '생명공학과',
-  '수학과',
-  '물리학과',
-  '화학과',
-  '경영학과',
-  '경제학과',
-  '심리학과',
-  '사회학과',
-  '영어영문학과',
+  'AI융합학부',
+  '건축학부 건축공학전공',
+  '건축학부 건축학부',
+  '건축학부 건축학전공',
+  '건축학부 실내건축전공',
+  '경영학부',
   '국어국문학과',
+  '국제무역학과',
+  '국제법무학과',
+  '금융경제학과',
+  '금융학부',
+  '기계공학부',
+  '기독교학과',
+  '글로벌미디어학부',
+  '글로벌통상학과',
+  '독어독문학과',
+  '물리학과',
+  '미디어경영학과',
+  '법학과',
+  '벤처경영학과',
+  '벤처중소기업학과',
+  '복지경영학과',
+  '불어불문학과',
+  '사학과',
+  '사회복지학부',
+  '산업정보시스템공학과',
+  '소프트웨어학부',
+  '수학과',
+  '스포츠학부',
+  '신소재공학과',
+  '영어영문학과',
+  '예술창작학부 문예창작전공',
+  '예술창작학부 영화예술전공',
+  '언론홍보학과',
+  '의생명시스템학부',
+  '자유전공학부',
+  '전기공학부',
+  '전자정보공학부 IT융합전공',
+  '전자정보공학부 전자공학전공',
+  '정보보호학과',
+  '정보사회학과',
+  '정보통계보험수리학과',
+  '정치외교학과',
   '철학과',
-];
+  '차세대반도체학과',
+  '컴퓨터학부',
+  '통상산업학과',
+  '평생교육학과',
+  '한문학과',
+  '화학과',
+  '화학공학과',
+  '혁신경영학과',
+  '행정학부',
+  '회계세무학과',
+  '회계학과',
+] as const;
 
 interface DepartmentInputProps {
   initialValue: string | undefined;
@@ -82,7 +122,7 @@ const DepartmentInput = ({ onNext, initialValue }: DepartmentInputProps) => {
             }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
-            className="bg-basic-light absolute z-10 mt-2 w-full rounded-xl border border-gray-200 shadow-sm"
+            className="bg-basic-light absolute z-10 mt-2 max-h-44 w-full overflow-y-auto rounded-xl border border-gray-200 shadow-sm"
           >
             {matchingDepartments.map((dept, index) => (
               <li key={index}>
