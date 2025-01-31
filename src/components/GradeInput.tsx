@@ -13,7 +13,7 @@ interface GradeInputProps {
 
 const GradeInput = ({ onNext, initialValue }: GradeInputProps) => {
   const [grade, setGrade] = useState(initialValue);
-  const [showLabel, setShowLabel] = useState(false);
+  const [showLabel, setShowLabel] = useState(initialValue !== undefined);
   const [showDropdown, setShowDropdown, dropDownRef] = useDropdown();
 
   const handleGradeSelect = (grade: Grade) => {
