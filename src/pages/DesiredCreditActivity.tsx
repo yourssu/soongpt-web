@@ -76,9 +76,9 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
 
   return (
     <AppScreen>
-      <div className="min-h-screen py-12">
+      <div className="flex min-h-screen flex-col py-12">
         <AppBar progress={100} />
-        <div className="mt-15 flex flex-col items-center">
+        <div className="mt-15 flex flex-1 flex-col items-center">
           <h2 className="text-center text-[28px] font-semibold">
             사용자님의 이번학기 <br />
             희망 학점은 <RollingNumber number={desiredCredit} className="text-primary" />
@@ -236,7 +236,7 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
           {(majorElective !== credit.majorElective || generalElective > 0) && (
             <motion.button
               type="button"
-              className="bg-primary mt-57 w-50 rounded-2xl py-3.5 font-semibold text-white"
+              className="bg-primary mt-auto mb-5 w-50 rounded-2xl py-3.5 font-semibold text-white"
               initial={{
                 opacity: 0,
                 y: 20,
