@@ -8,7 +8,7 @@ interface ChapelInputProps {
 }
 
 const ChapelInput = ({ onNext, initialValue }: ChapelInputProps) => {
-  const [chapel, setChapel] = useState(initialValue);
+  const [chapel, setChapel] = useState(initialValue ?? true);
 
   const handleClickChapel = () => {
     setChapel(!chapel);
