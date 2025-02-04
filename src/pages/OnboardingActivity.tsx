@@ -11,6 +11,7 @@ import DepartmentInput from '../components/DepartmentInput';
 import GradeInput from '../components/GradeInput';
 import studentMachine from '../machines/studentMachine';
 import { useFlow } from '../stackflow';
+import * as PrimivtivePopover from '@radix-ui/react-popover';
 
 const OnboardingActivity: ActivityComponentType = () => {
   // localStorage에 저장된 state를 가져옴
@@ -56,6 +57,21 @@ const OnboardingActivity: ActivityComponentType = () => {
         <div className="mt-15 flex flex-col items-center">
           <h2 className="text-[28px] font-semibold">사용자님에 대해 알려주세요!</h2>
           <span className="mt-1 font-light">시간표를 만들기 위한 최소한의 정보가 필요해요.</span>
+
+          <PrimivtivePopover.Root>
+            <PrimivtivePopover.Trigger>
+              <div className="bg-black p-2 text-white">wow</div>
+            </PrimivtivePopover.Trigger>
+            <PrimivtivePopover.Portal>
+              <PrimivtivePopover.Content
+                sideOffset={4}
+                className="z-[100] rounded-md bg-amber-300 p-4"
+              >
+                음?
+              </PrimivtivePopover.Content>
+            </PrimivtivePopover.Portal>
+          </PrimivtivePopover.Root>
+
           <div className="mt-12 flex w-full flex-col gap-6 px-12">
             {state.matches('채플수강여부입력') && (
               <ChapelInput
