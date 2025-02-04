@@ -1,23 +1,14 @@
-import { useState } from 'react';
-
-export interface Course {
-  courseId: string;
-  name: string;
-  professors: string[];
-  credit: number;
-}
+import { Course } from '../type/course.type.ts';
 
 interface CourseListItemProps {
   course: Course;
-  addCredit: (credit: number) => void;
+  onClickCourseItem: (courseId: string) => void;
+  isSelected: boolean;
 }
 
-const CourseListItem = ({ addCredit, course }: CourseListItemProps) => {
-  const [isSelected, setIsSelected] = useState(false);
-
+const CourseListItem = ({ onClickCourseItem, course, isSelected }: CourseListItemProps) => {
   const handleClick = () => {
-    addCredit(isSelected ? -course.credit : course.credit);
-    setIsSelected((prev) => !prev);
+    onClickCourseItem(course.courseId);
   };
 
   return (
