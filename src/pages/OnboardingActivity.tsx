@@ -42,10 +42,8 @@ const OnboardingActivity: ActivityComponentType = () => {
     // localStorage에 state를 저장
     localStorage.setItem('student', JSON.stringify(persistedState));
     console.log(state.context);
-    push('DesiredCreditActivity', {
-      majorRequired: 6,
-      majorElective: 5,
-      generalRequired: 4,
+    push('CourseSelectionActivity', {
+      type: '전필',
     });
   };
 
