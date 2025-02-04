@@ -5,6 +5,7 @@ export interface CourseSelection {
   description: string;
   next: CourseType | null;
   progress: number;
+  okText: string;
   courses: Course[];
 }
 

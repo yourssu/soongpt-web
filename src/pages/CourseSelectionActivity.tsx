@@ -55,47 +55,78 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
   return (
     <AppScreen>
       <AnimatePresence mode="wait">
-        <div className="min-h-screen py-12">
+        <div className="flex max-h-screen min-h-screen flex-col gap-15 py-12">
           <AppBar progress={courseSelection[params.type].progress} />
           <motion.div
             key={params.type}
-            className="mt-15 flex flex-col items-center"
+            className="flex flex-1 flex-col items-center gap-16 overflow-auto"
             initial={{ y: -20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.2 }}
           >
-            <h2 className="text-center text-[28px]/[normal] font-semibold whitespace-pre-wrap">
-              {courseSelection[params.type].title}
-            </h2>
-            <span className="items mt-1 font-light">
-              {courseSelection[params.type].description}
-            </span>
-            <div className="mt-12 w-full px-12">
-              <div className="max-h-h-course-list-4 flex flex-col gap-3.5 overflow-auto">
-                {courses.map((course) => (
-                  <CourseListItem
-                    onClickCourseItem={onClickCourseItem}
-                    isSelected={selectedCourseIds.includes(course.courseId)}
-                    key={course.courseId}
-                    course={course}
-                  />
-                ))}
+            <div className="flex w-full flex-1 flex-col items-center overflow-auto">
+              <h2 className="text-center text-[28px]/[normal] font-semibold whitespace-pre-wrap">
+                {courseSelection[params.type].title}
+              </h2>
+              <span className="items mt-1 font-light">
+                {courseSelection[params.type].description}
+              </span>
+              <div className="mt-10 flex w-full flex-1 flex-col gap-3 overflow-auto px-12">
+                {params.type === 'majorElective' && (
+                  <div className="flex gap-1.5">
+                    <button className="text-basic-secondary bg-chip-unselected flex place-items-center rounded-[40px] px-3 py-0.5 text-sm font-normal">
+                      1학년
+                    </button>
+                    <button className="text-basic-secondary bg-chip-unselected flex place-items-center rounded-[40px] px-3 py-0.5 text-sm font-normal">
+                      2학년
+                    </button>
+                    <button className="text-basic-secondary bg-chip-unselected flex place-items-center rounded-[40px] px-3 py-0.5 text-sm font-normal">
+                      3학년
+                    </button>
+                    <button className="text-basic-secondary bg-chip-unselected flex place-items-center rounded-[40px] px-3 py-0.5 text-sm font-normal">
+                      4,5학년
+                    </button>
+                  </div>
+                )}
+                <div className="flex flex-1 flex-col gap-3.5 overflow-auto">
+                  {courses.map((course) => (
+                    <CourseListItem
+                      onClickCourseItem={onClickCourseItem}
+                      isSelected={selectedCourseIds.includes(course.courseId)}
+                      key={course.courseId}
+                      course={course}
+                    />
+                  ))}
+                </div>
               </div>
             </div>
-            <span className="mt-16 text-base font-light">
-              현재{' '}
-              <span className="text-[#6B5CFF]">
-                {Object.values(totalCredit).reduce((acc, item) => acc + item)}학점
-              </span>{' '}
-              선택했어요
-            </span>
-            <button
-              type="button"
-              className="bg-primary mt-3 w-50 rounded-2xl py-3.5 font-semibold text-white"
-              onClick={onNextClick}
-            >
-              확인했어요
-            </button>
+            <div className="flex w-full flex-col items-center gap-3 px-12">
+              <span className="text-base font-light">
+                현재{' '}
+                <span className="text-[#6B5CFF]">
+                  {Object.values(totalCredit).reduce((acc, item) => acc + item)}학점
+                </span>{' '}
+                선택했어요
+              </span>
+              <div className="flex w-full items-center justify-center gap-3">
+                {params.type === 'majorElective' && (
+                  <button
+                    type="button"
+                    className="bg-pressed text-secondary max-w-52 flex-1 rounded-2xl py-3.5 font-semibold"
+                    onClick={onNextClick}
+                  >
+                    선택한 과목 보기
+                  </button>
+                )}
+                <button
+                  type="button"
+                  className="bg-primary max-w-52 flex-1 rounded-2xl py-3.5 font-semibold text-white"
+                  onClick={onNextClick}
+                >
+                  {courseSelection[params.type].okText}
+                </button>
+              </div>
+            </div>
           </motion.div>
         </div>
       </AnimatePresence>
