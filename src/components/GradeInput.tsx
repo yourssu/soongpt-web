@@ -7,12 +7,13 @@ import { Grade } from '../machines/studentMachine';
 const grades = [1, 2, 3, 4, 5] as const;
 
 interface GradeInputProps {
+  initialValue: Grade | undefined;
   onNext: (grade: Grade) => void;
 }
 
-const GradeInput = ({ onNext }: GradeInputProps) => {
-  const [grade, setGrade] = useState<Grade>();
-  const [showLabel, setShowLabel] = useState(false);
+const GradeInput = ({ onNext, initialValue }: GradeInputProps) => {
+  const [grade, setGrade] = useState(initialValue);
+  const [showLabel, setShowLabel] = useState(initialValue !== undefined);
   const [showDropdown, setShowDropdown, dropDownRef] = useDropdown();
 
   const handleGradeSelect = (grade: Grade) => {
@@ -40,7 +41,7 @@ const GradeInput = ({ onNext }: GradeInputProps) => {
       {showLabel && <label className="mb-1.5 block text-sm">학년</label>}
       <div className="relative" ref={dropDownRef}>
         <div
-          className="bg-basic-light focus-visible:ring-ring flex w-full items-center justify-between rounded-lg px-4 py-3 focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-none"
+          className="bg-basic-light focus-visible:ring-ring flex w-full items-center justify-between rounded-xl px-4 py-3 focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-none"
           onClick={() => setShowDropdown(!showDropdown)}
         >
           <button
@@ -54,7 +55,7 @@ const GradeInput = ({ onNext }: GradeInputProps) => {
         <AnimatePresence>
           {showDropdown && (
             <motion.ul
-              className="bg-basic-light absolute z-10 mt-2 w-full rounded-lg border border-gray-200 shadow-sm"
+              className="bg-basic-light absolute z-10 mt-2 w-full rounded-xl border border-gray-200 shadow-sm"
               initial={{ opacity: 0, y: -10 }}
               animate={{
                 opacity: 1,
@@ -72,7 +73,7 @@ const GradeInput = ({ onNext }: GradeInputProps) => {
                 <li key={gradeOption}>
                   <button
                     type="button"
-                    className="text-list flex w-full items-center justify-between rounded-lg px-4 py-2 text-lg font-semibold hover:bg-gray-100"
+                    className="text-list flex w-full items-center justify-between rounded-xl px-4 py-2 text-lg font-semibold hover:bg-gray-100"
                     onClick={() => {
                       handleGradeSelect(gradeOption);
                     }}

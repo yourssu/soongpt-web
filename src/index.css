@@ -2,8 +2,7 @@
 
 @theme {
   --font-pretendard: 'Pretendard Variable', sans-serif;
-  --color-primary: #674fd0;
-  --color-progress-bar: #6b5cff;
+  --color-primary: #6b5cff;
   --color-basic-light: #f7f8f8;
   --color-list: #686868;
   --color-ring: hsl(240 5% 64.9%);
@@ -15,6 +14,7 @@
 
   --spacing-h-course-list-3: calc(3 * var(--spacing-h-course-item) + 2 * var(--spacing-gap-course-item));
   --spacing-h-course-list-4: calc(4 * var(--spacing-h-course-item) + 3 * var(--spacing-gap-course-item));
+  --color-disabled: #e3e4e8;
 }
 
 @layer base {

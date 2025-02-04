@@ -2,20 +2,28 @@ import { AppScreen } from '@stackflow/plugin-basic-ui';
 import { ActivityComponentType } from '@stackflow/react';
 
 import { useMachine } from '@xstate/react';
+import { motion } from 'motion/react';
 import { useEffect, useState } from 'react';
 import AdmissionYearInput from '../components/AdmissionYearInput';
 import AppBar from '../components/AppBar';
 import ChapelInput from '../components/ChapelInput';
 import DepartmentInput from '../components/DepartmentInput';
 import GradeInput from '../components/GradeInput';
-import { default as studentMachine } from '../machines/studentMachine';
-import { useFlow } from '../stackflow.ts';
+import studentMachine from '../machines/studentMachine';
+import { useFlow } from '../stackflow';
 
 const OnboardingActivity: ActivityComponentType = () => {
-  const { push } = useFlow();
+  // localStorage에 저장된 state를 가져옴
+  const stateString = localStorage.getItem('student');
+  // 가져온 state를 JSON.parse로 변환
+  const restoredState = stateString ? JSON.parse(stateString) : undefined;
 
-  const [state, send] = useMachine(studentMachine);
+  // 저장된 state를 복원
+  const [state, send, actorRef] = useMachine(studentMachine, {
+    snapshot: restoredState,
+  });
   const [progress, setProgress] = useState(0);
+  const { push } = useFlow();
 
   useEffect(() => {
     const stateProgressMap = {
@@ -29,7 +37,16 @@ const OnboardingActivity: ActivityComponentType = () => {
   }, [state.value]);
 
   const handleClickButton = () => {
-    push('CourseSelectionActivity', {});
+    // actorRef.getPersistedSnapshot()을 통해 현재 state를 가져옴
+    const persistedState = actorRef.getPersistedSnapshot();
+    // localStorage에 state를 저장
+    localStorage.setItem('student', JSON.stringify(persistedState));
+    console.log(state.context);
+    push('DesiredCreditActivity', {
+      majorRequired: 6,
+      majorElective: 5,
+      generalRequired: 4,
+    });
   };
 
   return (
@@ -42,6 +59,7 @@ const OnboardingActivity: ActivityComponentType = () => {
           <div className="mt-12 flex w-full flex-col gap-6 px-12">
             {state.matches('채플수강여부입력') && (
               <ChapelInput
+                initialValue={restoredState?.context?.chapel}
                 onNext={(chapel) =>
                   send({
                     type: '채플수강여부입력완료',
@@ -53,6 +71,7 @@ const OnboardingActivity: ActivityComponentType = () => {
 
             {(state.matches('학년입력') || state.matches('채플수강여부입력')) && (
               <GradeInput
+                initialValue={restoredState?.context?.grade}
                 onNext={(grade) =>
                   send({
                     type: '학년입력완료',
@@ -66,6 +85,7 @@ const OnboardingActivity: ActivityComponentType = () => {
               state.matches('학년입력') ||
               state.matches('채플수강여부입력')) && (
               <AdmissionYearInput
+                initialValue={restoredState?.context?.admissionYear}
                 onNext={(admissionYear) =>
                   send({
                     type: '입학년도입력완료',
@@ -76,18 +96,28 @@ const OnboardingActivity: ActivityComponentType = () => {
             )}
 
             <DepartmentInput
+              initialValue={restoredState?.context?.department}
               onNext={(department) => send({ type: '학과입력완료', payload: { department } })}
             />
           </div>
 
           {state.matches('채플수강여부입력') && (
-            <button
+            <motion.button
               type="button"
-              className="bg-progress-bar mt-14 w-50 rounded-2xl py-3.5 font-semibold text-white"
               onClick={handleClickButton}
+              className="bg-primary mt-14 w-50 rounded-2xl py-3.5 font-semibold text-white"
+              initial={{
+                opacity: 0,
+                y: -20,
+              }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: 0.3,
+                ease: 'easeOut',
+              }}
             >
               다 입력했어요
-            </button>
+            </motion.button>
           )}
         </div>
       </div>
