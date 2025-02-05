@@ -11,6 +11,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@radix-ui/react-popover": "^1.1.5",
     "@stackflow/core": "^1.1.1",
     "@stackflow/plugin-basic-ui": "^1.11.1",
     "@stackflow/plugin-history-sync": "^1.7.1",
