@@ -64,6 +64,7 @@ const DepartmentInput = ({ onNext, initialValue }: DepartmentInputProps) => {
               sideOffset={5}
               forceMount
               onOpenAutoFocus={(e) => e.preventDefault()}
+              onCloseAutoFocus={(e) => e.preventDefault()}
             >
               <motion.ul
                 initial={{

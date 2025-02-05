@@ -1,9 +1,8 @@
+import * as Popover from '@radix-ui/react-popover';
 import { Check, ChevronDown } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
-import { useDropdown } from '../hooks/useDropDown';
-
-const admissionYears = [25, 24, 23, 22, 21, 20, 19, 18];
+import { admissionYears } from '../data/admissionYears';
 
 interface AdmissionYearInputProps {
   initialValue: number | undefined;
@@ -13,7 +12,7 @@ interface AdmissionYearInputProps {
 const AdmissionYearInput = ({ onNext, initialValue }: AdmissionYearInputProps) => {
   const [admissionYear, setAdmissionYear] = useState(initialValue);
   const [showLabel, setShowLabel] = useState(admissionYear !== undefined);
-  const [showDropdown, setShowDropdown, dropDownRef] = useDropdown();
+  const [showDropdown, setShowDropdown] = useState(false);
 
   const handleAdmissionYearSelect = (year: number) => {
     setAdmissionYear(year);
@@ -38,54 +37,55 @@ const AdmissionYearInput = ({ onNext, initialValue }: AdmissionYearInputProps) =
       }}
     >
       {showLabel && <label className="mb-1.5 block text-sm">입학년도(학번)</label>}
-      <div className="relative" ref={dropDownRef}>
-        <div
-          className="bg-basic-light focus-visible:ring-ring flex w-full items-center justify-between rounded-xl px-4 py-3 focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-none"
-          onClick={() => setShowDropdown(!showDropdown)}
-        >
+
+      <Popover.Root open={showDropdown} onOpenChange={setShowDropdown}>
+        <Popover.Trigger asChild>
           <button
             type="button"
-            className={`text-lg font-semibold ${admissionYear ? 'text-primary' : 'text-placeholder'}`}
+            className={`bg-basic-light focus-visible:outline-ring flex w-full items-center justify-between rounded-xl px-4 py-3 text-lg font-semibold ${admissionYear ? 'text-primary' : 'text-placeholder'}`}
           >
             {admissionYear ?? '입학년도(학번)'}
+            <ChevronDown className="text-text size-4" />
           </button>
-          <ChevronDown className="size-4" />
-        </div>
+        </Popover.Trigger>
+
         <AnimatePresence>
           {showDropdown && (
-            <motion.ul
-              className="bg-basic-light absolute z-10 mt-2 max-h-55 w-full overflow-y-auto rounded-xl border border-gray-200 shadow-sm"
-              initial={{ opacity: 0, y: -10 }}
-              animate={{
-                opacity: 1,
-                y: 0,
-              }}
-              exit={{
-                opacity: 0,
-                y: -10,
-              }}
-              transition={{
-                duration: 0.2,
-              }}
-            >
-              {admissionYears.map((year) => (
-                <li key={year}>
-                  <button
-                    type="button"
-                    className="text-list flex w-full items-center justify-between rounded-xl px-4 py-2 text-lg font-semibold hover:bg-gray-100"
-                    onClick={() => {
-                      handleAdmissionYearSelect(year);
-                    }}
-                  >
-                    {year}
-                    {admissionYear === year && <Check className="size-4 text-green-500" />}
-                  </button>
-                </li>
-              ))}
-            </motion.ul>
+            <Popover.Content asChild sideOffset={5} forceMount>
+              <motion.ul
+                className="bg-basic-light z-10 max-h-55 w-[var(--radix-popover-trigger-width)] overflow-y-auto rounded-xl border border-gray-200 shadow-sm"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{
+                  opacity: 1,
+                  y: 0,
+                }}
+                exit={{
+                  opacity: 0,
+                  y: -10,
+                }}
+                transition={{
+                  duration: 0.2,
+                }}
+              >
+                {admissionYears.map((year) => (
+                  <li key={year}>
+                    <button
+                      type="button"
+                      className="text-list focus-visible:outline-ring flex w-full items-center justify-between rounded-xl px-4 py-2 text-lg font-semibold hover:bg-gray-100 focus-visible:-outline-offset-1"
+                      onClick={() => {
+                        handleAdmissionYearSelect(year);
+                      }}
+                    >
+                      {year}
+                      {admissionYear === year && <Check className="size-4 text-green-500" />}
+                    </button>
+                  </li>
+                ))}
+              </motion.ul>
+            </Popover.Content>
           )}
         </AnimatePresence>
-      </div>
+      </Popover.Root>
     </motion.div>
   );
 };
