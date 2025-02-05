@@ -56,4 +56,4 @@ export const departments = [
   '의생명시스템학부',
   '정보통계보험수리학과',
   '화학과',
-];
+] as const;
