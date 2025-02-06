@@ -1,9 +1,10 @@
 import * as Popover from '@radix-ui/react-popover';
-import { Check, ChevronDown, Info } from 'lucide-react';
+import { Check, ChevronDown } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
 import { grades } from '../data/grades';
 import { Grade } from '../machines/studentMachine';
+import Hint from './Hint';
 
 interface GradeInputProps {
   initialValue: Grade | undefined;
@@ -88,10 +89,10 @@ const GradeInput = ({ onNext, initialValue }: GradeInputProps) => {
         </AnimatePresence>
       </Popover.Root>
 
-      <div className="text-hint mt-1.5 flex items-center gap-2">
-        <Info className="size-3" />
-        <span className="text-xs">이번 학기에 이수 예정인 학년을 선택해주세요.</span>
-      </div>
+      <Hint className="mt-2">
+        <Hint.Icon />
+        <Hint.Text>이번 학기에 이수 예정인 학년을 선택해주세요.</Hint.Text>
+      </Hint>
     </motion.div>
   );
 };
