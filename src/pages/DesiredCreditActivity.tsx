@@ -6,6 +6,7 @@ import { Check, ChevronDown } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
 import AppBar from '../components/AppBar';
+import Hint from '../components/Hint';
 import RollingNumber from '../components/RollingNumber';
 
 type DesiredCreditParams = {
@@ -226,6 +227,11 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
               </Popover.Root>
             </div>
           </div>
+
+          <Hint className="mt-2 self-start px-12">
+            <Hint.Icon />
+            <Hint.Text>이수 가능한 최대 학점은 22학점이에요.</Hint.Text>
+          </Hint>
 
           {(majorElective !== credit.majorElective || generalElective > 0) && (
             <motion.button
