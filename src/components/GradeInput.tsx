@@ -3,7 +3,7 @@ import { Check, ChevronDown } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
 import { grades } from '../data/grades';
-import { Grade } from '../machines/studentMachine';
+import { Grade } from '../schemas/studentSchema';
 import Hint from './Hint';
 
 interface GradeInputProps {
