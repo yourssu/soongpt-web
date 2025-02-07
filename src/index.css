@@ -13,6 +13,8 @@
   --color-pressed: #C2C8FF;
   --color-basic-secondary: #4B505D;
   --color-chip-unselected: #F1F1F4;
+  --color-chip-selected: #DDE1FF;
+  --color-modal: #25262C;
 }
 
 @layer base {

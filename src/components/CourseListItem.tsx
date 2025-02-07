@@ -19,7 +19,7 @@ const CourseListItem = ({ onClickCourseItem, course, isSelected }: CourseListIte
       animate={{
         borderColor: isSelected ? 'rgba(107, 92, 255, 1)' : 'rgba(107, 92, 255, 0)',
       }}
-      transition={{ duration: 0.1 }} // 더 빠른 반응을 위해 변경
+      transition={{ duration: 0.1 }}
       className={`flex min-h-[72px] w-full items-center justify-between rounded-xl border-2 bg-[#F7F8F8] px-5 ${
         isSelected ? 'text-[#6B5CFF]' : ''
       }`}
