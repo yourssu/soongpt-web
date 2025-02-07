@@ -2,7 +2,7 @@ import { CourseTime, CourseWithoutTarget } from '../schemas/courseSchema';
 import { Timetable as TimetableType } from '../schemas/timetableSchema';
 
 const MINUTES_PER_SLOT = 5;
-const SLOT_HEIGHT = 4;
+const SLOT_HEIGHT = 3.5;
 
 const TIME_TABLE_COLOR = [
   '#D497EE',
