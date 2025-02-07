@@ -130,17 +130,23 @@ const mockTimetable: TimetableType = {
 const TimetableSelectionActivity: ActivityComponentType = () => {
   return (
     <AppScreen>
-      <div className="min-h-screen py-12">
+      <div className="flex min-h-screen flex-col py-8">
         <AppBar progress={100} />
-        <div className="mt-15 flex flex-col items-center">
+        <div className="mt-8 flex flex-1 flex-col items-center">
           <h2 className="text-center text-[28px] font-semibold">
             사용자님을 위한
             <br />
             시간표를 가져왔어요!
           </h2>
-          <div className="mt-10 w-full px-10">
+          <div className="mt-8 w-full px-10">
             <Timetable timetable={mockTimetable} />
           </div>
+          <button
+            type="button"
+            className="bg-primary mt-auto mb-5 w-50 rounded-2xl py-3.5 font-semibold text-white"
+          >
+            이 시간표가 좋아요
+          </button>
         </div>
       </div>
     </AppScreen>
