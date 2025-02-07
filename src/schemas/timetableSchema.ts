@@ -12,6 +12,7 @@ const timetableCourseSchema = z.object({
 const timetableSchema = z.object({
   timetableId: z.number(),
   tag: z.string(),
+  score: z.number(),
   courses: z.array(timetableCourseSchema),
 });
 

@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import api from '../api/client';
 
 import { StudentTimetable } from '../schemas/studentSchema';
-import { timetableArrayResponseSchema } from '../schemas/timeTableSchema';
+import { timetableArrayResponseSchema } from '../schemas/timetableSchema';
 
 export const usePostTimetable = (student: StudentTimetable) => {
   return useMutation({
