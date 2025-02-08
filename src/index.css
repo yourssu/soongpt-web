@@ -3,6 +3,8 @@
 @theme {
   --font-pretendard: 'Pretendard Variable', sans-serif;
   --color-primary: #6b5cff;
+  --color-text: #292929;
+  --color-secondary: #ecefff;
   --color-basic-light: #f7f8f8;
   --color-list: #686868;
   --color-ring: hsl(240 5% 64.9%);

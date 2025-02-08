@@ -8,7 +8,7 @@ interface ChapelInputProps {
 }
 
 const ChapelInput = ({ onNext, initialValue }: ChapelInputProps) => {
-  const [chapel, setChapel] = useState(initialValue);
+  const [chapel, setChapel] = useState(initialValue ?? true);
 
   const handleClickChapel = () => {
     setChapel(!chapel);
@@ -28,15 +28,15 @@ const ChapelInput = ({ onNext, initialValue }: ChapelInputProps) => {
       }}
     >
       <label className="mb-1.5 block text-sm">채플 수강 여부</label>
-      <div
-        className="bg-basic-light focus-visible:ring-ring flex w-full items-center justify-between rounded-xl px-4 py-3 focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-none"
+
+      <button
+        type="button"
+        className="bg-basic-light focus-visible:outline-ring text-primary flex w-full items-center justify-between rounded-xl px-4 py-3 text-lg font-semibold"
         onClick={handleClickChapel}
       >
-        <button type="button" className="text-primary text-lg font-semibold">
-          {chapel ? '채플 수강' : '채플 미수강'}
-        </button>
+        {chapel ? '채플 수강' : '채플 미수강'}
         <CircleCheck className={`size-6 ${chapel ? 'text-primary' : 'text-disabled'}`} />
-      </div>
+      </button>
     </motion.div>
   );
 };

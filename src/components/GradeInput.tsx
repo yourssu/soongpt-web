@@ -1,10 +1,10 @@
-import { Check, ChevronDown, Info } from 'lucide-react';
+import * as Popover from '@radix-ui/react-popover';
+import { Check, ChevronDown } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
-import { useDropdown } from '../hooks/useDropDown';
-import { Grade } from '../machines/studentMachine';
-
-const grades = [1, 2, 3, 4, 5] as const;
+import { grades } from '../data/grades';
+import { Grade } from '../schemas/studentSchema';
+import Hint from './Hint';
 
 interface GradeInputProps {
   initialValue: Grade | undefined;
@@ -14,7 +14,7 @@ interface GradeInputProps {
 const GradeInput = ({ onNext, initialValue }: GradeInputProps) => {
   const [grade, setGrade] = useState(initialValue);
   const [showLabel, setShowLabel] = useState(initialValue !== undefined);
-  const [showDropdown, setShowDropdown, dropDownRef] = useDropdown();
+  const [showDropdown, setShowDropdown] = useState(false);
 
   const handleGradeSelect = (grade: Grade) => {
     setGrade(grade);
@@ -39,58 +39,60 @@ const GradeInput = ({ onNext, initialValue }: GradeInputProps) => {
       }}
     >
       {showLabel && <label className="mb-1.5 block text-sm">학년</label>}
-      <div className="relative" ref={dropDownRef}>
-        <div
-          className="bg-basic-light focus-visible:ring-ring flex w-full items-center justify-between rounded-xl px-4 py-3 focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:outline-none"
-          onClick={() => setShowDropdown(!showDropdown)}
-        >
+
+      <Popover.Root open={showDropdown} onOpenChange={setShowDropdown}>
+        <Popover.Trigger asChild>
           <button
             type="button"
-            className={`text-lg font-semibold ${grade ? 'text-primary' : 'text-placeholder'}`}
+            className={`bg-basic-light focus-visible:outline-ring flex w-full items-center justify-between rounded-xl px-4 py-3 text-lg font-semibold ${grade ? 'text-primary' : 'text-placeholder'}`}
           >
             {grade ?? '학년'}
+            <ChevronDown className="text-text size-4" />
           </button>
-          <ChevronDown className="size-4" />
-        </div>
+        </Popover.Trigger>
+
         <AnimatePresence>
           {showDropdown && (
-            <motion.ul
-              className="bg-basic-light absolute z-10 mt-2 w-full rounded-xl border border-gray-200 shadow-sm"
-              initial={{ opacity: 0, y: -10 }}
-              animate={{
-                opacity: 1,
-                y: 0,
-              }}
-              exit={{
-                opacity: 0,
-                y: -10,
-              }}
-              transition={{
-                duration: 0.2,
-              }}
-            >
-              {grades.map((gradeOption) => (
-                <li key={gradeOption}>
-                  <button
-                    type="button"
-                    className="text-list flex w-full items-center justify-between rounded-xl px-4 py-2 text-lg font-semibold hover:bg-gray-100"
-                    onClick={() => {
-                      handleGradeSelect(gradeOption);
-                    }}
-                  >
-                    {gradeOption}
-                    {grade === gradeOption && <Check className="size-4 text-green-500" />}
-                  </button>
-                </li>
-              ))}
-            </motion.ul>
+            <Popover.Content asChild sideOffset={5} forceMount>
+              <motion.ul
+                className="bg-basic-light z-10 w-[var(--radix-popover-trigger-width)] rounded-xl border border-gray-200 shadow-sm"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{
+                  opacity: 1,
+                  y: 0,
+                }}
+                exit={{
+                  opacity: 0,
+                  y: -10,
+                }}
+                transition={{
+                  duration: 0.2,
+                }}
+              >
+                {grades.map((gradeOption) => (
+                  <li key={gradeOption}>
+                    <button
+                      type="button"
+                      className="text-list focus-visible:outline-ring flex w-full items-center justify-between rounded-xl px-4 py-2 text-lg font-semibold hover:bg-gray-100 focus-visible:-outline-offset-1"
+                      onClick={() => {
+                        handleGradeSelect(gradeOption);
+                      }}
+                    >
+                      {gradeOption}
+                      {grade === gradeOption && <Check className="size-4 text-green-500" />}
+                    </button>
+                  </li>
+                ))}
+              </motion.ul>
+            </Popover.Content>
           )}
         </AnimatePresence>
-        <div className="text-hint mt-1.5 flex items-center gap-2">
-          <Info className="size-3" />
-          <span className="text-xs">이번 학기에 이수 예정인 학년을 선택해주세요.</span>
-        </div>
-      </div>
+      </Popover.Root>
+
+      <Hint className="mt-2">
+        <Hint.Icon />
+        <Hint.Text>이번 학기에 이수 예정인 학년을 선택해주세요.</Hint.Text>
+      </Hint>
     </motion.div>
   );
 };

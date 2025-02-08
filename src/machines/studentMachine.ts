@@ -1,6 +1,5 @@
 import { assign, setup } from 'xstate';
-
-export type Grade = 1 | 2 | 3 | 4 | 5;
+import { Grade } from '../schemas/studentSchema';
 
 type Context = {
   department: string; // 학과
@@ -12,7 +11,7 @@ type Context = {
 type Event =
   | { type: '학과입력완료'; payload: { department: string } }
   | { type: '입학년도입력완료'; payload: { admissionYear: number } }
-  | { type: '학년입력완료'; payload: { grade: 1 | 2 | 3 | 4 | 5 } }
+  | { type: '학년입력완료'; payload: { grade: Grade } }
   | { type: '채플수강여부입력완료'; payload: { chapel: boolean } };
 
 const studentMachine = setup({

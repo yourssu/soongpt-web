@@ -5,6 +5,7 @@ import { stackflow } from '@stackflow/react';
 import CourseSelectionActivity from './pages/CourseSelectionActivity';
 import DesiredCreditActivity from './pages/DesiredCreditActivity';
 import OnboardingActivity from './pages/OnboardingActivity';
+import TimetableSelectionActivity from './pages/TimetableSelectionActivity';
 
 export const { Stack, useFlow, useStepFlow, activities } = stackflow({
   transitionDuration: 350,
@@ -18,6 +19,7 @@ export const { Stack, useFlow, useStepFlow, activities } = stackflow({
         OnboardingActivity: '/',
         CourseSelectionActivity: '/course-selection',
         DesiredCreditActivity: '/desired-credit',
+        TimetableSelectionActivity: '/time-table-selection',
       },
       fallbackActivity: () => 'OnboardingActivity',
     }),
@@ -26,5 +28,6 @@ export const { Stack, useFlow, useStepFlow, activities } = stackflow({
     OnboardingActivity,
     CourseSelectionActivity,
     DesiredCreditActivity,
+    TimetableSelectionActivity,
   },
 });

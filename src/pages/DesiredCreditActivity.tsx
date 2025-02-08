@@ -1,123 +1,242 @@
 import { AppScreen } from '@stackflow/plugin-basic-ui';
 import { ActivityComponentType } from '@stackflow/react';
 
+import * as Popover from '@radix-ui/react-popover';
 import { Check, ChevronDown } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
 import AppBar from '../components/AppBar';
+import Hint from '../components/Hint';
 import RollingNumber from '../components/RollingNumber';
-import { useDropdown } from '../hooks/useDropDown';
 
-interface DesiredCreditParams {
+type DesiredCreditParams = {
   majorRequired: number;
   majorElective: number;
   generalRequired: number;
-}
-
-const Classification = {
-  majorRequired: '전공필수',
-  majorElective: '전공선택',
-  generalRequired: '교양필수',
-  generalElective: '교양선택',
 };
+
+const getAvailableCredits = (currentCredit: number, baseCredit: number = 0) => {
+  return Array.from({ length: MAX_CREDIT - currentCredit + 1 }, (_, i) => i + baseCredit);
+};
+
+type Classification = '전공필수' | '전공선택' | '교양필수' | '교양선택';
 
 const MAX_CREDIT = 22;
 
 const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ params: credit }) => {
-  const totalCredit = Object.values(credit).reduce((acc, credit) => acc + credit, 0);
-  const availableCredits = Array.from({ length: MAX_CREDIT - totalCredit + 1 }, (_, i) => i);
+  const previousCredit = Object.values(credit).reduce((acc, credit) => acc + credit, 0); // 과목 선택 페이지에서 선택한 전필 + 전선 + 교필 학점
+  const [desiredCredit, setDesiredCredit] = useState(previousCredit); // 희망 학점
 
-  const [desiredCredit, setDesiredCredit] = useState(totalCredit);
-  const [generalElective, setGeneralElective] = useState(0);
-  const [showDropdown, setShowDropdown, dropDownRef] = useDropdown();
+  const [availableMajorElective, setAvailableMajorElective] = useState(() =>
+    getAvailableCredits(previousCredit, credit.majorElective),
+  ); // 수강 가능한 전공선택 학점
+  const [availableGeneralElective, setAvailableGeneralElective] = useState(() =>
+    getAvailableCredits(previousCredit),
+  ); // 수강 가능한 교양선택 학점
 
-  const handleCreditSelect = (credit: number) => {
-    setGeneralElective(credit);
-    setDesiredCredit(totalCredit + credit);
-    setShowDropdown(false);
+  const [majorElective, setMajorElective] = useState(credit.majorElective); // 전공선택 학점
+  const [generalElective, setGeneralElective] = useState(0); // 교양선택 학점
+
+  const [showMajorElectiveDropdown, setShowMajorElectiveDropdown] = useState(false);
+  const [showGeneralElectiveDropdown, setShowGeneralElectiveDropdown] = useState(false);
+
+  const handleCreditSelect = ({
+    type,
+    selectedCredit,
+  }: {
+    type: Classification;
+    selectedCredit: number;
+  }) => {
+    if (type === '전공선택') {
+      const majorElectiveDiff = selectedCredit - majorElective;
+
+      setMajorElective(selectedCredit);
+      setDesiredCredit((prev) => prev + majorElectiveDiff);
+      setAvailableGeneralElective(
+        getAvailableCredits(desiredCredit + majorElectiveDiff - generalElective),
+      );
+
+      setShowMajorElectiveDropdown(false);
+    } else if (type === '교양선택') {
+      const generalElectiveDiff = selectedCredit - generalElective;
+      const majorElectiveDiff = majorElective - credit.majorElective;
+
+      setGeneralElective(selectedCredit);
+      setDesiredCredit((prev) => prev + generalElectiveDiff);
+      setAvailableMajorElective(
+        getAvailableCredits(
+          desiredCredit + generalElectiveDiff - majorElectiveDiff,
+          credit.majorElective,
+        ),
+      );
+
+      setShowGeneralElectiveDropdown(false);
+    }
   };
 
   return (
     <AppScreen>
-      <div className="min-h-screen py-12">
+      <div className="flex min-h-screen flex-col py-12">
         <AppBar progress={100} />
-        <div className="mt-15 flex flex-col items-center">
+        <div className="mt-15 flex flex-1 flex-col items-center">
           <h2 className="text-center text-[28px] font-semibold">
             사용자님의 이번학기 <br />
             희망 학점은 <RollingNumber number={desiredCredit} className="text-primary" />
             학점이군요!
           </h2>
-          <span className="mt-1 font-light">희망 학점에 맞추어 교양선택과목을 추천해드릴게요.</span>
+          <span className="mt-1 font-light">희망 학점에 맞추어 선택과목을 추천해드릴게요.</span>
           <div className="mt-15 grid grid-cols-2 gap-x-2.5 gap-y-6 px-12">
-            {Object.entries(credit).map(([key, value]) => (
-              <div key={key}>
-                <label className="mb-1.5 block text-sm">
-                  {Classification[key as keyof typeof Classification]} 학점
-                </label>
-                <input
-                  type="number"
-                  disabled
-                  value={value}
-                  className="bg-basic-light text-primary w-full rounded-xl px-4 py-3 text-lg font-semibold"
-                />
-              </div>
-            ))}
             <div>
-              <label className="mb-1.5 block text-sm">교양선택 학점</label>
-              <div className="relative" ref={dropDownRef}>
-                <div
-                  className="bg-basic-light flex w-full items-center justify-between rounded-xl px-4 py-3"
-                  onClick={() => setShowDropdown(!showDropdown)}
-                >
+              <label className="mb-1.5 block text-sm">전공필수 학점</label>
+              <input
+                type="number"
+                disabled
+                value={credit.majorRequired}
+                className="bg-basic-light text-primary w-full rounded-xl px-4 py-3 text-lg font-semibold"
+              />
+            </div>
+
+            <div>
+              <label className="mb-1.5 block text-sm">전공선택 학점</label>
+              <Popover.Root
+                open={showMajorElectiveDropdown}
+                onOpenChange={setShowMajorElectiveDropdown}
+              >
+                <Popover.Trigger asChild>
                   <button
                     type="button"
-                    className={`text-lg font-semibold ${generalElective === 0 ? 'text-placeholder' : 'text-primary'}`}
+                    className={`bg-basic-light focus-visible:outline-ring flex w-full items-center justify-between rounded-xl px-4 py-3 text-lg font-semibold ${majorElective === credit.majorElective ? 'text-placeholder' : 'text-primary'}`}
                   >
-                    {generalElective}
+                    {majorElective}
+                    <ChevronDown className="text-text size-4" />
                   </button>
-                  <ChevronDown className="size-4" />
-                </div>
+                </Popover.Trigger>
+
                 <AnimatePresence>
-                  {showDropdown && (
-                    <motion.ul
-                      className="bg-basic-light absolute z-10 mt-2 max-h-44 w-full overflow-y-auto rounded-xl border border-gray-200 shadow-sm"
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{
-                        opacity: 1,
-                        y: 0,
-                      }}
-                      exit={{
-                        opacity: 0,
-                        y: -10,
-                      }}
-                      transition={{
-                        duration: 0.2,
-                      }}
-                    >
-                      {availableCredits.map((availableCredit) => (
-                        <li key={availableCredit}>
-                          <button
-                            type="button"
-                            className="text-list flex w-full items-center justify-between rounded-xl px-4 py-2 text-lg font-semibold hover:bg-gray-100"
-                            onClick={() => handleCreditSelect(availableCredit)}
-                          >
-                            {availableCredit}
-                            {availableCredit === generalElective && (
-                              <Check className="size-4 text-green-500" />
-                            )}
-                          </button>
-                        </li>
-                      ))}
-                    </motion.ul>
+                  {showMajorElectiveDropdown && (
+                    <Popover.Content asChild sideOffset={5} forceMount>
+                      <motion.ul
+                        className="bg-basic-light z-10 max-h-44 w-[var(--radix-popover-trigger-width)] overflow-y-auto rounded-xl border border-gray-200 shadow-sm"
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{
+                          opacity: 1,
+                          y: 0,
+                        }}
+                        exit={{
+                          opacity: 0,
+                          y: -10,
+                        }}
+                        transition={{
+                          duration: 0.2,
+                        }}
+                      >
+                        {availableMajorElective.map((availableCredit) => (
+                          <li key={availableCredit}>
+                            <button
+                              type="button"
+                              className="text-list focus-visible:outline-ring flex w-full items-center justify-between rounded-xl px-4 py-2 text-lg font-semibold hover:bg-gray-100 focus-visible:-outline-offset-1"
+                              onClick={() =>
+                                handleCreditSelect({
+                                  type: '전공선택',
+                                  selectedCredit: availableCredit,
+                                })
+                              }
+                            >
+                              {availableCredit}
+                              {availableCredit === majorElective && (
+                                <Check className="size-4 text-green-500" />
+                              )}
+                            </button>
+                          </li>
+                        ))}
+                      </motion.ul>
+                    </Popover.Content>
                   )}
                 </AnimatePresence>
-              </div>
+              </Popover.Root>
+            </div>
+
+            <div>
+              <label className="mb-1.5 block text-sm">교양필수 학점</label>
+              <input
+                type="number"
+                disabled
+                value={credit.generalRequired}
+                className="bg-basic-light text-primary w-full rounded-xl px-4 py-3 text-lg font-semibold"
+              />
+            </div>
+
+            <div>
+              <label className="mb-1.5 block text-sm">교양선택 학점</label>
+
+              <Popover.Root
+                open={showGeneralElectiveDropdown}
+                onOpenChange={setShowGeneralElectiveDropdown}
+              >
+                <Popover.Trigger asChild>
+                  <button
+                    type="button"
+                    className={`bg-basic-light focus-visible:outline-ring flex w-full items-center justify-between rounded-xl px-4 py-3 text-lg font-semibold ${generalElective === 0 ? 'text-placeholder' : 'text-primary'}`}
+                  >
+                    {generalElective}
+                    <ChevronDown className="text-text size-4" />
+                  </button>
+                </Popover.Trigger>
+
+                <AnimatePresence>
+                  {showGeneralElectiveDropdown && (
+                    <Popover.Content asChild sideOffset={5} forceMount>
+                      <motion.ul
+                        className="bg-basic-light z-10 max-h-44 w-[var(--radix-popover-trigger-width)] overflow-y-auto rounded-xl border border-gray-200 shadow-sm"
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{
+                          opacity: 1,
+                          y: 0,
+                        }}
+                        exit={{
+                          opacity: 0,
+                          y: -10,
+                        }}
+                        transition={{
+                          duration: 0.2,
+                        }}
+                      >
+                        {availableGeneralElective.map((availableCredit) => (
+                          <li key={availableCredit}>
+                            <button
+                              type="button"
+                              className="text-list focus-visible:outline-ring flex w-full items-center justify-between rounded-xl px-4 py-2 text-lg font-semibold hover:bg-gray-100 focus-visible:-outline-offset-1"
+                              onClick={() =>
+                                handleCreditSelect({
+                                  type: '교양선택',
+                                  selectedCredit: availableCredit,
+                                })
+                              }
+                            >
+                              {availableCredit}
+                              {availableCredit === generalElective && (
+                                <Check className="size-4 text-green-500" />
+                              )}
+                            </button>
+                          </li>
+                        ))}
+                      </motion.ul>
+                    </Popover.Content>
+                  )}
+                </AnimatePresence>
+              </Popover.Root>
             </div>
           </div>
-          {generalElective > 0 && (
+
+          <Hint className="mt-2 self-start px-12">
+            <Hint.Icon />
+            <Hint.Text>이수 가능한 최대 학점은 22학점이에요.</Hint.Text>
+          </Hint>
+
+          {(majorElective !== credit.majorElective || generalElective > 0) && (
             <motion.button
               type="button"
-              className="bg-primary mt-57 w-50 rounded-2xl py-3.5 font-semibold text-white"
+              className="bg-primary mt-auto w-50 rounded-2xl py-3.5 font-semibold text-white"
               initial={{
                 opacity: 0,
                 y: 20,
