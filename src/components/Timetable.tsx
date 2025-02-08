@@ -1,4 +1,4 @@
-import { createContext, ElementType, HTMLAttributes, ReactNode, useContext } from 'react';
+import { createContext, ElementType, HTMLAttributes, useContext } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { CourseTime, CourseWithoutTarget } from '../schemas/courseSchema';
 import { Timetable as TimetableType } from '../schemas/timetableSchema';
@@ -69,7 +69,6 @@ const getCoursePosition = (courseTime: CourseTime): { top: number; height: numbe
 };
 
 interface TimetableProps extends HTMLAttributes<HTMLDivElement> {
-  children: ReactNode;
   timetable: TimetableType;
 }
 

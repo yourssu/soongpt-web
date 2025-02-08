@@ -1,20 +1,12 @@
 import { Info } from 'lucide-react';
-import { ElementType, HTMLAttributes, ReactNode } from 'react';
+import { ElementType, HTMLAttributes } from 'react';
 import { twMerge } from 'tailwind-merge';
-
-interface HintProps extends HTMLAttributes<HTMLDivElement> {
-  children: ReactNode;
-}
-
-interface HintTextProps extends HTMLAttributes<HTMLSpanElement> {
-  children: ReactNode;
-}
 
 interface HintIconProps extends HTMLAttributes<SVGSVGElement> {
   as?: ElementType;
 }
 
-const Hint = ({ children, className, ...props }: HintProps) => {
+const Hint = ({ children, className, ...props }: HTMLAttributes<HTMLDivElement>) => {
   return (
     <div className={`text-hint flex items-center gap-2 ${twMerge(className)}`} {...props}>
       {children}
@@ -22,7 +14,7 @@ const Hint = ({ children, className, ...props }: HintProps) => {
   );
 };
 
-const HintText = ({ children, className, ...props }: HintTextProps) => {
+const HintText = ({ children, className, ...props }: HTMLAttributes<HTMLSpanElement>) => {
   return (
     <span className={`text-xs ${twMerge(className)}`} {...props}>
       {children}
