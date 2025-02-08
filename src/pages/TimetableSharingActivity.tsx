@@ -1,7 +1,8 @@
 import { AppScreen } from '@stackflow/plugin-basic-ui';
 import { ActivityComponentType } from '@stackflow/react';
 import useEmblaCarousel from 'embla-carousel-react';
-import { HTMLAttributes, PropsWithChildren, useCallback, useEffect, useState } from 'react';
+import html2canvas from 'html2canvas';
+import { HTMLAttributes, PropsWithChildren, useCallback, useEffect, useRef, useState } from 'react';
 import AppBar from '../components/AppBar';
 import Timetable, { SharingHeader } from '../components/Timetable';
 import { StudentMachineContext } from '../machines/studentMachine';
@@ -97,7 +98,9 @@ const TemplateStudent = ({ textColor }: PropsWithChildren<{ textColor: string }>
 };
 
 const TemplateCredit = ({ children }: HTMLAttributes<HTMLDivElement>) => {
-  return <div className={`mt-1.5 flex justify-between px-2 font-semibold`}>{children}</div>;
+  return (
+    <div className={`mt-1.5 flex items-center justify-between px-2 font-semibold`}>{children}</div>
+  );
 };
 
 const TemplateCreditChip = ({
@@ -121,6 +124,34 @@ const TemplateCreditChip = ({
 const TimetableSharingActivity: ActivityComponentType = () => {
   const [emblaRef, emblaApi] = useEmblaCarousel();
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const templateRef = useRef<HTMLDivElement>(null);
+
+  const handleClickSave = async () => {
+    if (!templateRef.current) return;
+
+    try {
+      const canvas = await html2canvas(templateRef.current, {
+        scale: 2, // 더 선명한 이미지를 위해 2배 크기로 렌더링
+        backgroundColor: null, // 투명 배경 유지
+        windowWidth: templateRef.current.clientWidth,
+        windowHeight: templateRef.current.clientHeight,
+      });
+      // Canvas를 이미지로 변환
+      const image = canvas.toDataURL('image/png');
+
+      // 다운로드 링크 생성
+      const link = document.createElement('a');
+      link.href = image;
+      link.download = `시간표_${new Date().getTime()}.png`;
+
+      // 다운로드 트리거
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error('Failed to save template:', error);
+    }
+  };
 
   const onSelect = useCallback(() => {
     if (emblaApi) {
@@ -158,7 +189,11 @@ const TimetableSharingActivity: ActivityComponentType = () => {
           <div className="w-full flex-1 overflow-hidden px-5" ref={emblaRef}>
             <div className="-ml-5 flex">
               {TEMPLATE_COLORS.map((color, index) => (
-                <div key={`template-${index}`} className="min-w-0 flex-shrink-0 transform-gpu pl-5">
+                <div
+                  key={`template-${index}`}
+                  className="min-w-0 flex-shrink-0 transform-gpu pl-5"
+                  ref={index === selectedIndex ? templateRef : null}
+                >
                   <Template bgImage={color.templateBg}>
                     <TemplateContent bgImage={color.templateContentBg}>
                       <Timetable timetable={mockTimetable} className="!border-0 bg-white">
@@ -202,6 +237,7 @@ const TimetableSharingActivity: ActivityComponentType = () => {
             <button
               type="button"
               className="rounded-2xl bg-[#c2c8ff] px-9 py-3 font-semibold text-[#5736F5]"
+              onClick={handleClickSave}
             >
               저장할래요
             </button>
