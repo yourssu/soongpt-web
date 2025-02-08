@@ -1,6 +1,8 @@
 import { AppScreen } from '@stackflow/plugin-basic-ui';
 import { ActivityComponentType } from '@stackflow/react';
 
+import useEmblaCarousel from 'embla-carousel-react';
+import { useCallback, useEffect, useState } from 'react';
 import AppBar from '../components/AppBar';
 import Timetable from '../components/Timetable';
 import { Timetable as TimetableType } from '../schemas/timetableSchema';
@@ -128,6 +130,27 @@ const mockTimetable: TimetableType = {
 };
 
 const TimetableSelectionActivity: ActivityComponentType = () => {
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    axis: 'y',
+  });
+
+  const onSelect = useCallback(() => {
+    if (emblaApi) {
+      setSelectedIndex(emblaApi.selectedScrollSnap());
+    }
+  }, [emblaApi]);
+
+  useEffect(() => {
+    if (emblaApi) {
+      onSelect();
+      emblaApi.on('select', onSelect);
+      return () => {
+        emblaApi.off('select', onSelect);
+      };
+    }
+  }, [emblaApi, onSelect]);
+
   return (
     <AppScreen>
       <div className="flex min-h-screen flex-col py-8">
@@ -138,12 +161,18 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
             <br />
             시간표를 가져왔어요!
           </h2>
-          <div className="mt-8 w-full px-10">
-            <Timetable timetable={mockTimetable} />
+          <div className="mt-8 w-full flex-1 overflow-hidden px-10" ref={emblaRef}>
+            <div className="-mt-4 flex flex-col" style={{ maxHeight: 'calc(100vh - 300px)' }}>
+              {[0, 1, 2].map((index) => (
+                <div key={index} className={`min-h-0 flex-shrink-0 transform-gpu pt-4`}>
+                  <Timetable timetable={mockTimetable} selected={index === selectedIndex} />
+                </div>
+              ))}
+            </div>
           </div>
           <button
             type="button"
-            className="bg-primary mt-auto mb-5 w-50 rounded-2xl py-3.5 font-semibold text-white"
+            className="bg-primary mt-4 w-50 rounded-2xl py-3.5 font-semibold text-white"
           >
             이 시간표가 좋아요
           </button>
