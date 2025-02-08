@@ -10,5 +10,6 @@ export const useGetTimetable = (timetableId: number) => {
 
       return timetableResponseSchema.parse(response);
     },
+    staleTime: Infinity,
   });
 };
