@@ -68,9 +68,10 @@ const getCoursePosition = (courseTime: CourseTime): { top: number; height: numbe
 
 interface TimetableProps {
   timetable: TimetableType;
+  selected: boolean;
 }
 
-const Timetable = ({ timetable }: TimetableProps) => {
+const Timetable = ({ timetable, selected }: TimetableProps) => {
   const courses = timetable.courses;
 
   const totalCredit = getTotalCredit(courses);
@@ -78,8 +79,12 @@ const Timetable = ({ timetable }: TimetableProps) => {
   const timeRange = getTimeRange(courses);
 
   return (
-    <div className="border-primary w-full overflow-hidden rounded-xl border-2">
-      <div className="bg-primary flex items-center justify-between py-2.5 pr-2.5 pl-5 text-white">
+    <div
+      className={`w-full overflow-hidden rounded-xl border-2 ${selected ? 'border-primary' : 'border-placeholder'}`}
+    >
+      <div
+        className={`flex items-center justify-between py-2.5 pr-2.5 pl-5 ${selected ? 'bg-primary text-white' : 'border-placeholder border-b-1'}`}
+      >
         <h3 className="text-sm font-semibold">😴 {timetable.tag}</h3>
         <button
           className="text-primary bg-secondary rounded-lg px-2 py-1 text-xs font-semibold"
