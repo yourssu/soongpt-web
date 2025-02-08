@@ -4,10 +4,10 @@ import api from '../api/client';
 import { StudentTimetable } from '../schemas/studentSchema';
 import { timetableArrayResponseSchema } from '../schemas/timetableSchema';
 
-export const usePostTimetable = (student: StudentTimetable) => {
+export const usePostTimetable = () => {
   return useMutation({
-    mutationKey: ['timetable', student],
-    mutationFn: async () => {
+    mutationKey: ['timetables'],
+    mutationFn: async (student: StudentTimetable) => {
       const response = await api
         .post('timetables', {
           json: student,

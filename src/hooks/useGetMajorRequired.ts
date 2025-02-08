@@ -15,5 +15,6 @@ export const useGetMajorRequired = ({ schoolId, department, grade }: StudentWith
 
       return courseResponseSchema.parse(response);
     },
+    staleTime: Infinity,
   });
 };

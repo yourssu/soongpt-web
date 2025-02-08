@@ -15,5 +15,6 @@ export const useGetGeneralElective = ({ schoolId, department, grade }: StudentWi
 
       return courseResponseSchema.parse(response);
     },
+    staleTime: Infinity,
   });
 };
