@@ -1,7 +1,6 @@
 import { AppScreen } from '@stackflow/plugin-basic-ui';
 import { ActivityComponentType } from '@stackflow/react';
 
-import { useMachine } from '@xstate/react';
 import { motion } from 'motion/react';
 import { useEffect, useRef, useState } from 'react';
 import AdmissionYearInput from '../components/AdmissionYearInput';
@@ -9,19 +8,13 @@ import AppBar from '../components/AppBar';
 import ChapelInput from '../components/ChapelInput';
 import DepartmentInput from '../components/DepartmentInput';
 import GradeInput from '../components/GradeInput';
-import studentMachine from '../machines/studentMachine';
+import { StudentMachineContext } from '../machines/studentMachine';
 import { useFlow } from '../stackflow';
 
 const OnboardingActivity: ActivityComponentType = () => {
-  // localStorage에 저장된 state를 가져옴
-  const stateString = localStorage.getItem('student');
-  // 가져온 state를 JSON.parse로 변환
-  const restoredState = stateString ? JSON.parse(stateString) : undefined;
+  const state = StudentMachineContext.useSelector((state) => state);
+  const actorRef = StudentMachineContext.useActorRef();
 
-  // 저장된 state를 복원
-  const [state, send, actorRef] = useMachine(studentMachine, {
-    snapshot: restoredState,
-  });
   const [progress, setProgress] = useState(0);
   const { push } = useFlow();
 
@@ -49,6 +42,7 @@ const OnboardingActivity: ActivityComponentType = () => {
     const persistedState = actorRef.getPersistedSnapshot();
     // localStorage에 state를 저장
     localStorage.setItem('student', JSON.stringify(persistedState));
+
     console.log(state.context);
 
     push('CourseSelectionActivity', {
@@ -66,9 +60,9 @@ const OnboardingActivity: ActivityComponentType = () => {
           <div className="my-12 flex w-full flex-1 flex-col gap-6 px-12">
             {state.matches('채플수강여부입력') && (
               <ChapelInput
-                initialValue={restoredState?.context?.chapel}
+                initialValue={state?.context?.chapel}
                 onNext={(chapel) =>
-                  send({
+                  actorRef.send({
                     type: '채플수강여부입력완료',
                     payload: { chapel },
                   })
@@ -78,9 +72,9 @@ const OnboardingActivity: ActivityComponentType = () => {
 
             {(state.matches('학년입력') || state.matches('채플수강여부입력')) && (
               <GradeInput
-                initialValue={restoredState?.context?.grade}
+                initialValue={state?.context?.grade}
                 onNext={(grade) =>
-                  send({
+                  actorRef.send({
                     type: '학년입력완료',
                     payload: { grade },
                   })
@@ -92,9 +86,9 @@ const OnboardingActivity: ActivityComponentType = () => {
               state.matches('학년입력') ||
               state.matches('채플수강여부입력')) && (
               <AdmissionYearInput
-                initialValue={restoredState?.context?.admissionYear}
+                initialValue={state?.context?.admissionYear}
                 onNext={(admissionYear) =>
-                  send({
+                  actorRef.send({
                     type: '입학년도입력완료',
                     payload: { admissionYear },
                   })
@@ -103,8 +97,10 @@ const OnboardingActivity: ActivityComponentType = () => {
             )}
 
             <DepartmentInput
-              initialValue={restoredState?.context?.department}
-              onNext={(department) => send({ type: '학과입력완료', payload: { department } })}
+              initialValue={state?.context?.department}
+              onNext={(department) =>
+                actorRef.send({ type: '학과입력완료', payload: { department } })
+              }
             />
           </div>
 

@@ -1,3 +1,4 @@
+import { createActorContext } from '@xstate/react';
 import { assign, setup } from 'xstate';
 import { Grade } from '../schemas/studentSchema';
 
@@ -93,4 +94,11 @@ const studentMachine = setup({
   },
 });
 
-export default studentMachine;
+// localStorage에 저장된 state를 가져옴
+const stateString = localStorage.getItem('student');
+// 가져온 state를 JSON.parse로 변환
+const restoredState = stateString ? JSON.parse(stateString) : undefined;
+
+export const StudentMachineContext = createActorContext(studentMachine, {
+  snapshot: restoredState,
+});

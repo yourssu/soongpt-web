@@ -1,9 +1,12 @@
+import { StudentMachineContext } from './machines/studentMachine';
 import { Stack } from './stackflow';
 
 const App = () => {
   return (
     <main className="font-pretendard">
-      <Stack />
+      <StudentMachineContext.Provider>
+        <Stack />
+      </StudentMachineContext.Provider>
     </main>
   );
 };
