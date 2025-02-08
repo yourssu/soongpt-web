@@ -61,7 +61,7 @@ const OnboardingActivity: ActivityComponentType = () => {
         <div className="mt-15 flex flex-1 flex-col items-center">
           <h2 className="text-[28px] font-semibold">사용자님에 대해 알려주세요!</h2>
           <span className="mt-1 font-light">시간표를 만들기 위한 최소한의 정보가 필요해요.</span>
-          <div className="my-12 flex w-full flex-col gap-6 px-12">
+          <div className="my-12 flex w-full flex-1 flex-col gap-6 px-12">
             {state.matches('채플수강여부입력') && (
               <ChapelInput
                 initialValue={restoredState?.context?.chapel}
@@ -111,7 +111,7 @@ const OnboardingActivity: ActivityComponentType = () => {
               ref={submitButtonRef}
               type="button"
               onClick={handleClickButton}
-              className="bg-primary mt-auto mb-5 w-50 rounded-2xl py-3.5 font-semibold text-white"
+              className="bg-primary mt-4 w-50 rounded-2xl py-3.5 font-semibold text-white"
               initial={{
                 opacity: 0,
                 y: 20,

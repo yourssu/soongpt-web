@@ -236,7 +236,7 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
           {(majorElective !== credit.majorElective || generalElective > 0) && (
             <motion.button
               type="button"
-              className="bg-primary mt-auto mb-5 w-50 rounded-2xl py-3.5 font-semibold text-white"
+              className="bg-primary mt-auto w-50 rounded-2xl py-3.5 font-semibold text-white"
               initial={{
                 opacity: 0,
                 y: 20,
