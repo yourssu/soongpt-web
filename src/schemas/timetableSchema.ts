@@ -27,3 +27,5 @@ export const timetableArrayResponseSchema = z.object({
     timetables: z.array(timetableSchema),
   }),
 });
+
+export type Timetable = z.infer<typeof timetableSchema>;

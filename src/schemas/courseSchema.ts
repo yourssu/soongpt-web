@@ -20,3 +20,7 @@ export const courseResponseSchema = z.object({
   timestamp: z.string().datetime(),
   result: z.array(courseSchema),
 });
+
+export type Course = z.infer<typeof courseSchema>;
+export type CourseWithoutTarget = Omit<Course, 'target'>;
+export type CourseTime = z.infer<typeof courseTimeSchema>;
