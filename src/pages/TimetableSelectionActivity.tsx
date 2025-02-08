@@ -7,7 +7,7 @@ import AppBar from '../components/AppBar';
 import Timetable from '../components/Timetable';
 import { Timetable as TimetableType } from '../schemas/timetableSchema';
 
-const mockTimetable: TimetableType = {
+export const mockTimetable: TimetableType = {
   timetableId: 1,
   tag: '아침 수업 없는 시간표',
   score: 95,
@@ -130,6 +130,10 @@ const mockTimetable: TimetableType = {
 };
 
 const TimetableSelectionActivity: ActivityComponentType = () => {
+  // const timetableMutation = useMutationState({
+  //   filters: { mutationKey: ['timetables'] },
+  // });
+
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [emblaRef, emblaApi] = useEmblaCarousel({
     axis: 'y',
@@ -153,7 +157,7 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
 
   return (
     <AppScreen>
-      <div className="flex min-h-screen flex-col py-8">
+      <div className="flex min-h-screen flex-col py-12">
         <AppBar progress={100} />
         <div className="mt-8 flex flex-1 flex-col items-center">
           <h2 className="text-center text-[28px] font-semibold">
@@ -165,7 +169,14 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
             <div className="-mt-4 flex flex-col" style={{ maxHeight: 'calc(100vh - 300px)' }}>
               {[0, 1, 2].map((index) => (
                 <div key={index} className={`min-h-0 flex-shrink-0 transform-gpu pt-4`}>
-                  <Timetable timetable={mockTimetable} selected={index === selectedIndex} />
+                  <Timetable
+                    timetable={mockTimetable}
+                    className={`${index === selectedIndex ? 'border-primary' : 'border-placeholder'}`}
+                  >
+                    <Timetable.Header
+                      className={`${index === selectedIndex ? 'bg-primary text-white' : 'border-placeholder border-b-1'}`}
+                    />
+                  </Timetable>
                 </div>
               ))}
             </div>

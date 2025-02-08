@@ -1,3 +1,5 @@
+import { createContext, ElementType, HTMLAttributes, ReactNode, useContext } from 'react';
+import { twMerge } from 'tailwind-merge';
 import { CourseTime, CourseWithoutTarget } from '../schemas/courseSchema';
 import { Timetable as TimetableType } from '../schemas/timetableSchema';
 
@@ -66,12 +68,44 @@ const getCoursePosition = (courseTime: CourseTime): { top: number; height: numbe
   return { top, height };
 };
 
-interface TimetableProps {
+interface TimetableProps extends HTMLAttributes<HTMLDivElement> {
+  children: ReactNode;
   timetable: TimetableType;
-  selected: boolean;
 }
 
-const Timetable = ({ timetable, selected }: TimetableProps) => {
+interface TimetableHeaderProps extends HTMLAttributes<HTMLDivElement> {
+  as?: ElementType;
+}
+
+const TimetableContext = createContext({
+  totalCredit: 0,
+  tag: '',
+});
+
+const DefaultHeader = ({ className, ...props }: TimetableHeaderProps) => {
+  const { totalCredit, tag } = useContext(TimetableContext);
+
+  return (
+    <div
+      className={`flex items-center justify-between py-2.5 pr-2.5 pl-5 ${twMerge(className)}`}
+      {...props}
+    >
+      <h3 className="text-sm font-semibold">😴 {tag}</h3>
+      <button
+        className="text-primary bg-secondary rounded-lg px-2 py-1 text-xs font-semibold"
+        disabled
+      >
+        {totalCredit}학점
+      </button>
+    </div>
+  );
+};
+
+const TimetableHeader = ({ as: Header = DefaultHeader, ...props }: TimetableHeaderProps) => {
+  return <Header {...props} />;
+};
+
+const Timetable = ({ children, timetable, className, ...props }: TimetableProps) => {
   const courses = timetable.courses;
 
   const totalCredit = getTotalCredit(courses);
@@ -79,87 +113,83 @@ const Timetable = ({ timetable, selected }: TimetableProps) => {
   const timeRange = getTimeRange(courses);
 
   return (
-    <div
-      className={`w-full overflow-hidden rounded-xl border-2 ${selected ? 'border-primary' : 'border-placeholder'}`}
-    >
+    <TimetableContext.Provider value={{ totalCredit, tag: timetable.tag }}>
       <div
-        className={`flex items-center justify-between py-2.5 pr-2.5 pl-5 ${selected ? 'bg-primary text-white' : 'border-placeholder border-b-1'}`}
+        className={`w-full overflow-hidden rounded-xl border-2 ${twMerge(className)}`}
+        {...props}
       >
-        <h3 className="text-sm font-semibold">😴 {timetable.tag}</h3>
-        <button
-          className="text-primary bg-secondary rounded-lg px-2 py-1 text-xs font-semibold"
-          disabled
+        {/* Timetable Header */}
+        {children}
+        <div
+          className="divide-placeholder grid"
+          style={{
+            gridTemplateColumns: getGridTemplateCols(days.length),
+            gridTemplateRows: getGridTemplateRows(timeRange.length),
+          }}
         >
-          {totalCredit}학점
-        </button>
-      </div>
-      <div
-        className="divide-placeholder grid"
-        style={{
-          gridTemplateColumns: getGridTemplateCols(days.length),
-          gridTemplateRows: getGridTemplateRows(timeRange.length),
-        }}
-      >
-        {/* Header row */}
-        <div className="border-placeholder col-span-full grid grid-cols-subgrid border-b-1">
-          <div className="border-placeholder border-r-1"></div>
-          {days.map((day) => (
-            <div
-              key={day}
-              className="border-placeholder flex items-center justify-center border-r-1 text-xs font-light last:border-r-0"
-            >
-              {day}
-            </div>
-          ))}
-        </div>
-
-        {/* Time rows */}
-        {timeRange.map((tableTime) => (
-          <div className="border-placeholder col-span-full grid grid-cols-subgrid border-b-1 last:border-b-0">
-            <div
-              key={`tableTime-${tableTime}`}
-              className="border-placeholder flex justify-end border-r-1 p-0.5 text-xs font-light"
-            >
-              {tableTime}
-            </div>
-            {days.map((tableDay) => (
+          {/* Header row */}
+          <div className="border-placeholder col-span-full grid grid-cols-subgrid border-b-1">
+            <div className="border-placeholder border-r-1"></div>
+            {days.map((day) => (
               <div
-                key={`${tableTime}-${tableDay}`}
-                className="border-placeholder relative border-r-1 last:border-r-0"
+                key={day}
+                className="border-placeholder flex items-center justify-center border-r-1 text-xs font-light last:border-r-0"
               >
-                {courses.map((course) => {
-                  const courseTime = course.courseTime.find(
-                    (time) =>
-                      time.week === tableDay && Number(time.start.split(':')[0]) === tableTime,
-                  );
-                  if (courseTime) {
-                    const { top, height } = getCoursePosition(courseTime);
-                    const bgColor =
-                      TIME_TABLE_COLOR[course.courseName.length % TIME_TABLE_COLOR.length];
-
-                    return (
-                      <div
-                        key={course.courseName}
-                        className="absolute w-full rounded-lg p-0.5 text-xs font-bold text-white"
-                        style={{
-                          backgroundColor: bgColor,
-                          borderColor: bgColor,
-                          top: `${top}px`,
-                          height: `${height}px`,
-                        }}
-                      >
-                        {course.courseName}
-                      </div>
-                    );
-                  }
-                })}
+                {day}
               </div>
             ))}
           </div>
-        ))}
+
+          {/* Time rows */}
+          {timeRange.map((tableTime) => (
+            <div className="border-placeholder col-span-full grid grid-cols-subgrid border-b-1 last:border-b-0">
+              <div
+                key={`tableTime-${tableTime}`}
+                className="border-placeholder flex justify-end border-r-1 p-0.5 text-xs font-light"
+              >
+                {tableTime}
+              </div>
+              {days.map((tableDay) => (
+                <div
+                  key={`${tableTime}-${tableDay}`}
+                  className="border-placeholder relative border-r-1 last:border-r-0"
+                >
+                  {courses.map((course) => {
+                    const courseTime = course.courseTime.find(
+                      (time) =>
+                        time.week === tableDay && Number(time.start.split(':')[0]) === tableTime,
+                    );
+                    if (courseTime) {
+                      const { top, height } = getCoursePosition(courseTime);
+                      const bgColor =
+                        TIME_TABLE_COLOR[course.courseName.length % TIME_TABLE_COLOR.length];
+
+                      return (
+                        <div
+                          key={course.courseName}
+                          className="absolute w-full rounded-lg p-0.5 text-xs font-bold text-white"
+                          style={{
+                            backgroundColor: bgColor,
+                            borderColor: bgColor,
+                            top: `${top}px`,
+                            height: `${height}px`,
+                          }}
+                        >
+                          {course.courseName}
+                        </div>
+                      );
+                    }
+                  })}
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
+    </TimetableContext.Provider>
   );
 };
+
+Timetable.Header = TimetableHeader;
 
 export default Timetable;
