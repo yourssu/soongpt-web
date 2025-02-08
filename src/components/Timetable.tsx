@@ -110,7 +110,7 @@ export const SharingHeader = ({ bgColor, textColor }: TimetableHeaderProps) => {
       }}
     >
       <div
-        className={`absolute top-0 left-1/2 -translate-x-1/2 rounded-b-xl px-4 py-1 whitespace-nowrap`}
+        className={`absolute top-0 left-1/2 flex -translate-x-1/2 items-center rounded-b-xl px-4 py-1 whitespace-nowrap`}
         style={{
           backgroundColor: bgColor,
         }}

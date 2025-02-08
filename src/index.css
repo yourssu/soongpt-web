@@ -24,6 +24,10 @@
     color: #292929;
   }
 
+  img {
+    @apply inline-block;
+  }
+
   input::placeholder {
     color: #cfcfcf;
   }
