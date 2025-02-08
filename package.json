@@ -23,6 +23,7 @@
     "motion": "^12.0.6",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-use-measure": "^2.1.7",
     "tailwindcss": "^4.0.0",
     "xstate": "^5.19.2"
   },

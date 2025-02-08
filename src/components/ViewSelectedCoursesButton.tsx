@@ -1,4 +1,4 @@
-import SelectedCourseList from './SelectedCourseList.tsx';
+import SelectedCoursesBottomSheet from './SelectedCoursesBottomSheet.tsx';
 import { useState } from 'react';
 
 const ViewSelectedCoursesButton = () => {
@@ -16,7 +16,7 @@ const ViewSelectedCoursesButton = () => {
       >
         선택한 과목 보기
       </button>
-      <SelectedCourseList open={open} handleClose={handleClose} />
+      <SelectedCoursesBottomSheet open={open} handleClose={handleClose} />
     </>
   );
 };
