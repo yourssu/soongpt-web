@@ -74,6 +74,8 @@ interface TimetableProps extends HTMLAttributes<HTMLDivElement> {
 
 interface TimetableHeaderProps extends HTMLAttributes<HTMLDivElement> {
   as?: ElementType;
+  bgColor?: string;
+  textColor?: string;
 }
 
 const TimetableContext = createContext({
@@ -81,14 +83,11 @@ const TimetableContext = createContext({
   tag: '',
 });
 
-const DefaultHeader = ({ className, ...props }: TimetableHeaderProps) => {
+const DefaultHeader = ({ className }: TimetableHeaderProps) => {
   const { totalCredit, tag } = useContext(TimetableContext);
 
   return (
-    <div
-      className={`flex items-center justify-between py-2.5 pr-2.5 pl-5 ${twMerge(className)}`}
-      {...props}
-    >
+    <div className={`flex items-center justify-between py-2.5 pr-2.5 pl-5 ${twMerge(className)}`}>
       <h3 className="text-sm font-semibold">😴 {tag}</h3>
       <button
         className="text-primary bg-secondary rounded-lg px-2 py-1 text-xs font-semibold"
@@ -96,6 +95,28 @@ const DefaultHeader = ({ className, ...props }: TimetableHeaderProps) => {
       >
         {totalCredit}학점
       </button>
+    </div>
+  );
+};
+
+export const SharingHeader = ({ bgColor, textColor }: TimetableHeaderProps) => {
+  const { tag } = useContext(TimetableContext);
+
+  return (
+    <div
+      className={`relative h-6`}
+      style={{
+        color: textColor,
+      }}
+    >
+      <div
+        className={`absolute top-0 left-1/2 -translate-x-1/2 rounded-b-xl px-4 py-1 whitespace-nowrap`}
+        style={{
+          backgroundColor: bgColor,
+        }}
+      >
+        <h3 className="text-xs font-semibold">😴 {tag}</h3>
+      </div>
     </div>
   );
 };
