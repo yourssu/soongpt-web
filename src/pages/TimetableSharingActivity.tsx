@@ -153,6 +153,20 @@ const TimetableSharingActivity: ActivityComponentType = () => {
     }
   };
 
+  const handleClickShare = async () => {
+    if (!navigator.share) return;
+
+    try {
+      await navigator.share({
+        title: '숭피티 추천 시간표',
+        text: '숭피티 추천 시간표를 확인해보세요!',
+        url: window.location.href,
+      });
+    } catch (error) {
+      console.error('Failed to share template:', error);
+    }
+  };
+
   const onSelect = useCallback(() => {
     if (emblaApi) {
       setSelectedIndex(emblaApi.selectedScrollSnap());
@@ -244,6 +258,7 @@ const TimetableSharingActivity: ActivityComponentType = () => {
             <button
               type="button"
               className="bg-primary rounded-2xl px-9 py-3 font-semibold text-white"
+              onClick={handleClickShare}
             >
               공유할래요
             </button>
