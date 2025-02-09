@@ -26,7 +26,7 @@ const studentMachine = setup({
   context: {
     department: '',
     admissionYear: 0,
-    grade: 1,
+    grade: 0,
     chapel: true,
   },
   on: {

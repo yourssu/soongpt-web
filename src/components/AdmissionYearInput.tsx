@@ -11,7 +11,7 @@ interface AdmissionYearInputProps {
 
 const AdmissionYearInput = ({ onNext, initialValue }: AdmissionYearInputProps) => {
   const [admissionYear, setAdmissionYear] = useState(initialValue);
-  const [showLabel, setShowLabel] = useState(admissionYear !== undefined);
+  const [showLabel, setShowLabel] = useState(admissionYear !== 0);
   const [showDropdown, setShowDropdown] = useState(false);
 
   const handleAdmissionYearSelect = (year: number) => {
@@ -42,9 +42,9 @@ const AdmissionYearInput = ({ onNext, initialValue }: AdmissionYearInputProps) =
         <Popover.Trigger asChild>
           <button
             type="button"
-            className={`bg-basic-light focus-visible:outline-ring flex w-full items-center justify-between rounded-xl px-4 py-3 text-lg font-semibold ${admissionYear ? 'text-primary' : 'text-placeholder'}`}
+            className={`bg-basic-light focus-visible:outline-ring flex w-full items-center justify-between rounded-xl px-4 py-3 text-lg font-semibold ${admissionYear === 0 ? 'text-placeholder' : 'text-primary'}`}
           >
-            {admissionYear ?? '입학년도(학번)'}
+            {admissionYear === 0 ? '입학년도(학번)' : admissionYear}
             <ChevronDown className="text-text size-4" />
           </button>
         </Popover.Trigger>
