@@ -170,14 +170,14 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
     <AppScreen>
       <div className="flex min-h-dvh flex-col py-12">
         <AppBar progress={100} />
-        <div className="mt-8 flex flex-1 flex-col items-center">
+        <div className="mt-4 flex flex-1 flex-col items-center">
           <h2 className="text-center text-[28px] font-semibold">
             사용자님을 위한
             <br />
             시간표를 {latestMutation.status === 'pending' ? '가져오는 중이에요!' : '가져왔어요!'}
           </h2>
-          <div className="mt-8 w-full flex-1 overflow-hidden px-10" ref={emblaRef}>
-            <div className="-mt-4 flex flex-col" style={{ maxHeight: 'calc(100dvh - 300px)' }}>
+          <div className="mt-4 w-full flex-1 overflow-hidden px-10" ref={emblaRef}>
+            <div className="-mt-4 flex flex-col" style={{ maxHeight: 'calc(100dvh - 250px)' }}>
               {latestMutation.status === 'pending' ? (
                 <TimetableSkeleton className="pt-4">
                   <TimetableSkeleton.Header />
