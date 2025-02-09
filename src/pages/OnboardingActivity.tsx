@@ -52,7 +52,7 @@ const OnboardingActivity: ActivityComponentType = () => {
 
   return (
     <AppScreen>
-      <div className="flex min-h-screen flex-col py-12">
+      <div className="flex min-h-dvh flex-col py-12">
         <AppBar progress={progress} />
         <div className="mt-15 flex flex-1 flex-col items-center">
           <h2 className="text-[28px] font-semibold">사용자님에 대해 알려주세요!</h2>

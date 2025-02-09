@@ -168,7 +168,7 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
 
   return (
     <AppScreen>
-      <div className="flex min-h-screen flex-col py-12">
+      <div className="flex min-h-dvh flex-col py-12">
         <AppBar progress={100} />
         <div className="mt-8 flex flex-1 flex-col items-center">
           <h2 className="text-center text-[28px] font-semibold">
@@ -177,7 +177,7 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
             시간표를 {latestMutation.status === 'pending' ? '가져오는 중이에요!' : '가져왔어요!'}
           </h2>
           <div className="mt-8 w-full flex-1 overflow-hidden px-10" ref={emblaRef}>
-            <div className="-mt-4 flex flex-col" style={{ maxHeight: 'calc(100vh - 300px)' }}>
+            <div className="-mt-4 flex flex-col" style={{ maxHeight: 'calc(100dvh - 300px)' }}>
               {latestMutation.status === 'pending' ? (
                 <TimetableSkeleton className="pt-4">
                   <TimetableSkeleton.Header />

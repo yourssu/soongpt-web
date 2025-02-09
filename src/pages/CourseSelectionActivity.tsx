@@ -1,21 +1,20 @@
 import { AppScreen } from '@stackflow/plugin-basic-ui';
 import { ActivityComponentType } from '@stackflow/react';
+import _ from 'lodash';
+import { AnimatePresence, motion } from 'motion/react';
+import { useMemo, useState } from 'react';
 import AppBar from '../components/AppBar';
 import CourseListItem from '../components/CourseListItem.tsx';
-import { useState } from 'react';
-import { useFlow, useStepFlow } from '../stackflow.ts';
-import { AnimatePresence, motion } from 'motion/react';
-import { CourseType } from '../type/course.type.ts';
-import { courseSelection, gradeSelection } from '../data/courseSelection.ts';
 import GradeChip from '../components/GradeChip.tsx';
 import ViewSelectedCoursesButton from '../components/ViewSelectedCoursesButton.tsx';
 import { CourseListContext } from '../context/CourseListContext.ts';
+import { courseSelection, gradeSelection } from '../data/courseSelection.ts';
 import { useGetCourses } from '../hooks/useGetCourses.ts';
-import { Course } from '../schemas/courseSchema.ts';
-import { useMemo } from 'react';
-import _ from 'lodash';
-import { Grade } from '../schemas/studentSchema.ts';
 import { StudentMachineContext } from '../machines/studentMachine.ts';
+import { Course } from '../schemas/courseSchema.ts';
+import { Grade } from '../schemas/studentSchema.ts';
+import { useFlow, useStepFlow } from '../stackflow.ts';
+import { CourseType } from '../type/course.type.ts';
 
 const isSameCourse = (a: Course, b: Course) =>
   a.courseName === b.courseName && a.professorName === b.professorName;
@@ -130,7 +129,7 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
     <AppScreen>
       <AnimatePresence mode="wait">
         <CourseListContext.Provider value={selectedCourses}>
-          <div className="flex max-h-screen min-h-screen flex-col gap-15 py-12">
+          <div className="flex max-h-dvh min-h-dvh flex-col gap-15 py-12">
             <AppBar progress={courseSelection[type].progress} />
             <motion.div
               key={type}

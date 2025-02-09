@@ -104,7 +104,7 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
 
   return (
     <AppScreen>
-      <div className="flex min-h-screen flex-col py-12">
+      <div className="flex min-h-dvh flex-col py-12">
         <AppBar progress={100} />
         <div className="mt-15 flex flex-1 flex-col items-center">
           <h2 className="text-center text-[28px] font-semibold">

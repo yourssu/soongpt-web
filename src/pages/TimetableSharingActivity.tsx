@@ -199,7 +199,7 @@ const TimetableSharingActivity: ActivityComponentType = () => {
 
   return (
     <AppScreen>
-      <div className="flex min-h-screen flex-col py-12">
+      <div className="flex min-h-dvh flex-col py-12">
         <AppBar progress={100} />
         <div className="mt-8 flex flex-1 flex-col items-center">
           <div className="w-full flex-1 overflow-hidden px-5" ref={emblaRef}>
