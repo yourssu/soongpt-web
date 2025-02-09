@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { courseTimeSchema } from './courseSchema';
 
 const timetableTagSchema = z.enum([
+  'DEFAULT',
   'HAS_FREE_DAY',
   'NO_MORNING_CLASSES',
   'NO_LONG_BREAKS',
