@@ -5,6 +5,7 @@ import useEmblaCarousel from 'embla-carousel-react';
 import { useCallback, useEffect, useState } from 'react';
 import AppBar from '../components/AppBar';
 import Timetable from '../components/Timetable';
+import { TimetableSkeleton } from '../components/TimetableSkeleton';
 import { Timetable as TimetableType } from '../schemas/timetableSchema';
 
 export const mockTimetable: TimetableType = {
@@ -134,6 +135,10 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
   //   filters: { mutationKey: ['timetables'] },
   // });
 
+  // console.log(timetableMutation);
+
+  const [isPending, setIsPending] = useState(true);
+
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [emblaRef, emblaApi] = useEmblaCarousel({
     axis: 'y',
@@ -155,6 +160,11 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
     }
   }, [emblaApi, onSelect]);
 
+  const handleNextClick = () => {
+    setIsPending(!isPending);
+    // push('TimetableSharingActivity', {});
+  };
+
   return (
     <AppScreen>
       <div className="flex min-h-screen flex-col py-12">
@@ -167,23 +177,30 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
           </h2>
           <div className="mt-8 w-full flex-1 overflow-hidden px-10" ref={emblaRef}>
             <div className="-mt-4 flex flex-col" style={{ maxHeight: 'calc(100vh - 300px)' }}>
-              {[0, 1, 2].map((index) => (
-                <div key={index} className={`min-h-0 flex-shrink-0 transform-gpu pt-4`}>
-                  <Timetable
-                    timetable={mockTimetable}
-                    className={`${index === selectedIndex ? 'border-primary' : 'border-placeholder'}`}
-                  >
-                    <Timetable.Header
-                      className={`${index === selectedIndex ? 'bg-primary text-white' : 'border-placeholder border-b-1'}`}
-                    />
-                  </Timetable>
-                </div>
-              ))}
+              {isPending ? (
+                <TimetableSkeleton className="pt-4">
+                  <TimetableSkeleton.Header />
+                </TimetableSkeleton>
+              ) : (
+                [0, 1, 2].map((index) => (
+                  <div key={index} className={`min-h-0 flex-shrink-0 transform-gpu pt-4`}>
+                    <Timetable
+                      timetable={mockTimetable}
+                      className={`${index === selectedIndex ? 'border-primary' : 'border-placeholder'}`}
+                    >
+                      <Timetable.Header
+                        className={`${index === selectedIndex ? 'bg-primary text-white' : 'border-placeholder border-b-1'}`}
+                      />
+                    </Timetable>
+                  </div>
+                ))
+              )}
             </div>
           </div>
           <button
             type="button"
             className="bg-primary mt-4 w-50 rounded-2xl py-3.5 font-semibold text-white"
+            onClick={handleNextClick}
           >
             이 시간표가 좋아요
           </button>
