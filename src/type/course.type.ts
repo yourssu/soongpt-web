@@ -6,12 +6,4 @@ export interface CourseSelection {
   next: CourseType | null;
   progress: number;
   okText: string;
-  courses: Course[];
-}
-
-export interface Course {
-  courseId: string;
-  name: string;
-  professors: string[];
-  credit: number;
 }

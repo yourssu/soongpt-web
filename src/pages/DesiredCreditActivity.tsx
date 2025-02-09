@@ -92,9 +92,9 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
       department: context.department,
       grade: context.grade,
       isChapel: context.chapel,
-      majorRequiredCourses: [],
-      majorElectiveCourses: ['컴퓨터그래픽스', '전공종합설계1'],
-      generalRequiredCourses: [],
+      majorRequiredCourses: params.majorRequiredCourses,
+      majorElectiveCourses: params.majorElectiveCourses,
+      generalRequiredCourses: params.generalRequiredCourses,
       majorElectiveCredit: majorElective,
       generalElectiveCredit: generalElective,
     });

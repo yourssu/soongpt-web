@@ -123,7 +123,7 @@ const SelectedCoursesBottomSheet = ({ open, handleClose }: SelectedCourseBottomS
                   ) : (
                     courses.map((course) => (
                       <CourseListItem
-                        key={course.courseId}
+                        key={`${course.courseName} ${course.professorName}`}
                         course={course}
                         onClickCourseItem={() => {}}
                         isSelected={false}
