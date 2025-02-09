@@ -102,7 +102,7 @@ const DefaultHeader = ({ className }: TimetableHeaderProps) => {
     <div className={`flex items-center justify-between py-2.5 pr-2.5 pl-5 ${twMerge(className)}`}>
       <h3 className="text-sm font-semibold">{TIME_TABLE_TAG[tag]}</h3>
       <button
-        className="text-primary bg-secondary rounded-lg px-2 py-1 text-xs font-semibold"
+        className="text-primary bg-credit-chip rounded-lg px-2 py-1 text-xs font-semibold"
         disabled
       >
         {totalCredit}학점
