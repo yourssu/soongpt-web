@@ -13,7 +13,7 @@ interface GradeInputProps {
 
 const GradeInput = ({ onNext, initialValue }: GradeInputProps) => {
   const [grade, setGrade] = useState(initialValue);
-  const [showLabel, setShowLabel] = useState(initialValue !== undefined);
+  const [showLabel, setShowLabel] = useState(initialValue !== 0);
   const [showDropdown, setShowDropdown] = useState(false);
 
   const handleGradeSelect = (grade: Grade) => {
@@ -44,9 +44,9 @@ const GradeInput = ({ onNext, initialValue }: GradeInputProps) => {
         <Popover.Trigger asChild>
           <button
             type="button"
-            className={`bg-basic-light focus-visible:outline-ring flex w-full items-center justify-between rounded-xl px-4 py-3 text-lg font-semibold ${grade ? 'text-primary' : 'text-placeholder'}`}
+            className={`bg-basic-light focus-visible:outline-ring flex w-full items-center justify-between rounded-xl px-4 py-3 text-lg font-semibold ${grade === 0 ? 'text-placeholder' : 'text-primary'}`}
           >
-            {grade ?? '학년'}
+            {grade === 0 ? '학년' : grade}
             <ChevronDown className="text-text size-4" />
           </button>
         </Popover.Trigger>

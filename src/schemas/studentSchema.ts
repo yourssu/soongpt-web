@@ -1,6 +1,13 @@
 import { z } from 'zod';
 
-const Grade = z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4), z.literal(5)]);
+const Grade = z.union([
+  z.literal(0),
+  z.literal(1),
+  z.literal(2),
+  z.literal(3),
+  z.literal(4),
+  z.literal(5),
+]);
 
 export const studentSchema = z.object({
   schoolId: z.number().int().min(15).max(25).describe('입학년도'),
