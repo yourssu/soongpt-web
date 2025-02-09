@@ -40,15 +40,13 @@ const getDays = (courses: CourseWithoutTarget[]): string[] => {
 };
 
 const getTimeRange = (courses: CourseWithoutTarget[]): number[] => {
-  let earliestHour = 24;
+  const earliestHour = 9;
   let latestHour = 0;
 
   courses.forEach((course) => {
     course.courseTime.forEach((time) => {
-      const startHour = Number(time.start.split(':')[0]);
       const endHour = Number(time.end.split(':')[0]);
 
-      earliestHour = Math.min(earliestHour, startHour);
       latestHour = Math.max(latestHour, endHour);
     });
   });
