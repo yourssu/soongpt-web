@@ -8,15 +8,20 @@ import { useState } from 'react';
 import AppBar from '../components/AppBar';
 import Hint from '../components/Hint';
 import RollingNumber from '../components/RollingNumber';
-import { useFlow } from '../stackflow.ts';
+import { usePostTimetable } from '../hooks/usePostTimetable';
+import { StudentMachineContext } from '../machines/studentMachine';
+import { useFlow } from '../stackflow';
 
 type DesiredCreditParams = {
   majorRequired: number;
   majorElective: number;
   generalRequired: number;
+  majorRequiredCourses: string[];
+  majorElectiveCourses: string[];
+  generalRequiredCourses: string[];
 };
 
-const getAvailableCredits = (currentCredit: number, baseCredit: number = 0) => {
+const getAvailableCredits = (currentCredit: number, baseCredit: number = 0): number[] => {
   return Array.from({ length: MAX_CREDIT - currentCredit + 1 }, (_, i) => i + baseCredit);
 };
 
@@ -24,22 +29,27 @@ type Classification = '전공필수' | '전공선택' | '교양필수' | '교양
 
 const MAX_CREDIT = 22;
 
-const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ params: credit }) => {
-  const previousCredit = Object.values(credit).reduce((acc, credit) => acc + credit, 0); // 과목 선택 페이지에서 선택한 전필 + 전선 + 교필 학점
+const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ params }) => {
+  const previousCredit = params.majorRequired + params.majorElective + params.generalRequired; // 과목 선택 페이지에서 선택한 전필 + 전선 + 교필 학점
   const [desiredCredit, setDesiredCredit] = useState(previousCredit); // 희망 학점
 
   const [availableMajorElective, setAvailableMajorElective] = useState(() =>
-    getAvailableCredits(previousCredit, credit.majorElective),
+    getAvailableCredits(previousCredit, params.majorElective),
   ); // 수강 가능한 전공선택 학점
   const [availableGeneralElective, setAvailableGeneralElective] = useState(() =>
     getAvailableCredits(previousCredit),
   ); // 수강 가능한 교양선택 학점
 
-  const [majorElective, setMajorElective] = useState(credit.majorElective); // 전공선택 학점
+  const [majorElective, setMajorElective] = useState(params.majorElective); // 전공선택 학점
   const [generalElective, setGeneralElective] = useState(0); // 교양선택 학점
 
   const [showMajorElectiveDropdown, setShowMajorElectiveDropdown] = useState(false);
   const [showGeneralElectiveDropdown, setShowGeneralElectiveDropdown] = useState(false);
+
+  const context = StudentMachineContext.useSelector((state) => state.context);
+  const postTimetableMutation = usePostTimetable();
+
+  const { push } = useFlow();
 
   const handleCreditSelect = ({
     type,
@@ -60,14 +70,14 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
       setShowMajorElectiveDropdown(false);
     } else if (type === '교양선택') {
       const generalElectiveDiff = selectedCredit - generalElective;
-      const majorElectiveDiff = majorElective - credit.majorElective;
+      const majorElectiveDiff = majorElective - params.majorElective;
 
       setGeneralElective(selectedCredit);
       setDesiredCredit((prev) => prev + generalElectiveDiff);
       setAvailableMajorElective(
         getAvailableCredits(
           desiredCredit + generalElectiveDiff - majorElectiveDiff,
-          credit.majorElective,
+          params.majorElective,
         ),
       );
 
@@ -75,9 +85,20 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
     }
   };
 
-  const { push } = useFlow();
+  const handleNextClick = () => {
+    // 시간표 추천 API 요청
+    postTimetableMutation.mutate({
+      schoolId: context.admissionYear,
+      department: context.department,
+      grade: context.grade,
+      isChapel: context.chapel,
+      majorRequiredCourses: [],
+      majorElectiveCourses: ['컴퓨터그래픽스', '전공종합설계1'],
+      generalRequiredCourses: [],
+      majorElectiveCredit: majorElective,
+      generalElectiveCredit: generalElective,
+    });
 
-  const onNextClick = () => {
     push('TimetableSelectionActivity', {});
   };
 
@@ -98,7 +119,7 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
               <input
                 type="number"
                 disabled
-                value={credit.majorRequired}
+                value={params.majorRequired}
                 className="bg-basic-light text-primary w-full rounded-xl px-4 py-3 text-lg font-semibold"
               />
             </div>
@@ -112,7 +133,7 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
                 <Popover.Trigger asChild>
                   <button
                     type="button"
-                    className={`bg-basic-light focus-visible:outline-ring flex w-full items-center justify-between rounded-xl px-4 py-3 text-lg font-semibold ${majorElective === credit.majorElective ? 'text-placeholder' : 'text-primary'}`}
+                    className={`bg-basic-light focus-visible:outline-ring flex w-full items-center justify-between rounded-xl px-4 py-3 text-lg font-semibold ${majorElective === params.majorElective ? 'text-placeholder' : 'text-primary'}`}
                   >
                     {majorElective}
                     <ChevronDown className="text-text size-4" />
@@ -168,7 +189,7 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
               <input
                 type="number"
                 disabled
-                value={credit.generalRequired}
+                value={params.generalRequired}
                 className="bg-basic-light text-primary w-full rounded-xl px-4 py-3 text-lg font-semibold"
               />
             </div>
@@ -240,9 +261,9 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
             <Hint.Text>이수 가능한 최대 학점은 22학점이에요.</Hint.Text>
           </Hint>
 
-          {(majorElective !== credit.majorElective || generalElective > 0) && (
+          {(majorElective !== params.majorElective || generalElective > 0) && (
             <motion.button
-              onClick={onNextClick}
+              onClick={handleNextClick}
               type="button"
               className="bg-primary mt-auto w-50 rounded-2xl py-3.5 font-semibold text-white"
               initial={{
