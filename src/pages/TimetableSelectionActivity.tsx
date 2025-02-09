@@ -7,130 +7,8 @@ import { useCallback, useEffect, useState } from 'react';
 import AppBar from '../components/AppBar';
 import Timetable from '../components/Timetable';
 import { TimetableSkeleton } from '../components/TimetableSkeleton';
-import { TimetableArrayResponse, Timetable as TimetableType } from '../schemas/timetableSchema';
+import { TimetableArrayResponse } from '../schemas/timetableSchema';
 import { useFlow } from '../stackflow';
-
-export const mockTimetable: TimetableType = {
-  timetableId: 1,
-  tag: 'EVENLY_DISTRIBUTED',
-  score: 95,
-  courses: [
-    // {
-    //   courseName: '웹프로그래밍기초및실습',
-    //   professorName: '유소율',
-    //   classification: '전공필수',
-    //   credit: 3,
-    //   courseTime: [
-    //     {
-    //       week: '월',
-    //       start: '15:00',
-    //       end: '16:55',
-    //       classroom: '명신관 405',
-    //     },
-    //     {
-    //       week: '월',
-    //       start: '17:00',
-    //       end: '18:50',
-    //       classroom: '명신관 405',
-    //     },
-    //   ],
-    // },
-    {
-      courseName: '비전채플',
-      professorName: '조은식',
-      classification: '전공필수',
-      credit: 0.5,
-      courseTime: [
-        {
-          week: '월',
-          start: '13:30',
-          end: '14:20',
-          classroom: '한경직기념관',
-        },
-      ],
-    },
-    {
-      courseName: '컴퓨터비전',
-      professorName: '송현주',
-      classification: '전공필수',
-      credit: 3,
-      courseTime: [
-        {
-          week: '화',
-          start: '12:00',
-          end: '13:15',
-          classroom: '진리관 305',
-        },
-        {
-          week: '목',
-          start: '12:00',
-          end: '13:15',
-          classroom: '진리관 305',
-        },
-      ],
-    },
-    {
-      courseName: '운영체제',
-      professorName: '홍지만',
-      classification: '전공필수',
-      credit: 3,
-      courseTime: [
-        {
-          week: '월',
-          start: '09:00',
-          end: '10:15',
-          classroom: '진리관 401',
-        },
-        {
-          week: '수',
-          start: '09:00',
-          end: '10:15',
-          classroom: '진리관 401',
-        },
-      ],
-    },
-    {
-      courseName: '컴파일러',
-      professorName: '김철수',
-      classification: '전공선택',
-      credit: 3,
-      courseTime: [
-        {
-          week: '화',
-          start: '13:30',
-          end: '14:45',
-          classroom: '명신관 502',
-        },
-        {
-          week: '수',
-          start: '13:30',
-          end: '14:45',
-          classroom: '명신관 502',
-        },
-      ],
-    },
-    {
-      courseName: '데이터베이스',
-      professorName: '박지성',
-      classification: '전공선택',
-      credit: 3,
-      courseTime: [
-        {
-          week: '화',
-          start: '15:00',
-          end: '16:15',
-          classroom: '진리관 307',
-        },
-        {
-          week: '목',
-          start: '15:00',
-          end: '16:15',
-          classroom: '진리관 307',
-        },
-      ],
-    },
-  ],
-};
 
 const TimetableSelectionActivity: ActivityComponentType = () => {
   const timetableMutation = useMutationState<MutationState<TimetableArrayResponse>>({
@@ -163,7 +41,15 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
   }, [emblaApi, onSelect]);
 
   const handleNextClick = () => {
-    push('TimetableSharingActivity', {});
+    if (latestMutation.data) {
+      const selectedTimetable = latestMutation.data.result.timetables[selectedIndex];
+
+      // queryClient.setQueryData(['timetable', selectedTimetable.timetableId], selectedTimetable);
+
+      push('TimetableSharingActivity', {
+        timetableId: selectedTimetable.timetableId,
+      });
+    }
   };
 
   return (
