@@ -19,6 +19,7 @@ const TIME_TABLE_COLOR = [
 ];
 
 const TIME_TABLE_TAG: Record<TimetableTag, string> = {
+  DEFAULT: '기본 시간표',
   HAS_FREE_DAY: '🥳 공강 날이 있는 시간표',
   NO_MORNING_CLASSES: '⏰ 아침 수업이 없는 시간표',
   NO_LONG_BREAKS: '🚀 우주 공강이 없는 시간표 ',
@@ -92,7 +93,7 @@ const TimetableContext = createContext<{
   tag: TimetableTag;
 }>({
   totalCredit: 0,
-  tag: 'NO_MORNING_CLASSES',
+  tag: 'DEFAULT',
 });
 
 const DefaultHeader = ({ className }: TimetableHeaderProps) => {
@@ -164,7 +165,7 @@ const Timetable = ({ children, timetable, className, ...props }: TimetableProps)
             <div className="border-placeholder border-r-1"></div>
             {days.map((day) => (
               <div
-                key={day}
+                key={`${timetable.timetableId}-${day}`}
                 className="border-placeholder flex items-center justify-center border-r-1 text-xs font-light last:border-r-0"
               >
                 {day}
@@ -176,14 +177,14 @@ const Timetable = ({ children, timetable, className, ...props }: TimetableProps)
           {timeRange.map((tableTime) => (
             <div className="border-placeholder col-span-full grid grid-cols-subgrid border-b-1 last:border-b-0">
               <div
-                key={`${tableTime}`}
+                key={`${timetable.timetableId}-${tableTime}`}
                 className="border-placeholder flex justify-end border-r-1 p-0.5 text-xs font-light"
               >
                 {tableTime}
               </div>
               {days.map((tableDay) => (
                 <div
-                  key={`${tableTime}-${tableDay}`}
+                  key={`${timetable.timetableId}-${tableTime}-${tableDay}`}
                   className="border-placeholder relative border-r-1 last:border-r-0"
                 >
                   {courses.map((course) => {
@@ -198,7 +199,7 @@ const Timetable = ({ children, timetable, className, ...props }: TimetableProps)
 
                       return (
                         <div
-                          key={`${course.courseName}-${courseTime.start}`}
+                          key={`${timetable.timetableId}-${course.courseName}-${courseTime.start}`}
                           className="absolute w-full rounded-lg p-0.5 text-xs font-bold text-white"
                           style={{
                             backgroundColor: bgColor,
