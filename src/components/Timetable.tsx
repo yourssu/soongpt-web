@@ -4,7 +4,7 @@ import { CourseTime, CourseWithoutTarget } from '../schemas/courseSchema';
 import { TimetableTag, Timetable as TimetableType } from '../schemas/timetableSchema';
 
 const MINUTES_PER_SLOT = 5;
-const SLOT_HEIGHT = 3.5;
+export const SLOT_HEIGHT = 3.5;
 
 const TIME_TABLE_COLOR = [
   '#D497EE',
@@ -55,11 +55,11 @@ const getTimeRange = (courses: CourseWithoutTarget[]): number[] => {
   return Array.from({ length: latestHour - earliestHour + 1 }, (_, i) => i + earliestHour);
 };
 
-const getGridTemplateCols = (length: number): string => {
+export const getGridTemplateCols = (length: number): string => {
   return `1fr repeat(${length}, 3fr)`;
 };
 
-const getGridTemplateRows = (length: number): string => {
+export const getGridTemplateRows = (length: number): string => {
   const headerHeight = SLOT_HEIGHT * 6;
   return `${headerHeight}px repeat(${length}, ${SLOT_HEIGHT * 12}px)`;
 };

@@ -5,6 +5,7 @@ import html2canvas from 'html2canvas';
 import { HTMLAttributes, PropsWithChildren, useCallback, useEffect, useRef, useState } from 'react';
 import AppBar from '../components/AppBar';
 import Timetable, { SharingHeader } from '../components/Timetable';
+import { TemplateSkeleton } from '../components/TimetableSkeleton';
 import { StudentMachineContext } from '../machines/studentMachine';
 import { mockTimetable } from './TimetableSelectionActivity';
 
@@ -125,6 +126,7 @@ const TimetableSharingActivity: ActivityComponentType = () => {
   const [emblaRef, emblaApi] = useEmblaCarousel();
   const [selectedIndex, setSelectedIndex] = useState(0);
   const templateRef = useRef<HTMLDivElement>(null);
+  const [isPending] = useState(false);
 
   const handleClickSave = async () => {
     if (!templateRef.current) return;
@@ -202,56 +204,62 @@ const TimetableSharingActivity: ActivityComponentType = () => {
         <div className="mt-8 flex flex-1 flex-col items-center">
           <div className="w-full flex-1 overflow-hidden px-5" ref={emblaRef}>
             <div className="-ml-5 flex">
-              {TEMPLATE_COLORS.map((color, index) => (
-                <div
-                  key={`template-${index}`}
-                  className="min-w-0 flex-shrink-0 transform-gpu pl-5"
-                  ref={index === selectedIndex ? templateRef : null}
-                >
-                  <Template bgImage={color.templateBg}>
-                    <TemplateContent bgImage={color.templateContentBg}>
-                      <Timetable timetable={mockTimetable} className="!border-0 bg-white">
-                        <Timetable.Header
-                          as={SharingHeader}
-                          bgColor={color.tableHeaderBg}
-                          textColor={color.headerText}
-                        />
-                      </Timetable>
-                      <TemplateStudent textColor={color.headerText} />
-                      <TemplateCredit>
-                        <TemplateCreditChip bgColor={color.chipBg} textColor={color.chipText}>
-                          <div className="text-[10px]">이수학점</div>
-                          <div className="text-[10px]">12</div>
-                        </TemplateCreditChip>
-                        <TemplateCreditChip bgColor={color.chipBg} textColor={color.chipText}>
-                          <div className="text-[10px]">전공학점</div>
-                          <div className="text-[10px]">10</div>
-                        </TemplateCreditChip>
-                      </TemplateCredit>
-                    </TemplateContent>
-                  </Template>
-                </div>
-              ))}
+              {isPending ? (
+                <TemplateSkeleton />
+              ) : (
+                TEMPLATE_COLORS.map((color, index) => (
+                  <div
+                    key={`template-${index}`}
+                    className="min-w-0 flex-shrink-0 transform-gpu pl-5"
+                    ref={index === selectedIndex ? templateRef : null}
+                  >
+                    <Template bgImage={color.templateBg}>
+                      <TemplateContent bgImage={color.templateContentBg}>
+                        <Timetable timetable={mockTimetable} className="!border-0 bg-white">
+                          <Timetable.Header
+                            as={SharingHeader}
+                            bgColor={color.tableHeaderBg}
+                            textColor={color.headerText}
+                          />
+                        </Timetable>
+                        <TemplateStudent textColor={color.headerText} />
+                        <TemplateCredit>
+                          <TemplateCreditChip bgColor={color.chipBg} textColor={color.chipText}>
+                            <div className="text-[10px]">이수학점</div>
+                            <div className="text-[10px]">12</div>
+                          </TemplateCreditChip>
+                          <TemplateCreditChip bgColor={color.chipBg} textColor={color.chipText}>
+                            <div className="text-[10px]">전공학점</div>
+                            <div className="text-[10px]">10</div>
+                          </TemplateCreditChip>
+                        </TemplateCredit>
+                      </TemplateContent>
+                    </Template>
+                  </div>
+                ))
+              )}
             </div>
           </div>
           <div className="mt-4 flex justify-center gap-3">
-            {TEMPLATE_COLORS.map((color, index) => (
-              <button
-                key={`button-${index}`}
-                className={`size-7.5 rounded-full shadow-sm outline-2 transition-colors ${index === selectedIndex ? 'outline-primary' : 'outline-placeholder'}`}
-                style={{
-                  background: color.templateContentBg,
-                }}
-                type="button"
-                onClick={() => scrollTo(index)}
-              />
-            ))}
+            {!isPending &&
+              TEMPLATE_COLORS.map((color, index) => (
+                <button
+                  key={`button-${index}`}
+                  className={`size-7.5 rounded-full shadow-sm outline-2 transition-colors ${index === selectedIndex ? 'outline-primary' : 'outline-placeholder'}`}
+                  style={{
+                    background: color.templateContentBg,
+                  }}
+                  type="button"
+                  onClick={() => scrollTo(index)}
+                />
+              ))}
           </div>
           <div className="mt-4 flex justify-center gap-2">
             <button
               type="button"
               className="rounded-2xl bg-[#c2c8ff] px-9 py-3 font-semibold text-[#5736F5]"
               onClick={handleClickSave}
+              disabled={isPending}
             >
               저장할래요
             </button>
@@ -259,6 +267,7 @@ const TimetableSharingActivity: ActivityComponentType = () => {
               type="button"
               className="bg-primary rounded-2xl px-9 py-3 font-semibold text-white"
               onClick={handleClickShare}
+              disabled={isPending}
             >
               공유할래요
             </button>
