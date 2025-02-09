@@ -11,6 +11,12 @@
   --color-placeholder: #cfcfcf;
   --color-hint: #b5b9c4;
   --color-disabled: #e3e4e8;
+  --color-secondary: #5736F5;
+  --color-pressed: #C2C8FF;
+  --color-basic-secondary: #4B505D;
+  --color-chip-unselected: #F1F1F4;
+  --color-chip-selected: #DDE1FF;
+  --color-modal: #25262C;
 }
 
 @layer base {

@@ -7,7 +7,7 @@ import DesiredCreditActivity from './pages/DesiredCreditActivity';
 import OnboardingActivity from './pages/OnboardingActivity';
 import TimetableSelectionActivity from './pages/TimetableSelectionActivity';
 
-export const { Stack, useFlow } = stackflow({
+export const { Stack, useFlow, useStepFlow, activities } = stackflow({
   transitionDuration: 350,
   plugins: [
     basicRendererPlugin(),

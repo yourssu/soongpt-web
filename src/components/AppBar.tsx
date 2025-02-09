@@ -1,6 +1,6 @@
-import { useActivity } from '@stackflow/react';
+import { useActivity, useStep } from '@stackflow/react';
 import { ChevronLeft } from 'lucide-react';
-import { useFlow } from '../stackflow';
+import { activities, useFlow, useStepFlow } from '../stackflow';
 import ProgressBar from './ProgressBar';
 
 interface AppBarProps {
@@ -9,9 +9,16 @@ interface AppBarProps {
 
 const AppBar = ({ progress }: AppBarProps) => {
   const activity = useActivity();
+  const step = useStep();
   const { pop } = useFlow();
+  const { stepPop } = useStepFlow(activity.name as keyof typeof activities);
 
   const handleClickBackButton = () => {
+    if (step) {
+      stepPop();
+      return;
+    }
+
     pop();
   };
 
@@ -19,7 +26,7 @@ const AppBar = ({ progress }: AppBarProps) => {
     <div className="flex items-center gap-4 px-6">
       <button
         onClick={handleClickBackButton}
-        className={`flex size-6 ${activity.isRoot ? 'invisible' : ''}`}
+        className={`flex size-6 ${activity.isRoot && !step ? 'invisible' : ''}`}
       >
         <ChevronLeft />
       </button>

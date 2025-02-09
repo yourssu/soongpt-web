@@ -8,6 +8,7 @@ import { useState } from 'react';
 import AppBar from '../components/AppBar';
 import Hint from '../components/Hint';
 import RollingNumber from '../components/RollingNumber';
+import { useFlow } from '../stackflow.ts';
 
 type DesiredCreditParams = {
   majorRequired: number;
@@ -72,6 +73,12 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
 
       setShowGeneralElectiveDropdown(false);
     }
+  };
+
+  const { push } = useFlow();
+
+  const onNextClick = () => {
+    push('TimetableSelectionActivity', {});
   };
 
   return (
@@ -235,6 +242,7 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
 
           {(majorElective !== credit.majorElective || generalElective > 0) && (
             <motion.button
+              onClick={onNextClick}
               type="button"
               className="bg-primary mt-auto w-50 rounded-2xl py-3.5 font-semibold text-white"
               initial={{
