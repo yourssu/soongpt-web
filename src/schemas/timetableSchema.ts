@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { courseTimeSchema } from './courseSchema';
+import { courseClassificationSchema, courseTimeSchema } from './courseSchema';
 
 const timetableTagSchema = z.enum([
   'DEFAULT',
@@ -14,7 +14,7 @@ const timetableTagSchema = z.enum([
 const timetableCourseSchema = z.object({
   courseName: z.string(),
   professorName: z.string(),
-  classification: z.string(),
+  classification: courseClassificationSchema,
   credit: z.number(),
   courseTime: z.array(courseTimeSchema),
 });
@@ -22,7 +22,7 @@ const timetableCourseSchema = z.object({
 const timetableSchema = z.object({
   timetableId: z.number(),
   tag: timetableTagSchema,
-  score: z.number(),
+  score: z.number().nullable(),
   courses: z.array(timetableCourseSchema),
 });
 
