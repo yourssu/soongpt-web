@@ -1,6 +1,15 @@
 import { z } from 'zod';
 import { courseTimeSchema } from './courseSchema';
 
+const timetableTagSchema = z.enum([
+  'HAS_FREE_DAY',
+  'NO_MORNING_CLASSES',
+  'NO_LONG_BREAKS',
+  'EVENLY_DISTRIBUTED',
+  'GUARANTEED_LUNCH_TIME',
+  'NO_EVENING_CLASSES',
+]);
+
 const timetableCourseSchema = z.object({
   courseName: z.string(),
   professorName: z.string(),
@@ -11,7 +20,7 @@ const timetableCourseSchema = z.object({
 
 const timetableSchema = z.object({
   timetableId: z.number(),
-  tag: z.string(),
+  tag: timetableTagSchema,
   score: z.number(),
   courses: z.array(timetableCourseSchema),
 });
@@ -29,3 +38,4 @@ export const timetableArrayResponseSchema = z.object({
 });
 
 export type Timetable = z.infer<typeof timetableSchema>;
+export type TimetableTag = z.infer<typeof timetableTagSchema>;

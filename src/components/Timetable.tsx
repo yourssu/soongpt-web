@@ -1,7 +1,7 @@
 import { createContext, ElementType, HTMLAttributes, useContext } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { CourseTime, CourseWithoutTarget } from '../schemas/courseSchema';
-import { Timetable as TimetableType } from '../schemas/timetableSchema';
+import { TimetableTag, Timetable as TimetableType } from '../schemas/timetableSchema';
 
 const MINUTES_PER_SLOT = 5;
 const SLOT_HEIGHT = 3.5;
@@ -17,6 +17,15 @@ const TIME_TABLE_COLOR = [
   '#fcaa67',
   '#f08676',
 ];
+
+const TIME_TABLE_TAG: Record<TimetableTag, string> = {
+  HAS_FREE_DAY: '🥳 공강 날이 있는 시간표',
+  NO_MORNING_CLASSES: '⏰ 아침 수업이 없는 시간표',
+  NO_LONG_BREAKS: '🚀 우주 공강이 없는 시간표 ',
+  EVENLY_DISTRIBUTED: '⚖️ 균등하게 배분되어 있는 시간표',
+  GUARANTEED_LUNCH_TIME: '🍔 점심시간 보장되는 시간표',
+  NO_EVENING_CLASSES: '🛏 저녁수업이 없는 시간표',
+};
 
 const getTotalCredit = (courses: CourseWithoutTarget[]): number => {
   return courses.reduce((acc, course) => acc + course.credit, 0);
@@ -78,9 +87,12 @@ interface TimetableHeaderProps extends HTMLAttributes<HTMLDivElement> {
   textColor?: string;
 }
 
-const TimetableContext = createContext({
+const TimetableContext = createContext<{
+  totalCredit: number;
+  tag: TimetableTag;
+}>({
   totalCredit: 0,
-  tag: '',
+  tag: 'NO_MORNING_CLASSES',
 });
 
 const DefaultHeader = ({ className }: TimetableHeaderProps) => {
@@ -88,7 +100,7 @@ const DefaultHeader = ({ className }: TimetableHeaderProps) => {
 
   return (
     <div className={`flex items-center justify-between py-2.5 pr-2.5 pl-5 ${twMerge(className)}`}>
-      <h3 className="text-sm font-semibold">😴 {tag}</h3>
+      <h3 className="text-sm font-semibold">{TIME_TABLE_TAG[tag]}</h3>
       <button
         className="text-primary bg-secondary rounded-lg px-2 py-1 text-xs font-semibold"
         disabled
@@ -115,7 +127,7 @@ export const SharingHeader = ({ bgColor, textColor }: TimetableHeaderProps) => {
           backgroundColor: bgColor,
         }}
       >
-        <h3 className="text-xs font-semibold">😴 {tag}</h3>
+        <h3 className="text-xs font-semibold">{TIME_TABLE_TAG[tag]}</h3>
       </div>
     </div>
   );
@@ -164,7 +176,7 @@ const Timetable = ({ children, timetable, className, ...props }: TimetableProps)
           {timeRange.map((tableTime) => (
             <div className="border-placeholder col-span-full grid grid-cols-subgrid border-b-1 last:border-b-0">
               <div
-                key={`tableTime-${tableTime}`}
+                key={`${tableTime}`}
                 className="border-placeholder flex justify-end border-r-1 p-0.5 text-xs font-light"
               >
                 {tableTime}
@@ -186,7 +198,7 @@ const Timetable = ({ children, timetable, className, ...props }: TimetableProps)
 
                       return (
                         <div
-                          key={course.courseName}
+                          key={`${course.courseName}-${courseTime.start}`}
                           className="absolute w-full rounded-lg p-0.5 text-xs font-bold text-white"
                           style={{
                             backgroundColor: bgColor,

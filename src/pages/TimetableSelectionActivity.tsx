@@ -9,29 +9,29 @@ import { Timetable as TimetableType } from '../schemas/timetableSchema';
 
 export const mockTimetable: TimetableType = {
   timetableId: 1,
-  tag: '아침 수업 없는 시간표',
+  tag: 'EVENLY_DISTRIBUTED',
   score: 95,
   courses: [
-    {
-      courseName: '웹프로그래밍기초및실습',
-      professorName: '유소율',
-      classification: '전공필수',
-      credit: 3,
-      courseTime: [
-        {
-          week: '월',
-          start: '15:00',
-          end: '16:55',
-          classroom: '명신관 405',
-        },
-        {
-          week: '월',
-          start: '17:00',
-          end: '18:50',
-          classroom: '명신관 405',
-        },
-      ],
-    },
+    // {
+    //   courseName: '웹프로그래밍기초및실습',
+    //   professorName: '유소율',
+    //   classification: '전공필수',
+    //   credit: 3,
+    //   courseTime: [
+    //     {
+    //       week: '월',
+    //       start: '15:00',
+    //       end: '16:55',
+    //       classroom: '명신관 405',
+    //     },
+    //     {
+    //       week: '월',
+    //       start: '17:00',
+    //       end: '18:50',
+    //       classroom: '명신관 405',
+    //     },
+    //   ],
+    // },
     {
       courseName: '비전채플',
       professorName: '조은식',
