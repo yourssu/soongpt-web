@@ -26,12 +26,12 @@ const timetableSchema = z.object({
 });
 
 export const timetableResponseSchema = z.object({
-  timestamp: z.string().datetime(),
+  timestamp: z.string(),
   result: timetableSchema,
 });
 
 export const timetableArrayResponseSchema = z.object({
-  timestamp: z.string().datetime(),
+  timestamp: z.string(),
   result: z.object({
     timetables: z.array(timetableSchema),
   }),
@@ -39,3 +39,4 @@ export const timetableArrayResponseSchema = z.object({
 
 export type Timetable = z.infer<typeof timetableSchema>;
 export type TimetableTag = z.infer<typeof timetableTagSchema>;
+export type TimetableArrayResponse = z.infer<typeof timetableArrayResponseSchema>;

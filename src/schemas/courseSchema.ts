@@ -17,7 +17,7 @@ export const courseSchema = z.object({
 });
 
 export const courseResponseSchema = z.object({
-  timestamp: z.string().datetime(),
+  timestamp: z.string(),
   result: z.array(courseSchema),
 });
 
