@@ -88,7 +88,7 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
             latestMutation.data.result.timetables.map((timetable, index) => (
               <div
                 key={timetable.timetableId}
-                className={`min-h-0 flex-shrink-0 transform-gpu pt-4`}
+                className={`min-h-0 flex-shrink-0 transform-gpu pt-4 first:pt-0`}
               >
                 <Timetable
                   timetable={timetable}
@@ -126,7 +126,7 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
             {`사용자님을 위한\n시간표를 ${timetableSelection[latestMutation.status].title}`}
           </h2>
           <div className="mt-4 w-full flex-1 overflow-hidden px-10" ref={emblaRef}>
-            <div className="mt-4 flex flex-col" style={{ maxHeight: 'calc(100dvh - 250px)' }}>
+            <div className="flex flex-col" style={{ maxHeight: 'calc(100dvh - 250px)' }}>
               {timetableSelection[latestMutation.status].element}
             </div>
           </div>
