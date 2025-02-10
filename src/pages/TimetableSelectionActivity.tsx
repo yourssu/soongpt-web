@@ -106,9 +106,11 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
       ),
     },
     error: {
-      title: '찾지 못했어요 ㅠㅠ',
+      title: '찾지 못했어요',
       buttonText: '다시 만들기',
-      element: <>{latestMutation.error && latestMutation.error.message}</>,
+      element: (
+        <div className="text-center">{latestMutation.error && latestMutation.error.message}</div>
+      ),
     },
     idle: {
       title: '가져오는 중이에요!',
@@ -128,7 +130,7 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
             시간표를 {timetableSelection[latestMutation.status].title}
           </h2>
           <div className="mt-4 w-full flex-1 overflow-hidden px-10" ref={emblaRef}>
-            <div className="-mt-4 flex flex-col" style={{ maxHeight: 'calc(100dvh - 250px)' }}>
+            <div className="mt-4 flex flex-col" style={{ maxHeight: 'calc(100dvh - 250px)' }}>
               {timetableSelection[latestMutation.status].element}
             </div>
           </div>
