@@ -1,5 +1,12 @@
 import { z } from 'zod';
 
+export const courseClassificationSchema = z.enum([
+  'MAJOR_REQUIRED',
+  'MAJOR_ELECTIVE',
+  'GENERAL_REQUIRED',
+  'GENERAL_ELECTIVE',
+]);
+
 export const courseTimeSchema = z.object({
   week: z.string(),
   start: z.string(),
@@ -10,7 +17,7 @@ export const courseTimeSchema = z.object({
 export const courseSchema = z.object({
   courseName: z.string(),
   professorName: z.string(),
-  classification: z.string(),
+  classification: courseClassificationSchema,
   credit: z.number(),
   target: z.array(z.string()),
   courseTime: z.array(courseTimeSchema),
@@ -22,5 +29,6 @@ export const courseResponseSchema = z.object({
 });
 
 export type Course = z.infer<typeof courseSchema>;
+export type CourseClassification = z.infer<typeof courseClassificationSchema>;
 export type CourseWithoutTarget = Omit<Course, 'target'>;
 export type CourseTime = z.infer<typeof courseTimeSchema>;

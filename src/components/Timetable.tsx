@@ -28,8 +28,18 @@ const TIME_TABLE_TAG: Record<TimetableTag, string> = {
   NO_EVENING_CLASSES: '🛏 저녁수업이 없는 시간표',
 };
 
-const getTotalCredit = (courses: CourseWithoutTarget[]): number => {
+export const getTotalCredit = (courses: CourseWithoutTarget[]): number => {
   return courses.reduce((acc, course) => acc + course.credit, 0);
+};
+
+export const getMajorCredit = (courses: CourseWithoutTarget[]): number => {
+  return courses.reduce((acc, course) => {
+    if (course.classification === 'MAJOR_REQUIRED' || course.classification === 'MAJOR_ELECTIVE') {
+      return acc + course.credit;
+    }
+
+    return acc;
+  }, 0);
 };
 
 const getDays = (courses: CourseWithoutTarget[]): string[] => {
