@@ -34,7 +34,7 @@ const TimetableSkeletonHeader = ({
 
 export const TemplateSkeleton = () => {
   return (
-    <div className="w-full pl-5">
+    <div className="w-full px-5">
       <div className="w-full overflow-hidden rounded-xl bg-gray-200 px-6 py-16">
         <div className="rounded-xl bg-gray-300 px-3 py-2">
           <TimetableSkeleton className="!border-0 bg-white">
