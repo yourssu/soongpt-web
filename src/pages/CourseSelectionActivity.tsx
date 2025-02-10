@@ -21,13 +21,14 @@ const isSameCourse = (a: Course, b: Course) =>
   a.courseName === b.courseName && a.professorName === b.professorName;
 
 interface CourseSelectionActivityParams {
-  type: CourseType;
+  type?: CourseType;
 }
 
 const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityParams> = ({
   params,
 }) => {
   const state = StudentMachineContext.useSelector((state) => state);
+  const type = params.type ?? 'majorRequired';
 
   const [selectedCourses, setSelectedCourses] = useState<Course[]>([]);
   const [totalCredit, setTotalCredit] = useState<Record<CourseType, number>>({
@@ -40,9 +41,9 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
   const { push } = useFlow();
 
   const onNextClick = () => {
-    if (courseSelection[params.type].next) {
+    if (courseSelection[type].next) {
       stepPush({
-        type: courseSelection[params.type].next,
+        type: courseSelection[type].next,
       } as CourseSelectionActivityParams);
       return;
     }
@@ -66,7 +67,7 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
     setSelectedCourses((prevState) => {
       const isSelected = prevState.some((c) => isSameCourse(c, course));
 
-      let newCredit = totalCredit[params.type];
+      let newCredit = totalCredit[type];
       if (isSelected) {
         newCredit -= credit;
       } else {
@@ -74,7 +75,7 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
       }
       setTotalCredit((prev) => ({
         ...prev,
-        [params.type]: newCredit,
+        [type]: newCredit,
       }));
 
       return isSelected
@@ -90,7 +91,7 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
   };
 
   const {
-    [params.type]: { data },
+    [type]: { data },
   } = useGetCourses({
     schoolId: state.context.admissionYear,
     grade: state.context.grade,
@@ -114,7 +115,7 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
       return baseData;
     });
 
-    if (params.type === 'majorElective') {
+    if (type === 'majorElective') {
       return courses.filter((course) =>
         selectedGrades.some((grade) =>
           course.target.includes(`${state.context.department}${grade}`),
@@ -123,16 +124,16 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
     }
 
     return courses;
-  }, [data, params.type, selectedGrades, state.context.department]);
+  }, [data, type, selectedGrades, state.context.department]);
 
   return (
     <AppScreen>
       <AnimatePresence mode="wait">
         <CourseListContext.Provider value={selectedCourses}>
           <div className="flex max-h-screen min-h-screen flex-col gap-15 py-12">
-            <AppBar progress={courseSelection[params.type].progress} />
+            <AppBar progress={courseSelection[type].progress} />
             <motion.div
-              key={params.type}
+              key={type}
               className="flex flex-1 flex-col items-center gap-16 overflow-auto"
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
@@ -140,13 +141,11 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
             >
               <div className="flex w-full flex-1 flex-col items-center overflow-auto">
                 <h2 className="text-center text-[28px]/[normal] font-semibold whitespace-pre-wrap">
-                  {courseSelection[params.type].title}
+                  {courseSelection[type].title}
                 </h2>
-                <span className="items mt-1 font-light">
-                  {courseSelection[params.type].description}
-                </span>
+                <span className="items mt-1 font-light">{courseSelection[type].description}</span>
                 <div className="mt-10 flex w-full flex-1 flex-col gap-3 overflow-auto px-12">
-                  {params.type === 'majorElective' && (
+                  {type === 'majorElective' && (
                     <div className="flex gap-1.5">
                       {gradeSelection.map((grades) => (
                         <GradeChip
@@ -183,13 +182,13 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
                   선택했어요
                 </span>
                 <div className="flex w-full items-center justify-center gap-3">
-                  {params.type === 'majorElective' && <ViewSelectedCoursesButton />}
+                  {type === 'majorElective' && <ViewSelectedCoursesButton />}
                   <button
                     type="button"
                     className="bg-primary max-w-52 flex-1 rounded-2xl py-3.5 font-semibold text-white"
                     onClick={onNextClick}
                   >
-                    {courseSelection[params.type].okText}
+                    {courseSelection[type].okText}
                   </button>
                 </div>
               </div>
