@@ -1,25 +1,37 @@
 import { AppScreen } from '@stackflow/plugin-basic-ui';
 import { ActivityComponentType } from '@stackflow/react';
-import { AnimatePresence, motion } from 'motion/react';
-import { useState } from 'react';
 import AppBar from '../components/AppBar';
 import CourseListItem from '../components/CourseListItem.tsx';
+import { useState } from 'react';
+import { useFlow, useStepFlow } from '../stackflow.ts';
+import { AnimatePresence, motion } from 'motion/react';
+import { CourseType } from '../type/course.type.ts';
+import { courseSelection, gradeSelection } from '../data/courseSelection.ts';
 import GradeChip from '../components/GradeChip.tsx';
 import ViewSelectedCoursesButton from '../components/ViewSelectedCoursesButton.tsx';
-import { courseSelection } from '../constant/course.constant.ts';
 import { CourseListContext } from '../context/CourseListContext.ts';
-import { useFlow, useStepFlow } from '../stackflow.ts';
-import { CourseType } from '../type/course.type.ts';
+import { useGetCourses } from '../hooks/useGetCourses.ts';
+import { Course } from '../schemas/courseSchema.ts';
+import { useMemo } from 'react';
+import _ from 'lodash';
+import { Grade } from '../schemas/studentSchema.ts';
+import { StudentMachineContext } from '../machines/studentMachine.ts';
+
+const isSameCourse = (a: Course, b: Course) =>
+  a.courseName === b.courseName && a.professorName === b.professorName;
 
 interface CourseSelectionActivityParams {
-  type: CourseType;
+  type?: CourseType;
 }
 
 const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityParams> = ({
   params,
 }) => {
-  const [selectedCourseIds, setSelectedCourseIds] = useState<string[]>([]);
-  const [totalCredit, setTotalCredit] = useState<{ [K in CourseType]: number }>({
+  const state = StudentMachineContext.useSelector((state) => state);
+  const type = params.type ?? 'majorRequired';
+
+  const [selectedCourses, setSelectedCourses] = useState<Course[]>([]);
+  const [totalCredit, setTotalCredit] = useState<Record<CourseType, number>>({
     majorRequired: 0,
     majorElective: 0,
     generalRequired: 0,
@@ -29,60 +41,99 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
   const { push } = useFlow();
 
   const onNextClick = () => {
-    if (courseSelection[params.type].next) {
+    if (courseSelection[type].next) {
       stepPush({
-        type: courseSelection[params.type].next,
+        type: courseSelection[type].next,
       } as CourseSelectionActivityParams);
       return;
     }
 
     push('DesiredCreditActivity', {
-      majorRequiredCourses: [],
-      majorElectiveCourses: ['전공종합설계1', '컴퓨터그래픽스'],
-      generalRequiredCourses: [],
+      majorRequiredCourses: selectedCourses
+        .filter((course) => course.classification === 'MAJOR_REQUIRED')
+        .map((course) => course.courseName),
+      majorElectiveCourses: selectedCourses
+        .filter((course) => course.classification === 'MAJOR_ELECTIVE')
+        .map((course) => course.courseName),
+      generalRequiredCourses: selectedCourses
+        .filter((course) => course.classification === 'GENERAL_REQUIRED')
+        .map((course) => course.courseName),
       ...totalCredit,
     });
   };
 
-  const courses = courseSelection[params.type].courses;
+  const onClickCourseItem = (course: Course) => {
+    const credit = courses.find((c) => isSameCourse(c, course))?.credit ?? 0;
+    setSelectedCourses((prevState) => {
+      const isSelected = prevState.some((c) => isSameCourse(c, course));
 
-  const onClickCourseItem = (courseId: string) => {
-    const credit = courses.find((course) => course.courseId === courseId)?.credit ?? 0;
-
-    setSelectedCourseIds((prevState) => {
-      if (prevState.includes(courseId)) {
-        setTotalCredit({ ...totalCredit, [params.type]: totalCredit[params.type] - credit });
-        return prevState.filter((prevCourseId) => prevCourseId !== courseId);
+      let newCredit = totalCredit[type];
+      if (isSelected) {
+        newCredit -= credit;
       } else {
-        setTotalCredit({ ...totalCredit, [params.type]: totalCredit[params.type] + credit });
-        return [...prevState, courseId];
+        newCredit += credit;
       }
+      setTotalCredit((prev) => ({
+        ...prev,
+        [type]: newCredit,
+      }));
+
+      return isSelected
+        ? prevState.filter((c) => !isSameCourse(c, course))
+        : [...prevState, course];
     });
   };
 
-  const [selectedGrade, setSelectedGrade] = useState(
-    (
-      JSON.parse(localStorage.getItem('student') || '') as { context: { grade: number } }
-    ).context.grade.toString(),
-  );
+  const [selectedGrades, setSelectedGrades] = useState([state.context.grade]);
 
-  const onClickGradeChip = (grade: string) => () => {
-    setSelectedGrade(grade);
+  const onClickGradeChip = (grades: Grade[]) => () => {
+    setSelectedGrades(grades);
   };
+
+  const {
+    [type]: { data },
+  } = useGetCourses({
+    schoolId: state.context.admissionYear,
+    grade: state.context.grade,
+    department: state.context.department,
+  });
+
+  const courses = useMemo<Course[]>(() => {
+    if (data === undefined) return [];
+
+    const groupedCourses = _.groupBy(data.result, 'courseName');
+
+    const courses = _.map(groupedCourses, (courses: Course[]) => {
+      const baseData = { ...courses[0] };
+
+      const professors = _.uniq(
+        _.map(courses, 'professorName').filter((name) => name && name.trim() !== ''),
+      );
+
+      baseData.professorName = professors.length > 0 ? professors.join(', ') : '';
+
+      return baseData;
+    });
+
+    if (type === 'majorElective') {
+      return courses.filter((course) =>
+        selectedGrades.some((grade) =>
+          course.target.includes(`${state.context.department}${grade}`),
+        ),
+      );
+    }
+
+    return courses;
+  }, [data, type, selectedGrades, state.context.department]);
 
   return (
     <AppScreen>
       <AnimatePresence mode="wait">
-        <CourseListContext.Provider
-          value={Object.values(courseSelection)
-            .map((item) => item.courses)
-            .flat()
-            .filter(({ courseId }) => selectedCourseIds.includes(courseId))}
-        >
+        <CourseListContext.Provider value={selectedCourses}>
           <div className="flex max-h-screen min-h-screen flex-col gap-15 py-12">
-            <AppBar progress={courseSelection[params.type].progress} />
+            <AppBar progress={courseSelection[type].progress} />
             <motion.div
-              key={params.type}
+              key={type}
               className="flex flex-1 flex-col items-center gap-16 overflow-auto"
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
@@ -90,33 +141,35 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
             >
               <div className="flex w-full flex-1 flex-col items-center overflow-auto">
                 <h2 className="text-center text-[28px]/[normal] font-semibold whitespace-pre-wrap">
-                  {courseSelection[params.type].title}
+                  {courseSelection[type].title}
                 </h2>
-                <span className="items mt-1 font-light">
-                  {courseSelection[params.type].description}
-                </span>
+                <span className="items mt-1 font-light">{courseSelection[type].description}</span>
                 <div className="mt-10 flex w-full flex-1 flex-col gap-3 overflow-auto px-12">
-                  {params.type === 'majorElective' && (
+                  {type === 'majorElective' && (
                     <div className="flex gap-1.5">
-                      {['1학년', '2학년', '3학년', '4,5학년'].map((grade) => (
+                      {gradeSelection.map((grades) => (
                         <GradeChip
-                          onClickGradeChip={onClickGradeChip(grade)}
-                          key={grade}
-                          isSelected={grade.includes(selectedGrade)}
-                          grade={grade}
+                          onClickGradeChip={onClickGradeChip(grades)}
+                          key={grades.join(', ')}
+                          isSelected={grades.join(',') === selectedGrades.join(',')}
+                          grades={grades}
                         />
                       ))}
                     </div>
                   )}
-                  <div className="flex flex-1 flex-col gap-3.5 overflow-auto">
-                    {courses.map((course) => (
-                      <CourseListItem
-                        onClickCourseItem={onClickCourseItem}
-                        isSelected={selectedCourseIds.includes(course.courseId)}
-                        key={course.courseId}
-                        course={course}
-                      />
-                    ))}
+                  <div className="overflow-auto">
+                    <div className="flex flex-1 flex-col gap-3.5">
+                      {courses.map((course) => (
+                        <CourseListItem
+                          onClickCourseItem={onClickCourseItem}
+                          isSelected={selectedCourses.some((selectedCourse) =>
+                            isSameCourse(course, selectedCourse),
+                          )}
+                          key={course.courseName}
+                          course={course}
+                        />
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -129,13 +182,13 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
                   선택했어요
                 </span>
                 <div className="flex w-full items-center justify-center gap-3">
-                  {params.type === 'majorElective' && <ViewSelectedCoursesButton />}
+                  {type === 'majorElective' && <ViewSelectedCoursesButton />}
                   <button
                     type="button"
                     className="bg-primary max-w-52 flex-1 rounded-2xl py-3.5 font-semibold text-white"
                     onClick={onNextClick}
                   >
-                    {courseSelection[params.type].okText}
+                    {courseSelection[type].okText}
                   </button>
                 </div>
               </div>

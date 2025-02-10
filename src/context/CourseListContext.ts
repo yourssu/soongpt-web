@@ -1,4 +1,4 @@
 import { createContext } from 'react';
-import { Course } from '../type/course.type.ts';
+import { Course } from '../schemas/courseSchema.ts';
 
 export const CourseListContext = createContext<Course[]>([]);
