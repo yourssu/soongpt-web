@@ -130,7 +130,7 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
     <AppScreen>
       <AnimatePresence mode="wait">
         <CourseListContext.Provider value={selectedCourses}>
-          <div className="flex max-h-screen min-h-screen flex-col gap-15 py-12">
+          <div className="flex min-h-dvh flex-col gap-15 py-12">
             <AppBar progress={courseSelection[type].progress} />
             <motion.div
               key={type}
@@ -144,7 +144,7 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
                   {courseSelection[type].title}
                 </h2>
                 <span className="items mt-1 font-light">{courseSelection[type].description}</span>
-                <div className="mt-10 flex w-full flex-1 flex-col gap-3 overflow-auto px-12">
+                <div className="mt-10 flex max-h-80 w-full flex-1 flex-col gap-3 overflow-auto px-12">
                   {type === 'majorElective' && (
                     <div className="flex gap-1.5">
                       {gradeSelection.map((grades) => (
@@ -157,7 +157,13 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
                       ))}
                     </div>
                   )}
-                  <div className="overflow-auto">
+                  <motion.div
+                    key={selectedGrades.join(',')}
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ duration: 0.4, ease: 'easeOut' }}
+                    className="overflow-auto"
+                  >
                     <div className="flex flex-1 flex-col gap-3.5">
                       {courses.map((course) => (
                         <CourseListItem
@@ -170,7 +176,7 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
                         />
                       ))}
                     </div>
-                  </div>
+                  </motion.div>
                 </div>
               </div>
               <div className="flex w-full flex-col items-center gap-3 px-12">
