@@ -20,12 +20,10 @@ const TimetableSharingActivity: ActivityComponentType<TimetableSharingParams> = 
     if (!templateRef.current) return null;
 
     const canvas = await html2canvas(templateRef.current, {
-      scale: 2,
-      backgroundColor: null,
-      windowWidth: templateRef.current.clientWidth,
-      windowHeight: templateRef.current.clientHeight,
+      scale: 2, // 더 선명한 이미지를 위해 2배 크기로 렌더링
+      backgroundColor: null, // 투명 배경 유지
     });
-
+    // Canvas를 이미지로 변환
     return canvas.toDataURL('image/png');
   };
 
@@ -33,24 +31,18 @@ const TimetableSharingActivity: ActivityComponentType<TimetableSharingParams> = 
     if (!templateRef.current) return;
 
     try {
-      const canvas = await html2canvas(templateRef.current, {
-        scale: 2, // 더 선명한 이미지를 위해 2배 크기로 렌더링
-        backgroundColor: null, // 투명 배경 유지
-        windowWidth: templateRef.current.clientWidth,
-        windowHeight: templateRef.current.clientHeight,
-      });
-      // Canvas를 이미지로 변환
-      const image = canvas.toDataURL('image/png');
+      const imageUrl = await captureTemplate();
+      if (imageUrl) {
+        // 다운로드 링크 생성
+        const link = document.createElement('a');
+        link.href = imageUrl;
+        link.download = `시간표_${new Date().getTime()}.png`;
 
-      // 다운로드 링크 생성
-      const link = document.createElement('a');
-      link.href = image;
-      link.download = `시간표_${new Date().getTime()}.png`;
-
-      // 다운로드 트리거
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+        // 다운로드 트리거
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
     } catch (error) {
       console.error('Failed to save template:', error);
     }
@@ -64,8 +56,7 @@ const TimetableSharingActivity: ActivityComponentType<TimetableSharingParams> = 
 
       if (imageUrl) {
         // Convert base64 to blob
-        const response = await ky(imageUrl);
-        const blob = await response.blob();
+        const blob = await ky(imageUrl).blob();
 
         const file = new File([blob], `시간표_${new Date().getTime()}.png`, {
           type: 'image/png',
