@@ -1,8 +1,8 @@
 import { AppScreen } from '@stackflow/plugin-basic-ui';
 import { ActivityComponentType } from '@stackflow/react';
-import { useQueryClient } from '@tanstack/react-query';
 import html2canvas from 'html2canvas';
-import { Suspense, useEffect, useRef } from 'react';
+import ky from 'ky';
+import { Suspense, useRef } from 'react';
 import AppBar from '../components/AppBar';
 import TimetableSharingTemplate from '../components/TimetableSharingTemplate';
 import { TemplateSkeleton } from '../components/TimetableSkeleton';
@@ -15,35 +15,34 @@ const TimetableSharingActivity: ActivityComponentType<TimetableSharingParams> = 
   params: { timetableId },
 }) => {
   const templateRef = useRef<HTMLDivElement>(null);
-  const queryClient = useQueryClient();
-  const state = queryClient.getQueryState(['timetable', timetableId]);
 
-  useEffect(() => {
-    console.log(state);
-  }, [state]);
+  const captureTemplate = async () => {
+    if (!templateRef.current) return null;
+
+    const canvas = await html2canvas(templateRef.current, {
+      scale: 2, // 더 선명한 이미지를 위해 2배 크기로 렌더링
+      backgroundColor: null, // 투명 배경 유지
+    });
+    // Canvas를 이미지로 변환
+    return canvas.toDataURL('image/png');
+  };
 
   const handleClickSave = async () => {
     if (!templateRef.current) return;
 
     try {
-      const canvas = await html2canvas(templateRef.current, {
-        scale: 2, // 더 선명한 이미지를 위해 2배 크기로 렌더링
-        backgroundColor: null, // 투명 배경 유지
-        windowWidth: templateRef.current.clientWidth,
-        windowHeight: templateRef.current.clientHeight,
-      });
-      // Canvas를 이미지로 변환
-      const image = canvas.toDataURL('image/png');
+      const imageUrl = await captureTemplate();
+      if (imageUrl) {
+        // 다운로드 링크 생성
+        const link = document.createElement('a');
+        link.href = imageUrl;
+        link.download = `시간표_${new Date().getTime()}.png`;
 
-      // 다운로드 링크 생성
-      const link = document.createElement('a');
-      link.href = image;
-      link.download = `시간표_${new Date().getTime()}.png`;
-
-      // 다운로드 트리거
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+        // 다운로드 트리거
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
     } catch (error) {
       console.error('Failed to save template:', error);
     }
@@ -53,11 +52,26 @@ const TimetableSharingActivity: ActivityComponentType<TimetableSharingParams> = 
     if (!navigator.share) return;
 
     try {
-      await navigator.share({
-        title: '숭피티 추천 시간표',
-        text: '숭피티 추천 시간표를 확인해보세요!',
-        url: window.location.href,
-      });
+      const imageUrl = await captureTemplate();
+
+      if (imageUrl) {
+        // Convert base64 to blob
+        const blob = await ky(imageUrl).blob();
+
+        const file = new File([blob], `시간표_${new Date().getTime()}.png`, {
+          type: 'image/png',
+        });
+
+        const shareData = {
+          title: '숭피티 추천 시간표',
+          text: '숭피티 추천 시간표를 확인해보세요!',
+          files: [file],
+        };
+
+        if (navigator.canShare(shareData)) {
+          await navigator.share(shareData);
+        }
+      }
     } catch (error) {
       console.error('Failed to share template:', error);
     }

@@ -66,19 +66,22 @@ export const TEMPLATE_COLORS: Color[] = [
   },
 ];
 
-const Template = ({ children, bgImage, ...props }: PropsWithChildren<{ bgImage: string }>) => {
-  return (
-    <div
-      className={`w-full overflow-hidden rounded-xl px-6 py-16`}
-      style={{
-        background: `${bgImage}`,
-      }}
-      {...props}
-    >
-      {children}
-    </div>
-  );
-};
+const Template = forwardRef<HTMLDivElement, PropsWithChildren<{ bgImage: string }>>(
+  ({ children, bgImage, ...props }, ref) => {
+    return (
+      <div
+        ref={ref}
+        className={`w-full overflow-hidden rounded-xl px-6 py-16`}
+        style={{
+          background: `${bgImage}`,
+        }}
+        {...props}
+      >
+        {children}
+      </div>
+    );
+  },
+);
 
 const TemplateContent = ({ children, bgImage }: PropsWithChildren<{ bgImage: string }>) => {
   return (
@@ -174,12 +177,11 @@ const TimetableSharingTemplate = forwardRef<HTMLDivElement, TimetableSharingTemp
         <div className="w-full flex-1 overflow-hidden px-5" ref={emblaRef}>
           <div className="-ml-5 flex">
             {TEMPLATE_COLORS.map((color, index) => (
-              <div
-                key={`template-${index}`}
-                className="min-w-0 flex-shrink-0 transform-gpu pl-5"
-                ref={selectedIndex === index ? templateRef : null}
-              >
-                <Template bgImage={color.templateBg}>
+              <div key={`template-${index}`} className="min-w-0 flex-shrink-0 transform-gpu pl-5">
+                <Template
+                  bgImage={color.templateBg}
+                  ref={selectedIndex === index ? templateRef : null}
+                >
                   <TemplateContent bgImage={color.templateContentBg}>
                     <Timetable timetable={timetable} className="!border-0 bg-white">
                       <Timetable.Header
