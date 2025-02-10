@@ -18,7 +18,9 @@ const DepartmentInput = ({ onNext, initialValue }: DepartmentInputProps) => {
     const value = event.target.value.trim();
     setDepartment(value);
 
-    const matches = departments.filter((dept) => value !== '' && dept.includes(value));
+    const matches = departments.filter(
+      (dept) => value !== '' && dept.toLowerCase().includes(value.toLowerCase()),
+    );
     setMatchingDepartments(matches);
   };
 
