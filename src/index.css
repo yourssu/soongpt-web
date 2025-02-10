@@ -22,6 +22,9 @@
 @layer base {
   body {
     color: #292929;
+
+    overflow: hidden;
+    overscroll-behavior: none;
   }
 
   img {

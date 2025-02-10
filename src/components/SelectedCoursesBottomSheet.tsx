@@ -57,7 +57,6 @@ const SelectedCoursesBottomSheet = ({ open, handleClose }: SelectedCourseBottomS
 
   const handleTouchMove: TouchEventHandler = (e) => {
     if (!dragging) return;
-    e.preventDefault();
     const deltaY = startYRef.current - e.touches[0].clientY;
     setContainerHeight(Math.min(deltaY + startValueRef.current, maxHeight));
   };
@@ -82,7 +81,7 @@ const SelectedCoursesBottomSheet = ({ open, handleClose }: SelectedCourseBottomS
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="bg-modal/80 absolute inset-0 z-50 flex touch-none flex-col-reverse overscroll-none px-4 pt-12 pb-[34px]"
+            className="bg-modal/80 absolute inset-0 z-50 flex flex-col-reverse overflow-hidden px-4 pt-12 pb-[34px]"
           >
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -96,7 +95,7 @@ const SelectedCoursesBottomSheet = ({ open, handleClose }: SelectedCourseBottomS
                 onTouchStart={handleTouchStart}
                 className="flex w-full justify-center p-4"
               >
-                <div className="bg-hint h-[4px] w-[30px] rounded-[100px] select-none"></div>
+                <div className="bg-hint h-[4px] w-[30px] rounded-[100px]"></div>
               </div>
               <motion.div
                 className={`mb-[18px] ${dragging ? 'overflow-hidden' : 'overflow-auto'}`}
