@@ -2,7 +2,7 @@ import { AppScreen } from '@stackflow/plugin-basic-ui';
 import { ActivityComponentType } from '@stackflow/react';
 import _ from 'lodash';
 import { AnimatePresence, motion } from 'motion/react';
-import { useMemo, useRef, useState } from 'react';
+import { useMemo, useState } from 'react';
 import AppBar from '../components/AppBar';
 import CourseListItem from '../components/CourseListItem.tsx';
 import GradeChip from '../components/GradeChip.tsx';
@@ -36,20 +36,11 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
     generalRequired: 0,
   });
 
-  const containerRef = useRef<HTMLDivElement | null>(null);
-
   const { stepPush } = useStepFlow('CourseSelectionActivity');
   const { push } = useFlow();
 
   const onNextClick = () => {
     if (courseSelection[type].next) {
-      if (containerRef.current) {
-        containerRef.current.scrollTo({
-          top: 0,
-          behavior: 'smooth',
-        });
-      }
-
       stepPush({
         type: courseSelection[type].next,
       } as CourseSelectionActivityParams);
@@ -139,10 +130,7 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
     <AppScreen>
       <AnimatePresence mode="wait">
         <CourseListContext.Provider value={selectedCourses}>
-          <div
-            ref={containerRef}
-            className="flex max-h-dvh min-h-dvh flex-col gap-6 overflow-auto py-12"
-          >
+          <div className="flex max-h-dvh min-h-dvh flex-col gap-6 py-12">
             <AppBar progress={courseSelection[type].progress} />
             <motion.div
               key={type}
