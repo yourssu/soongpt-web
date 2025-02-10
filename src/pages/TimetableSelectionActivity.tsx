@@ -7,9 +7,9 @@ import { ReactElement, useCallback, useEffect, useState } from 'react';
 import AppBar from '../components/AppBar';
 import Timetable from '../components/Timetable';
 import { TimetableSkeleton } from '../components/TimetableSkeleton';
+import { SoongptError } from '../schemas/errorSchema.ts';
 import { TimetableArrayResponse } from '../schemas/timetableSchema';
 import { useFlow } from '../stackflow';
-import { SoongptError } from '../schemas/errorSchema.ts';
 
 interface TimetableSelection {
   title: string;
@@ -52,10 +52,8 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
       pop(2);
     }
 
-    if (latestMutation.data && 'result' in latestMutation.data) {
+    if (latestMutation.data) {
       const selectedTimetable = latestMutation.data.result.timetables[selectedIndex];
-
-      // queryClient.setQueryData(['timetable', selectedTimetable.timetableId], selectedTimetable);
 
       push('TimetableSharingActivity', {
         timetableId: selectedTimetable.timetableId,
@@ -64,7 +62,7 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
   };
 
   useEffect(() => {
-    if (!latestMutation) replace('OnboardingActivity', {});
+    if (!latestMutation) replace('OnboardingActivity', {}, { animate: false });
   }, [latestMutation, replace]);
 
   if (!latestMutation) {
