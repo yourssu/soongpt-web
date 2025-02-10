@@ -124,10 +124,8 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
       <div className="flex min-h-dvh flex-col py-12">
         <AppBar progress={100} />
         <div className="mt-4 flex flex-1 flex-col items-center">
-          <h2 className="text-center text-[28px] font-semibold">
-            사용자님을 위한
-            <br />
-            시간표를 {timetableSelection[latestMutation.status].title}
+          <h2 className="text-center text-[28px] font-semibold whitespace-pre-wrap">
+            {`사용자님을 위한\n시간표를 ${timetableSelection[latestMutation.status].title}`}
           </h2>
           <div className="mt-4 w-full flex-1 overflow-hidden px-10" ref={emblaRef}>
             <div className="mt-4 flex flex-col" style={{ maxHeight: 'calc(100dvh - 250px)' }}>
