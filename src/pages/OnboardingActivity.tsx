@@ -44,7 +44,7 @@ const OnboardingActivity: ActivityComponentType = () => {
     localStorage.setItem('student', JSON.stringify(persistedState));
 
     push('CourseSelectionActivity', {
-      type: 'majorRequired',
+      type: 'MAJOR_REQUIRED',
     });
   };
 
