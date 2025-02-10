@@ -106,14 +106,14 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
     <AppScreen>
       <div className="flex min-h-dvh flex-col py-12">
         <AppBar progress={100} />
-        <div className="mt-15 flex flex-1 flex-col items-center">
+        <div className="mt-6 flex flex-1 flex-col items-center">
           <h2 className="text-center text-[28px] font-semibold">
             사용자님의 이번학기 <br />
             희망 학점은 <RollingNumber number={desiredCredit} className="text-primary" />
             학점이군요!
           </h2>
           <span className="mt-1 font-light">희망 학점에 맞추어 선택과목을 추천해드릴게요.</span>
-          <div className="mt-15 grid grid-cols-2 gap-x-2.5 gap-y-6 px-12">
+          <div className="mt-6 grid grid-cols-2 gap-x-2.5 gap-y-6 px-12">
             <div>
               <label className="mb-1.5 block text-sm">전공필수 학점</label>
               <input
