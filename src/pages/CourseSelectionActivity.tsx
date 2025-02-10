@@ -44,6 +44,7 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
       stepPush({
         type: courseSelection[type].next,
       } as CourseSelectionActivityParams);
+
       return;
     }
 
@@ -156,7 +157,13 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
                       ))}
                     </div>
                   )}
-                  <div className="overflow-auto">
+                  <motion.div
+                    key={selectedGrades.join(',')}
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ duration: 0.4, ease: 'easeOut' }}
+                    className="overflow-auto"
+                  >
                     <div className="flex flex-1 flex-col gap-3.5">
                       {courses.map((course) => (
                         <CourseListItem
@@ -169,7 +176,7 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
                         />
                       ))}
                     </div>
-                  </div>
+                  </motion.div>
                 </div>
               </div>
               <div className="flex w-full flex-col items-center gap-3 px-12">
