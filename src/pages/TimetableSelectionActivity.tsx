@@ -1,17 +1,24 @@
 import { AppScreen } from '@stackflow/plugin-basic-ui';
 import { ActivityComponentType } from '@stackflow/react';
 
-import { MutationState, useMutationState } from '@tanstack/react-query';
+import { MutationState, MutationStatus, useMutationState } from '@tanstack/react-query';
 import useEmblaCarousel from 'embla-carousel-react';
-import { useCallback, useEffect, useState } from 'react';
+import { ReactElement, useCallback, useEffect, useState } from 'react';
 import AppBar from '../components/AppBar';
 import Timetable from '../components/Timetable';
 import { TimetableSkeleton } from '../components/TimetableSkeleton';
 import { TimetableArrayResponse } from '../schemas/timetableSchema';
 import { useFlow } from '../stackflow';
+import { SoongptError } from '../schemas/errorSchema.ts';
+
+interface TimetableSelection {
+  title: string;
+  buttonText: string;
+  element: ReactElement;
+}
 
 const TimetableSelectionActivity: ActivityComponentType = () => {
-  const timetableMutation = useMutationState<MutationState<TimetableArrayResponse>>({
+  const timetableMutation = useMutationState<MutationState<TimetableArrayResponse, SoongptError>>({
     filters: { mutationKey: ['timetables'] },
   });
 
@@ -22,7 +29,7 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
     axis: 'y',
   });
 
-  const { push, replace } = useFlow();
+  const { push, replace, pop } = useFlow();
 
   const onSelect = useCallback(() => {
     if (emblaApi) {
@@ -41,7 +48,11 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
   }, [emblaApi, onSelect]);
 
   const handleNextClick = () => {
-    if (latestMutation.data) {
+    if (latestMutation.status === 'error') {
+      pop(2);
+    }
+
+    if (latestMutation.data && 'result' in latestMutation.data) {
       const selectedTimetable = latestMutation.data.result.timetables[selectedIndex];
 
       // queryClient.setQueryData(['timetable', selectedTimetable.timetableId], selectedTimetable);
@@ -60,6 +71,52 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
     return null;
   }
 
+  const timetableSelection: Record<MutationStatus, TimetableSelection> = {
+    pending: {
+      title: '가져오는 중이에요!',
+      buttonText: '이 시간표가 좋아요',
+      element: (
+        <TimetableSkeleton className="pt-4">
+          <TimetableSkeleton.Header />
+        </TimetableSkeleton>
+      ),
+    },
+    success: {
+      title: '가져왔어요!',
+      buttonText: '이 시간표가 좋아요',
+      element: (
+        <>
+          {latestMutation.data &&
+            latestMutation.data.result.timetables.map((timetable, index) => (
+              <div
+                key={timetable.timetableId}
+                className={`min-h-0 flex-shrink-0 transform-gpu pt-4`}
+              >
+                <Timetable
+                  timetable={timetable}
+                  className={`${index === selectedIndex ? 'border-primary' : 'border-placeholder'}`}
+                >
+                  <Timetable.Header
+                    className={`${index === selectedIndex ? 'bg-primary text-white' : 'border-placeholder border-b-1'}`}
+                  />
+                </Timetable>
+              </div>
+            ))}
+        </>
+      ),
+    },
+    error: {
+      title: '찾지 못했어요 ㅠㅠ',
+      buttonText: '다시 만들기',
+      element: <>{latestMutation.error && latestMutation.error.message}</>,
+    },
+    idle: {
+      title: '가져오는 중이에요!',
+      buttonText: '이 시간표가 좋아요',
+      element: <></>,
+    },
+  };
+
   return (
     <AppScreen>
       <div className="flex min-h-dvh flex-col py-12">
@@ -68,31 +125,11 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
           <h2 className="text-center text-[28px] font-semibold">
             사용자님을 위한
             <br />
-            시간표를 {latestMutation.status === 'pending' ? '가져오는 중이에요!' : '가져왔어요!'}
+            시간표를 {timetableSelection[latestMutation.status].title}
           </h2>
           <div className="mt-4 w-full flex-1 overflow-hidden px-10" ref={emblaRef}>
             <div className="-mt-4 flex flex-col" style={{ maxHeight: 'calc(100dvh - 250px)' }}>
-              {latestMutation.status === 'pending' ? (
-                <TimetableSkeleton className="pt-4">
-                  <TimetableSkeleton.Header />
-                </TimetableSkeleton>
-              ) : (
-                latestMutation.data?.result.timetables.map((timetable, index) => (
-                  <div
-                    key={timetable.timetableId}
-                    className={`min-h-0 flex-shrink-0 transform-gpu pt-4`}
-                  >
-                    <Timetable
-                      timetable={timetable}
-                      className={`${index === selectedIndex ? 'border-primary' : 'border-placeholder'}`}
-                    >
-                      <Timetable.Header
-                        className={`${index === selectedIndex ? 'bg-primary text-white' : 'border-placeholder border-b-1'}`}
-                      />
-                    </Timetable>
-                  </div>
-                ))
-              )}
+              {timetableSelection[latestMutation.status].element}
             </div>
           </div>
           <button
@@ -101,7 +138,7 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
             disabled={latestMutation.status === 'pending'}
             onClick={handleNextClick}
           >
-            이 시간표가 좋아요
+            {timetableSelection[latestMutation.status].buttonText}
           </button>
         </div>
       </div>
