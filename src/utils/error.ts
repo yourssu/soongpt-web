@@ -1,6 +1,6 @@
-import { SoongptError, soongptErrorSchema } from '../schemas/errorSchema.ts';
 import { HTTPError } from 'ky';
 import { ZodError } from 'zod';
+import { SoongptError, soongptErrorSchema } from '../schemas/errorSchema.ts';
 
 export async function transformError(e: unknown): Promise<SoongptError> {
   if (!(e instanceof HTTPError))
@@ -9,7 +9,7 @@ export async function transformError(e: unknown): Promise<SoongptError> {
       status: 500,
       timestamp: new Date(),
     };
-  return await e.response
+  return e.response
     .json()
     .then((res) => soongptErrorSchema.parse(res))
     .catch((err) => {
