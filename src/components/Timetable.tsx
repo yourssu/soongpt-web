@@ -86,6 +86,25 @@ const getCoursePosition = (courseTime: CourseTime): { top: number; height: numbe
   return { top, height };
 };
 
+const getLineClamp = (courseTime: CourseTime): number => {
+  const [startHour, startMinute] = courseTime.start.split(':').map(Number);
+  const [endHour, endMinute] = courseTime.end.split(':').map(Number);
+
+  const start = startHour * 60 + startMinute;
+  const end = endHour * 60 + endMinute;
+
+  // 50분 이하 2줄 제한
+  if (end - start <= 50) {
+    return 2;
+  }
+  // 1시간 15분 이하 3줄 제한
+  else if (end - start <= 75) {
+    return 3;
+  } else {
+    return 4;
+  }
+};
+
 interface TimetableProps extends HTMLAttributes<HTMLDivElement> {
   timetable: TimetableType;
 }
@@ -214,6 +233,10 @@ const Timetable = ({ children, timetable, className, ...props }: TimetableProps)
                             borderColor: bgColor,
                             top: `${top}px`,
                             height: `${height}px`,
+                            display: '-webkit-box',
+                            WebkitBoxOrient: 'vertical',
+                            WebkitLineClamp: getLineClamp(courseTime),
+                            overflow: 'hidden',
                           }}
                         >
                           {course.courseName}
