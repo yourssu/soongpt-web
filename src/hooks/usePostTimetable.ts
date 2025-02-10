@@ -3,6 +3,7 @@ import api from '../api/client';
 
 import { StudentTimetable } from '../schemas/studentSchema';
 import { timetableArrayResponseSchema } from '../schemas/timetableSchema';
+import { transformError } from '../utils/error.ts';
 
 export const usePostTimetable = () => {
   return useMutation({
@@ -12,7 +13,10 @@ export const usePostTimetable = () => {
         .post('timetables', {
           json: student,
         })
-        .json();
+        .json()
+        .catch(async (e) => {
+          throw await transformError(e);
+        });
 
       return timetableArrayResponseSchema.parse(response);
     },

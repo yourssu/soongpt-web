@@ -183,11 +183,11 @@ const Timetable = ({ children, timetable, className, ...props }: TimetableProps)
 
           {/* Time rows */}
           {timeRange.map((tableTime) => (
-            <div className="border-placeholder col-span-full grid grid-cols-subgrid border-b-1 last:border-b-0">
-              <div
-                key={`${timetable.timetableId}-${tableTime}`}
-                className="border-placeholder flex justify-end border-r-1 p-0.5 text-xs font-light"
-              >
+            <div
+              key={`${timetable.timetableId}-${tableTime}`}
+              className="border-placeholder col-span-full grid grid-cols-subgrid border-b-1 last:border-b-0"
+            >
+              <div className="border-placeholder flex justify-end border-r-1 p-0.5 text-xs font-light">
                 {tableTime}
               </div>
               {days.map((tableDay) => (
