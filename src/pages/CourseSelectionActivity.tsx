@@ -2,7 +2,7 @@ import { AppScreen } from '@stackflow/plugin-basic-ui';
 import { ActivityComponentType } from '@stackflow/react';
 import AppBar from '../components/AppBar';
 import CourseListItem from '../components/CourseListItem.tsx';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useFlow, useStepFlow } from '../stackflow.ts';
 import { AnimatePresence, motion } from 'motion/react';
 import { CourseType } from '../type/course.type.ts';
@@ -37,14 +37,24 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
     generalRequired: 0,
   });
 
+  const containerRef = useRef<HTMLDivElement | null>(null);
+
   const { stepPush } = useStepFlow('CourseSelectionActivity');
   const { push } = useFlow();
 
   const onNextClick = () => {
     if (courseSelection[type].next) {
+      if (containerRef.current) {
+        containerRef.current.scrollTo({
+          top: 0,
+          behavior: 'smooth',
+        });
+      }
+
       stepPush({
         type: courseSelection[type].next,
       } as CourseSelectionActivityParams);
+
       return;
     }
 
@@ -130,21 +140,24 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
     <AppScreen>
       <AnimatePresence mode="wait">
         <CourseListContext.Provider value={selectedCourses}>
-          <div className="flex min-h-dvh flex-col gap-15 py-12">
+          <div
+            ref={containerRef}
+            className="flex max-h-dvh min-h-dvh flex-col gap-15 overflow-auto py-12"
+          >
             <AppBar progress={courseSelection[type].progress} />
             <motion.div
               key={type}
-              className="flex flex-1 flex-col items-center gap-16 overflow-auto"
+              className="flex flex-1 flex-col items-center gap-16"
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.3, ease: 'easeOut' }}
             >
-              <div className="flex w-full flex-1 flex-col items-center overflow-auto">
+              <div className="flex w-full flex-1 flex-col items-center">
                 <h2 className="text-center text-[28px]/[normal] font-semibold whitespace-pre-wrap">
                   {courseSelection[type].title}
                 </h2>
                 <span className="items mt-1 font-light">{courseSelection[type].description}</span>
-                <div className="mt-10 flex max-h-80 w-full flex-1 flex-col gap-3 overflow-auto px-12">
+                <div className="mt-10 flex max-h-80 w-full flex-1 flex-col gap-3 px-12">
                   {type === 'majorElective' && (
                     <div className="flex gap-1.5">
                       {gradeSelection.map((grades) => (
