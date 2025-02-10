@@ -3,8 +3,11 @@ import api from '../api/client';
 
 import { StudentTimetable } from '../schemas/studentSchema';
 import { timetableArrayResponseSchema } from '../schemas/timetableSchema';
+import { useFlow } from '../stackflow.ts';
 
 export const usePostTimetable = () => {
+  const { pop } = useFlow();
+
   return useMutation({
     mutationKey: ['timetables'],
     mutationFn: async (student: StudentTimetable) => {
@@ -16,5 +19,6 @@ export const usePostTimetable = () => {
 
       return timetableArrayResponseSchema.parse(response);
     },
+    onError: () => pop(),
   });
 };

@@ -22,7 +22,7 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
     axis: 'y',
   });
 
-  const { push } = useFlow();
+  const { push, replace } = useFlow();
 
   const onSelect = useCallback(() => {
     if (emblaApi) {
@@ -51,6 +51,14 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
       });
     }
   };
+
+  useEffect(() => {
+    if (!latestMutation) replace('OnboardingActivity', {});
+  }, [latestMutation, replace]);
+
+  if (!latestMutation) {
+    return null;
+  }
 
   return (
     <AppScreen>
