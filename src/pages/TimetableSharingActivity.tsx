@@ -1,8 +1,8 @@
 import { AppScreen } from '@stackflow/plugin-basic-ui';
 import { ActivityComponentType } from '@stackflow/react';
-import { useQueryClient } from '@tanstack/react-query';
 import html2canvas from 'html2canvas';
-import { Suspense, useEffect, useRef } from 'react';
+import ky from 'ky';
+import { Suspense, useRef } from 'react';
 import AppBar from '../components/AppBar';
 import TimetableSharingTemplate from '../components/TimetableSharingTemplate';
 import { TemplateSkeleton } from '../components/TimetableSkeleton';
@@ -15,12 +15,19 @@ const TimetableSharingActivity: ActivityComponentType<TimetableSharingParams> = 
   params: { timetableId },
 }) => {
   const templateRef = useRef<HTMLDivElement>(null);
-  const queryClient = useQueryClient();
-  const state = queryClient.getQueryState(['timetable', timetableId]);
 
-  useEffect(() => {
-    console.log(state);
-  }, [state]);
+  const captureTemplate = async () => {
+    if (!templateRef.current) return null;
+
+    const canvas = await html2canvas(templateRef.current, {
+      scale: 2,
+      backgroundColor: null,
+      windowWidth: templateRef.current.clientWidth,
+      windowHeight: templateRef.current.clientHeight,
+    });
+
+    return canvas.toDataURL('image/png');
+  };
 
   const handleClickSave = async () => {
     if (!templateRef.current) return;
@@ -53,11 +60,27 @@ const TimetableSharingActivity: ActivityComponentType<TimetableSharingParams> = 
     if (!navigator.share) return;
 
     try {
-      await navigator.share({
-        title: '숭피티 추천 시간표',
-        text: '숭피티 추천 시간표를 확인해보세요!',
-        url: window.location.href,
-      });
+      const imageUrl = await captureTemplate();
+
+      if (imageUrl) {
+        // Convert base64 to blob
+        const response = await ky(imageUrl);
+        const blob = await response.blob();
+
+        const file = new File([blob], `시간표_${new Date().getTime()}.png`, {
+          type: 'image/png',
+        });
+
+        const shareData = {
+          title: '숭피티 추천 시간표',
+          text: '숭피티 추천 시간표를 확인해보세요!',
+          files: [file],
+        };
+
+        if (navigator.canShare(shareData)) {
+          await navigator.share(shareData);
+        }
+      }
     } catch (error) {
       console.error('Failed to share template:', error);
     }
