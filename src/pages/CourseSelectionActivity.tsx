@@ -2,7 +2,7 @@ import { AppScreen } from '@stackflow/plugin-basic-ui';
 import { ActivityComponentType } from '@stackflow/react';
 import _ from 'lodash';
 import { AnimatePresence, motion } from 'motion/react';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import AppBar from '../components/AppBar';
 import CourseListItem from '../components/CourseListItem.tsx';
 import GradeChip from '../components/GradeChip.tsx';
@@ -28,6 +28,43 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
 }) => {
   const state = StudentMachineContext.useSelector((state) => state);
   const type = params.type ?? 'MAJOR_REQUIRED';
+  const [selectedGrades, setSelectedGrades] = useState([state.context.grade]);
+
+  const {
+    [type]: { data },
+  } = useGetCourses({
+    schoolId: state.context.admissionYear,
+    grade: state.context.grade,
+    department: state.context.department,
+  });
+
+  const courses = useMemo<Course[]>(() => {
+    if (data === undefined) return [];
+
+    const groupedCourses = _.groupBy(data.result, 'courseName');
+
+    const courses = _.map(groupedCourses, (courses: Course[]) => {
+      const baseData = { ...courses[0] };
+
+      const professors = _.uniq(
+        _.map(courses, 'professorName').filter((name) => name && name.trim() !== ''),
+      );
+
+      baseData.professorName = professors.length > 0 ? professors.join(', ') : '';
+
+      return baseData;
+    });
+
+    if (type === 'MAJOR_ELECTIVE') {
+      return courses.filter((course) =>
+        selectedGrades.some((grade) =>
+          course.target.includes(`${state.context.department}${grade}`),
+        ),
+      );
+    }
+
+    return courses;
+  }, [data, type, selectedGrades, state.context.department]);
 
   const [selectedCourses, setSelectedCourses] = useState<Course[]>([]);
   const [totalCredit, setTotalCredit] = useState<Record<CourseType, number>>({
@@ -86,47 +123,30 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
     });
   };
 
-  const [selectedGrades, setSelectedGrades] = useState([state.context.grade]);
-
   const onClickGradeChip = (grades: Grade[]) => () => {
     setSelectedGrades(grades);
   };
 
-  const {
-    [type]: { data },
-  } = useGetCourses({
-    schoolId: state.context.admissionYear,
-    grade: state.context.grade,
-    department: state.context.department,
+  const initRef = useRef<Record<CourseType, boolean>>({
+    MAJOR_REQUIRED: false,
+    GENERAL_REQUIRED: false,
+    MAJOR_ELECTIVE: false,
   });
 
-  const courses = useMemo<Course[]>(() => {
-    if (data === undefined) return [];
-
-    const groupedCourses = _.groupBy(data.result, 'courseName');
-
-    const courses = _.map(groupedCourses, (courses: Course[]) => {
-      const baseData = { ...courses[0] };
-
-      const professors = _.uniq(
-        _.map(courses, 'professorName').filter((name) => name && name.trim() !== ''),
-      );
-
-      baseData.professorName = professors.length > 0 ? professors.join(', ') : '';
-
-      return baseData;
-    });
-
-    if (type === 'MAJOR_ELECTIVE') {
-      return courses.filter((course) =>
-        selectedGrades.some((grade) =>
-          course.target.includes(`${state.context.department}${grade}`),
-        ),
-      );
+  useEffect(() => {
+    if (
+      (type === 'MAJOR_REQUIRED' || type === 'GENERAL_REQUIRED') &&
+      courses.length > 0 &&
+      !initRef.current[type]
+    ) {
+      setSelectedCourses((prevState) => [...prevState, ...courses]);
+      setTotalCredit((prevState) => ({
+        ...prevState,
+        [type]: courses.reduce((acc, course) => acc + course.credit, 0),
+      }));
+      initRef.current[type] = true;
     }
-
-    return courses;
-  }, [data, type, selectedGrades, state.context.department]);
+  }, [courses, type]);
 
   return (
     <AppScreen>
