@@ -92,13 +92,12 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
     setSelectedGrades(grades);
   };
 
-  const { data } = useGetCourses({
-    type: params.type,
-    info: {
-      schoolId: state.context.admissionYear,
-      grade: state.context.grade,
-      department: state.context.department,
-    },
+  const {
+    [params.type]: { data },
+  } = useGetCourses({
+    schoolId: state.context.admissionYear,
+    grade: state.context.grade,
+    department: state.context.department,
   });
 
   const courses = useMemo<Course[]>(() => {
