@@ -1,4 +1,6 @@
-export type CourseType = 'majorRequired' | 'generalRequired' | 'majorElective';
+import { CourseClassification } from '../schemas/courseSchema.ts';
+
+export type CourseType = Exclude<CourseClassification, 'GENERAL_ELECTIVE'>;
 
 export interface CourseSelection {
   title: string;

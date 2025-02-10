@@ -27,13 +27,13 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
   params,
 }) => {
   const state = StudentMachineContext.useSelector((state) => state);
-  const type = params.type ?? 'majorRequired';
+  const type = params.type ?? 'MAJOR_REQUIRED';
 
   const [selectedCourses, setSelectedCourses] = useState<Course[]>([]);
   const [totalCredit, setTotalCredit] = useState<Record<CourseType, number>>({
-    majorRequired: 0,
-    majorElective: 0,
-    generalRequired: 0,
+    MAJOR_REQUIRED: 0,
+    MAJOR_ELECTIVE: 0,
+    GENERAL_REQUIRED: 0,
   });
 
   const { stepPush } = useStepFlow('CourseSelectionActivity');
@@ -58,7 +58,9 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
       generalRequiredCourses: selectedCourses
         .filter((course) => course.classification === 'GENERAL_REQUIRED')
         .map((course) => course.courseName),
-      ...totalCredit,
+      majorRequired: totalCredit['MAJOR_REQUIRED'],
+      generalRequired: totalCredit['GENERAL_REQUIRED'],
+      majorElective: totalCredit['MAJOR_ELECTIVE'],
     });
   };
 
@@ -115,7 +117,7 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
       return baseData;
     });
 
-    if (type === 'majorElective') {
+    if (type === 'MAJOR_ELECTIVE') {
       return courses.filter((course) =>
         selectedGrades.some((grade) =>
           course.target.includes(`${state.context.department}${grade}`),
@@ -145,7 +147,7 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
                 </h2>
                 <span className="items mt-1 font-light">{courseSelection[type].description}</span>
                 <div className="mt-6 flex w-full flex-1 flex-col gap-3 overflow-auto px-12">
-                  {type === 'majorElective' && (
+                  {type === 'MAJOR_ELECTIVE' && (
                     <div className="flex gap-1.5">
                       {gradeSelection.map((grades) => (
                         <GradeChip
@@ -188,7 +190,7 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
                   선택했어요
                 </span>
                 <div className="flex w-full items-center justify-center gap-3">
-                  {type === 'majorElective' && <ViewSelectedCoursesButton />}
+                  {type === 'MAJOR_ELECTIVE' && <ViewSelectedCoursesButton />}
                   <button
                     type="button"
                     className="bg-primary max-w-52 flex-1 rounded-2xl py-3.5 font-semibold text-white"

@@ -4,12 +4,12 @@ import { courseResponseSchema } from '../schemas/courseSchema';
 import { StudentWithoutChapel } from '../schemas/studentSchema';
 import { CourseType } from '../type/course.type.ts';
 
-const courseTypes = ['majorRequired', 'majorElective', 'generalRequired'] as const;
+const courseTypes = ['MAJOR_REQUIRED', 'MAJOR_ELECTIVE', 'GENERAL_REQUIRED'] as const;
 
 const url: Record<CourseType, string> = {
-  majorRequired: 'major/required',
-  majorElective: 'major/elective',
-  generalRequired: 'general/required',
+  MAJOR_REQUIRED: 'major/required',
+  MAJOR_ELECTIVE: 'major/elective',
+  GENERAL_REQUIRED: 'general/required',
 };
 
 export const useGetCourses = (info: StudentWithoutChapel) => {
@@ -30,8 +30,8 @@ export const useGetCourses = (info: StudentWithoutChapel) => {
   });
 
   return {
-    majorRequired: results[0],
-    majorElective: results[1],
-    generalRequired: results[2],
+    MAJOR_REQUIRED: results[0],
+    MAJOR_ELECTIVE: results[1],
+    GENERAL_REQUIRED: results[2],
   };
 };

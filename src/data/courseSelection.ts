@@ -1,22 +1,22 @@
 import { CourseSelection, CourseType } from '../type/course.type.ts';
 import { Grade } from '../schemas/studentSchema.ts';
 
-export const courseSelection: { [key in CourseType]: CourseSelection } = {
-  majorRequired: {
+export const courseSelection: Record<CourseType, CourseSelection> = {
+  MAJOR_REQUIRED: {
     title: '이번 학기에 이수해야 하는\n전공필수과목이에요.',
     description: '잘못되었다면 이수할 과목만 선택해주세요!',
     okText: '확인했어요',
-    next: 'generalRequired',
+    next: 'GENERAL_REQUIRED',
     progress: 33,
   },
-  generalRequired: {
+  GENERAL_REQUIRED: {
     title: '이번 학기에 이수해야 하는\n교양필수과목이에요.',
     description: '잘못되었다면 이수할 과목만 선택해주세요!',
-    next: 'majorElective',
+    next: 'MAJOR_ELECTIVE',
     progress: 66,
     okText: '확인했어요',
   },
-  majorElective: {
+  MAJOR_ELECTIVE: {
     title: '이번 학기에 이수할\n전공선택과목을 알려주세요!',
     description: '타학년 전공선택과목도 선택할 수 있어요.',
     next: null,
