@@ -261,24 +261,22 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
             <Hint.Text>이수 가능한 최대 학점은 22학점이에요.</Hint.Text>
           </Hint>
 
-          {(majorElective !== params.majorElective || generalElective > 0) && (
-            <motion.button
-              onClick={handleNextClick}
-              type="button"
-              className="bg-primary mt-auto w-50 rounded-2xl py-3.5 font-semibold text-white"
-              initial={{
-                opacity: 0,
-                y: 20,
-              }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{
-                duration: 0.3,
-                ease: 'easeOut',
-              }}
-            >
-              네 맞아요
-            </motion.button>
-          )}
+          <motion.button
+            onClick={handleNextClick}
+            type="button"
+            className="bg-primary mt-auto w-50 rounded-2xl py-3.5 font-semibold text-white"
+            initial={{
+              opacity: 0,
+              y: 20,
+            }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: 0.3,
+              ease: 'easeOut',
+            }}
+          >
+            네 맞아요
+          </motion.button>
         </div>
       </div>
     </AppScreen>
