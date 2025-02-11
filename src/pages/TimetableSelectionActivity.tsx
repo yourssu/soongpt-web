@@ -10,6 +10,8 @@ import { TimetableSkeleton } from '../components/TimetableSkeleton';
 import { SoongptError } from '../schemas/errorSchema.ts';
 import { TimetableArrayResponse } from '../schemas/timetableSchema';
 import { useFlow } from '../stackflow';
+import Warning from '../assets/warning.svg';
+import { motion } from 'motion/react';
 
 interface TimetableSelection {
   title: string;
@@ -74,41 +76,45 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
       title: '가져오는 중이에요!',
       buttonText: '이 시간표가 좋아요',
       element: (
-        <TimetableSkeleton className="pt-4">
-          <TimetableSkeleton.Header />
-        </TimetableSkeleton>
+        <div className="mt-4 w-full flex-1 overflow-hidden px-10" ref={emblaRef}>
+          <div className="-mt-4 flex h-full flex-col" style={{ maxHeight: 'calc(100dvh - 250px)' }}>
+            <TimetableSkeleton className="pt-4">
+              <TimetableSkeleton.Header />
+            </TimetableSkeleton>
+          </div>
+        </div>
       ),
     },
     success: {
       title: '가져왔어요!',
       buttonText: '이 시간표가 좋아요',
       element: (
-        <>
-          {latestMutation.data &&
-            latestMutation.data.result.timetables.map((timetable, index) => (
-              <div
-                key={timetable.timetableId}
-                className={`min-h-0 flex-shrink-0 transform-gpu pt-4 first:pt-0`}
-              >
-                <Timetable
-                  timetable={timetable}
-                  className={`${index === selectedIndex ? 'border-primary' : 'border-placeholder'}`}
+        <div className="mt-4 w-full flex-1 overflow-hidden px-10" ref={emblaRef}>
+          <div className="-mt-4 flex h-full flex-col" style={{ maxHeight: 'calc(100dvh - 250px)' }}>
+            {latestMutation.data &&
+              latestMutation.data.result.timetables.map((timetable, index) => (
+                <div
+                  key={timetable.timetableId}
+                  className={`min-h-0 flex-shrink-0 transform-gpu pt-4 first:pt-0`}
                 >
-                  <Timetable.Header
-                    className={`${index === selectedIndex ? 'bg-primary text-white' : 'border-placeholder border-b-1'}`}
-                  />
-                </Timetable>
-              </div>
-            ))}
-        </>
+                  <Timetable
+                    timetable={timetable}
+                    className={`${index === selectedIndex ? 'border-primary' : 'border-placeholder'}`}
+                  >
+                    <Timetable.Header
+                      className={`${index === selectedIndex ? 'bg-primary text-white' : 'border-placeholder border-b-1'}`}
+                    />
+                  </Timetable>
+                </div>
+              ))}
+          </div>
+        </div>
       ),
     },
     error: {
-      title: '찾지 못했어요',
+      title: '찾지 못했어요..',
       buttonText: '다시 만들기',
-      element: (
-        <div className="text-center">{latestMutation.error && latestMutation.error.message}</div>
-      ),
+      element: <img className="m-auto" src={Warning} alt="warning" />,
     },
     idle: {
       title: '가져오는 중이에요!',
@@ -119,17 +125,19 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
 
   return (
     <AppScreen>
-      <div className="flex min-h-dvh flex-col py-12">
+      <div className="flex min-h-dvh flex-col py-6">
         <AppBar progress={100} />
-        <div className="mt-4 flex flex-1 flex-col items-center">
+        <motion.div
+          key={latestMutation.status}
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.4, ease: 'easeOut' }}
+          className="mt-4 flex flex-1 flex-col items-center"
+        >
           <h2 className="text-center text-[28px] font-semibold whitespace-pre-wrap">
             {`사용자님을 위한\n시간표를 ${timetableSelection[latestMutation.status].title}`}
           </h2>
-          <div className="mt-4 w-full flex-1 overflow-hidden px-10" ref={emblaRef}>
-            <div className="flex flex-col" style={{ maxHeight: 'calc(100dvh - 250px)' }}>
-              {timetableSelection[latestMutation.status].element}
-            </div>
-          </div>
+          {timetableSelection[latestMutation.status].element}
           <button
             type="button"
             className={`mt-4 w-50 rounded-2xl py-3.5 font-semibold text-white ${latestMutation.status === 'pending' ? 'bg-gray-300' : 'bg-primary'}`}
@@ -138,7 +146,7 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
           >
             {timetableSelection[latestMutation.status].buttonText}
           </button>
-        </div>
+        </motion.div>
       </div>
     </AppScreen>
   );

@@ -15,6 +15,7 @@ import { Course } from '../schemas/courseSchema.ts';
 import { Grade } from '../schemas/studentSchema.ts';
 import { useFlow, useStepFlow } from '../stackflow.ts';
 import { CourseType } from '../type/course.type.ts';
+import { useGetArrayState } from '../hooks/useGetArrayState.ts';
 
 const isSameCourse = (a: Course, b: Course) =>
   a.courseName === b.courseName && a.professorName === b.professorName;
@@ -31,7 +32,7 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
   const [selectedGrades, setSelectedGrades] = useState([state.context.grade]);
 
   const {
-    [type]: { data },
+    [type]: { data, isPending },
   } = useGetCourses({
     schoolId: state.context.admissionYear,
     grade: state.context.grade,
@@ -57,9 +58,10 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
 
     if (type === 'MAJOR_ELECTIVE') {
       return courses.filter((course) =>
-        selectedGrades.some((grade) =>
-          course.target.includes(`${state.context.department}${grade}`),
-        ),
+        gradeSelection
+          .filter((grades) => grades.some((grade) => selectedGrades.includes(grade)))
+          .flat()
+          .some((grade) => course.target.includes(`${state.context.department}${grade}`)),
       );
     }
 
@@ -148,11 +150,15 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
     }
   }, [courses, type]);
 
+  const coursesState = useGetArrayState({ array: data?.result ?? [] });
+
+  if (isPending) return null;
+
   return (
     <AppScreen>
       <AnimatePresence mode="wait">
         <CourseListContext.Provider value={selectedCourses}>
-          <div className="flex max-h-dvh min-h-dvh flex-col gap-6 py-12">
+          <div className="flex max-h-dvh min-h-dvh flex-col gap-6 py-6">
             <AppBar progress={courseSelection[type].progress} />
             <motion.div
               key={type}
@@ -163,43 +169,53 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
             >
               <div className="flex w-full flex-1 flex-col items-center overflow-auto">
                 <h2 className="text-center text-[28px]/[normal] font-semibold whitespace-pre-wrap">
-                  {courseSelection[type].title}
+                  {courseSelection[type].info[coursesState].title}
                 </h2>
-                <span className="items mt-1 font-light">{courseSelection[type].description}</span>
-                <div className="mt-6 flex w-full flex-1 flex-col gap-3 overflow-auto px-12">
-                  {type === 'MAJOR_ELECTIVE' && (
-                    <div className="flex gap-1.5">
-                      {gradeSelection.map((grades) => (
-                        <GradeChip
-                          onClickGradeChip={onClickGradeChip(grades)}
-                          key={grades.join(', ')}
-                          isSelected={grades.join(',') === selectedGrades.join(',')}
-                          grades={grades}
-                        />
-                      ))}
-                    </div>
-                  )}
-                  <motion.div
-                    key={selectedGrades.join(',')}
-                    initial={{ y: 20, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ duration: 0.4, ease: 'easeOut' }}
-                    className="overflow-auto"
-                  >
-                    <div className="flex flex-1 flex-col gap-3.5">
-                      {courses.map((course) => (
-                        <CourseListItem
-                          onClickCourseItem={onClickCourseItem}
-                          isSelected={selectedCourses.some((selectedCourse) =>
-                            isSameCourse(course, selectedCourse),
-                          )}
-                          key={course.courseName}
-                          course={course}
-                        />
-                      ))}
-                    </div>
-                  </motion.div>
-                </div>
+                <span className="items mt-1 font-light">
+                  {courseSelection[type].info[coursesState].description}
+                </span>
+                {courseSelection[type].info[coursesState].image ? (
+                  <img
+                    className="my-auto"
+                    src={courseSelection[type].info[coursesState].image}
+                    alt="L-Like"
+                  />
+                ) : (
+                  <div className="mt-6 flex w-full flex-1 flex-col gap-3 overflow-auto px-12">
+                    {type === 'MAJOR_ELECTIVE' && (
+                      <div className="flex gap-1.5">
+                        {gradeSelection.map((grades) => (
+                          <GradeChip
+                            onClickGradeChip={onClickGradeChip(grades)}
+                            key={grades.join(', ')}
+                            isSelected={grades.some((grade) => selectedGrades.includes(grade))}
+                            grades={grades}
+                          />
+                        ))}
+                      </div>
+                    )}
+                    <motion.div
+                      key={selectedGrades.join(',')}
+                      initial={{ y: 20, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      transition={{ duration: 0.4, ease: 'easeOut' }}
+                      className="overflow-auto"
+                    >
+                      <div className="flex flex-1 flex-col gap-3.5">
+                        {courses.map((course) => (
+                          <CourseListItem
+                            onClickCourseItem={onClickCourseItem}
+                            isSelected={selectedCourses.some((selectedCourse) =>
+                              isSameCourse(course, selectedCourse),
+                            )}
+                            key={course.courseName}
+                            course={course}
+                          />
+                        ))}
+                      </div>
+                    </motion.div>
+                  </div>
+                )}
               </div>
               <div className="flex w-full flex-col items-center gap-3 px-12">
                 <span className="text-base font-light">
@@ -216,7 +232,7 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
                     className="bg-primary max-w-52 flex-1 rounded-2xl py-3.5 font-semibold text-white"
                     onClick={onNextClick}
                   >
-                    {courseSelection[type].okText}
+                    {courseSelection[type].info[coursesState].okText}
                   </button>
                 </div>
               </div>

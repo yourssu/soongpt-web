@@ -5,6 +5,7 @@ export const courseClassificationSchema = z.enum([
   'MAJOR_ELECTIVE',
   'GENERAL_REQUIRED',
   'GENERAL_ELECTIVE',
+  'CHAPEL',
 ]);
 
 export const courseTimeSchema = z.object({
