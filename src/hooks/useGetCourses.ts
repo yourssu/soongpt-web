@@ -12,8 +12,11 @@ const url: Record<CourseType, string> = {
   GENERAL_REQUIRED: 'general/required',
 };
 
+const getArrayState = <T>(array: T[]): 'FILLED' | 'EMPTY' =>
+  array.length > 0 ? 'FILLED' : 'EMPTY';
+
 export const useGetCourses = (info: StudentWithoutChapel) => {
-  const results = useQueries({
+  return useQueries({
     queries: courseTypes.map((type) => ({
       queryKey: [type, info],
       queryFn: async () => {
@@ -27,11 +30,19 @@ export const useGetCourses = (info: StudentWithoutChapel) => {
       },
       staleTime: Infinity,
     })),
+    combine: (results) => ({
+      MAJOR_REQUIRED: {
+        ...results[0],
+        arrayState: getArrayState(results[0].data?.result ?? []),
+      },
+      MAJOR_ELECTIVE: {
+        ...results[1],
+        arrayState: getArrayState(results[1].data?.result ?? []),
+      },
+      GENERAL_REQUIRED: {
+        ...results[2],
+        arrayState: getArrayState(results[2].data?.result ?? []),
+      },
+    }),
   });
-
-  return {
-    MAJOR_REQUIRED: results[0],
-    MAJOR_ELECTIVE: results[1],
-    GENERAL_REQUIRED: results[2],
-  };
 };

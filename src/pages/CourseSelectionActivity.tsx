@@ -15,7 +15,6 @@ import { Course } from '../schemas/courseSchema.ts';
 import { Grade } from '../schemas/studentSchema.ts';
 import { useFlow, useStepFlow } from '../stackflow.ts';
 import { CourseType } from '../type/course.type.ts';
-import { useGetArrayState } from '../hooks/useGetArrayState.ts';
 
 const isSameCourse = (a: Course, b: Course) =>
   a.courseName === b.courseName && a.professorName === b.professorName;
@@ -32,7 +31,7 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
   const [selectedGrades, setSelectedGrades] = useState([state.context.grade]);
 
   const {
-    [type]: { data, isPending },
+    [type]: { data, arrayState: coursesState },
   } = useGetCourses({
     schoolId: state.context.admissionYear,
     grade: state.context.grade,
@@ -129,10 +128,9 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
     setSelectedGrades(grades);
   };
 
-  const initRef = useRef<Record<CourseType, boolean>>({
+  const initRef = useRef<Record<Exclude<CourseType, 'MAJOR_ELECTIVE'>, boolean>>({
     MAJOR_REQUIRED: false,
     GENERAL_REQUIRED: false,
-    MAJOR_ELECTIVE: false,
   });
 
   useEffect(() => {
@@ -149,10 +147,6 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
       initRef.current[type] = true;
     }
   }, [courses, type]);
-
-  const coursesState = useGetArrayState({ array: data?.result ?? [] });
-
-  if (isPending) return null;
 
   return (
     <AppScreen>
