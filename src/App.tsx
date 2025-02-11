@@ -1,6 +1,6 @@
+import { Suspense } from 'react';
 import { StudentMachineContext } from './machines/studentMachine';
 import { Stack } from './stackflow';
-import { Suspense } from 'react';
 
 const App = () => {
   return (
