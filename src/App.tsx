@@ -1,11 +1,14 @@
 import { StudentMachineContext } from './machines/studentMachine';
 import { Stack } from './stackflow';
+import { Suspense } from 'react';
 
 const App = () => {
   return (
     <main className="font-pretendard">
       <StudentMachineContext.Provider>
-        <Stack />
+        <Suspense>
+          <Stack />
+        </Suspense>
       </StudentMachineContext.Provider>
     </main>
   );
