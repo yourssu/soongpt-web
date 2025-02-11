@@ -1,4 +1,4 @@
-import CourseSelectionSkeleton from './CourseSelectionSkeleton.tsx';
+import CourseSelectionView from './CourseSelectionView.tsx';
 import { emptyCourse } from '../../data/courseSelectionInfo.ts';
 import Warning from '../../assets/warning.svg';
 
@@ -31,7 +31,7 @@ interface CourseSelectionFallbackProps {
 
 const CourseSelectionFallback = ({ type }: CourseSelectionFallbackProps) => {
   return (
-    <CourseSelectionSkeleton
+    <CourseSelectionView
       courses={[emptyCourse, emptyCourse, emptyCourse]}
       coursesState={'FILLED'}
       selectedCourses={[]}

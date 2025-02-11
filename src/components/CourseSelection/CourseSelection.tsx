@@ -9,7 +9,7 @@ import { useFlow, useStepFlow } from '../../stackflow.ts';
 import { Grade } from '../../schemas/studentSchema.ts';
 import { CourseListContext } from '../../context/CourseListContext.ts';
 import { isSameCourse } from '../../utils/course.ts';
-import CourseSelectionSkeleton from './CourseSelectionSkeleton.tsx';
+import CourseSelectionView from './CourseSelectionView.tsx';
 import { CourseTypeContext } from '../../context/CourseTypeContext.ts';
 
 const CourseSelection = () => {
@@ -136,7 +136,7 @@ const CourseSelection = () => {
 
   return (
     <CourseListContext.Provider value={selectedCourses}>
-      <CourseSelectionSkeleton
+      <CourseSelectionView
         courses={courses}
         coursesState={coursesState}
         selectedCourses={selectedCourses}

@@ -28,7 +28,7 @@ interface CourseSelectionSkeletonProps {
   image?: string;
 }
 
-const CourseSelectionSkeleton = ({
+const CourseSelectionView = ({
   coursesState,
   selectedCourses,
   selectedGrades,
@@ -118,4 +118,4 @@ const CourseSelectionSkeleton = ({
   );
 };
 
-export default CourseSelectionSkeleton;
+export default CourseSelectionView;
