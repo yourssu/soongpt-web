@@ -3,7 +3,7 @@ import { ActivityComponentType } from '@stackflow/react';
 
 import { MutationState, MutationStatus, useMutationState } from '@tanstack/react-query';
 import { motion } from 'motion/react';
-import { ReactElement, useCallback, useEffect, useRef, useState } from 'react';
+import { ReactElement, useEffect, useRef, useState } from 'react';
 import Warning from '../assets/warning.svg';
 import AppBar from '../components/AppBar';
 import Timetable from '../components/Timetable';
@@ -15,7 +15,7 @@ import { useFlow } from '../stackflow';
 interface TimetableSelection {
   title: string;
   buttonText: string;
-  element: ReactElement;
+  element: () => ReactElement;
 }
 
 const TimetableSelectionActivity: ActivityComponentType = () => {
@@ -29,29 +29,15 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
 
   const { push, replace, pop } = useFlow();
 
-  const observerRef = useRef<IntersectionObserver | null>(null);
+  const timetableRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-  const handleIntersection = useCallback((entries: IntersectionObserverEntry[]) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        const index = Number(entry.target.getAttribute('data-index'));
-        setSelectedIndex(index);
-      }
+  const handleTimetableClick = (index: number) => {
+    setSelectedIndex(index);
+    timetableRefs.current[index]?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center',
     });
-  }, []);
-
-  useEffect(() => {
-    observerRef.current = new IntersectionObserver(handleIntersection, {
-      threshold: 0.5,
-      rootMargin: '-20% 0px', // 상하 20% 영역을 제외하고 관찰
-    });
-
-    return () => {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-      }
-    };
-  }, [handleIntersection]);
+  };
 
   const handleNextClick = () => {
     if (latestMutation.status === 'error') {
@@ -68,18 +54,14 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
   };
 
   useEffect(() => {
-    if (!latestMutation) replace('OnboardingActivity', {}, { animate: false });
-  }, [latestMutation, replace]);
-
-  if (!latestMutation) {
-    return null;
-  }
+    if (timetableMutation.length === 0) replace('OnboardingActivity', {}, { animate: false });
+  }, [timetableMutation, replace]);
 
   const timetableSelection: Record<MutationStatus, TimetableSelection> = {
     pending: {
       title: '가져오는 중이에요!',
       buttonText: '이 시간표가 좋아요',
-      element: (
+      element: () => (
         <TimetableSkeleton className="pt-4">
           <TimetableSkeleton.Header />
         </TimetableSkeleton>
@@ -88,7 +70,7 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
     success: {
       title: '가져왔어요!',
       buttonText: '이 시간표가 좋아요',
-      element: (
+      element: () => (
         <>
           {latestMutation.data &&
             latestMutation.data.result.timetables.map((timetable, index) => (
@@ -100,10 +82,9 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
                   {
                     /* div 요소가 마운트 될 때 실행*/
                   }
-                  if (element && observerRef.current) {
-                    observerRef.current.observe(element);
-                  }
+                  timetableRefs.current[index] = element;
                 }}
+                onClick={() => handleTimetableClick(index)}
               >
                 <Timetable
                   timetable={timetable}
@@ -127,14 +108,22 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
     error: {
       title: '찾지 못했어요..',
       buttonText: '다시 만들기',
-      element: <img className="m-auto" src={Warning} alt="warning" />,
+      element: () => (
+        <div className="flex flex-1 flex-col justify-center">
+          <img src={Warning} alt="Warning" />
+        </div>
+      ),
     },
     idle: {
       title: '가져오는 중이에요!',
       buttonText: '이 시간표가 좋아요',
-      element: <></>,
+      element: () => <></>,
     },
   };
+
+  if (!latestMutation) {
+    return null;
+  }
 
   return (
     <AppScreen>
@@ -150,8 +139,8 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
           <h2 className="text-center text-[28px] font-semibold whitespace-pre-wrap">
             {`사용자님을 위한\n시간표를 ${timetableSelection[latestMutation.status].title}`}
           </h2>
-          <div className="mt-4 w-full flex-1 px-10 pb-4">
-            {timetableSelection[latestMutation.status].element}
+          <div className="mt-4 flex w-full flex-1 flex-col px-10 pb-4">
+            {timetableSelection[latestMutation.status].element()}
           </div>
           <div className="sticky bottom-12 flex w-full justify-center">
             <button
