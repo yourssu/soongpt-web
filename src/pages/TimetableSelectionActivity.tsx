@@ -142,7 +142,7 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
           <div className="mt-4 flex w-full flex-1 flex-col px-10 pb-4">
             {timetableSelection[latestMutation.status].element()}
           </div>
-          <div className="sticky bottom-12 flex w-full justify-center">
+          <div className="sticky bottom-6 flex w-full justify-center">
             <button
               type="button"
               className={`w-50 rounded-2xl py-3.5 font-semibold text-white shadow-sm ${latestMutation.status === 'pending' ? 'bg-gray-300' : 'bg-primary'}`}

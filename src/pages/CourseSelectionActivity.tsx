@@ -39,8 +39,6 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
   });
 
   const courses = useMemo<Course[]>(() => {
-    if (data === undefined) return [];
-
     const groupedCourses = _.groupBy(data.result, 'courseName');
 
     const courses = _.map(groupedCourses, (courses: Course[]) => {
