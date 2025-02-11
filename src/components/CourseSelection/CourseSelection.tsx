@@ -114,23 +114,16 @@ const CourseSelection = () => {
     setSelectedGrades(grades);
   };
 
-  const initRef = useRef<Record<Exclude<CourseType, 'MAJOR_ELECTIVE'>, boolean>>({
-    MAJOR_REQUIRED: false,
-    GENERAL_REQUIRED: false,
-  });
+  const initRef = useRef(false);
 
   useEffect(() => {
-    if (
-      (type === 'MAJOR_REQUIRED' || type === 'GENERAL_REQUIRED') &&
-      courses.length > 0 &&
-      !initRef.current[type]
-    ) {
+    if (type === 'MAJOR_REQUIRED' && courses.length > 0 && !initRef.current) {
       setSelectedCourses((prevState) => [...prevState, ...courses]);
       setTotalCredit((prevState) => ({
         ...prevState,
         [type]: courses.reduce((acc, course) => acc + course.credit, 0),
       }));
-      initRef.current[type] = true;
+      initRef.current = true;
     }
   }, [courses, type]);
 
@@ -147,6 +140,7 @@ const CourseSelection = () => {
         title={courseSelectionInfo[type].text[coursesState].title}
         description={courseSelectionInfo[type].text[coursesState].description}
         image={courseSelectionInfo[type].text[coursesState].image}
+        totalCredit={totalCredit}
       />
     </CourseListContext.Provider>
   );
