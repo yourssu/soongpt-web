@@ -10,8 +10,8 @@ interface StateInfo {
   image?: string;
 }
 
-export interface CourseSelection {
-  info: Record<ArrayState, StateInfo>;
+export interface CourseSelectionInfo {
+  text: Record<ArrayState, StateInfo>;
   next: CourseType | null;
   progress: number;
 }
