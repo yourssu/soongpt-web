@@ -174,7 +174,7 @@ const TimetableSharingTemplate = forwardRef<HTMLDivElement, TimetableSharingTemp
 
     return (
       <>
-        <div className="w-full flex-1 overflow-hidden px-5" ref={emblaRef}>
+        <div className="w-full overflow-hidden px-5" ref={emblaRef}>
           <div className="-ml-5 flex">
             {TEMPLATE_COLORS.map((color, index) => (
               <div key={`template-${index}`} className="min-w-0 flex-[0_0_100%] transform-gpu pl-5">

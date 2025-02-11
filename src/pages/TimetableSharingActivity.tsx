@@ -81,7 +81,7 @@ const TimetableSharingActivity: ActivityComponentType<TimetableSharingParams> = 
     <AppScreen>
       <div className="flex min-h-dvh flex-col py-6">
         <AppBar progress={100} />
-        <div className="mt-6 flex flex-1 flex-col items-center">
+        <div className="mt-6 flex flex-1 flex-col items-center justify-evenly">
           <Suspense fallback={<TemplateSkeleton />}>
             <TimetableSharingTemplate timetableId={timetableId} ref={templateRef} />
             <div className="mt-4 flex justify-center gap-2">
