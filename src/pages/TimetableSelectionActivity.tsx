@@ -7,9 +7,9 @@ import { ReactElement, useCallback, useEffect, useState } from 'react';
 import AppBar from '../components/AppBar';
 import Timetable from '../components/Timetable';
 import { TimetableSkeleton } from '../components/TimetableSkeleton';
+import { SoongptError } from '../schemas/errorSchema.ts';
 import { TimetableArrayResponse } from '../schemas/timetableSchema';
 import { useFlow } from '../stackflow';
-import { SoongptError } from '../schemas/errorSchema.ts';
 
 interface TimetableSelection {
   title: string;
@@ -52,10 +52,8 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
       pop(2);
     }
 
-    if (latestMutation.data && 'result' in latestMutation.data) {
+    if (latestMutation.data) {
       const selectedTimetable = latestMutation.data.result.timetables[selectedIndex];
-
-      // queryClient.setQueryData(['timetable', selectedTimetable.timetableId], selectedTimetable);
 
       push('TimetableSharingActivity', {
         timetableId: selectedTimetable.timetableId,
@@ -64,7 +62,7 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
   };
 
   useEffect(() => {
-    if (!latestMutation) replace('OnboardingActivity', {});
+    if (!latestMutation) replace('OnboardingActivity', {}, { animate: false });
   }, [latestMutation, replace]);
 
   if (!latestMutation) {
@@ -90,7 +88,7 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
             latestMutation.data.result.timetables.map((timetable, index) => (
               <div
                 key={timetable.timetableId}
-                className={`min-h-0 flex-shrink-0 transform-gpu pt-4`}
+                className={`min-h-0 flex-shrink-0 transform-gpu pt-4 first:pt-0`}
               >
                 <Timetable
                   timetable={timetable}
@@ -128,7 +126,7 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
             {`사용자님을 위한\n시간표를 ${timetableSelection[latestMutation.status].title}`}
           </h2>
           <div className="mt-4 w-full flex-1 overflow-hidden px-10" ref={emblaRef}>
-            <div className="mt-4 flex flex-col" style={{ maxHeight: 'calc(100dvh - 250px)' }}>
+            <div className="flex flex-col" style={{ maxHeight: 'calc(100dvh - 250px)' }}>
               {timetableSelection[latestMutation.status].element}
             </div>
           </div>
