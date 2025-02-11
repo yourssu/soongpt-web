@@ -150,7 +150,7 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
           <h2 className="text-center text-[28px] font-semibold whitespace-pre-wrap">
             {`사용자님을 위한\n시간표를 ${timetableSelection[latestMutation.status].title}`}
           </h2>
-          <div className="mt-4 w-full flex-1 px-10">
+          <div className="mt-4 w-full flex-1 px-10 pb-4">
             {timetableSelection[latestMutation.status].element}
           </div>
           <div className="sticky bottom-12 flex w-full justify-center">
