@@ -10,6 +10,7 @@ import DepartmentInput from '../components/DepartmentInput';
 import GradeInput from '../components/GradeInput';
 import { StudentMachineContext } from '../machines/studentMachine';
 import { useFlow } from '../stackflow';
+import { Mixpanel } from '../utils/mixpanel';
 
 const OnboardingActivity: ActivityComponentType = () => {
   const state = StudentMachineContext.useSelector((state) => state);
@@ -42,6 +43,14 @@ const OnboardingActivity: ActivityComponentType = () => {
     const persistedState = actorRef.getPersistedSnapshot();
     // localStorage에 state를 저장
     localStorage.setItem('student', JSON.stringify(persistedState));
+
+    // MixPanel에 사용자 정보 전송
+    Mixpanel.setUser({
+      department: state.context.department,
+      schoolId: state.context.admissionYear,
+      grade: state.context.grade,
+      isChapel: state.context.chapel,
+    });
 
     push('CourseSelectionActivity', {
       type: 'MAJOR_REQUIRED',
