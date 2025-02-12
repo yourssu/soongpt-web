@@ -7,12 +7,14 @@ import { ArrayState } from '../../type/common.type.ts';
 import { Grade } from '../../schemas/studentSchema.ts';
 import { Course } from '../../schemas/courseSchema.ts';
 import { isSameCourse } from '../../utils/course.ts';
-import { useContext } from 'react';
+import { ReactElement, useContext } from 'react';
 import { CourseTypeContext } from '../../context/CourseTypeContext.ts';
+import { useGetArrayState } from '../../hooks/useGetArrayState.ts';
+import Like from '../../assets/like.svg';
 
 interface CourseSelectionSkeletonProps {
   courses: Course[];
-  coursesState: ArrayState;
+  resultState: ArrayState;
   selectedCourses: Course[];
   selectedGrades: Grade[];
   totalCredit?: {
@@ -29,7 +31,7 @@ interface CourseSelectionSkeletonProps {
 }
 
 const CourseSelectionView = ({
-  coursesState,
+  resultState,
   selectedCourses,
   selectedGrades,
   courses,
@@ -42,6 +44,50 @@ const CourseSelectionView = ({
   image,
 }: CourseSelectionSkeletonProps) => {
   const type = useContext(CourseTypeContext);
+  const coursesState = useGetArrayState(courses);
+
+  const courseListElement: Record<ArrayState, ReactElement> = {
+    FILLED: (
+      <motion.div
+        key={selectedGrades.join(',')}
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.4, ease: 'easeOut' }}
+        className="overflow-auto"
+      >
+        <div className="flex flex-1 flex-col gap-3.5">
+          {courses.map((course) => (
+            <CourseListItem
+              onClickCourseItem={onClickCourseItem ?? (() => {})}
+              isSelected={selectedCourses.some((selectedCourse) =>
+                isSameCourse(course, selectedCourse),
+              )}
+              key={course.courseName}
+              course={course}
+            />
+          ))}
+        </div>
+      </motion.div>
+    ),
+    EMPTY: (
+      <motion.div
+        key={selectedGrades.join(',')}
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.4, ease: 'easeOut' }}
+        className="flex flex-1 flex-col"
+      >
+        <div className="flex w-full flex-1 place-items-center">
+          <div className="spacing flex w-full flex-col place-items-center gap-4">
+            <span className="text-xl font-semibold tracking-tighter">
+              해당 학년은 전공선택 과목이 없어요.
+            </span>
+            <img width={100} src={Like} alt={'like'} />
+          </div>
+        </div>
+      </motion.div>
+    ),
+  };
 
   return (
     <motion.div
@@ -72,26 +118,8 @@ const CourseSelectionView = ({
                 ))}
               </div>
             )}
-            <motion.div
-              key={selectedGrades.join(',')}
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.4, ease: 'easeOut' }}
-              className="overflow-auto"
-            >
-              <div className="flex flex-1 flex-col gap-3.5">
-                {courses.map((course) => (
-                  <CourseListItem
-                    onClickCourseItem={onClickCourseItem ?? (() => {})}
-                    isSelected={selectedCourses.some((selectedCourse) =>
-                      isSameCourse(course, selectedCourse),
-                    )}
-                    key={course.courseName}
-                    course={course}
-                  />
-                ))}
-              </div>
-            </motion.div>
+
+            {courseListElement[coursesState]}
           </div>
         )}
       </div>
@@ -110,7 +138,7 @@ const CourseSelectionView = ({
             className="bg-primary max-w-52 flex-1 rounded-2xl py-3.5 font-semibold text-white"
             onClick={onNextClick}
           >
-            {courseSelectionInfo[type].text[coursesState].okText}
+            {courseSelectionInfo[type].text[resultState].okText}
           </button>
         </div>
       </div>
