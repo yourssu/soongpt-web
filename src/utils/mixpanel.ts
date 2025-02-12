@@ -16,13 +16,8 @@ export const Mixpanel = {
   },
 
   setUser: (student: Student) => {
-    const userId = `${student.department}_${student.schoolId}`;
-
-    mixpanel.identify(userId);
-
     mixpanel.people.set({
       ...student,
-      $name: userId,
       $last_seen: new Date(),
     });
   },
