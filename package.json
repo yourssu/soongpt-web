@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@radix-ui/react-popover": "^1.1.5",
+    "@radix-ui/react-toast": "^1.2.6",
     "@stackflow/core": "^1.1.1",
     "@stackflow/plugin-basic-ui": "^1.11.1",
     "@stackflow/plugin-history-sync": "^1.7.1",
