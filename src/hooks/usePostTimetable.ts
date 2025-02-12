@@ -12,6 +12,7 @@ export const usePostTimetable = () => {
       const response = await api
         .post('timetables', {
           json: student,
+          timeout: false,
         })
         .json()
         .catch(async (e) => {
