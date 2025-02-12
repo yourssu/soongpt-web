@@ -152,7 +152,7 @@ export const SharingHeader = ({ bgColor, textColor }: TimetableHeaderProps) => {
       <div
         className={`absolute top-0 left-1/2 flex -translate-x-1/2 items-center rounded-b-xl px-4 py-1 whitespace-nowrap`}
         style={{
-          backgroundColor: bgColor,
+          background: bgColor,
         }}
       >
         <h3 className="text-xs font-semibold">{TIME_TABLE_TAG[tag]}</h3>
@@ -175,7 +175,7 @@ const Timetable = ({ children, timetable, className, ...props }: TimetableProps)
   return (
     <TimetableContext.Provider value={{ totalCredit, tag: timetable.tag }}>
       <div
-        className={`w-full overflow-hidden rounded-xl border-2 ${twMerge(className)}`}
+        className={`${twMerge('w-full overflow-hidden rounded-xl border-2', className)}`}
         {...props}
       >
         {/* Timetable Header */}

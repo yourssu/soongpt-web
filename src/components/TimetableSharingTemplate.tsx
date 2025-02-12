@@ -127,7 +127,7 @@ const TemplateCreditChip = ({
     <div
       className={`flex items-center gap-2 rounded-xl px-2 py-1`}
       style={{
-        backgroundColor: bgColor,
+        background: bgColor,
         color: textColor,
       }}
     >
