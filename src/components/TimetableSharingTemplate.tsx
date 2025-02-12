@@ -22,8 +22,7 @@ interface Color {
 
 export const TEMPLATE_COLORS: Color[] = [
   {
-    templateBg:
-      'conic-gradient(from 136deg at 57.41% 53.71%, #000 42.11314111948013deg, #3A3A3A 360deg)',
+    templateBg: '#000000',
     templateContentBg: 'linear-gradient(161deg, #3D3D3D 5.9%, #181818 96.88%)',
     tableHeaderBg: '#3D3D3D',
     headerText: '#FFFFFF',
@@ -48,7 +47,7 @@ export const TEMPLATE_COLORS: Color[] = [
     chipText: '#FFFFFF',
   },
   {
-    templateBg: '#FFFFF',
+    templateBg: '#FFFFFF',
     templateContentBg: 'linear-gradient(180deg, #A4B9FF 0%, #E2A9D0 100%)',
     tableHeaderBg: '#A4B9FF',
     headerText: '#FFFFFF',
@@ -57,8 +56,7 @@ export const TEMPLATE_COLORS: Color[] = [
   },
   {
     templateBg: '#EDF8FF',
-    templateContentBg:
-      'conic-gradient(from 126deg at 48.53% 51.74%, #FFF 0deg, #C5E7FF 41.400000751018524deg, #D9E7FF 54.00000214576721deg, #FDE8FF 77.40000128746033deg, #F3F3F3 113.39999914169312deg, #C5E7FF 140.3999948501587deg, #DAE7FF 153.00000429153442deg, #FDE8FF 174.6000051498413deg, #F4F1F1 205.19999742507935deg, #C5E7FF 224.02934074401855deg, #C5E7FF 245.48347234725952deg, #DCE8FF 258.04187536239624deg, #FDE8FF 262.8000068664551deg, #FEEFFE 275.3999948501587deg, #FFFBFB 296.9999957084656deg, #C5E7FF 311.40000343322754deg, #FDE8FF 333.0000042915344deg, #FFFBFB 351.00000858306885deg)',
+    templateContentBg: '#EDF8FF',
     tableHeaderBg: '#C5E7FF',
     headerText: '#292929',
     chipBg: 'rgba(255, 255, 255, 0.25)',
