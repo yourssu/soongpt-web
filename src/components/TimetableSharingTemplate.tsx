@@ -16,6 +16,7 @@ interface Color {
   templateContentBg: string;
   tableHeaderBg: string;
   headerText: string;
+  studentText: string;
   chipBg: string;
   chipText: string;
 }
@@ -26,6 +27,7 @@ export const TEMPLATE_COLORS: Color[] = [
     templateContentBg: 'linear-gradient(161deg, #3D3D3D 5.9%, #181818 96.88%)',
     tableHeaderBg: '#3D3D3D',
     headerText: '#FFFFFF',
+    studentText: '#FFFFFF',
     chipBg: 'rgba(42, 42, 42, 0.36)',
     chipText: '#FFFFFF',
   },
@@ -34,6 +36,7 @@ export const TEMPLATE_COLORS: Color[] = [
     templateContentBg: '#1554DB',
     tableHeaderBg: '#1554DB',
     headerText: '#FFFFFF',
+    studentText: '#FFFFFF',
     chipBg: 'rgba(42, 42, 42, 0.36)',
     chipText: '#FFFFFF',
   },
@@ -43,6 +46,7 @@ export const TEMPLATE_COLORS: Color[] = [
     templateContentBg: '#F9F9F9',
     tableHeaderBg: '#F9F9F9',
     headerText: '#292929',
+    studentText: '#292929',
     chipBg: 'rgba(42, 42, 42, 0.36)',
     chipText: '#FFFFFF',
   },
@@ -51,6 +55,7 @@ export const TEMPLATE_COLORS: Color[] = [
     templateContentBg: 'linear-gradient(180deg, #A4B9FF 0%, #E2A9D0 100%)',
     tableHeaderBg: '#A4B9FF',
     headerText: '#FFFFFF',
+    studentText: '#FFFFFF',
     chipBg: 'rgba(255, 255, 255, 0.25)',
     chipText: '#FFFFFF',
   },
@@ -61,6 +66,7 @@ export const TEMPLATE_COLORS: Color[] = [
     tableHeaderBg:
       'linear-gradient(90deg, #C5E7FF 0%, #FDE8FF 31.21%, #DDE7FF 69.21%, #ECE8FF 91.71%)',
     headerText: '#FFFFFF',
+    studentText: '#292929',
     chipBg: 'rgba(255, 255, 255, 0.25)',
     chipText: '#292929',
   },
@@ -127,7 +133,7 @@ const TemplateCreditChip = ({
     <div
       className={`flex items-center gap-2 rounded-xl px-2 py-1`}
       style={{
-        backgroundColor: bgColor,
+        background: bgColor,
         color: textColor,
       }}
     >
@@ -190,7 +196,7 @@ const TimetableSharingTemplate = forwardRef<HTMLDivElement, TimetableSharingTemp
                         textColor={color.headerText}
                       />
                     </Timetable>
-                    <TemplateStudent textColor={color.headerText} />
+                    <TemplateStudent textColor={color.studentText} />
                     <TemplateCredit>
                       <TemplateCreditChip bgColor={color.chipBg} textColor={color.chipText}>
                         <div className="text-[10px]">이수학점</div>
