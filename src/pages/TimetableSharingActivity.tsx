@@ -1,8 +1,9 @@
+import * as Toast from '@radix-ui/react-toast';
 import { AppScreen } from '@stackflow/plugin-basic-ui';
 import { ActivityComponentType } from '@stackflow/react';
 import html2canvas from 'html2canvas';
 import ky from 'ky';
-import { Suspense, useRef } from 'react';
+import { Suspense, useRef, useState } from 'react';
 import AppBar from '../components/AppBar';
 import TimetableSharingTemplate from '../components/TimetableSharingTemplate';
 import { TemplateSkeleton } from '../components/TimetableSkeleton';
@@ -15,6 +16,7 @@ const TimetableSharingActivity: ActivityComponentType<TimetableSharingParams> = 
   params: { timetableId },
 }) => {
   const templateRef = useRef<HTMLDivElement>(null);
+  const [openToast, setOpenToast] = useState(false);
 
   const captureTemplate = async () => {
     if (!templateRef.current) return null;
@@ -28,8 +30,6 @@ const TimetableSharingActivity: ActivityComponentType<TimetableSharingParams> = 
   };
 
   const handleClickSave = async () => {
-    if (!templateRef.current) return;
-
     try {
       const imageUrl = await captureTemplate();
       if (imageUrl) {
@@ -70,39 +70,58 @@ const TimetableSharingActivity: ActivityComponentType<TimetableSharingParams> = 
 
         if (navigator.canShare(shareData)) {
           await navigator.share(shareData);
+        } else {
+          await navigator.clipboard.writeText(window.location.href);
+          setOpenToast(true);
         }
       }
-    } catch (error) {
-      console.error('Failed to share template:', error);
+    } catch {
+      await navigator.clipboard.writeText(window.location.href);
+      setOpenToast(true);
     }
   };
 
   return (
     <AppScreen>
-      <div className="flex min-h-dvh flex-col py-6">
-        <AppBar progress={100} />
-        <div className="mt-6 flex flex-1 flex-col items-center justify-evenly">
-          <Suspense fallback={<TemplateSkeleton />}>
-            <TimetableSharingTemplate timetableId={timetableId} ref={templateRef} />
-            <div className="mt-4 flex justify-center gap-2">
-              <button
-                type="button"
-                className="rounded-2xl bg-[#c2c8ff] px-9 py-3 font-semibold text-[#5736F5]"
-                onClick={handleClickSave}
-              >
-                저장할래요
-              </button>
-              <button
-                type="button"
-                className="bg-primary rounded-2xl px-9 py-3 font-semibold text-white"
-                onClick={handleClickShare}
-              >
-                공유할래요
-              </button>
-            </div>
-          </Suspense>
+      <Toast.Provider swipeDirection="down">
+        <div className="flex min-h-dvh flex-col py-6">
+          <AppBar progress={100} />
+          <div className="mt-6 flex flex-1 flex-col items-center justify-evenly">
+            <Suspense fallback={<TemplateSkeleton />}>
+              <TimetableSharingTemplate timetableId={timetableId} ref={templateRef} />
+              <div className="mt-4 flex justify-center gap-2">
+                <button
+                  type="button"
+                  className="rounded-2xl bg-[#c2c8ff] px-9 py-3 font-semibold text-[#5736F5]"
+                  onClick={handleClickSave}
+                >
+                  저장할래요
+                </button>
+                <button
+                  type="button"
+                  className="bg-primary rounded-2xl px-9 py-3 font-semibold text-white"
+                  onClick={handleClickShare}
+                >
+                  공유할래요
+                </button>
+                <Toast.Root
+                  className="rounded-md border border-gray-200 bg-white p-4 shadow-lg"
+                  open={openToast}
+                  onOpenChange={setOpenToast}
+                >
+                  <Toast.Title className="mb-1 font-medium text-gray-900">
+                    링크가 복사되었어요!
+                  </Toast.Title>
+                  <Toast.Description className="text-sm text-gray-500">
+                    현재 페이지의 URL이 클립보드에 복사되었어요.
+                  </Toast.Description>
+                </Toast.Root>
+                <Toast.Viewport className="fixed top-0 left-1/2 z-50 m-0 flex w-96 -translate-x-1/2 justify-center p-6 outline-none" />
+              </div>
+            </Suspense>
+          </div>
         </div>
-      </div>
+      </Toast.Provider>
     </AppScreen>
   );
 };
