@@ -227,7 +227,7 @@ const Timetable = ({ children, timetable, className, ...props }: TimetableProps)
                       return (
                         <div
                           key={`${timetable.timetableId}-${course.courseName}-${courseTime.start}`}
-                          className="absolute w-full rounded-lg p-0.5 text-xs font-bold text-white"
+                          className="absolute w-full p-0.5 text-xs font-bold text-white"
                           style={{
                             backgroundColor: bgColor,
                             borderColor: bgColor,
