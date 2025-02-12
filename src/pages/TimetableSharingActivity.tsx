@@ -17,6 +17,10 @@ const TimetableSharingActivity: ActivityComponentType<TimetableSharingParams> = 
 }) => {
   const templateRef = useRef<HTMLDivElement>(null);
   const [openToast, setOpenToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState({
+    title: '',
+    description: '',
+  });
 
   const captureTemplate = async () => {
     if (!templateRef.current) return null;
@@ -49,8 +53,6 @@ const TimetableSharingActivity: ActivityComponentType<TimetableSharingParams> = 
   };
 
   const handleClickShare = async () => {
-    if (!navigator.share) return;
-
     try {
       const imageUrl = await captureTemplate();
 
@@ -68,22 +70,31 @@ const TimetableSharingActivity: ActivityComponentType<TimetableSharingParams> = 
           files: [file],
         };
 
-        if (navigator.canShare(shareData)) {
-          await navigator.share(shareData);
-        } else {
-          await navigator.clipboard.writeText(window.location.href);
-          setOpenToast(true);
-        }
+        await navigator.share(shareData);
       }
     } catch {
-      await navigator.clipboard.writeText(window.location.href);
-      setOpenToast(true);
+      navigator.clipboard
+        .writeText(window.location.href)
+        .then(() => {
+          setToastMessage({
+            title: '링크가 복사되었어요!',
+            description: '현재 페이지의 URL이 클립보드에 복사되었어요.',
+          });
+          setOpenToast(true);
+        })
+        .catch(() => {
+          setToastMessage({
+            title: '공유하기를 지원하지 않는 환경입니다',
+            description: '다른 브라우저에서 시도해보세요.',
+          });
+          setOpenToast(true);
+        });
     }
   };
 
   return (
     <AppScreen>
-      <Toast.Provider swipeDirection="down">
+      <Toast.Provider swipeDirection="right" duration={3000}>
         <div className="flex min-h-dvh flex-col py-6">
           <AppBar progress={100} />
           <div className="mt-6 flex flex-1 flex-col items-center justify-evenly">
@@ -110,13 +121,13 @@ const TimetableSharingActivity: ActivityComponentType<TimetableSharingParams> = 
                   onOpenChange={setOpenToast}
                 >
                   <Toast.Title className="mb-1 font-medium text-gray-900">
-                    링크가 복사되었어요!
+                    {toastMessage.title}
                   </Toast.Title>
                   <Toast.Description className="text-sm text-gray-500">
-                    현재 페이지의 URL이 클립보드에 복사되었어요.
+                    {toastMessage.description}
                   </Toast.Description>
                 </Toast.Root>
-                <Toast.Viewport className="fixed top-0 left-1/2 z-50 m-0 flex w-96 -translate-x-1/2 justify-center p-6 outline-none" />
+                <Toast.Viewport className="fixed right-0 bottom-0 z-50 m-0 flex w-96 justify-center p-6 outline-none" />
               </div>
             </Suspense>
           </div>
