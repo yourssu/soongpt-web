@@ -56,9 +56,11 @@ export const TEMPLATE_COLORS: Color[] = [
   },
   {
     templateBg: '#EDF8FF',
-    templateContentBg: '#EDF8FF',
-    tableHeaderBg: '#C5E7FF',
-    headerText: '#292929',
+    templateContentBg:
+      'linear-gradient(145deg, #FDE8FF 16.15%, #F3F3F3 28.18%, #C5E7FF 37.19%, #DAE7FF 41.4%, #F4F1F1 58.83%, #C5E7FF 72.29%, #DCE8FF 76.48%, #FDE8FF 101.51%, #FFFBFB 107.52%)',
+    tableHeaderBg:
+      'linear-gradient(90deg, #C5E7FF 0%, #FDE8FF 31.21%, #DDE7FF 69.21%, #ECE8FF 91.71%)',
+    headerText: '#FFFFFF',
     chipBg: 'rgba(255, 255, 255, 0.25)',
     chipText: '#292929',
   },
