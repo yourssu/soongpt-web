@@ -17,7 +17,7 @@ const TimetableSharingActivity: ActivityComponentType<TimetableSharingParams> = 
 }) => {
   const templateRef = useRef<HTMLDivElement>(null);
   const [openToast, setOpenToast] = useState(false);
-  const [toastMessage, setToastMessage] = useState({
+  const [toastMessage] = useState({
     title: '',
     description: '',
   });
@@ -72,23 +72,8 @@ const TimetableSharingActivity: ActivityComponentType<TimetableSharingParams> = 
 
         await navigator.share(shareData);
       }
-    } catch {
-      navigator.clipboard
-        .writeText(window.location.href)
-        .then(() => {
-          setToastMessage({
-            title: '링크가 복사되었어요!',
-            description: '현재 페이지의 URL이 클립보드에 복사되었어요.',
-          });
-          setOpenToast(true);
-        })
-        .catch(() => {
-          setToastMessage({
-            title: '공유하기를 지원하지 않는 환경입니다',
-            description: '다른 브라우저에서 시도해보세요.',
-          });
-          setOpenToast(true);
-        });
+    } catch (error) {
+      console.error('Failed to share template:', error);
     }
   };
 
