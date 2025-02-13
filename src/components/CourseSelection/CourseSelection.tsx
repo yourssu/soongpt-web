@@ -19,7 +19,7 @@ const CourseSelection = () => {
   const type = useContext(CourseTypeContext);
 
   const {
-    [type]: { data, arrayState: coursesState },
+    [type]: { data, arrayState: resultState },
   } = useGetCourses({
     schoolId: state.context.admissionYear,
     grade: state.context.grade,
@@ -146,15 +146,15 @@ const CourseSelection = () => {
     <CourseListContext.Provider value={selectedCourses}>
       <CourseSelectionView
         courses={courses}
-        coursesState={coursesState}
+        resultState={resultState}
         selectedCourses={selectedCourses}
         selectedGrades={selectedGrades}
         onClickGradeChip={onClickGradeChip}
         onClickCourseItem={onClickCourseItem}
         onNextClick={onNextClick}
-        title={courseSelectionInfo[type].text[coursesState].title}
-        description={courseSelectionInfo[type].text[coursesState].description}
-        image={courseSelectionInfo[type].text[coursesState].image}
+        title={courseSelectionInfo[type].text[resultState].title}
+        description={courseSelectionInfo[type].text[resultState].description}
+        image={courseSelectionInfo[type].text[resultState].image}
         totalCredit={totalCredit}
       />
     </CourseListContext.Provider>
