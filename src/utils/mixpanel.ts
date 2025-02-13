@@ -6,7 +6,7 @@ const MIXPANEL_TOKEN = import.meta.env.VITE_MIXPANEL_TOKEN;
 // Initialize MixPanel
 mixpanel.init(MIXPANEL_TOKEN, {
   debug: import.meta.env.DEV,
-  track_pageview: true,
+  track_pageview: 'url-with-path',
   persistence: 'localStorage',
 });
 
