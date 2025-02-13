@@ -31,6 +31,7 @@ jobs:
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
           VITE_MIXPANEL_TOKEN: ${{ secrets.VITE_MIXPANEL_TOKEN }}
           VITE_CHANNEL_TALK_PLUGIN_KEY: ${{ secrets.VITE_CHANNEL_TALK_PLUGIN_KEY }}
+          VITE_SENTRY_DSN: ${{secrets.VITE_SENTRY_DSN}}
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
