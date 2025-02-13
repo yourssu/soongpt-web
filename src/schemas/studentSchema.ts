@@ -19,7 +19,7 @@ export const studentSchema = z.object({
   isChapel: z.boolean().describe('채플 수강 여부'),
 });
 
-export const studentTimetableSchema = studentSchema.extend({
+export const coursePreferenceSchema = z.object({
   majorRequiredCourses: z.array(z.string()).describe('전공필수 과목 목록'),
   majorElectiveCourses: z.array(z.string()).describe('전공선택 과목 목록'),
   generalRequiredCourses: z.array(z.string()).describe('교양필수 과목 목록'),
@@ -27,7 +27,10 @@ export const studentTimetableSchema = studentSchema.extend({
   generalElectiveCredit: z.number().int().nonnegative().describe('희망 교양선택 학점'),
 });
 
+export const studentTimetableSchema = studentSchema.merge(coursePreferenceSchema);
+
 export type Grade = z.infer<typeof Grade>;
 export type Student = z.infer<typeof studentSchema>;
 export type StudentWithoutChapel = Omit<Student, 'isChapel'>;
+export type CoursePreference = z.infer<typeof coursePreferenceSchema>;
 export type StudentTimetable = z.infer<typeof studentTimetableSchema>;
