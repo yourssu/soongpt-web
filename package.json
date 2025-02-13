@@ -11,6 +11,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@channel.io/channel-web-sdk-loader": "^2.0.0",
     "@radix-ui/react-popover": "^1.1.5",
     "@radix-ui/react-toast": "^1.2.6",
     "@stackflow/core": "^1.1.1",
