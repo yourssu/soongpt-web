@@ -9,6 +9,7 @@ import {
 } from 'react';
 import { useGetTimetable } from '../hooks/useGetTimetable';
 import { StudentMachineContext } from '../machines/studentMachine';
+import { Mixpanel } from '../utils/mixpanel';
 import Timetable, { getMajorCredit, getTotalCredit, SharingHeader } from './Timetable';
 
 interface Color {
@@ -177,6 +178,11 @@ const TimetableSharingTemplate = forwardRef<HTMLDivElement, TimetableSharingTemp
         };
       }
     }, [emblaApi, onSelect]);
+
+    // Mixpanel 이벤트 추적
+    useEffect(() => {
+      Mixpanel.trackTimetableSharingEnter(timetable);
+    }, [timetable]);
 
     return (
       <>

@@ -1,16 +1,17 @@
-import { CourseType } from '../../type/course.type.ts';
-import { StudentMachineContext } from '../../machines/studentMachine.ts';
-import { useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { useGetCourses } from '../../hooks/useGetCourses.ts';
-import { Course } from '../../schemas/courseSchema.ts';
 import _ from 'lodash';
-import { courseSelectionInfo, gradeSelection } from '../../data/courseSelectionInfo.ts';
-import { useFlow, useStepFlow } from '../../stackflow.ts';
-import { Grade } from '../../schemas/studentSchema.ts';
+import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { CourseListContext } from '../../context/CourseListContext.ts';
-import { isSameCourse } from '../../utils/course.ts';
-import CourseSelectionView from './CourseSelectionView.tsx';
 import { CourseTypeContext } from '../../context/CourseTypeContext.ts';
+import { courseSelectionInfo, gradeSelection } from '../../data/courseSelectionInfo.ts';
+import { useGetCourses } from '../../hooks/useGetCourses.ts';
+import { StudentMachineContext } from '../../machines/studentMachine.ts';
+import { Course } from '../../schemas/courseSchema.ts';
+import { Grade } from '../../schemas/studentSchema.ts';
+import { useFlow, useStepFlow } from '../../stackflow.ts';
+import { CourseType } from '../../type/course.type.ts';
+import { isSameCourse } from '../../utils/course.ts';
+import { Mixpanel } from '../../utils/mixpanel.ts';
+import CourseSelectionView from './CourseSelectionView.tsx';
 
 const CourseSelection = () => {
   const state = StudentMachineContext.useSelector((state) => state);
@@ -65,27 +66,41 @@ const CourseSelection = () => {
   const { push } = useFlow();
 
   const onNextClick = () => {
+    let courses = [];
+
     if (courseSelectionInfo[type].next) {
       stepPush({
         type: courseSelectionInfo[type].next,
       });
-      return;
+
+      courses = selectedCourses
+        .filter((course) => course.classification === type)
+        .map((course) => course.courseName);
+    } else {
+      const majorRequiredCourses = selectedCourses
+        .filter((course) => course.classification === 'MAJOR_REQUIRED')
+        .map((course) => course.courseName);
+      const majorElectiveCourses = selectedCourses
+        .filter((course) => course.classification === 'MAJOR_ELECTIVE')
+        .map((course) => course.courseName);
+      const generalRequiredCourses = selectedCourses
+        .filter((course) => course.classification === 'GENERAL_REQUIRED')
+        .map((course) => course.courseName);
+
+      courses = majorElectiveCourses;
+
+      push('DesiredCreditActivity', {
+        majorRequiredCourses,
+        majorElectiveCourses,
+        generalRequiredCourses,
+        majorRequired: totalCredit['MAJOR_REQUIRED'],
+        generalRequired: totalCredit['GENERAL_REQUIRED'],
+        majorElective: totalCredit['MAJOR_ELECTIVE'],
+      });
     }
 
-    push('DesiredCreditActivity', {
-      majorRequiredCourses: selectedCourses
-        .filter((course) => course.classification === 'MAJOR_REQUIRED')
-        .map((course) => course.courseName),
-      majorElectiveCourses: selectedCourses
-        .filter((course) => course.classification === 'MAJOR_ELECTIVE')
-        .map((course) => course.courseName),
-      generalRequiredCourses: selectedCourses
-        .filter((course) => course.classification === 'GENERAL_REQUIRED')
-        .map((course) => course.courseName),
-      majorRequired: totalCredit['MAJOR_REQUIRED'],
-      generalRequired: totalCredit['GENERAL_REQUIRED'],
-      majorElective: totalCredit['MAJOR_ELECTIVE'],
-    });
+    // Mixpanel 이벤트 추적
+    Mixpanel.trackCourseSelectionClick(type, courses);
   };
 
   const onClickCourseItem = (course: Course) => {
