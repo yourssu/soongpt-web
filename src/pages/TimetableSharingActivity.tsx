@@ -7,6 +7,7 @@ import { Suspense, useRef, useState } from 'react';
 import AppBar from '../components/AppBar';
 import TimetableSharingTemplate from '../components/TimetableSharingTemplate';
 import { TemplateSkeleton } from '../components/TimetableSkeleton';
+import { Mixpanel } from '../utils/mixpanel';
 
 type TimetableSharingParams = {
   timetableId: number;
@@ -34,6 +35,9 @@ const TimetableSharingActivity: ActivityComponentType<TimetableSharingParams> = 
   };
 
   const handleClickSave = async () => {
+    // Mixpanel 이벤트 추적
+    Mixpanel.trackTimetableSaveClick();
+
     try {
       const imageUrl = await captureTemplate();
       if (imageUrl) {
@@ -53,6 +57,9 @@ const TimetableSharingActivity: ActivityComponentType<TimetableSharingParams> = 
   };
 
   const handleClickShare = async () => {
+    // Mixpanel 이벤트 추적
+    Mixpanel.trackTimetableShareClick();
+
     try {
       const imageUrl = await captureTemplate();
 

@@ -44,13 +44,16 @@ const OnboardingActivity: ActivityComponentType = () => {
     // localStorage에 state를 저장
     localStorage.setItem('student', JSON.stringify(persistedState));
 
-    // MixPanel에 사용자 정보 전송
-    Mixpanel.setUser({
+    const student = {
       department: state.context.department,
       schoolId: state.context.admissionYear,
       grade: state.context.grade,
       isChapel: state.context.chapel,
-    });
+    };
+
+    // MixPanel에 사용자 정보 설정
+    Mixpanel.setUser(student);
+    Mixpanel.trackUserInformationClick(student);
 
     push('CourseSelectionActivity', {
       type: 'MAJOR_REQUIRED',

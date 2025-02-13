@@ -1,5 +1,7 @@
 import mixpanel from 'mixpanel-browser';
-import { Student } from '../schemas/studentSchema';
+import { CoursePreference, Student } from '../schemas/studentSchema';
+import { Timetable } from '../schemas/timetableSchema';
+import { CourseType } from '../type/course.type';
 
 const MIXPANEL_TOKEN = import.meta.env.VITE_MIXPANEL_TOKEN;
 
@@ -20,5 +22,47 @@ export const Mixpanel = {
       ...student,
       $last_seen: new Date(),
     });
+  },
+
+  trackUserInformationClick: (student: Student) => {
+    mixpanel.track('User Information Click', student);
+  },
+
+  trackCourseSelectionClick: (type: CourseType, courses: string[]) => {
+    mixpanel.track(`${type} Course Selection Click`, {
+      courses,
+    });
+  },
+
+  trackDesiredCreditClick: (credit: CoursePreference) => {
+    mixpanel.track('Desired Credit Click', credit);
+  },
+
+  trackTimetableSelectionClick: (
+    selectedTimetable: Timetable,
+    unselectedTimetables: Timetable[],
+  ) => {
+    mixpanel.track('Timetable Selection Click', {
+      selectedTimetable,
+      unselectedTimetables,
+    });
+  },
+
+  trackTimetableSelectionError: () => {
+    mixpanel.track('Timetable Selection Error');
+  },
+
+  trackTimetableSharingEnter: (timetable: Timetable) => {
+    mixpanel.track('Timetable Sharing Enter', {
+      timetable,
+    });
+  },
+
+  trackTimetableSaveClick: () => {
+    mixpanel.track('Timetable Save Click');
+  },
+
+  trackTimetableShareClick: () => {
+    mixpanel.track('Timetable Share Click');
   },
 };
