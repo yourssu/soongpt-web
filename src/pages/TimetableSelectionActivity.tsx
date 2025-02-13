@@ -11,6 +11,7 @@ import { TimetableSkeleton } from '../components/TimetableSkeleton';
 import { SoongptError } from '../schemas/errorSchema.ts';
 import { TimetableArrayResponse } from '../schemas/timetableSchema';
 import { useFlow } from '../stackflow';
+import { Mixpanel } from '../utils/mixpanel.ts';
 
 interface TimetableSelection {
   title: string;
@@ -46,6 +47,12 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
 
     if (latestMutation.data) {
       const selectedTimetable = latestMutation.data.result.timetables[selectedIndex];
+      const unSelectedTimetable = latestMutation.data.result.timetables.filter(
+        (timetable) => timetable.timetableId !== selectedTimetable.timetableId,
+      );
+
+      // Mixpanel 이벤트 추적
+      Mixpanel.trackTimetableSelectionClick(selectedTimetable, unSelectedTimetable);
 
       push('TimetableSharingActivity', {
         timetableId: selectedTimetable.timetableId,
@@ -56,6 +63,13 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
   useEffect(() => {
     if (timetableMutation.length === 0) replace('OnboardingActivity', {}, { animate: false });
   }, [timetableMutation, replace]);
+
+  // Mixpanel 이벤트 추적
+  useEffect(() => {
+    if (latestMutation.status === 'error') {
+      Mixpanel.trackTimetableSelectionError();
+    }
+  }, [latestMutation]);
 
   const timetableSelection: Record<MutationStatus, TimetableSelection> = {
     pending: {

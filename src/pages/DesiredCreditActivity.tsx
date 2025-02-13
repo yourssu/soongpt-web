@@ -11,6 +11,7 @@ import RollingNumber from '../components/RollingNumber';
 import { usePostTimetable } from '../hooks/usePostTimetable';
 import { StudentMachineContext } from '../machines/studentMachine';
 import { useFlow } from '../stackflow';
+import { Mixpanel } from '../utils/mixpanel';
 
 type DesiredCreditParams = {
   majorRequired: number;
@@ -92,6 +93,15 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
       department: context.department,
       grade: context.grade,
       isChapel: context.chapel,
+      majorRequiredCourses: params.majorRequiredCourses,
+      majorElectiveCourses: params.majorElectiveCourses,
+      generalRequiredCourses: params.generalRequiredCourses,
+      majorElectiveCredit: majorElective,
+      generalElectiveCredit: generalElective,
+    });
+
+    // Mixpanel 이벤트 추적
+    Mixpanel.trackDesiredCreditClick({
       majorRequiredCourses: params.majorRequiredCourses,
       majorElectiveCourses: params.majorElectiveCourses,
       generalRequiredCourses: params.generalRequiredCourses,

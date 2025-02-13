@@ -4,10 +4,9 @@ import { Stack } from './stackflow';
 import { Mixpanel } from './utils/mixpanel';
 
 const App = () => {
-  // Identify the user
   useEffect(() => {
-    const userId = crypto.randomUUID();
-    Mixpanel.identify(userId);
+    // MixPanel에 사용자 식별
+    Mixpanel.identify();
   }, []);
 
   return (
