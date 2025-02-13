@@ -1,4 +1,5 @@
 import mixpanel from 'mixpanel-browser';
+import { SoongptError } from '../schemas/errorSchema';
 import { CoursePreference, Student } from '../schemas/studentSchema';
 import { Timetable } from '../schemas/timetableSchema';
 import { CourseType } from '../type/course.type';
@@ -56,8 +57,10 @@ export const Mixpanel = {
     });
   },
 
-  trackTimetableSelectionError: () => {
-    mixpanel.track('Timetable Selection Error');
+  trackTimetableSelectionError: (error: SoongptError) => {
+    mixpanel.track('Timetable Selection Error', {
+      error,
+    });
   },
 
   trackTimetableSharingEnter: (timetable: Timetable) => {

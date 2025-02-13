@@ -67,7 +67,9 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
   // Mixpanel 이벤트 추적
   useEffect(() => {
     if (latestMutation.status === 'error') {
-      Mixpanel.trackTimetableSelectionError();
+      if (latestMutation.error) {
+        Mixpanel.trackTimetableSelectionError(latestMutation.error);
+      }
     }
   }, [latestMutation]);
 
