@@ -10,17 +10,25 @@ mixpanel.init(MIXPANEL_TOKEN, {
   debug: import.meta.env.DEV,
   track_pageview: 'url-with-path',
   persistence: 'localStorage',
+  ignore_dnt: true,
 });
 
 export const Mixpanel = {
-  identify: (id: string) => {
+  identify: (id?: string) => {
     mixpanel.identify(id);
+  },
+
+  registerUser: (student: Student) => {
+    mixpanel.register({
+      ...student,
+    });
   },
 
   setUser: (student: Student) => {
     mixpanel.people.set({
+      $name: `${student.department}-${student.schoolId}-${student.grade}학년`,
+      $created: new Date(),
       ...student,
-      $last_seen: new Date(),
     });
   },
 
