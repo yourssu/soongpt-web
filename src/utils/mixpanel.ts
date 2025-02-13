@@ -13,6 +13,7 @@ mixpanel.init(MIXPANEL_TOKEN, {
   persistence: 'localStorage',
   ignore_dnt: true,
   record_sessions_percent: 100,
+  record_mask_text_selector: '',
 });
 
 export const Mixpanel = {
