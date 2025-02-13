@@ -33,7 +33,7 @@ const CourseSelectionFallback = ({ type }: CourseSelectionFallbackProps) => {
   return (
     <CourseSelectionView
       courses={[emptyCourse, emptyCourse, emptyCourse]}
-      coursesState={'FILLED'}
+      resultState={'FILLED'}
       selectedCourses={[]}
       selectedGrades={[]}
       title={courseSelectionFallbackInfo[type].title}

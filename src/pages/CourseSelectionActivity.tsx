@@ -6,9 +6,9 @@ import { CourseType } from '../type/course.type.ts';
 import CourseSelection from '../components/CourseSelection/CourseSelection.tsx';
 import AppBar from '../components/AppBar.tsx';
 import { courseSelectionInfo } from '../data/courseSelectionInfo.ts';
-import { ErrorBoundary } from 'react-error-boundary';
 import { CourseTypeContext } from '../context/CourseTypeContext.ts';
 import CourseSelectionFallback from '../components/CourseSelection/CourseSelectionFallback.tsx';
+import SoongptErrorBoundary from '../components/SoongptErrorBoundary.tsx';
 
 interface CourseSelectionActivityParams {
   type?: CourseType;
@@ -25,11 +25,11 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
         <CourseTypeContext.Provider value={type}>
           <div className="flex max-h-dvh min-h-dvh flex-col gap-6 py-6">
             <AppBar progress={courseSelectionInfo[type].progress} />
-            <ErrorBoundary fallback={<CourseSelectionFallback type={'error'} />}>
+            <SoongptErrorBoundary fallback={<CourseSelectionFallback type={'error'} />}>
               <Suspense fallback={<CourseSelectionFallback type={'pending'} />}>
                 <CourseSelection />
               </Suspense>
-            </ErrorBoundary>
+            </SoongptErrorBoundary>
           </div>
         </CourseTypeContext.Provider>
       </AnimatePresence>
