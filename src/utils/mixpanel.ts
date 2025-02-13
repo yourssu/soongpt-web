@@ -12,6 +12,7 @@ mixpanel.init(MIXPANEL_TOKEN, {
   track_pageview: 'url-with-path',
   persistence: 'localStorage',
   ignore_dnt: true,
+  record_sessions_percent: 100,
 });
 
 export const Mixpanel = {
