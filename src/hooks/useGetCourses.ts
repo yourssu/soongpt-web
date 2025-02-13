@@ -23,6 +23,7 @@ export const useGetCourses = (info: StudentWithoutChapel) => {
         const response = await api
           .get(`courses/${url[type]}`, {
             searchParams: info,
+            timeout: false,
           })
           .json();
 

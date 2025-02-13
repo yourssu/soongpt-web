@@ -6,7 +6,7 @@ export const useGetTimetable = (timetableId: number) => {
   return useSuspenseQuery({
     queryKey: ['timetable', timetableId],
     queryFn: async () => {
-      const response = await api.get(`timetables/${timetableId}`).json();
+      const response = await api.get(`timetables/${timetableId}`, { timeout: false }).json();
       return timetableResponseSchema.parse(response);
     },
     select: (data) => data.result,
