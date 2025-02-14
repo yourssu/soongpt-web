@@ -43,7 +43,7 @@ const CourseListItem = ({ onClickCourseItem, course, isSelected }: CourseListIte
         <div className="text-[20px] font-semibold">{course.courseName}</div>
         <div className="text-[12px] font-light">{course.professorName}</div>
       </div>
-      {course.credit > 0 && (
+      {course.courseName.length !== 0 && (
         <div className="flex h-6 items-center rounded-lg bg-[#ECEFFF] px-1.5 text-[12px]/[18px] font-semibold text-nowrap text-[#5736F5]">
           {course.credit}학점
         </div>
