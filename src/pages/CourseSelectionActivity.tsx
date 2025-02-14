@@ -25,7 +25,7 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
         <CourseTypeContext.Provider value={type}>
           <div className="flex max-h-dvh min-h-dvh flex-col gap-6 py-6">
             <AppBar progress={courseSelectionInfo[type].progress} />
-            <SoongptErrorBoundary FallbackComponent={<CourseSelectionFallback type={'error'} />}>
+            <SoongptErrorBoundary clientErrorComponent={<CourseSelectionFallback type={'error'} />}>
               <Suspense fallback={<CourseSelectionFallback type={'pending'} />}>
                 <CourseSelection />
               </Suspense>
