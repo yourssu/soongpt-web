@@ -69,14 +69,11 @@ importers:
         specifier: ^12.0.6
         version: 12.0.6(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react:
-        specifier: ^18.3.1
+        specifier: ^18.3.0
         version: 18.3.1
       react-dom:
-        specifier: ^18.3.1
+        specifier: ^18.3.0
         version: 18.3.1(react@18.3.1)
-      react-error-boundary:
-        specifier: ^5.0.0
-        version: 5.0.0(react@18.3.1)
       react-use-measure:
         specifier: ^2.1.7
         version: 2.1.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -103,10 +100,10 @@ importers:
         specifier: ^2.51.0
         version: 2.51.0
       '@types/react':
-        specifier: ^18.3.18
+        specifier: ^18.3.0
         version: 18.3.18
       '@types/react-dom':
-        specifier: ^18.3.5
+        specifier: ^18.3.0
         version: 18.3.5(@types/react@18.3.18)
       '@vitejs/plugin-react':
         specifier: ^4.3.4
@@ -2071,11 +2068,6 @@ packages:
     resolution: {integrity: sha512-5m4nQKp+rZRb09LNH59GM4BxTh9251/ylbKIbpe7TpGxfJ+9kv6BLkLBXIjjspbgbnIBNqlI23tRnTWT0snUIw==}
     peerDependencies:
       react: ^18.3.1
-
-  react-error-boundary@5.0.0:
-    resolution: {integrity: sha512-tnjAxG+IkpLephNcePNA7v6F/QpWLH8He65+DmedchDwg162JZqx4NmbXj0mlAYVVEd81OW7aFhmbsScYfiAFQ==}
-    peerDependencies:
-      react: '>=16.13.1'
 
   react-fast-compare@3.2.2:
     resolution: {integrity: sha512-nsO+KSNgo1SbJqJEYRE9ERzo7YtYbou/OqjSQKxV7jcKox7+usiUVZOAC+XnDOABXggQTno0Y1CpVnuWEc1boQ==}
@@ -4142,11 +4134,6 @@ snapshots:
       loose-envify: 1.4.0
       react: 18.3.1
       scheduler: 0.23.2
-
-  react-error-boundary@5.0.0(react@18.3.1):
-    dependencies:
-      '@babel/runtime': 7.26.0
-      react: 18.3.1
 
   react-fast-compare@3.2.2: {}
 

@@ -56,11 +56,11 @@ export const courseSelectionInfo: Record<CourseType, CourseSelectionInfo> = {
 
 export const gradeSelection: Grade[][] = [[1], [2], [3], [4, 5]];
 
-export const emptyCourse: Course = {
+export const emptyCourses: Course[] = [1, 2, 3].map((credit) => ({
   courseName: '',
   professorName: '',
   courseTime: [],
   classification: 'MAJOR_REQUIRED',
-  credit: 0,
+  credit: credit,
   target: [],
-};
+}));

@@ -62,7 +62,7 @@ const CourseSelectionView = ({
               isSelected={selectedCourses.some((selectedCourse) =>
                 isSameCourse(course, selectedCourse),
               )}
-              key={course.courseName}
+              key={`${course.courseName} ${course.credit}`}
               course={course}
             />
           ))}

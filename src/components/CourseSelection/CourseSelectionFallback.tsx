@@ -1,5 +1,5 @@
 import CourseSelectionView from './CourseSelectionView.tsx';
-import { emptyCourse } from '../../data/courseSelectionInfo.ts';
+import { emptyCourses } from '../../data/courseSelectionInfo.ts';
 import Warning from '../../assets/warning.svg';
 
 type CourseSelectionFallbackType = 'pending' | 'error';
@@ -32,7 +32,7 @@ interface CourseSelectionFallbackProps {
 const CourseSelectionFallback = ({ type }: CourseSelectionFallbackProps) => {
   return (
     <CourseSelectionView
-      courses={[emptyCourse, emptyCourse, emptyCourse]}
+      courses={emptyCourses}
       resultState={'FILLED'}
       selectedCourses={[]}
       selectedGrades={[]}
