@@ -3,16 +3,20 @@ import { useEffect } from 'react';
 
 interface RollingNumberProps extends HTMLMotionProps<'span'> {
   number: number;
+  decimals: number;
 }
 
-const RollingNumber = ({ number, ...props }: RollingNumberProps) => {
+const RollingNumber = ({ number, decimals, ...props }: RollingNumberProps) => {
   const springValue = useSpring(number, {
     mass: 0.8,
     stiffness: 75,
     damping: 15,
   });
 
-  const displayNumber = useTransform(springValue, (latest) => Math.round(latest));
+  const displayNumber = useTransform(springValue, (latest) => {
+    const factor = Math.pow(10, decimals);
+    return (Math.round(latest * factor) / factor).toFixed(decimals);
+  });
 
   useEffect(() => {
     springValue.set(number);
