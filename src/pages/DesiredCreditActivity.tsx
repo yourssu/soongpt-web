@@ -28,10 +28,15 @@ const getAvailableCredits = (currentCredit: number, baseCredit: number = 0): num
 
 type Classification = '전공필수' | '전공선택' | '교양필수' | '교양선택';
 
-const MAX_CREDIT = 22;
+const MAX_CREDIT = 22.5;
 
 const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ params }) => {
-  const previousCredit = params.majorRequired + params.majorElective + params.generalRequired; // 과목 선택 페이지에서 선택한 전필 + 전선 + 교필 학점
+  const context = StudentMachineContext.useSelector((state) => state.context);
+  const chapelCredit = context.chapel ? 0.5 : 0;
+
+  const previousCredit =
+    params.majorRequired + params.majorElective + params.generalRequired + chapelCredit; // 과목 선택 페이지에서 선택한 전필 + 전선 + 교필 학점 + 채플 학점
+
   const [desiredCredit, setDesiredCredit] = useState(previousCredit); // 희망 학점
 
   const [availableMajorElective, setAvailableMajorElective] = useState(() =>
@@ -47,7 +52,6 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
   const [showMajorElectiveDropdown, setShowMajorElectiveDropdown] = useState(false);
   const [showGeneralElectiveDropdown, setShowGeneralElectiveDropdown] = useState(false);
 
-  const context = StudentMachineContext.useSelector((state) => state.context);
   const postTimetableMutation = usePostTimetable();
 
   const { push } = useFlow();
@@ -119,7 +123,12 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
         <div className="mt-6 flex flex-1 flex-col items-center">
           <h2 className="text-center text-[28px] font-semibold">
             사용자님의 이번학기 <br />
-            희망 학점은 <RollingNumber number={desiredCredit} className="text-primary" />
+            희망 학점은{' '}
+            <RollingNumber
+              number={desiredCredit}
+              decimals={context.chapel ? 1 : 0}
+              className="text-primary"
+            />
             학점이군요!
           </h2>
           <span className="mt-1 font-light">희망 학점에 맞추어 선택과목을 추천해드릴게요.</span>
