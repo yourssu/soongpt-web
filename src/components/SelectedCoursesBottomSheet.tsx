@@ -69,84 +69,81 @@ const SelectedCoursesBottomSheet = ({ open, handleClose }: SelectedCourseBottomS
   };
 
   return (
-    root && (
-      <>
-        {createPortal(
-          <AnimatePresence>
-            {open && (
-              <motion.div
-                onMouseUp={handleMouseUp}
-                onMouseMove={handleMouseMove}
-                onTouchEnd={handleTouchEnd}
-                onTouchMove={handleTouchMove}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="bg-modal/80 absolute inset-0 z-50 flex flex-col-reverse overflow-hidden px-4 pt-12 pb-[34px]"
+    root &&
+    createPortal(
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            onMouseUp={handleMouseUp}
+            onMouseMove={handleMouseMove}
+            onTouchEnd={handleTouchEnd}
+            onTouchMove={handleTouchMove}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="bg-modal/80 absolute inset-0 z-50 flex flex-col-reverse overflow-hidden px-4 pt-12 pb-[34px]"
+          >
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 20 }}
+              transition={{ duration: 0.2 }}
+              className={`flex flex-col ${dragging ? 'overflow-hidden' : 'overflow-auto'} rounded-2xl bg-white px-4 pb-4`}
+            >
+              <div
+                onMouseDown={handleMouseDown}
+                onTouchStart={handleTouchStart}
+                className="flex w-full justify-center p-4"
               >
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 20 }}
-                  transition={{ duration: 0.2 }}
-                  className={`flex flex-col ${dragging ? 'overflow-hidden' : 'overflow-auto'} rounded-2xl bg-white px-4 pb-4`}
+                <div className="bg-hint h-[4px] w-[30px] rounded-[100px]"></div>
+              </div>
+              <motion.div
+                className={`mb-[18px] ${dragging ? 'overflow-hidden' : 'overflow-auto'}`}
+                animate={{
+                  maxHeight: open ? containerHeight : 0,
+                  height: open ? containerHeight : 0,
+                }}
+                initial={{ maxHeight: 0, height: 0 }}
+                exit={{ maxHeight: 0, height: 0 }}
+                transition={
+                  dragging
+                    ? {
+                        delay: 0,
+                        duration: 0.1,
+                      }
+                    : undefined
+                }
+              >
+                <div
+                  ref={contentRef}
+                  className={`flex flex-1 flex-col gap-3.5 ${dragging ? 'overflow-hidden' : 'overflow-auto'} px-4 select-none`}
                 >
-                  <div
-                    onMouseDown={handleMouseDown}
-                    onTouchStart={handleTouchStart}
-                    className="flex w-full justify-center p-4"
-                  >
-                    <div className="bg-hint h-[4px] w-[30px] rounded-[100px]"></div>
-                  </div>
-                  <motion.div
-                    className={`mb-[18px] ${dragging ? 'overflow-hidden' : 'overflow-auto'}`}
-                    animate={{
-                      maxHeight: open ? containerHeight : 0,
-                      height: open ? containerHeight : 0,
-                    }}
-                    initial={{ maxHeight: 0, height: 0 }}
-                    exit={{ maxHeight: 0, height: 0 }}
-                    transition={
-                      dragging
-                        ? {
-                            delay: 0,
-                            duration: 0.1,
-                          }
-                        : undefined
-                    }
-                  >
-                    <div
-                      ref={contentRef}
-                      className={`flex flex-1 flex-col gap-3.5 ${dragging ? 'overflow-hidden' : 'overflow-auto'} px-4 select-none`}
-                    >
-                      {courses.length === 0 ? (
-                        <div>선택된 과목이 없어요.</div>
-                      ) : (
-                        courses.map((course) => (
-                          <CourseListItem
-                            key={`${course.courseName} ${course.professorName}`}
-                            course={course}
-                            onClickCourseItem={() => {}}
-                            isSelected={false}
-                          />
-                        ))
-                      )}
-                    </div>
-                  </motion.div>
-                  <button
-                    type="button"
-                    className="bg-primary w-full rounded-2xl py-3.5 text-base font-semibold text-white"
-                    onClick={handleClose}
-                  >
-                    전공선택과목 보기
-                  </button>
-                </motion.div>
+                  {courses.length === 0 ? (
+                    <div>선택된 과목이 없어요.</div>
+                  ) : (
+                    courses.map((course) => (
+                      <CourseListItem
+                        key={`${course.courseName} ${course.professorName}`}
+                        course={course}
+                        onClickCourseItem={() => {}}
+                        isSelected={false}
+                      />
+                    ))
+                  )}
+                </div>
               </motion.div>
-            )}
-          </AnimatePresence>,
-          root,
+              <button
+                type="button"
+                className="bg-primary w-full rounded-2xl py-3.5 text-base font-semibold text-white"
+                onClick={handleClose}
+              >
+                전공선택과목 보기
+              </button>
+            </motion.div>
+          </motion.div>
         )}
-      </>
+      </AnimatePresence>,
+      root,
     )
   );
 };
