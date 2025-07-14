@@ -25,8 +25,8 @@ const CourseListItem = ({ onClickCourseItem, course, isSelected }: CourseListIte
               borderColor: isSelected ? 'rgba(107, 92, 255, 1)' : 'rgba(107, 92, 255, 0)',
             }
       }
-      className={`flex min-h-[72px] w-full items-center justify-between gap-3 rounded-xl border-2 bg-[#F7F8F8] px-5 ${
-        isSelected ? 'text-[#6B5CFF]' : ''
+      className={`bg-bg-layerDefault flex min-h-[72px] w-full items-center justify-between gap-3 rounded-xl border-2 px-5 ${
+        isSelected ? 'text-brandPrimary' : ''
       }`}
       initial={{ borderColor: 'rgba(107, 92, 255, 0)' }}
       onClick={handleClick}
@@ -45,7 +45,7 @@ const CourseListItem = ({ onClickCourseItem, course, isSelected }: CourseListIte
         <div className="text-[12px] font-light">{course.professorName}</div>
       </div>
       {course.credit > 0 && (
-        <div className="flex h-6 items-center rounded-lg bg-[#ECEFFF] px-1.5 text-[12px]/[18px] font-semibold text-nowrap text-[#5736F5]">
+        <div className="text-brandSecondary bg-bg-brandLayerLight flex h-6 items-center rounded-lg px-1.5 text-[12px]/[18px] font-semibold text-nowrap">
           {course.credit}학점
         </div>
       )}

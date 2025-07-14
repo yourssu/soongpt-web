@@ -127,7 +127,7 @@ const CourseSelectionView = ({
       <div className="flex w-full flex-col items-center gap-3 px-12">
         <span className="text-base font-light">
           현재{' '}
-          <span className="text-[#6B5CFF]">
+          <span className="text-brandPrimary">
             {totalCredit ? Object.values(totalCredit).reduce((acc, item) => acc + item) : 0}학점
           </span>{' '}
           선택했어요

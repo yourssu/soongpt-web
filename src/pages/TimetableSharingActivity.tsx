@@ -98,7 +98,7 @@ const TimetableSharingActivity: ActivityComponentType<TimetableSharingParams> = 
               <TimetableSharingTemplate ref={templateRef} timetableId={timetableId} />
               <div className="mt-4 flex justify-center gap-2">
                 <button
-                  className="rounded-2xl bg-[#c2c8ff] px-9 py-3 font-semibold text-[#5736F5]"
+                  className="text-brandSecondary bg-bg-brandLayerDefault rounded-2xl px-9 py-3 font-semibold"
                   onClick={handleClickSave}
                   type="button"
                 >
