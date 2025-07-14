@@ -53,7 +53,7 @@ const DepartmentInput = ({ onNext, initialValue }: DepartmentInputProps) => {
       <Popover.Root open={matchingDepartments.length > 0}>
         <Popover.Trigger asChild>
           <input
-            className="bg-basic-light text-primary focus-visible:outline-ring w-full rounded-xl px-4 py-3 text-lg font-semibold"
+            className="bg-bg-layerDefault text-brandPrimary focus-visible:outline-borderRing w-full rounded-xl px-4 py-3 text-lg font-semibold"
             onChange={handleInputChange}
             placeholder="학과"
             type="text"
@@ -75,7 +75,7 @@ const DepartmentInput = ({ onNext, initialValue }: DepartmentInputProps) => {
                   opacity: 1,
                   y: 0,
                 }}
-                className="bg-basic-light z-10 max-h-44 w-[var(--radix-popover-trigger-width)] overflow-y-auto rounded-xl border border-gray-200 shadow-sm"
+                className="bg-bg-layerDefault z-10 max-h-44 w-[var(--radix-popover-trigger-width)] overflow-y-auto rounded-xl border border-gray-200 shadow-sm"
                 exit={{ opacity: 0, y: -10 }}
                 initial={{
                   opacity: 0,
@@ -86,7 +86,7 @@ const DepartmentInput = ({ onNext, initialValue }: DepartmentInputProps) => {
                 {matchingDepartments.map((dept) => (
                   <li key={dept}>
                     <button
-                      className="text-list focus-visible:outline-ring flex w-full items-center justify-between rounded-xl px-4 py-2 text-lg font-semibold hover:bg-gray-100 focus-visible:-outline-offset-1"
+                      className="text-neutralSubtle focus-visible:outline-borderRing flex w-full items-center justify-between rounded-xl px-4 py-2 text-lg font-semibold hover:bg-gray-100 focus-visible:-outline-offset-1"
                       onClick={() => handleDepartmentSelect(dept)}
                       type="button"
                     >

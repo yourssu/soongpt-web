@@ -6,7 +6,7 @@ const ProgressBar = ({ width }: ProgressBarProps) => {
   return (
     <div className="h-1 w-full bg-black">
       <div
-        className="bg-primary h-full transition-all duration-500"
+        className="bg-brandPrimary h-full transition-all duration-500"
         style={{ width: `${width}%` }}
       />
     </div>

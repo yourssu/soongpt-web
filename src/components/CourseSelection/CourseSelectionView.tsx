@@ -135,7 +135,7 @@ const CourseSelectionView = ({
         <div className="flex w-full items-center justify-center gap-3">
           {type === 'MAJOR_ELECTIVE' && <ViewSelectedCoursesButton />}
           <button
-            className="bg-primary max-w-52 flex-1 rounded-2xl py-3.5 font-semibold text-white"
+            className="bg-brandPrimary max-w-52 flex-1 rounded-2xl py-3.5 font-semibold text-white"
             onClick={onNextClick}
             type="button"
           >

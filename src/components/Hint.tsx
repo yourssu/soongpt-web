@@ -8,7 +8,7 @@ interface HintIconProps extends HTMLAttributes<SVGSVGElement> {
 
 const Hint = ({ children, className, ...props }: HTMLAttributes<HTMLDivElement>) => {
   return (
-    <div className={`text-hint flex items-center gap-2 ${twMerge(className)}`} {...props}>
+    <div className={`text-neutralHint flex items-center gap-2 ${twMerge(className)}`} {...props}>
       {children}
     </div>
   );

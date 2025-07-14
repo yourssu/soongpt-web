@@ -131,7 +131,7 @@ const DefaultHeader = ({ className }: TimetableHeaderProps) => {
     <div className={`flex items-center justify-between py-2.5 pr-2.5 pl-5 ${twMerge(className)}`}>
       <h3 className="text-sm font-semibold">{TIME_TABLE_TAG[tag]}</h3>
       <button
-        className="text-primary bg-credit-chip rounded-lg px-2 py-1 text-xs font-semibold"
+        className="text-brandPrimary bg-bg-brandLayerLight rounded-lg px-2 py-1 text-xs font-semibold"
         disabled
       >
         {totalCredit}학점
@@ -182,18 +182,18 @@ const Timetable = ({ children, timetable, className, ...props }: TimetableProps)
         {/* Timetable Header */}
         {children}
         <div
-          className="divide-placeholder grid"
+          className="divide-neutralPlaceholder grid"
           style={{
             gridTemplateColumns: getGridTemplateCols(days.length),
             gridTemplateRows: getGridTemplateRows(timeRange.length),
           }}
         >
           {/* Header row */}
-          <div className="border-placeholder col-span-full grid grid-cols-subgrid border-b-1">
-            <div className="border-placeholder border-r-1" />
+          <div className="border-neutralPlaceholder col-span-full grid grid-cols-subgrid border-b-1">
+            <div className="border-neutralPlaceholder border-r-1" />
             {days.map((day) => (
               <div
-                className="border-placeholder flex items-center justify-center border-r-1 text-xs font-light last:border-r-0"
+                className="border-neutralPlaceholder flex items-center justify-center border-r-1 text-xs font-light last:border-r-0"
                 key={`${timetable.timetableId}-${day}`}
               >
                 {day}
@@ -204,15 +204,15 @@ const Timetable = ({ children, timetable, className, ...props }: TimetableProps)
           {/* Time rows */}
           {timeRange.map((tableTime) => (
             <div
-              className="border-placeholder col-span-full grid grid-cols-subgrid border-b-1 last:border-b-0"
+              className="border-neutralPlaceholder col-span-full grid grid-cols-subgrid border-b-1 last:border-b-0"
               key={`${timetable.timetableId}-${tableTime}`}
             >
-              <div className="border-placeholder flex justify-end border-r-1 p-0.5 text-xs font-light">
+              <div className="border-neutralPlaceholder flex justify-end border-r-1 p-0.5 text-xs font-light">
                 {tableTime}
               </div>
               {days.map((tableDay) => (
                 <div
-                  className="border-placeholder relative border-r-1 last:border-r-0"
+                  className="border-neutralPlaceholder relative border-r-1 last:border-r-0"
                   key={`${timetable.timetableId}-${tableTime}-${tableDay}`}
                 >
                   {courses.map((course) => {

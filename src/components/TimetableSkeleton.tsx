@@ -75,25 +75,25 @@ export const TimetableSkeleton = ({
   return (
     <div className={`transform-gpu animate-pulse ${twMerge(className)}`} {...props}>
       <div
-        className={`border-placeholder overflow-hidden rounded-xl border-2 ${twMerge(borderClass)}`}
+        className={`border-neutralPlaceholder overflow-hidden rounded-xl border-2 ${twMerge(borderClass)}`}
       >
         {/* Header */}
         {children}
 
         {/* Timetable Grid */}
         <div
-          className="divide-placeholder grid"
+          className="divide-neutralPlaceholder grid"
           style={{
             gridTemplateColumns: getGridTemplateCols(days.length),
             gridTemplateRows: getGridTemplateRows(times.length),
           }}
         >
           {/* Days Header */}
-          <div className="border-placeholder col-span-full grid grid-cols-subgrid border-b-1">
-            <div className="border-placeholder border-r-1" />
+          <div className="border-neutralPlaceholder col-span-full grid grid-cols-subgrid border-b-1">
+            <div className="border-neutralPlaceholder border-r-1" />
             {days.map((day) => (
               <div
-                className="border-placeholder flex items-center justify-center border-r-1 text-xs font-light last:border-r-0"
+                className="border-neutralPlaceholder flex items-center justify-center border-r-1 text-xs font-light last:border-r-0"
                 key={day}
               >
                 {day}
@@ -104,15 +104,15 @@ export const TimetableSkeleton = ({
           {/* Time Slots */}
           {times.map((time) => (
             <div
-              className="border-placeholder col-span-full grid grid-cols-subgrid border-b-1 last:border-b-0"
+              className="border-neutralPlaceholder col-span-full grid grid-cols-subgrid border-b-1 last:border-b-0"
               key={time}
             >
-              <div className="border-placeholder flex justify-end border-r-1 p-0.5 text-xs font-light">
+              <div className="border-neutralPlaceholder flex justify-end border-r-1 p-0.5 text-xs font-light">
                 {time}
               </div>
               {days.map((day) => (
                 <div
-                  className="border-placeholder relative border-r-1 last:border-r-0"
+                  className="border-neutralPlaceholder relative border-r-1 last:border-r-0"
                   key={`${time}-${day}`}
                 >
                   {/* Random Skeleton Blocks */}

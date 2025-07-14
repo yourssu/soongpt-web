@@ -119,7 +119,7 @@ const OnboardingActivity: ActivityComponentType = () => {
           {state.matches('채플수강여부입력') && (
             <motion.button
               animate={{ opacity: 1, y: 0 }}
-              className="bg-primary mt-4 w-50 rounded-2xl py-3.5 font-semibold text-white"
+              className="bg-brandPrimary mt-4 w-50 rounded-2xl py-3.5 font-semibold text-white"
               initial={{
                 opacity: 0,
                 y: 20,

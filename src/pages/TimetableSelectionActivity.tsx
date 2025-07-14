@@ -107,15 +107,15 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
               >
                 <Timetable
                   className={`${
-                    index === selectedIndex ? 'border-primary' : 'border-placeholder'
+                    index === selectedIndex ? 'border-brandPrimary' : 'border-neutralPlaceholder'
                   } transition-colors duration-300`}
                   timetable={timetable}
                 >
                   <Timetable.Header
                     className={`${
                       index === selectedIndex
-                        ? 'bg-primary text-white'
-                        : 'border-placeholder border-b-1'
+                        ? 'bg-brandPrimary text-white'
+                        : 'border-neutralPlaceholder border-b-1'
                     } transition-colors duration-300`}
                   />
                 </Timetable>
@@ -163,7 +163,7 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
           </div>
           <div className="sticky bottom-6 flex w-full justify-center">
             <button
-              className={`w-50 rounded-2xl py-3.5 font-semibold text-white shadow-sm ${latestMutation.status === 'pending' ? 'bg-gray-300' : 'bg-primary'}`}
+              className={`w-50 rounded-2xl py-3.5 font-semibold text-white shadow-sm ${latestMutation.status === 'pending' ? 'bg-gray-300' : 'bg-brandPrimary'}`}
               disabled={latestMutation.status === 'pending'}
               onClick={handleNextClick}
               type="button"
