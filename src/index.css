@@ -2,26 +2,34 @@
 
 @theme {
   --font-pretendard: 'Pretendard Variable', sans-serif;
-  --color-primary: #6b5cff;
-  --color-text: #292929;
-  --color-credit-chip: #ecefff;
-  --color-basic-light: #f7f8f8;
-  --color-list: #686868;
-  --color-ring: hsl(240 5% 64.9%);
-  --color-placeholder: #cfcfcf;
-  --color-hint: #b5b9c4;
-  --color-disabled: #e3e4e8;
-  --color-secondary: #5736f5;
-  --color-pressed: #c2c8ff;
-  --color-basic-secondary: #4b505d;
-  --color-chip-unselected: #f1f1f4;
-  --color-chip-selected: #dde1ff;
-  --color-modal: #25262c;
+
+  /* Brand Semantics */
+  --color-brandPrimary: #6b5cff;
+  --color-brandSecondary: #5736f5; /* brandSecondary인데 왜 진해지는지 모르겠음... */
+
+  /* Text Semantics */
+  --color-neutral: #292929;
+  --color-neutralMuted: #4b505d;
+  --color-neutralSubtle: #686868;
+  --color-neutralPlaceholder: #cfcfcf;
+  --color-neutralDisabled: #e3e4e8;
+  --color-neutralHint: #b5b9c4;
+
+  /* Layer Semantics */
+  --color-bg-layerDefault: #f7f8f8;
+  --color-bg-brandLayerDefault: #c2c8ff;
+  --color-bg-brandLayerLight: #ecefff;
+  --color-bg-modalLayerDefault: #25262c;
+  --color-bg-chipSelected: #dde1ff;
+  --color-bg-chipUnselected: #f1f1f4;
+
+  /* Border Semantics */
+  --color-borderRing: hsl(240 5% 64.9%);
 }
 
 @layer base {
   body {
-    color: #292929;
+    color: var(--color-neutral);
 
     overflow: hidden;
     overscroll-behavior: none;
@@ -32,6 +40,6 @@
   }
 
   input::placeholder {
-    color: #cfcfcf;
+    color: var(--color-neutralPlaceholder);
   }
 }

@@ -45,11 +45,11 @@ const GradeInput = ({ onNext, initialValue }: GradeInputProps) => {
       <Popover.Root onOpenChange={setShowDropdown} open={showDropdown}>
         <Popover.Trigger asChild>
           <button
-            className={`bg-basic-light focus-visible:outline-ring flex w-full items-center justify-between rounded-xl px-4 py-3 text-lg font-semibold ${grade === 0 ? 'text-placeholder' : 'text-primary'}`}
+            className={`bg-bg-layerDefault focus-visible:outline-borderRing flex w-full items-center justify-between rounded-xl px-4 py-3 text-lg font-semibold ${grade === 0 ? 'text-neutralPlaceholder' : 'text-brandPrimary'}`}
             type="button"
           >
             {grade === 0 ? '학년' : grade}
-            <ChevronDown className="text-text size-4" />
+            <ChevronDown className="text-neutral size-4" />
           </button>
         </Popover.Trigger>
 
@@ -61,7 +61,7 @@ const GradeInput = ({ onNext, initialValue }: GradeInputProps) => {
                   opacity: 1,
                   y: 0,
                 }}
-                className="bg-basic-light z-10 w-[var(--radix-popover-trigger-width)] rounded-xl border border-gray-200 shadow-sm"
+                className="bg-bg-layerDefault z-10 w-[var(--radix-popover-trigger-width)] rounded-xl border border-gray-200 shadow-sm"
                 exit={{
                   opacity: 0,
                   y: -10,
@@ -74,7 +74,7 @@ const GradeInput = ({ onNext, initialValue }: GradeInputProps) => {
                 {grades.map((gradeOption) => (
                   <li key={gradeOption}>
                     <button
-                      className="text-list focus-visible:outline-ring flex w-full items-center justify-between rounded-xl px-4 py-2 text-lg font-semibold hover:bg-gray-100 focus-visible:-outline-offset-1"
+                      className="text-neutralSubtle focus-visible:outline-borderRing flex w-full items-center justify-between rounded-xl px-4 py-2 text-lg font-semibold hover:bg-gray-100 focus-visible:-outline-offset-1"
                       onClick={() => {
                         handleGradeSelect(gradeOption);
                       }}

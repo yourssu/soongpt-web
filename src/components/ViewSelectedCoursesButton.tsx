@@ -11,7 +11,7 @@ const ViewSelectedCoursesButton = () => {
   return (
     <>
       <button
-        className="bg-pressed text-secondary max-w-52 flex-1 rounded-2xl py-3.5 font-semibold"
+        className="bg-bg-brandLayerDefault text-brandSecondary max-w-52 flex-1 rounded-2xl py-3.5 font-semibold"
         onClick={handleOpen}
         type="button"
       >

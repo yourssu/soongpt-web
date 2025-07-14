@@ -83,7 +83,7 @@ const SelectedCoursesBottomSheet = ({ open, handleClose }: SelectedCourseBottomS
         {open && (
           <motion.div
             animate={{ opacity: 1 }}
-            className="bg-modal/80 absolute inset-0 z-50 flex flex-col-reverse overflow-hidden px-4 pt-12 pb-[34px]"
+            className="bg-bg-modalLayerDefault/80 absolute inset-0 z-50 flex flex-col-reverse overflow-hidden px-4 pt-12 pb-[34px]"
             exit={{ opacity: 0 }}
             initial={{ opacity: 0 }}
             onMouseMove={handleMouseMove}
@@ -103,7 +103,7 @@ const SelectedCoursesBottomSheet = ({ open, handleClose }: SelectedCourseBottomS
                 onMouseDown={handleMouseDown}
                 onTouchStart={handleTouchStart}
               >
-                <div className="bg-hint h-[4px] w-[30px] rounded-[100px]" />
+                <div className="bg-neutralHint h-[4px] w-[30px] rounded-[100px]" />
               </div>
               <motion.div
                 animate={{
@@ -141,7 +141,7 @@ const SelectedCoursesBottomSheet = ({ open, handleClose }: SelectedCourseBottomS
                 </div>
               </motion.div>
               <button
-                className="bg-primary w-full rounded-2xl py-3.5 text-base font-semibold text-white"
+                className="bg-brandPrimary w-full rounded-2xl py-3.5 text-base font-semibold text-white"
                 onClick={handleClose}
                 type="button"
               >

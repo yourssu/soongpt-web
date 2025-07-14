@@ -127,7 +127,7 @@ const CourseSelectionView = ({
       <div className="flex w-full flex-col items-center gap-3 px-12">
         <span className="text-base font-light">
           현재{' '}
-          <span className="text-[#6B5CFF]">
+          <span className="text-brandPrimary">
             {totalCredit ? Object.values(totalCredit).reduce((acc, item) => acc + item) : 0}학점
           </span>{' '}
           선택했어요
@@ -135,7 +135,7 @@ const CourseSelectionView = ({
         <div className="flex w-full items-center justify-center gap-3">
           {type === 'MAJOR_ELECTIVE' && <ViewSelectedCoursesButton />}
           <button
-            className="bg-primary max-w-52 flex-1 rounded-2xl py-3.5 font-semibold text-white"
+            className="bg-brandPrimary max-w-52 flex-1 rounded-2xl py-3.5 font-semibold text-white"
             onClick={onNextClick}
             type="button"
           >

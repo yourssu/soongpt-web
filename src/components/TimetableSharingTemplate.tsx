@@ -225,7 +225,7 @@ const TimetableSharingTemplate = forwardRef<HTMLDivElement, TimetableSharingTemp
         <div className="mt-4 flex justify-center gap-3">
           {TEMPLATE_COLORS.map((color, index) => (
             <button
-              className={`size-7.5 rounded-full shadow-sm outline-2 transition-colors ${index === selectedIndex ? 'outline-primary' : 'outline-placeholder'}`}
+              className={`size-7.5 rounded-full shadow-sm outline-2 transition-colors ${index === selectedIndex ? 'outline-brandPrimary' : 'outline-neutralPlaceholder'}`}
               key={`button-${index}`}
               onClick={() => scrollTo(index)}
               style={{

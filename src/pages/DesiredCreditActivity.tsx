@@ -126,7 +126,7 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
             사용자님의 이번학기 <br />
             희망 학점은{' '}
             <RollingNumber
-              className="text-primary"
+              className="text-brandPrimary"
               decimals={context.chapel ? 1 : 0}
               number={desiredCredit}
             />
@@ -137,7 +137,7 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
             <div>
               <label className="mb-1.5 block text-sm">전공필수 학점</label>
               <input
-                className="bg-basic-light text-primary w-full rounded-xl px-4 py-3 text-lg font-semibold"
+                className="bg-bg-layerDefault text-brandPrimary w-full rounded-xl px-4 py-3 text-lg font-semibold"
                 disabled
                 type="number"
                 value={params.majorRequired}
@@ -152,11 +152,11 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
               >
                 <Popover.Trigger asChild>
                   <button
-                    className={`bg-basic-light focus-visible:outline-ring flex w-full items-center justify-between rounded-xl px-4 py-3 text-lg font-semibold ${majorElective === params.majorElective ? 'text-placeholder' : 'text-primary'}`}
+                    className={`bg-bg-layerDefault focus-visible:outline-borderRing flex w-full items-center justify-between rounded-xl px-4 py-3 text-lg font-semibold ${majorElective === params.majorElective ? 'text-neutralPlaceholder' : 'text-brandPrimary'}`}
                     type="button"
                   >
                     {majorElective}
-                    <ChevronDown className="text-text size-4" />
+                    <ChevronDown className="text-neutral size-4" />
                   </button>
                 </Popover.Trigger>
 
@@ -168,7 +168,7 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
                           opacity: 1,
                           y: 0,
                         }}
-                        className="bg-basic-light z-10 max-h-44 w-[var(--radix-popover-trigger-width)] overflow-y-auto rounded-xl border border-gray-200 shadow-sm"
+                        className="bg-bg-layerDefault z-10 max-h-44 w-[var(--radix-popover-trigger-width)] overflow-y-auto rounded-xl border border-gray-200 shadow-sm"
                         exit={{
                           opacity: 0,
                           y: -10,
@@ -181,7 +181,7 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
                         {availableMajorElective.map((availableCredit) => (
                           <li key={availableCredit}>
                             <button
-                              className="text-list focus-visible:outline-ring flex w-full items-center justify-between rounded-xl px-4 py-2 text-lg font-semibold hover:bg-gray-100 focus-visible:-outline-offset-1"
+                              className="text-neutralSubtle focus-visible:outline-borderRing flex w-full items-center justify-between rounded-xl px-4 py-2 text-lg font-semibold hover:bg-gray-100 focus-visible:-outline-offset-1"
                               onClick={() =>
                                 handleCreditSelect({
                                   type: '전공선택',
@@ -207,7 +207,7 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
             <div>
               <label className="mb-1.5 block text-sm">교양필수 학점</label>
               <input
-                className="bg-basic-light text-primary w-full rounded-xl px-4 py-3 text-lg font-semibold"
+                className="bg-bg-layerDefault text-brandPrimary w-full rounded-xl px-4 py-3 text-lg font-semibold"
                 disabled
                 type="number"
                 value={params.generalRequired}
@@ -223,11 +223,11 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
               >
                 <Popover.Trigger asChild>
                   <button
-                    className={`bg-basic-light focus-visible:outline-ring flex w-full items-center justify-between rounded-xl px-4 py-3 text-lg font-semibold ${generalElective === 0 ? 'text-placeholder' : 'text-primary'}`}
+                    className={`bg-bg-layerDefault focus-visible:outline-borderRing flex w-full items-center justify-between rounded-xl px-4 py-3 text-lg font-semibold ${generalElective === 0 ? 'text-neutralPlaceholder' : 'text-brandPrimary'}`}
                     type="button"
                   >
                     {generalElective}
-                    <ChevronDown className="text-text size-4" />
+                    <ChevronDown className="text-neutral size-4" />
                   </button>
                 </Popover.Trigger>
 
@@ -239,7 +239,7 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
                           opacity: 1,
                           y: 0,
                         }}
-                        className="bg-basic-light z-10 max-h-44 w-[var(--radix-popover-trigger-width)] overflow-y-auto rounded-xl border border-gray-200 shadow-sm"
+                        className="bg-bg-layerDefault z-10 max-h-44 w-[var(--radix-popover-trigger-width)] overflow-y-auto rounded-xl border border-gray-200 shadow-sm"
                         exit={{
                           opacity: 0,
                           y: -10,
@@ -252,7 +252,7 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
                         {availableGeneralElective.map((availableCredit) => (
                           <li key={availableCredit}>
                             <button
-                              className="text-list focus-visible:outline-ring flex w-full items-center justify-between rounded-xl px-4 py-2 text-lg font-semibold hover:bg-gray-100 focus-visible:-outline-offset-1"
+                              className="text-neutralSubtle focus-visible:outline-borderRing flex w-full items-center justify-between rounded-xl px-4 py-2 text-lg font-semibold hover:bg-gray-100 focus-visible:-outline-offset-1"
                               onClick={() =>
                                 handleCreditSelect({
                                   type: '교양선택',
@@ -283,7 +283,7 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
 
           <motion.button
             animate={{ opacity: 1, y: 0 }}
-            className="bg-primary mt-auto w-50 rounded-2xl py-3.5 font-semibold text-white"
+            className="bg-brandPrimary mt-auto w-50 rounded-2xl py-3.5 font-semibold text-white"
             initial={{
               opacity: 0,
               y: 20,
