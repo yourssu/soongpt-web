@@ -1,5 +1,7 @@
-import { useActivity, useStep } from '@stackflow/react';
 import { ChevronLeft } from 'lucide-react';
+
+import { useActivity, useStep } from '@stackflow/react';
+
 import { activities, useFlow, useStepFlow } from '../stackflow';
 import ProgressBar from './ProgressBar';
 
@@ -25,15 +27,15 @@ const AppBar = ({ progress }: AppBarProps) => {
   return (
     <div className="flex items-center gap-4 px-6">
       <button
-        onClick={handleClickBackButton}
         className={`flex size-6 ${activity.isRoot && !step ? 'invisible' : ''}`}
+        onClick={handleClickBackButton}
       >
         <ChevronLeft />
       </button>
       <div className="flex-1">
         <ProgressBar width={progress} />
       </div>
-      <div className="size-6" aria-hidden="true" />
+      <div aria-hidden="true" className="size-6" />
     </div>
   );
 };

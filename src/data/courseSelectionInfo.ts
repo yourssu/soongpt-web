@@ -1,7 +1,7 @@
-import { CourseSelectionInfo, CourseType } from '../type/course.type.ts';
-import { Grade } from '../schemas/studentSchema.ts';
 import Like from '../assets/like.svg';
 import { Course } from '../schemas/courseSchema.ts';
+import { Grade } from '../schemas/studentSchema.ts';
+import { CourseSelectionInfo, CourseType } from '../type/course.type.ts';
 
 export const courseSelectionInfo: Record<CourseType, CourseSelectionInfo> = {
   MAJOR_REQUIRED: {

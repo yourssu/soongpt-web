@@ -1,4 +1,5 @@
 import { useSuspenseQueries } from '@tanstack/react-query';
+
 import api from '../api/client';
 import { courseResponseSchema } from '../schemas/courseSchema';
 import { StudentWithoutChapel } from '../schemas/studentSchema';
@@ -12,7 +13,7 @@ const url: Record<CourseType, string> = {
   GENERAL_REQUIRED: 'general/required',
 };
 
-const getArrayState = <T>(array: T[]): 'FILLED' | 'EMPTY' =>
+const getArrayState = <T>(array: T[]): 'EMPTY' | 'FILLED' =>
   array.length > 0 ? 'FILLED' : 'EMPTY';
 
 export const useGetCourses = (info: StudentWithoutChapel) => {

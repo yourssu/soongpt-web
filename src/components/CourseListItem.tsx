@@ -1,10 +1,11 @@
 import { motion } from 'motion/react';
+
 import { Course } from '../schemas/courseSchema.ts';
 
 interface CourseListItemProps {
   course: Course;
-  onClickCourseItem: (course: Course) => void;
   isSelected: boolean;
+  onClickCourseItem: (course: Course) => void;
 }
 
 const CourseListItem = ({ onClickCourseItem, course, isSelected }: CourseListItemProps) => {
@@ -14,17 +15,6 @@ const CourseListItem = ({ onClickCourseItem, course, isSelected }: CourseListIte
 
   return (
     <motion.div
-      onClick={handleClick}
-      initial={{ borderColor: 'rgba(107, 92, 255, 0)' }}
-      transition={
-        course.credit === 0
-          ? {
-              duration: 1.5,
-              repeat: Infinity,
-              ease: 'easeInOut',
-            }
-          : { duration: 0.1 }
-      }
       animate={
         course.credit === 0
           ? {
@@ -38,6 +28,17 @@ const CourseListItem = ({ onClickCourseItem, course, isSelected }: CourseListIte
       className={`flex min-h-[72px] w-full items-center justify-between gap-3 rounded-xl border-2 bg-[#F7F8F8] px-5 ${
         isSelected ? 'text-[#6B5CFF]' : ''
       }`}
+      initial={{ borderColor: 'rgba(107, 92, 255, 0)' }}
+      onClick={handleClick}
+      transition={
+        course.credit === 0
+          ? {
+              duration: 1.5,
+              repeat: Infinity,
+              ease: 'easeInOut',
+            }
+          : { duration: 0.1 }
+      }
     >
       <div className="my-2">
         <div className="text-[20px] font-semibold">{course.courseName}</div>

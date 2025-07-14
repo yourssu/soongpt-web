@@ -1,9 +1,10 @@
-import { AppScreen } from '@stackflow/plugin-basic-ui';
-import { ActivityComponentType } from '@stackflow/react';
-
-import { MutationState, MutationStatus, useMutationState } from '@tanstack/react-query';
 import { motion } from 'motion/react';
 import { ReactElement, useEffect, useRef, useState } from 'react';
+
+import { AppScreen } from '@stackflow/plugin-basic-ui';
+import { ActivityComponentType } from '@stackflow/react';
+import { MutationState, MutationStatus, useMutationState } from '@tanstack/react-query';
+
 import Warning from '../assets/warning.svg';
 import AppBar from '../components/AppBar';
 import Timetable from '../components/Timetable';
@@ -14,9 +15,9 @@ import { useFlow } from '../stackflow';
 import { Mixpanel } from '../utils/mixpanel.ts';
 
 interface TimetableSelection {
-  title: string;
   buttonText: string;
   element: () => ReactElement;
+  title: string;
 }
 
 const TimetableSelectionActivity: ActivityComponentType = () => {
@@ -61,7 +62,9 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
   };
 
   useEffect(() => {
-    if (timetableMutation.length === 0) replace('OnboardingActivity', {}, { animate: false });
+    if (timetableMutation.length === 0) {
+      replace('OnboardingActivity', {}, { animate: false });
+    }
   }, [timetableMutation, replace]);
 
   // Mixpanel 이벤트 추적
@@ -91,22 +94,22 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
           {latestMutation.data &&
             latestMutation.data.result.timetables.map((timetable, index) => (
               <div
-                key={timetable.timetableId}
                 className="pt-4 first:pt-0"
                 data-index={index}
+                key={timetable.timetableId}
+                onClick={() => handleTimetableClick(index)}
                 ref={(element) => {
                   {
                     /* div 요소가 마운트 될 때 실행*/
                   }
                   timetableRefs.current[index] = element;
                 }}
-                onClick={() => handleTimetableClick(index)}
               >
                 <Timetable
-                  timetable={timetable}
                   className={`${
                     index === selectedIndex ? 'border-primary' : 'border-placeholder'
                   } transition-colors duration-300`}
+                  timetable={timetable}
                 >
                   <Timetable.Header
                     className={`${
@@ -126,7 +129,7 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
       buttonText: '다시 만들기',
       element: () => (
         <div className="flex flex-1 flex-col items-center justify-center">
-          <img src={Warning} alt="Warning" className="size-42.5" />
+          <img alt="Warning" className="size-42.5" src={Warning} />
         </div>
       ),
     },
@@ -146,11 +149,11 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
       <div className="flex min-h-dvh flex-col py-6">
         <AppBar progress={100} />
         <motion.div
-          key={latestMutation.status}
-          initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.4, ease: 'easeOut' }}
           className="mt-4 flex flex-1 flex-col items-center"
+          initial={{ y: 20, opacity: 0 }}
+          key={latestMutation.status}
+          transition={{ duration: 0.4, ease: 'easeOut' }}
         >
           <h2 className="text-center text-[28px] font-semibold whitespace-pre-wrap">
             {`사용자님을 위한\n시간표를 ${timetableSelection[latestMutation.status].title}`}
@@ -160,10 +163,10 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
           </div>
           <div className="sticky bottom-6 flex w-full justify-center">
             <button
-              type="button"
               className={`w-50 rounded-2xl py-3.5 font-semibold text-white shadow-sm ${latestMutation.status === 'pending' ? 'bg-gray-300' : 'bg-primary'}`}
               disabled={latestMutation.status === 'pending'}
               onClick={handleNextClick}
+              type="button"
             >
               {timetableSelection[latestMutation.status].buttonText}
             </button>

@@ -1,5 +1,6 @@
 import { createContext, ElementType, HTMLAttributes, useContext } from 'react';
 import { twMerge } from 'tailwind-merge';
+
 import { CourseTime, CourseWithoutTarget } from '../schemas/courseSchema';
 import { TimetableTag, Timetable as TimetableType } from '../schemas/timetableSchema';
 
@@ -73,7 +74,7 @@ export const getGridTemplateRows = (length: number): string => {
   return `${headerHeight}px repeat(${length}, ${SLOT_HEIGHT * 12}px)`;
 };
 
-const getCoursePosition = (courseTime: CourseTime): { top: number; height: number } => {
+const getCoursePosition = (courseTime: CourseTime): { height: number; top: number } => {
   const [startHour, startMinute] = courseTime.start.split(':').map(Number);
   const [endHour, endMinute] = courseTime.end.split(':').map(Number);
 
@@ -116,8 +117,8 @@ interface TimetableHeaderProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 const TimetableContext = createContext<{
-  totalCredit: number;
   tag: TimetableTag;
+  totalCredit: number;
 }>({
   totalCredit: 0,
   tag: 'DEFAULT',
@@ -189,11 +190,11 @@ const Timetable = ({ children, timetable, className, ...props }: TimetableProps)
         >
           {/* Header row */}
           <div className="border-placeholder col-span-full grid grid-cols-subgrid border-b-1">
-            <div className="border-placeholder border-r-1"></div>
+            <div className="border-placeholder border-r-1" />
             {days.map((day) => (
               <div
-                key={`${timetable.timetableId}-${day}`}
                 className="border-placeholder flex items-center justify-center border-r-1 text-xs font-light last:border-r-0"
+                key={`${timetable.timetableId}-${day}`}
               >
                 {day}
               </div>
@@ -203,16 +204,16 @@ const Timetable = ({ children, timetable, className, ...props }: TimetableProps)
           {/* Time rows */}
           {timeRange.map((tableTime) => (
             <div
-              key={`${timetable.timetableId}-${tableTime}`}
               className="border-placeholder col-span-full grid grid-cols-subgrid border-b-1 last:border-b-0"
+              key={`${timetable.timetableId}-${tableTime}`}
             >
               <div className="border-placeholder flex justify-end border-r-1 p-0.5 text-xs font-light">
                 {tableTime}
               </div>
               {days.map((tableDay) => (
                 <div
-                  key={`${timetable.timetableId}-${tableTime}-${tableDay}`}
                   className="border-placeholder relative border-r-1 last:border-r-0"
+                  key={`${timetable.timetableId}-${tableTime}-${tableDay}`}
                 >
                   {courses.map((course) => {
                     const courseTime = course.courseTime.find(
@@ -226,8 +227,8 @@ const Timetable = ({ children, timetable, className, ...props }: TimetableProps)
 
                       return (
                         <div
-                          key={`${timetable.timetableId}-${course.courseName}-${courseTime.start}`}
                           className="absolute w-full p-0.5 text-xs font-bold text-white"
+                          key={`${timetable.timetableId}-${course.courseName}-${courseTime.start}`}
                           style={{
                             backgroundColor: bgColor,
                             borderColor: bgColor,

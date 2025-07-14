@@ -1,7 +1,9 @@
-import * as Popover from '@radix-ui/react-popover';
 import { Check } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
+
+import * as Popover from '@radix-ui/react-popover';
+
 import { departments } from '../data/departments';
 
 interface DepartmentInputProps {
@@ -36,11 +38,11 @@ const DepartmentInput = ({ onNext, initialValue }: DepartmentInputProps) => {
 
   return (
     <motion.div
+      animate={{ opacity: 1, y: 0 }}
       initial={{
         opacity: 0,
         y: -20,
       }}
-      animate={{ opacity: 1, y: 0 }}
       transition={{
         duration: 0.3,
         ease: 'easeOut',
@@ -51,11 +53,11 @@ const DepartmentInput = ({ onNext, initialValue }: DepartmentInputProps) => {
       <Popover.Root open={matchingDepartments.length > 0}>
         <Popover.Trigger asChild>
           <input
+            className="bg-basic-light text-primary focus-visible:outline-ring w-full rounded-xl px-4 py-3 text-lg font-semibold"
+            onChange={handleInputChange}
+            placeholder="학과"
             type="text"
             value={department}
-            onChange={handleInputChange}
-            className="bg-basic-light text-primary focus-visible:outline-ring w-full rounded-xl px-4 py-3 text-lg font-semibold"
-            placeholder="학과"
           />
         </Popover.Trigger>
 
@@ -63,30 +65,30 @@ const DepartmentInput = ({ onNext, initialValue }: DepartmentInputProps) => {
           {matchingDepartments.length > 0 && (
             <Popover.Content
               asChild
-              sideOffset={5}
               forceMount
-              onOpenAutoFocus={(e) => e.preventDefault()}
               onCloseAutoFocus={(e) => e.preventDefault()}
+              onOpenAutoFocus={(e) => e.preventDefault()}
+              sideOffset={5}
             >
               <motion.ul
-                initial={{
-                  opacity: 0,
-                  y: -10,
-                }}
                 animate={{
                   opacity: 1,
                   y: 0,
                 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.2 }}
                 className="bg-basic-light z-10 max-h-44 w-[var(--radix-popover-trigger-width)] overflow-y-auto rounded-xl border border-gray-200 shadow-sm"
+                exit={{ opacity: 0, y: -10 }}
+                initial={{
+                  opacity: 0,
+                  y: -10,
+                }}
+                transition={{ duration: 0.2 }}
               >
                 {matchingDepartments.map((dept) => (
                   <li key={dept}>
                     <button
-                      type="button"
                       className="text-list focus-visible:outline-ring flex w-full items-center justify-between rounded-xl px-4 py-2 text-lg font-semibold hover:bg-gray-100 focus-visible:-outline-offset-1"
                       onClick={() => handleDepartmentSelect(dept)}
+                      type="button"
                     >
                       {dept}
                       {department === dept && <Check className="size-4 text-green-500" />}

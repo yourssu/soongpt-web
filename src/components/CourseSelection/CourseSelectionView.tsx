@@ -1,33 +1,34 @@
-import { courseSelectionInfo, gradeSelection } from '../../data/courseSelectionInfo.ts';
-import GradeChip from '../GradeChip.tsx';
 import { motion } from 'motion/react';
-import ViewSelectedCoursesButton from '../ViewSelectedCoursesButton.tsx';
-import CourseListItem from '../CourseListItem.tsx';
-import { ArrayState } from '../../type/common.type.ts';
-import { Grade } from '../../schemas/studentSchema.ts';
-import { Course } from '../../schemas/courseSchema.ts';
-import { isSameCourse } from '../../utils/course.ts';
 import { ReactElement, useContext } from 'react';
-import { CourseTypeContext } from '../../context/CourseTypeContext.ts';
-import { useGetArrayState } from '../../hooks/useGetArrayState.ts';
+
 import Like from '../../assets/like.svg';
+import { CourseTypeContext } from '../../context/CourseTypeContext.ts';
+import { courseSelectionInfo, gradeSelection } from '../../data/courseSelectionInfo.ts';
+import { useGetArrayState } from '../../hooks/useGetArrayState.ts';
+import { Course } from '../../schemas/courseSchema.ts';
+import { Grade } from '../../schemas/studentSchema.ts';
+import { ArrayState } from '../../type/common.type.ts';
+import { isSameCourse } from '../../utils/course.ts';
+import CourseListItem from '../CourseListItem.tsx';
+import GradeChip from '../GradeChip.tsx';
+import ViewSelectedCoursesButton from '../ViewSelectedCoursesButton.tsx';
 
 interface CourseSelectionSkeletonProps {
   courses: Course[];
+  description?: string;
+  image?: string;
+  onClickCourseItem?: (course: Course) => void;
+  onClickGradeChip?: (grades: Grade[]) => () => void;
+  onNextClick?: () => void;
   resultState: ArrayState;
   selectedCourses: Course[];
   selectedGrades: Grade[];
-  totalCredit?: {
-    MAJOR_REQUIRED: number;
-    MAJOR_ELECTIVE: number;
-    GENERAL_REQUIRED: number;
-  };
-  onClickGradeChip?: (grades: Grade[]) => () => void;
-  onClickCourseItem?: (course: Course) => void;
-  onNextClick?: () => void;
   title: string;
-  description?: string;
-  image?: string;
+  totalCredit?: {
+    GENERAL_REQUIRED: number;
+    MAJOR_ELECTIVE: number;
+    MAJOR_REQUIRED: number;
+  };
 }
 
 const CourseSelectionView = ({
@@ -49,21 +50,21 @@ const CourseSelectionView = ({
   const courseListElement: Record<ArrayState, ReactElement> = {
     FILLED: (
       <motion.div
-        key={selectedGrades.join(',')}
-        initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.4, ease: 'easeOut' }}
         className="overflow-auto"
+        initial={{ y: 20, opacity: 0 }}
+        key={selectedGrades.join(',')}
+        transition={{ duration: 0.4, ease: 'easeOut' }}
       >
         <div className="flex flex-1 flex-col gap-3.5">
           {courses.map((course) => (
             <CourseListItem
-              onClickCourseItem={onClickCourseItem ?? (() => {})}
+              course={course}
               isSelected={selectedCourses.some((selectedCourse) =>
                 isSameCourse(course, selectedCourse),
               )}
               key={course.courseName}
-              course={course}
+              onClickCourseItem={onClickCourseItem ?? (() => {})}
             />
           ))}
         </div>
@@ -71,18 +72,18 @@ const CourseSelectionView = ({
     ),
     EMPTY: (
       <motion.div
-        key={selectedGrades.join(',')}
-        initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.4, ease: 'easeOut' }}
         className="flex flex-1 flex-col"
+        initial={{ y: 20, opacity: 0 }}
+        key={selectedGrades.join(',')}
+        transition={{ duration: 0.4, ease: 'easeOut' }}
       >
         <div className="flex w-full flex-1 place-items-center">
           <div className="spacing flex w-full flex-col place-items-center gap-4">
             <span className="text-xl font-semibold tracking-tighter">
               해당 학년은 전공선택 과목이 없어요.
             </span>
-            <img width={100} src={Like} alt={'like'} />
+            <img alt={'like'} src={Like} width={100} />
           </div>
         </div>
       </motion.div>
@@ -91,10 +92,10 @@ const CourseSelectionView = ({
 
   return (
     <motion.div
-      key={type}
+      animate={{ y: 0, opacity: 1 }}
       className="flex flex-1 flex-col items-center gap-6 overflow-auto"
       initial={{ y: 20, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
+      key={type}
       transition={{ duration: 0.3, ease: 'easeOut' }}
     >
       <div className="flex w-full flex-1 flex-col items-center overflow-auto">
@@ -103,17 +104,17 @@ const CourseSelectionView = ({
         </h2>
         <span className="items mt-1 font-light">{description}</span>
         {image ? (
-          <img className="my-auto" src={image} alt="L-Like" />
+          <img alt="L-Like" className="my-auto" src={image} />
         ) : (
           <div className="mt-6 flex w-full flex-1 flex-col gap-3 overflow-auto px-12">
             {type === 'MAJOR_ELECTIVE' && (
               <div className="flex gap-1.5">
                 {gradeSelection.map((grades) => (
                   <GradeChip
-                    onClickGradeChip={onClickGradeChip ? onClickGradeChip(grades) : () => {}}
-                    key={grades.join(', ')}
-                    isSelected={grades.some((grade) => selectedGrades.includes(grade))}
                     grades={grades}
+                    isSelected={grades.some((grade) => selectedGrades.includes(grade))}
+                    key={grades.join(', ')}
+                    onClickGradeChip={onClickGradeChip ? onClickGradeChip(grades) : () => {}}
                   />
                 ))}
               </div>
@@ -134,9 +135,9 @@ const CourseSelectionView = ({
         <div className="flex w-full items-center justify-center gap-3">
           {type === 'MAJOR_ELECTIVE' && <ViewSelectedCoursesButton />}
           <button
-            type="button"
             className="bg-primary max-w-52 flex-1 rounded-2xl py-3.5 font-semibold text-white"
             onClick={onNextClick}
+            type="button"
           >
             {courseSelectionInfo[type].text[resultState].okText}
           </button>

@@ -2,8 +2,8 @@ import { HTMLMotionProps, motion, useSpring, useTransform } from 'motion/react';
 import { useEffect } from 'react';
 
 interface RollingNumberProps extends HTMLMotionProps<'span'> {
-  number: number;
   decimals: number;
+  number: number;
 }
 
 const RollingNumber = ({ number, decimals, ...props }: RollingNumberProps) => {

@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
-import api from '../api/client';
 
+import api from '../api/client';
 import { StudentTimetable } from '../schemas/studentSchema';
 import { timetableArrayResponseSchema } from '../schemas/timetableSchema';
 import { transformError } from '../utils/error.ts';

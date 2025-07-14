@@ -1,8 +1,9 @@
+import { motion } from 'motion/react';
+import { useEffect, useRef, useState } from 'react';
+
 import { AppScreen } from '@stackflow/plugin-basic-ui';
 import { ActivityComponentType } from '@stackflow/react';
 
-import { motion } from 'motion/react';
-import { useEffect, useRef, useState } from 'react';
 import AdmissionYearInput from '../components/AdmissionYearInput';
 import AppBar from '../components/AppBar';
 import ChapelInput from '../components/ChapelInput';
@@ -117,19 +118,19 @@ const OnboardingActivity: ActivityComponentType = () => {
 
           {state.matches('채플수강여부입력') && (
             <motion.button
-              ref={submitButtonRef}
-              type="button"
-              onClick={handleClickButton}
+              animate={{ opacity: 1, y: 0 }}
               className="bg-primary mt-4 w-50 rounded-2xl py-3.5 font-semibold text-white"
               initial={{
                 opacity: 0,
                 y: 20,
               }}
-              animate={{ opacity: 1, y: 0 }}
+              onClick={handleClickButton}
+              ref={submitButtonRef}
               transition={{
                 duration: 0.3,
                 ease: 'easeOut',
               }}
+              type="button"
             >
               다 입력했어요
             </motion.button>

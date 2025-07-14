@@ -1,10 +1,11 @@
-import { AppScreen } from '@stackflow/plugin-basic-ui';
-import { ActivityComponentType } from '@stackflow/react';
-
-import * as Popover from '@radix-ui/react-popover';
 import { Check, ChevronDown } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
+
+import * as Popover from '@radix-ui/react-popover';
+import { AppScreen } from '@stackflow/plugin-basic-ui';
+import { ActivityComponentType } from '@stackflow/react';
+
 import AppBar from '../components/AppBar';
 import Hint from '../components/Hint';
 import RollingNumber from '../components/RollingNumber';
@@ -14,19 +15,19 @@ import { useFlow } from '../stackflow';
 import { Mixpanel } from '../utils/mixpanel';
 
 type DesiredCreditParams = {
-  majorRequired: number;
-  majorElective: number;
   generalRequired: number;
-  majorRequiredCourses: string[];
-  majorElectiveCourses: string[];
   generalRequiredCourses: string[];
+  majorElective: number;
+  majorElectiveCourses: string[];
+  majorRequired: number;
+  majorRequiredCourses: string[];
 };
 
 const getAvailableCredits = (currentCredit: number, baseCredit: number = 0): number[] => {
   return Array.from({ length: MAX_CREDIT - currentCredit + 1 }, (_, i) => i + baseCredit);
 };
 
-type Classification = '전공필수' | '전공선택' | '교양필수' | '교양선택';
+type Classification = '교양선택' | '교양필수' | '전공선택' | '전공필수';
 
 const MAX_CREDIT = 22.5;
 
@@ -60,8 +61,8 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
     type,
     selectedCredit,
   }: {
-    type: Classification;
     selectedCredit: number;
+    type: Classification;
   }) => {
     if (type === '전공선택') {
       const majorElectiveDiff = selectedCredit - majorElective;
@@ -125,9 +126,9 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
             사용자님의 이번학기 <br />
             희망 학점은{' '}
             <RollingNumber
-              number={desiredCredit}
-              decimals={context.chapel ? 1 : 0}
               className="text-primary"
+              decimals={context.chapel ? 1 : 0}
+              number={desiredCredit}
             />
             학점이군요!
           </h2>
@@ -136,23 +137,23 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
             <div>
               <label className="mb-1.5 block text-sm">전공필수 학점</label>
               <input
-                type="number"
-                disabled
-                value={params.majorRequired}
                 className="bg-basic-light text-primary w-full rounded-xl px-4 py-3 text-lg font-semibold"
+                disabled
+                type="number"
+                value={params.majorRequired}
               />
             </div>
 
             <div>
               <label className="mb-1.5 block text-sm">전공선택 학점</label>
               <Popover.Root
-                open={showMajorElectiveDropdown}
                 onOpenChange={setShowMajorElectiveDropdown}
+                open={showMajorElectiveDropdown}
               >
                 <Popover.Trigger asChild>
                   <button
-                    type="button"
                     className={`bg-basic-light focus-visible:outline-ring flex w-full items-center justify-between rounded-xl px-4 py-3 text-lg font-semibold ${majorElective === params.majorElective ? 'text-placeholder' : 'text-primary'}`}
+                    type="button"
                   >
                     {majorElective}
                     <ChevronDown className="text-text size-4" />
@@ -161,18 +162,18 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
 
                 <AnimatePresence>
                   {showMajorElectiveDropdown && (
-                    <Popover.Content asChild sideOffset={5} forceMount>
+                    <Popover.Content asChild forceMount sideOffset={5}>
                       <motion.ul
-                        className="bg-basic-light z-10 max-h-44 w-[var(--radix-popover-trigger-width)] overflow-y-auto rounded-xl border border-gray-200 shadow-sm"
-                        initial={{ opacity: 0, y: -10 }}
                         animate={{
                           opacity: 1,
                           y: 0,
                         }}
+                        className="bg-basic-light z-10 max-h-44 w-[var(--radix-popover-trigger-width)] overflow-y-auto rounded-xl border border-gray-200 shadow-sm"
                         exit={{
                           opacity: 0,
                           y: -10,
                         }}
+                        initial={{ opacity: 0, y: -10 }}
                         transition={{
                           duration: 0.2,
                         }}
@@ -180,7 +181,6 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
                         {availableMajorElective.map((availableCredit) => (
                           <li key={availableCredit}>
                             <button
-                              type="button"
                               className="text-list focus-visible:outline-ring flex w-full items-center justify-between rounded-xl px-4 py-2 text-lg font-semibold hover:bg-gray-100 focus-visible:-outline-offset-1"
                               onClick={() =>
                                 handleCreditSelect({
@@ -188,6 +188,7 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
                                   selectedCredit: availableCredit,
                                 })
                               }
+                              type="button"
                             >
                               {availableCredit}
                               {availableCredit === majorElective && (
@@ -206,10 +207,10 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
             <div>
               <label className="mb-1.5 block text-sm">교양필수 학점</label>
               <input
-                type="number"
-                disabled
-                value={params.generalRequired}
                 className="bg-basic-light text-primary w-full rounded-xl px-4 py-3 text-lg font-semibold"
+                disabled
+                type="number"
+                value={params.generalRequired}
               />
             </div>
 
@@ -217,13 +218,13 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
               <label className="mb-1.5 block text-sm">교양선택 학점</label>
 
               <Popover.Root
-                open={showGeneralElectiveDropdown}
                 onOpenChange={setShowGeneralElectiveDropdown}
+                open={showGeneralElectiveDropdown}
               >
                 <Popover.Trigger asChild>
                   <button
-                    type="button"
                     className={`bg-basic-light focus-visible:outline-ring flex w-full items-center justify-between rounded-xl px-4 py-3 text-lg font-semibold ${generalElective === 0 ? 'text-placeholder' : 'text-primary'}`}
+                    type="button"
                   >
                     {generalElective}
                     <ChevronDown className="text-text size-4" />
@@ -232,18 +233,18 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
 
                 <AnimatePresence>
                   {showGeneralElectiveDropdown && (
-                    <Popover.Content asChild sideOffset={5} forceMount>
+                    <Popover.Content asChild forceMount sideOffset={5}>
                       <motion.ul
-                        className="bg-basic-light z-10 max-h-44 w-[var(--radix-popover-trigger-width)] overflow-y-auto rounded-xl border border-gray-200 shadow-sm"
-                        initial={{ opacity: 0, y: -10 }}
                         animate={{
                           opacity: 1,
                           y: 0,
                         }}
+                        className="bg-basic-light z-10 max-h-44 w-[var(--radix-popover-trigger-width)] overflow-y-auto rounded-xl border border-gray-200 shadow-sm"
                         exit={{
                           opacity: 0,
                           y: -10,
                         }}
+                        initial={{ opacity: 0, y: -10 }}
                         transition={{
                           duration: 0.2,
                         }}
@@ -251,7 +252,6 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
                         {availableGeneralElective.map((availableCredit) => (
                           <li key={availableCredit}>
                             <button
-                              type="button"
                               className="text-list focus-visible:outline-ring flex w-full items-center justify-between rounded-xl px-4 py-2 text-lg font-semibold hover:bg-gray-100 focus-visible:-outline-offset-1"
                               onClick={() =>
                                 handleCreditSelect({
@@ -259,6 +259,7 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
                                   selectedCredit: availableCredit,
                                 })
                               }
+                              type="button"
                             >
                               {availableCredit}
                               {availableCredit === generalElective && (
@@ -281,18 +282,18 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
           </Hint>
 
           <motion.button
-            onClick={handleNextClick}
-            type="button"
+            animate={{ opacity: 1, y: 0 }}
             className="bg-primary mt-auto w-50 rounded-2xl py-3.5 font-semibold text-white"
             initial={{
               opacity: 0,
               y: 20,
             }}
-            animate={{ opacity: 1, y: 0 }}
+            onClick={handleNextClick}
             transition={{
               duration: 0.3,
               ease: 'easeOut',
             }}
+            type="button"
           >
             네 맞아요
           </motion.button>

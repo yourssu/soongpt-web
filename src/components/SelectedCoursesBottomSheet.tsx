@@ -1,5 +1,4 @@
-import { createPortal } from 'react-dom';
-import CourseListItem from './CourseListItem.tsx';
+import { AnimatePresence, motion } from 'motion/react';
 import {
   MouseEventHandler,
   TouchEventHandler,
@@ -8,13 +7,15 @@ import {
   useRef,
   useState,
 } from 'react';
-import { CourseListContext } from '../context/CourseListContext.ts';
-import { AnimatePresence, motion } from 'motion/react';
+import { createPortal } from 'react-dom';
 import useMeasure from 'react-use-measure';
 
+import { CourseListContext } from '../context/CourseListContext.ts';
+import CourseListItem from './CourseListItem.tsx';
+
 interface SelectedCourseBottomSheetProps {
-  open: boolean;
   handleClose: () => void;
+  open: boolean;
 }
 
 const SelectedCoursesBottomSheet = ({ open, handleClose }: SelectedCourseBottomSheetProps) => {
@@ -38,7 +39,9 @@ const SelectedCoursesBottomSheet = ({ open, handleClose }: SelectedCourseBottomS
   };
 
   const handleMouseMove: MouseEventHandler = (e) => {
-    if (!dragging) return;
+    if (!dragging) {
+      return;
+    }
     const deltaY = startYRef.current - e.clientY;
     setContainerHeight(Math.min(deltaY + startValueRef.current, maxHeight));
   };
@@ -46,7 +49,9 @@ const SelectedCoursesBottomSheet = ({ open, handleClose }: SelectedCourseBottomS
   const handleMouseUp: MouseEventHandler = () => {
     setDragging(false);
 
-    if (containerHeight < contentBounds.height) setContainerHeight(contentBounds.height);
+    if (containerHeight < contentBounds.height) {
+      setContainerHeight(contentBounds.height);
+    }
   };
 
   const handleTouchStart: TouchEventHandler = (e) => {
@@ -56,7 +61,9 @@ const SelectedCoursesBottomSheet = ({ open, handleClose }: SelectedCourseBottomS
   };
 
   const handleTouchMove: TouchEventHandler = (e) => {
-    if (!dragging) return;
+    if (!dragging) {
+      return;
+    }
     const deltaY = startYRef.current - e.touches[0].clientY;
     setContainerHeight(Math.min(deltaY + startValueRef.current, maxHeight));
   };
@@ -64,8 +71,9 @@ const SelectedCoursesBottomSheet = ({ open, handleClose }: SelectedCourseBottomS
   const handleTouchEnd: TouchEventHandler = () => {
     setDragging(false);
 
-    if (containerHeight < contentBounds.height)
+    if (containerHeight < contentBounds.height) {
       setContainerHeight(Math.min(contentBounds.height, maxHeight));
+    }
   };
 
   return (
@@ -74,37 +82,37 @@ const SelectedCoursesBottomSheet = ({ open, handleClose }: SelectedCourseBottomS
       <AnimatePresence>
         {open && (
           <motion.div
-            onMouseUp={handleMouseUp}
+            animate={{ opacity: 1 }}
+            className="bg-modal/80 absolute inset-0 z-50 flex flex-col-reverse overflow-hidden px-4 pt-12 pb-[34px]"
+            exit={{ opacity: 0 }}
+            initial={{ opacity: 0 }}
             onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
             onTouchEnd={handleTouchEnd}
             onTouchMove={handleTouchMove}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="bg-modal/80 absolute inset-0 z-50 flex flex-col-reverse overflow-hidden px-4 pt-12 pb-[34px]"
           >
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 20 }}
-              transition={{ duration: 0.2 }}
               className={`flex flex-col ${dragging ? 'overflow-hidden' : 'overflow-auto'} rounded-2xl bg-white px-4 pb-4`}
+              exit={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 20 }}
+              transition={{ duration: 0.2 }}
             >
               <div
+                className="flex w-full justify-center p-4"
                 onMouseDown={handleMouseDown}
                 onTouchStart={handleTouchStart}
-                className="flex w-full justify-center p-4"
               >
-                <div className="bg-hint h-[4px] w-[30px] rounded-[100px]"></div>
+                <div className="bg-hint h-[4px] w-[30px] rounded-[100px]" />
               </div>
               <motion.div
-                className={`mb-[18px] ${dragging ? 'overflow-hidden' : 'overflow-auto'}`}
                 animate={{
                   maxHeight: open ? containerHeight : 0,
                   height: open ? containerHeight : 0,
                 }}
-                initial={{ maxHeight: 0, height: 0 }}
+                className={`mb-[18px] ${dragging ? 'overflow-hidden' : 'overflow-auto'}`}
                 exit={{ maxHeight: 0, height: 0 }}
+                initial={{ maxHeight: 0, height: 0 }}
                 transition={
                   dragging
                     ? {
@@ -115,27 +123,27 @@ const SelectedCoursesBottomSheet = ({ open, handleClose }: SelectedCourseBottomS
                 }
               >
                 <div
-                  ref={contentRef}
                   className={`flex flex-1 flex-col gap-3.5 ${dragging ? 'overflow-hidden' : 'overflow-auto'} px-4 select-none`}
+                  ref={contentRef}
                 >
                   {courses.length === 0 ? (
                     <div>선택된 과목이 없어요.</div>
                   ) : (
                     courses.map((course) => (
                       <CourseListItem
-                        key={`${course.courseName} ${course.professorName}`}
                         course={course}
-                        onClickCourseItem={() => {}}
                         isSelected={false}
+                        key={`${course.courseName} ${course.professorName}`}
+                        onClickCourseItem={() => {}}
                       />
                     ))
                   )}
                 </div>
               </motion.div>
               <button
-                type="button"
                 className="bg-primary w-full rounded-2xl py-3.5 text-base font-semibold text-white"
                 onClick={handleClose}
+                type="button"
               >
                 전공선택과목 보기
               </button>
