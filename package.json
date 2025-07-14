@@ -7,6 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
+    "fix:lint": "eslint . --fix",
+    "fix:format": "prettier --write .",
     "preview": "vite preview",
     "prepare": "husky"
   },
@@ -64,7 +66,7 @@
     "vite": "^6.0.5"
   },
   "lint-staged": {
-    "src/**/*.{ts,tsx}": [
+    "src/**/*.{ts,mts,tsx}": [
       "eslint --fix",
       "prettier --write"
     ]
