@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "formulahendry.auto-rename-tag",
+    "usernamehw.errorlens",
+    "arcanis.vscode-zipfs"
+  ]
+}
