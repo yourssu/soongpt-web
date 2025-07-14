@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+
 import { ArrayState } from '../type/common.type.ts';
 
 export const useGetArrayState = <T>(array: T[]) => {

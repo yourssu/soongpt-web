@@ -7,19 +7,20 @@ import {
   useEffect,
   useState,
 } from 'react';
+
 import { useGetTimetable } from '../hooks/useGetTimetable';
 import { StudentMachineContext } from '../machines/studentMachine';
 import { Mixpanel } from '../utils/mixpanel';
 import Timetable, { getMajorCredit, getTotalCredit, SharingHeader } from './Timetable';
 
 interface Color {
-  templateBg: string;
-  templateContentBg: string;
-  tableHeaderBg: string;
-  headerText: string;
-  studentText: string;
   chipBg: string;
   chipText: string;
+  headerText: string;
+  studentText: string;
+  tableHeaderBg: string;
+  templateBg: string;
+  templateContentBg: string;
 }
 
 export const TEMPLATE_COLORS: Color[] = [
@@ -77,8 +78,8 @@ const Template = forwardRef<HTMLDivElement, PropsWithChildren<{ bgImage: string 
   ({ children, bgImage, ...props }, ref) => {
     return (
       <div
-        ref={ref}
         className={`w-full overflow-hidden rounded-xl px-6 py-16`}
+        ref={ref}
         style={{
           background: `${bgImage}`,
         }}
@@ -89,6 +90,8 @@ const Template = forwardRef<HTMLDivElement, PropsWithChildren<{ bgImage: string 
     );
   },
 );
+
+Template.displayName = 'Template';
 
 const TemplateContent = ({ children, bgImage }: PropsWithChildren<{ bgImage: string }>) => {
   return (
@@ -189,13 +192,13 @@ const TimetableSharingTemplate = forwardRef<HTMLDivElement, TimetableSharingTemp
         <div className="w-full overflow-hidden px-5" ref={emblaRef}>
           <div className="-ml-5 flex">
             {TEMPLATE_COLORS.map((color, index) => (
-              <div key={`template-${index}`} className="min-w-0 flex-[0_0_100%] transform-gpu pl-5">
+              <div className="min-w-0 flex-[0_0_100%] transform-gpu pl-5" key={`template-${index}`}>
                 <Template
                   bgImage={color.templateBg}
                   ref={selectedIndex === index ? templateRef : null}
                 >
                   <TemplateContent bgImage={color.templateContentBg}>
-                    <Timetable timetable={timetable} className="!border-0 bg-white">
+                    <Timetable className="!border-0 bg-white" timetable={timetable}>
                       <Timetable.Header
                         as={SharingHeader}
                         bgColor={color.tableHeaderBg}
@@ -222,13 +225,13 @@ const TimetableSharingTemplate = forwardRef<HTMLDivElement, TimetableSharingTemp
         <div className="mt-4 flex justify-center gap-3">
           {TEMPLATE_COLORS.map((color, index) => (
             <button
-              key={`button-${index}`}
               className={`size-7.5 rounded-full shadow-sm outline-2 transition-colors ${index === selectedIndex ? 'outline-primary' : 'outline-placeholder'}`}
+              key={`button-${index}`}
+              onClick={() => scrollTo(index)}
               style={{
                 background: color.templateContentBg,
               }}
               type="button"
-              onClick={() => scrollTo(index)}
             />
           ))}
         </div>
@@ -236,5 +239,7 @@ const TimetableSharingTemplate = forwardRef<HTMLDivElement, TimetableSharingTemp
     );
   },
 );
+
+TimetableSharingTemplate.displayName = 'TimetableSharingTemplate';
 
 export default TimetableSharingTemplate;

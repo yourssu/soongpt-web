@@ -1,13 +1,13 @@
-import CourseSelectionView from './CourseSelectionView.tsx';
-import { emptyCourse } from '../../data/courseSelectionInfo.ts';
 import Warning from '../../assets/warning.svg';
+import { emptyCourse } from '../../data/courseSelectionInfo.ts';
+import CourseSelectionView from './CourseSelectionView.tsx';
 
-type CourseSelectionFallbackType = 'pending' | 'error';
+type CourseSelectionFallbackType = 'error' | 'pending';
 
 interface CourseSelectionFallbackInfo {
-  title: string;
   description?: string;
   image?: string;
+  title: string;
 }
 
 const courseSelectionFallbackInfo: Record<
@@ -33,12 +33,12 @@ const CourseSelectionFallback = ({ type }: CourseSelectionFallbackProps) => {
   return (
     <CourseSelectionView
       courses={[emptyCourse, emptyCourse, emptyCourse]}
+      description={courseSelectionFallbackInfo[type].description}
+      image={courseSelectionFallbackInfo[type].image}
       resultState={'FILLED'}
       selectedCourses={[]}
       selectedGrades={[]}
       title={courseSelectionFallbackInfo[type].title}
-      description={courseSelectionFallbackInfo[type].description}
-      image={courseSelectionFallbackInfo[type].image}
     />
   );
 };

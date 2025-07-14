@@ -2,6 +2,7 @@ import { basicUIPlugin } from '@stackflow/plugin-basic-ui';
 import { historySyncPlugin } from '@stackflow/plugin-history-sync';
 import { basicRendererPlugin } from '@stackflow/plugin-renderer-basic';
 import { stackflow } from '@stackflow/react';
+
 import CourseSelectionActivity from './pages/CourseSelectionActivity';
 import DesiredCreditActivity from './pages/DesiredCreditActivity';
 import OnboardingActivity from './pages/OnboardingActivity';

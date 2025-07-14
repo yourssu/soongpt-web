@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { useContext, useEffect, useMemo, useRef, useState } from 'react';
+
 import { CourseListContext } from '../../context/CourseListContext.ts';
 import { CourseTypeContext } from '../../context/CourseTypeContext.ts';
 import { courseSelectionInfo, gradeSelection } from '../../data/courseSelectionInfo.ts';
@@ -27,7 +28,9 @@ const CourseSelection = () => {
   });
 
   const courses = useMemo<Course[]>(() => {
-    if (data === undefined) return [];
+    if (data === undefined) {
+      return [];
+    }
 
     const groupedCourses = _.groupBy(data.result, 'courseName');
 
@@ -146,15 +149,15 @@ const CourseSelection = () => {
     <CourseListContext.Provider value={selectedCourses}>
       <CourseSelectionView
         courses={courses}
+        description={courseSelectionInfo[type].text[resultState].description}
+        image={courseSelectionInfo[type].text[resultState].image}
+        onClickCourseItem={onClickCourseItem}
+        onClickGradeChip={onClickGradeChip}
+        onNextClick={onNextClick}
         resultState={resultState}
         selectedCourses={selectedCourses}
         selectedGrades={selectedGrades}
-        onClickGradeChip={onClickGradeChip}
-        onClickCourseItem={onClickCourseItem}
-        onNextClick={onNextClick}
         title={courseSelectionInfo[type].text[resultState].title}
-        description={courseSelectionInfo[type].text[resultState].description}
-        image={courseSelectionInfo[type].text[resultState].image}
         totalCredit={totalCredit}
       />
     </CourseListContext.Provider>

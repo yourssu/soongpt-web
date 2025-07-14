@@ -1,12 +1,15 @@
-import { QueryErrorResetBoundary } from '@tanstack/react-query';
-import { ReactElement, ReactNode } from 'react';
-import * as Sentry from '@sentry/react';
-import { SoongptError } from '../schemas/errorSchema.ts';
 import { motion } from 'motion/react';
+import { ReactElement, ReactNode } from 'react';
+
+import * as Sentry from '@sentry/react';
+import { QueryErrorResetBoundary } from '@tanstack/react-query';
+
 import Wrench from '../assets/wrench.svg';
+import { SoongptError } from '../schemas/errorSchema.ts';
 
 interface SoongptErrorBoundaryProps {
   children: ReactNode;
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   FallbackComponent: ReactElement;
 }
 
@@ -15,7 +18,6 @@ const SoongptErrorBoundary = ({ FallbackComponent, children }: SoongptErrorBound
     <QueryErrorResetBoundary>
       {({ reset }) => (
         <Sentry.ErrorBoundary
-          onError={reset}
           fallback={({ error, resetError }) => {
             const errorRange = Math.floor(((error as SoongptError).status ?? 500) / 100);
 
@@ -25,9 +27,9 @@ const SoongptErrorBoundary = ({ FallbackComponent, children }: SoongptErrorBound
               default:
                 return (
                   <motion.div
+                    animate={{ y: 0, opacity: 1 }}
                     className="flex flex-1 flex-col items-center gap-6 overflow-auto"
                     initial={{ y: 20, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
                     transition={{ duration: 0.3, ease: 'easeOut' }}
                   >
                     <div className="flex w-full flex-col items-center overflow-auto">
@@ -39,13 +41,13 @@ const SoongptErrorBoundary = ({ FallbackComponent, children }: SoongptErrorBound
                       </span>
                     </div>
                     <div className="flex flex-1 items-center justify-center">
-                      <img className="my-auto" src={Wrench} alt={'wrench'} />
+                      <img alt={'wrench'} className="my-auto" src={Wrench} />
                     </div>
                     <div className="flex w-full items-center justify-center gap-3">
                       <button
+                        className="bg-primary max-w-52 flex-1 rounded-2xl py-3.5 font-semibold text-white"
                         onClick={resetError}
                         type="button"
-                        className="bg-primary max-w-52 flex-1 rounded-2xl py-3.5 font-semibold text-white"
                       >
                         재요청 할래요
                       </button>
@@ -54,6 +56,7 @@ const SoongptErrorBoundary = ({ FallbackComponent, children }: SoongptErrorBound
                 );
             }
           }}
+          onError={reset}
         >
           {children}
         </Sentry.ErrorBoundary>

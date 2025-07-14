@@ -1,7 +1,9 @@
-import * as Popover from '@radix-ui/react-popover';
 import { Check, ChevronDown } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
+
+import * as Popover from '@radix-ui/react-popover';
+
 import { grades } from '../data/grades';
 import { Grade } from '../schemas/studentSchema';
 import Hint from './Hint';
@@ -28,11 +30,11 @@ const GradeInput = ({ onNext, initialValue }: GradeInputProps) => {
 
   return (
     <motion.div
+      animate={{ opacity: 1, y: 0 }}
       initial={{
         opacity: 0,
         y: -20,
       }}
-      animate={{ opacity: 1, y: 0 }}
       transition={{
         duration: 0.3,
         ease: 'easeOut',
@@ -40,11 +42,11 @@ const GradeInput = ({ onNext, initialValue }: GradeInputProps) => {
     >
       {showLabel && <label className="mb-1.5 block text-sm">학년</label>}
 
-      <Popover.Root open={showDropdown} onOpenChange={setShowDropdown}>
+      <Popover.Root onOpenChange={setShowDropdown} open={showDropdown}>
         <Popover.Trigger asChild>
           <button
-            type="button"
             className={`bg-basic-light focus-visible:outline-ring flex w-full items-center justify-between rounded-xl px-4 py-3 text-lg font-semibold ${grade === 0 ? 'text-placeholder' : 'text-primary'}`}
+            type="button"
           >
             {grade === 0 ? '학년' : grade}
             <ChevronDown className="text-text size-4" />
@@ -53,18 +55,18 @@ const GradeInput = ({ onNext, initialValue }: GradeInputProps) => {
 
         <AnimatePresence>
           {showDropdown && (
-            <Popover.Content asChild sideOffset={5} forceMount>
+            <Popover.Content asChild forceMount sideOffset={5}>
               <motion.ul
-                className="bg-basic-light z-10 w-[var(--radix-popover-trigger-width)] rounded-xl border border-gray-200 shadow-sm"
-                initial={{ opacity: 0, y: -10 }}
                 animate={{
                   opacity: 1,
                   y: 0,
                 }}
+                className="bg-basic-light z-10 w-[var(--radix-popover-trigger-width)] rounded-xl border border-gray-200 shadow-sm"
                 exit={{
                   opacity: 0,
                   y: -10,
                 }}
+                initial={{ opacity: 0, y: -10 }}
                 transition={{
                   duration: 0.2,
                 }}
@@ -72,11 +74,11 @@ const GradeInput = ({ onNext, initialValue }: GradeInputProps) => {
                 {grades.map((gradeOption) => (
                   <li key={gradeOption}>
                     <button
-                      type="button"
                       className="text-list focus-visible:outline-ring flex w-full items-center justify-between rounded-xl px-4 py-2 text-lg font-semibold hover:bg-gray-100 focus-visible:-outline-offset-1"
                       onClick={() => {
                         handleGradeSelect(gradeOption);
                       }}
+                      type="button"
                     >
                       {gradeOption}
                       {grade === gradeOption && <Check className="size-4 text-green-500" />}

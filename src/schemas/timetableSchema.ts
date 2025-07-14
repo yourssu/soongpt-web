@@ -1,4 +1,5 @@
 import { z } from 'zod';
+
 import { courseClassificationSchema, courseTimeSchema } from './courseSchema';
 
 const timetableTagSchema = z.enum([

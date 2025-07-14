@@ -1,5 +1,6 @@
 import { ElementType, HTMLAttributes } from 'react';
 import { twMerge } from 'tailwind-merge';
+
 import { getGridTemplateCols, getGridTemplateRows, SLOT_HEIGHT } from './Timetable';
 
 interface TimetableSkeletonHeaderProps extends HTMLAttributes<HTMLDivElement> {
@@ -92,8 +93,8 @@ export const TimetableSkeleton = ({
             <div className="border-placeholder border-r-1" />
             {days.map((day) => (
               <div
-                key={day}
                 className="border-placeholder flex items-center justify-center border-r-1 text-xs font-light last:border-r-0"
+                key={day}
               >
                 {day}
               </div>
@@ -103,16 +104,16 @@ export const TimetableSkeleton = ({
           {/* Time Slots */}
           {times.map((time) => (
             <div
-              key={time}
               className="border-placeholder col-span-full grid grid-cols-subgrid border-b-1 last:border-b-0"
+              key={time}
             >
               <div className="border-placeholder flex justify-end border-r-1 p-0.5 text-xs font-light">
                 {time}
               </div>
               {days.map((day) => (
                 <div
-                  key={`${time}-${day}`}
                   className="border-placeholder relative border-r-1 last:border-r-0"
+                  key={`${time}-${day}`}
                 >
                   {/* Random Skeleton Blocks */}
                   {Math.random() > 0.8 && (

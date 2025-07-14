@@ -1,19 +1,21 @@
-import { createActorContext } from '@xstate/react';
 import { assign, setup } from 'xstate';
+
+import { createActorContext } from '@xstate/react';
+
 import { Grade } from '../schemas/studentSchema';
 
 type Context = {
-  department: string; // 학과
   admissionYear: number; // 입학년도
-  grade: Grade; // 학년
   chapel: boolean; // 채플 수강 여부
+  department: string; // 학과
+  grade: Grade; // 학년
 };
 
 type Event =
-  | { type: '학과입력완료'; payload: { department: string } }
-  | { type: '입학년도입력완료'; payload: { admissionYear: number } }
-  | { type: '학년입력완료'; payload: { grade: Grade } }
-  | { type: '채플수강여부입력완료'; payload: { chapel: boolean } };
+  | { payload: { admissionYear: number }; type: '입학년도입력완료' }
+  | { payload: { chapel: boolean }; type: '채플수강여부입력완료' }
+  | { payload: { department: string }; type: '학과입력완료' }
+  | { payload: { grade: Grade }; type: '학년입력완료' };
 
 const studentMachine = setup({
   types: {
