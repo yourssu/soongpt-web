@@ -1,5 +1,5 @@
+import { ArrayState } from '@/hooks/useGetArrayState';
 import { CourseClassification } from '@/schemas/courseSchema';
-import { ArrayState } from '@/types/common';
 
 export type CourseType = Exclude<CourseClassification, 'CHAPEL' | 'GENERAL_ELECTIVE'>;
 
