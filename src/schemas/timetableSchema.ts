@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { courseClassificationSchema, courseTimeSchema } from './courseSchema';
+import { courseClassificationSchema, courseTimeSchema } from '@/schemas/courseSchema';
 
 const timetableTagSchema = z.enum([
   'DEFAULT',

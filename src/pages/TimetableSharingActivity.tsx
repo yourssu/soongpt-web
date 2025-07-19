@@ -1,15 +1,14 @@
+import * as Toast from '@radix-ui/react-toast';
+import { AppScreen } from '@stackflow/plugin-basic-ui';
+import { ActivityComponentType } from '@stackflow/react';
 import html2canvas from 'html2canvas';
 import ky from 'ky';
 import { Suspense, useRef, useState } from 'react';
 
-import * as Toast from '@radix-ui/react-toast';
-import { AppScreen } from '@stackflow/plugin-basic-ui';
-import { ActivityComponentType } from '@stackflow/react';
-
-import AppBar from '../components/AppBar';
-import TimetableSharingTemplate from '../components/TimetableSharingTemplate';
-import { TemplateSkeleton } from '../components/TimetableSkeleton';
-import { Mixpanel } from '../utils/mixpanel';
+import AppBar from '@/components/AppBar';
+import TimetableSharingTemplate from '@/components/TimetableSharingTemplate';
+import { TemplateSkeleton } from '@/components/TimetableSkeleton';
+import { Mixpanel } from '@/utils/mixpanel';
 
 type TimetableSharingParams = {
   timetableId: number;

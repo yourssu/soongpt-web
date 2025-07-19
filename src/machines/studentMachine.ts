@@ -1,8 +1,7 @@
+import { createActorContext } from '@xstate/react';
 import { assign, setup } from 'xstate';
 
-import { createActorContext } from '@xstate/react';
-
-import { Grade } from '../schemas/studentSchema';
+import { Grade } from '@/schemas/studentSchema';
 
 type Context = {
   admissionYear: number; // 입학년도

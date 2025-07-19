@@ -1,9 +1,9 @@
 import mixpanel from 'mixpanel-browser';
 
-import { SoongptError } from '../schemas/errorSchema';
-import { CoursePreference, Student } from '../schemas/studentSchema';
-import { Timetable } from '../schemas/timetableSchema';
-import { CourseType } from '../type/course.type';
+import { SoongptError } from '@/schemas/errorSchema';
+import { CoursePreference, Student } from '@/schemas/studentSchema';
+import { Timetable } from '@/schemas/timetableSchema';
+import { CourseType } from '@/type/course.type';
 
 const MIXPANEL_TOKEN = import.meta.env.VITE_MIXPANEL_TOKEN;
 

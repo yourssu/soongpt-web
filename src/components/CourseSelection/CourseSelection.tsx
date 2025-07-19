@@ -1,18 +1,18 @@
 import _ from 'lodash';
 import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 
-import { CourseListContext } from '../../context/CourseListContext.ts';
-import { CourseTypeContext } from '../../context/CourseTypeContext.ts';
-import { courseSelectionInfo, gradeSelection } from '../../data/courseSelectionInfo.ts';
-import { useGetCourses } from '../../hooks/useGetCourses.ts';
-import { StudentMachineContext } from '../../machines/studentMachine.ts';
-import { Course } from '../../schemas/courseSchema.ts';
-import { Grade } from '../../schemas/studentSchema.ts';
-import { useFlow, useStepFlow } from '../../stackflow.ts';
-import { CourseType } from '../../type/course.type.ts';
-import { isSameCourse } from '../../utils/course.ts';
-import { Mixpanel } from '../../utils/mixpanel.ts';
-import CourseSelectionView from './CourseSelectionView.tsx';
+import CourseSelectionView from '@/components/CourseSelection/CourseSelectionView';
+import { CourseListContext } from '@/context/CourseListContext';
+import { CourseTypeContext } from '@/context/CourseTypeContext';
+import { courseSelectionInfo, gradeSelection } from '@/data/courseSelectionInfo';
+import { useGetCourses } from '@/hooks/useGetCourses';
+import { StudentMachineContext } from '@/machines/studentMachine';
+import { Course } from '@/schemas/courseSchema';
+import { Grade } from '@/schemas/studentSchema';
+import { useFlow, useStepFlow } from '@/stackflow';
+import { CourseType } from '@/type/course.type';
+import { isSameCourse } from '@/utils/course';
+import { Mixpanel } from '@/utils/mixpanel';
 
 const CourseSelection = () => {
   const state = StudentMachineContext.useSelector((state) => state);

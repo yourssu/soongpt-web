@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { ArrayState } from '../type/common.type.ts';
+import { ArrayState } from '@/type/common.type';
 
 export const useGetArrayState = <T>(array: T[]) => {
   return useMemo((): ArrayState => (array.length === 0 ? 'EMPTY' : 'FILLED'), [array]);

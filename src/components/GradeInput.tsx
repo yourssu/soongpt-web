@@ -1,12 +1,11 @@
+import * as Popover from '@radix-ui/react-popover';
 import { Check, ChevronDown } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
 
-import * as Popover from '@radix-ui/react-popover';
-
-import { grades } from '../data/grades';
-import { Grade } from '../schemas/studentSchema';
-import Hint from './Hint';
+import Hint from '@/components/Hint';
+import { grades } from '@/data/grades';
+import { Grade } from '@/schemas/studentSchema';
 
 interface GradeInputProps {
   initialValue: Grade | undefined;

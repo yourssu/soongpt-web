@@ -1,17 +1,17 @@
 import { motion } from 'motion/react';
 import { ReactElement, useContext } from 'react';
 
-import Like from '../../assets/like.svg';
-import { CourseTypeContext } from '../../context/CourseTypeContext.ts';
-import { courseSelectionInfo, gradeSelection } from '../../data/courseSelectionInfo.ts';
-import { useGetArrayState } from '../../hooks/useGetArrayState.ts';
-import { Course } from '../../schemas/courseSchema.ts';
-import { Grade } from '../../schemas/studentSchema.ts';
-import { ArrayState } from '../../type/common.type.ts';
-import { isSameCourse } from '../../utils/course.ts';
-import CourseListItem from '../CourseListItem.tsx';
-import GradeChip from '../GradeChip.tsx';
-import ViewSelectedCoursesButton from '../ViewSelectedCoursesButton.tsx';
+import Like from '@/assets/like.svg';
+import CourseListItem from '@/components/CourseListItem';
+import GradeChip from '@/components/GradeChip';
+import ViewSelectedCoursesButton from '@/components/ViewSelectedCoursesButton';
+import { CourseTypeContext } from '@/context/CourseTypeContext';
+import { courseSelectionInfo, gradeSelection } from '@/data/courseSelectionInfo';
+import { useGetArrayState } from '@/hooks/useGetArrayState';
+import { Course } from '@/schemas/courseSchema';
+import { Grade } from '@/schemas/studentSchema';
+import { ArrayState } from '@/type/common.type';
+import { isSameCourse } from '@/utils/course';
 
 interface CourseSelectionSkeletonProps {
   courses: Course[];

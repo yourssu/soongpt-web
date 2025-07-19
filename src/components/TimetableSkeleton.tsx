@@ -1,7 +1,7 @@
 import { ElementType, HTMLAttributes } from 'react';
 import { twMerge } from 'tailwind-merge';
 
-import { getGridTemplateCols, getGridTemplateRows, SLOT_HEIGHT } from './Timetable';
+import { getGridTemplateCols, getGridTemplateRows, SLOT_HEIGHT } from '@/components/Timetable';
 
 interface TimetableSkeletonHeaderProps extends HTMLAttributes<HTMLDivElement> {
   as?: ElementType;

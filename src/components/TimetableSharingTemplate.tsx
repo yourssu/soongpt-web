@@ -8,10 +8,10 @@ import {
   useState,
 } from 'react';
 
-import { useGetTimetable } from '../hooks/useGetTimetable';
-import { StudentMachineContext } from '../machines/studentMachine';
-import { Mixpanel } from '../utils/mixpanel';
-import Timetable, { getMajorCredit, getTotalCredit, SharingHeader } from './Timetable';
+import Timetable, { getMajorCredit, getTotalCredit, SharingHeader } from '@/components/Timetable';
+import { useGetTimetable } from '@/hooks/useGetTimetable';
+import { StudentMachineContext } from '@/machines/studentMachine';
+import { Mixpanel } from '@/utils/mixpanel';
 
 interface Color {
   chipBg: string;

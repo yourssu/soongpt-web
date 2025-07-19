@@ -1,16 +1,15 @@
+import { AppScreen } from '@stackflow/plugin-basic-ui';
+import { ActivityComponentType } from '@stackflow/react';
 import { AnimatePresence } from 'motion/react';
 import { Suspense } from 'react';
 
-import { AppScreen } from '@stackflow/plugin-basic-ui';
-import { ActivityComponentType } from '@stackflow/react';
-
-import AppBar from '../components/AppBar.tsx';
-import CourseSelection from '../components/CourseSelection/CourseSelection.tsx';
-import CourseSelectionFallback from '../components/CourseSelection/CourseSelectionFallback.tsx';
-import SoongptErrorBoundary from '../components/SoongptErrorBoundary.tsx';
-import { CourseTypeContext } from '../context/CourseTypeContext.ts';
-import { courseSelectionInfo } from '../data/courseSelectionInfo.ts';
-import { CourseType } from '../type/course.type.ts';
+import AppBar from '@/components/AppBar';
+import CourseSelection from '@/components/CourseSelection/CourseSelection';
+import CourseSelectionFallback from '@/components/CourseSelection/CourseSelectionFallback';
+import SoongptErrorBoundary from '@/components/SoongptErrorBoundary';
+import { CourseTypeContext } from '@/context/CourseTypeContext';
+import { courseSelectionInfo } from '@/data/courseSelectionInfo';
+import { CourseType } from '@/type/course.type';
 
 interface CourseSelectionActivityParams {
   type?: CourseType;

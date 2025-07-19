@@ -1,18 +1,17 @@
-import { motion } from 'motion/react';
-import { ReactElement, useEffect, useRef, useState } from 'react';
-
 import { AppScreen } from '@stackflow/plugin-basic-ui';
 import { ActivityComponentType } from '@stackflow/react';
 import { MutationState, MutationStatus, useMutationState } from '@tanstack/react-query';
+import { motion } from 'motion/react';
+import { ReactElement, useEffect, useRef, useState } from 'react';
 
-import Warning from '../assets/warning.svg';
-import AppBar from '../components/AppBar';
-import Timetable from '../components/Timetable';
-import { TimetableSkeleton } from '../components/TimetableSkeleton';
-import { SoongptError } from '../schemas/errorSchema.ts';
-import { TimetableArrayResponse } from '../schemas/timetableSchema';
-import { useFlow } from '../stackflow';
-import { Mixpanel } from '../utils/mixpanel.ts';
+import Warning from '@/assets/warning.svg';
+import AppBar from '@/components/AppBar';
+import Timetable from '@/components/Timetable';
+import { TimetableSkeleton } from '@/components/TimetableSkeleton';
+import { SoongptError } from '@/schemas/errorSchema';
+import { TimetableArrayResponse } from '@/schemas/timetableSchema';
+import { useFlow } from '@/stackflow';
+import { Mixpanel } from '@/utils/mixpanel';
 
 interface TimetableSelection {
   buttonText: string;

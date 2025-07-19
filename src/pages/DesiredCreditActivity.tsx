@@ -1,18 +1,17 @@
+import * as Popover from '@radix-ui/react-popover';
+import { AppScreen } from '@stackflow/plugin-basic-ui';
+import { ActivityComponentType } from '@stackflow/react';
 import { Check, ChevronDown } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
 
-import * as Popover from '@radix-ui/react-popover';
-import { AppScreen } from '@stackflow/plugin-basic-ui';
-import { ActivityComponentType } from '@stackflow/react';
-
-import AppBar from '../components/AppBar';
-import Hint from '../components/Hint';
-import RollingNumber from '../components/RollingNumber';
-import { usePostTimetable } from '../hooks/usePostTimetable';
-import { StudentMachineContext } from '../machines/studentMachine';
-import { useFlow } from '../stackflow';
-import { Mixpanel } from '../utils/mixpanel';
+import AppBar from '@/components/AppBar';
+import Hint from '@/components/Hint';
+import RollingNumber from '@/components/RollingNumber';
+import { usePostTimetable } from '@/hooks/usePostTimetable';
+import { StudentMachineContext } from '@/machines/studentMachine';
+import { useFlow } from '@/stackflow';
+import { Mixpanel } from '@/utils/mixpanel';
 
 type DesiredCreditParams = {
   generalRequired: number;

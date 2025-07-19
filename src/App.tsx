@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 
-import { StudentMachineContext } from './machines/studentMachine';
-import { Stack } from './stackflow';
-import { ChannelTalk } from './utils/channelTalk';
-import { Mixpanel } from './utils/mixpanel';
+import { StudentMachineContext } from '@/machines/studentMachine';
+import { Stack } from '@/stackflow';
+import { ChannelTalk } from '@/utils/channelTalk';
+import { Mixpanel } from '@/utils/mixpanel';
 
 const App = () => {
   useEffect(() => {

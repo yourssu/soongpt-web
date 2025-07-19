@@ -1,10 +1,9 @@
+import * as Popover from '@radix-ui/react-popover';
 import { Check } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
 
-import * as Popover from '@radix-ui/react-popover';
-
-import { departments } from '../data/departments';
+import { departments } from '@/data/departments';
 
 interface DepartmentInputProps {
   initialValue: string | undefined;

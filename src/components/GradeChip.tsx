@@ -1,4 +1,4 @@
-import { Grade } from '../schemas/studentSchema.ts';
+import { Grade } from '@/schemas/studentSchema';
 
 interface GradeChipProps {
   grades: Grade[];

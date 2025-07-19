@@ -1,6 +1,6 @@
-import Warning from '../../assets/warning.svg';
-import { emptyCourse } from '../../data/courseSelectionInfo.ts';
-import CourseSelectionView from './CourseSelectionView.tsx';
+import Warning from '@/assets/warning.svg';
+import CourseSelectionView from '@/components/CourseSelection/CourseSelectionView';
+import { emptyCourse } from '@/data/courseSelectionInfo';
 
 type CourseSelectionFallbackType = 'error' | 'pending';
 

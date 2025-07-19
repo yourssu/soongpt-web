@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
 
-import { Course } from '../schemas/courseSchema.ts';
+import { Course } from '@/schemas/courseSchema';
 
 interface CourseListItemProps {
   course: Course;

@@ -1,12 +1,13 @@
+import * as Popover from '@radix-ui/react-popover';
+import { ErrorBoundaryProps } from '@sentry/react';
 import { Check, ChevronDown } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
 
-import * as Popover from '@radix-ui/react-popover';
-
-import { admissionYears } from '../data/admissionYears';
+import { admissionYears } from '@/data/admissionYears';
 
 interface AdmissionYearInputProps {
+  a?: ErrorBoundaryProps;
   initialValue: number | undefined;
   onNext: (admissionYear: number) => void;
 }
