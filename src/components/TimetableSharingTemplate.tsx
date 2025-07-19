@@ -8,10 +8,10 @@ import {
   useState,
 } from 'react';
 
+import { Mixpanel } from '@/bootstrap/mixpanel';
 import Timetable, { getMajorCredit, getTotalCredit, SharingHeader } from '@/components/Timetable';
 import { StudentMachineContext } from '@/contexts/StudentMachineContext';
 import { useGetTimetable } from '@/hooks/useGetTimetable';
-import { Mixpanel } from '@/utils/mixpanel';
 
 interface Color {
   chipBg: string;

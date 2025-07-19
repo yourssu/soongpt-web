@@ -5,13 +5,13 @@ import { Check, ChevronDown } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
 
+import { Mixpanel } from '@/bootstrap/mixpanel';
 import AppBar from '@/components/AppBar';
 import Hint from '@/components/Hint';
 import RollingNumber from '@/components/RollingNumber';
 import { StudentMachineContext } from '@/contexts/StudentMachineContext';
 import { usePostTimetable } from '@/hooks/usePostTimetable';
 import { useFlow } from '@/stackflow';
-import { Mixpanel } from '@/utils/mixpanel';
 
 type DesiredCreditParams = {
   generalRequired: number;

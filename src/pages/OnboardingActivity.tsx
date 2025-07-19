@@ -3,6 +3,7 @@ import { ActivityComponentType } from '@stackflow/react';
 import { motion } from 'motion/react';
 import { useEffect, useRef, useState } from 'react';
 
+import { Mixpanel } from '@/bootstrap/mixpanel';
 import AdmissionYearInput from '@/components/AdmissionYearInput';
 import AppBar from '@/components/AppBar';
 import ChapelInput from '@/components/ChapelInput';
@@ -10,7 +11,6 @@ import DepartmentInput from '@/components/DepartmentInput';
 import GradeInput from '@/components/GradeInput';
 import { StudentMachineContext } from '@/contexts/StudentMachineContext';
 import { useFlow } from '@/stackflow';
-import { Mixpanel } from '@/utils/mixpanel';
 
 const OnboardingActivity: ActivityComponentType = () => {
   const state = StudentMachineContext.useSelector((state) => state);

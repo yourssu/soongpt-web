@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 
+import { Mixpanel } from '@/bootstrap/mixpanel';
 import CourseSelectionView from '@/components/CourseSelection/CourseSelectionView';
 import { CourseListContext } from '@/contexts/CourseListContext';
 import { CourseTypeContext } from '@/contexts/CourseTypeContext';
@@ -12,7 +13,6 @@ import { useFlow, useStepFlow } from '@/stackflow';
 import { CourseType } from '@/types/course';
 import { courseSelectionInfo, gradeSelection } from '@/types/courseSelectionInfo';
 import { isSameCourse } from '@/utils/course';
-import { Mixpanel } from '@/utils/mixpanel';
 
 const CourseSelection = () => {
   const state = StudentMachineContext.useSelector((state) => state);
