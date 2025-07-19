@@ -10,7 +10,7 @@ import { courseSelectionInfo, gradeSelection } from '@/data/courseSelectionInfo'
 import { useGetArrayState } from '@/hooks/useGetArrayState';
 import { Course } from '@/schemas/courseSchema';
 import { Grade } from '@/schemas/studentSchema';
-import { ArrayState } from '@/type/common.type';
+import { ArrayState } from '@/types/common.type';
 import { isSameCourse } from '@/utils/course';
 
 interface CourseSelectionSkeletonProps {

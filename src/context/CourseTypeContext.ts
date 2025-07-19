@@ -1,5 +1,5 @@
 import { createContext } from 'react';
 
-import { CourseType } from '@/type/course.type';
+import { CourseType } from '@/types/course.type';
 
 export const CourseTypeContext = createContext<CourseType>('MAJOR_REQUIRED');

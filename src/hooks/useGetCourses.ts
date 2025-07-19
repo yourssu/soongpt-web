@@ -3,7 +3,7 @@ import { useSuspenseQueries } from '@tanstack/react-query';
 import api from '@/api/client';
 import { courseResponseSchema } from '@/schemas/courseSchema';
 import { StudentWithoutChapel } from '@/schemas/studentSchema';
-import { CourseType } from '@/type/course.type';
+import { CourseType } from '@/types/course.type';
 
 const courseTypes = ['MAJOR_REQUIRED', 'MAJOR_ELECTIVE', 'GENERAL_REQUIRED'] as const;
 

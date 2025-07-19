@@ -1,5 +1,5 @@
 import { CourseClassification } from '@/schemas/courseSchema';
-import { ArrayState } from '@/type/common.type';
+import { ArrayState } from '@/types/common.type';
 
 export type CourseType = Exclude<CourseClassification, 'CHAPEL' | 'GENERAL_ELECTIVE'>;
 

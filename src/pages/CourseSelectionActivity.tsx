@@ -9,7 +9,7 @@ import CourseSelectionFallback from '@/components/CourseSelection/CourseSelectio
 import SoongptErrorBoundary from '@/components/SoongptErrorBoundary';
 import { CourseTypeContext } from '@/context/CourseTypeContext';
 import { courseSelectionInfo } from '@/data/courseSelectionInfo';
-import { CourseType } from '@/type/course.type';
+import { CourseType } from '@/types/course.type';
 
 interface CourseSelectionActivityParams {
   type?: CourseType;
