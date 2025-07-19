@@ -1,9 +1,8 @@
+import { useActivity, useStep } from '@stackflow/react';
 import { ChevronLeft } from 'lucide-react';
 
-import { useActivity, useStep } from '@stackflow/react';
-
-import { activities, useFlow, useStepFlow } from '../stackflow';
-import ProgressBar from './ProgressBar';
+import ProgressBar from '@/components/ProgressBar';
+import { activities, useFlow, useStepFlow } from '@/stackflow';
 
 interface AppBarProps {
   progress: number; // 0 to 100

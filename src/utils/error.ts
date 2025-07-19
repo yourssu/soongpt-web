@@ -1,7 +1,7 @@
 import { HTTPError } from 'ky';
 import { ZodError } from 'zod';
 
-import { SoongptError, soongptErrorSchema } from '../schemas/errorSchema.ts';
+import { SoongptError, soongptErrorSchema } from '@/schemas/errorSchema';
 
 export async function transformError(e: unknown): Promise<SoongptError> {
   if (!(e instanceof HTTPError)) {

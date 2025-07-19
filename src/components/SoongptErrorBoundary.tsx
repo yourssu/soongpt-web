@@ -1,11 +1,10 @@
+import * as Sentry from '@sentry/react';
+import { QueryErrorResetBoundary } from '@tanstack/react-query';
 import { motion } from 'motion/react';
 import { ReactElement, ReactNode } from 'react';
 
-import * as Sentry from '@sentry/react';
-import { QueryErrorResetBoundary } from '@tanstack/react-query';
-
-import Wrench from '../assets/wrench.svg';
-import { SoongptError } from '../schemas/errorSchema.ts';
+import Wrench from '@/assets/wrench.svg';
+import { SoongptError } from '@/schemas/errorSchema';
 
 interface SoongptErrorBoundaryProps {
   children: ReactNode;

@@ -3,11 +3,11 @@ import { historySyncPlugin } from '@stackflow/plugin-history-sync';
 import { basicRendererPlugin } from '@stackflow/plugin-renderer-basic';
 import { stackflow } from '@stackflow/react';
 
-import CourseSelectionActivity from './pages/CourseSelectionActivity';
-import DesiredCreditActivity from './pages/DesiredCreditActivity';
-import OnboardingActivity from './pages/OnboardingActivity';
-import TimetableSelectionActivity from './pages/TimetableSelectionActivity';
-import TimetableSharingActivity from './pages/TimetableSharingActivity';
+import CourseSelectionActivity from '@/pages/CourseSelectionActivity';
+import DesiredCreditActivity from '@/pages/DesiredCreditActivity';
+import OnboardingActivity from '@/pages/OnboardingActivity';
+import TimetableSelectionActivity from '@/pages/TimetableSelectionActivity';
+import TimetableSharingActivity from '@/pages/TimetableSharingActivity';
 
 export const { Stack, useFlow, useStepFlow, activities } = stackflow({
   transitionDuration: 350,
