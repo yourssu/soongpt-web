@@ -6,10 +6,10 @@ import CourseListItem from '@/components/CourseListItem';
 import GradeChip from '@/components/GradeChip';
 import ViewSelectedCoursesButton from '@/components/ViewSelectedCoursesButton';
 import { CourseTypeContext } from '@/context/CourseTypeContext';
-import { courseSelectionInfo, gradeSelection } from '@/data/courseSelectionInfo';
 import { ArrayState, useGetArrayState } from '@/hooks/useGetArrayState';
 import { Course } from '@/schemas/courseSchema';
 import { Grade } from '@/schemas/studentSchema';
+import { courseSelectionInfo, gradeSelection } from '@/types/courseSelectionInfo';
 import { isSameCourse } from '@/utils/course';
 
 interface CourseSelectionSkeletonProps {

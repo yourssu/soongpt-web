@@ -4,7 +4,7 @@ import { Check, ChevronDown } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
 
-import { admissionYears } from '@/data/admissionYears';
+import { admissionYears } from '@/types/admissionYears';
 
 interface AdmissionYearInputProps {
   a?: ErrorBoundaryProps;

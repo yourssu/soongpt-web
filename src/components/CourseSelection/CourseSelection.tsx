@@ -4,13 +4,13 @@ import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import CourseSelectionView from '@/components/CourseSelection/CourseSelectionView';
 import { CourseListContext } from '@/context/CourseListContext';
 import { CourseTypeContext } from '@/context/CourseTypeContext';
-import { courseSelectionInfo, gradeSelection } from '@/data/courseSelectionInfo';
 import { useGetCourses } from '@/hooks/useGetCourses';
 import { StudentMachineContext } from '@/machines/studentMachine';
 import { Course } from '@/schemas/courseSchema';
 import { Grade } from '@/schemas/studentSchema';
 import { useFlow, useStepFlow } from '@/stackflow';
 import { CourseType } from '@/types/course';
+import { courseSelectionInfo, gradeSelection } from '@/types/courseSelectionInfo';
 import { isSameCourse } from '@/utils/course';
 import { Mixpanel } from '@/utils/mixpanel';
 

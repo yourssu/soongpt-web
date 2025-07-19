@@ -4,8 +4,8 @@ import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
 
 import Hint from '@/components/Hint';
-import { grades } from '@/data/grades';
 import { Grade } from '@/schemas/studentSchema';
+import { grades } from '@/types/grades';
 
 interface GradeInputProps {
   initialValue: Grade | undefined;

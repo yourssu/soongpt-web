@@ -1,6 +1,6 @@
 import Warning from '@/assets/warning.svg';
 import CourseSelectionView from '@/components/CourseSelection/CourseSelectionView';
-import { emptyCourse } from '@/data/courseSelectionInfo';
+import { emptyCourse } from '@/types/courseSelectionInfo';
 
 type CourseSelectionFallbackType = 'error' | 'pending';
 
