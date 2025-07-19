@@ -8,7 +8,7 @@ import AppBar from '@/components/AppBar';
 import ChapelInput from '@/components/ChapelInput';
 import DepartmentInput from '@/components/DepartmentInput';
 import GradeInput from '@/components/GradeInput';
-import { StudentMachineContext } from '@/machines/studentMachine';
+import { StudentMachineContext } from '@/context/StudentMachineContext';
 import { useFlow } from '@/stackflow';
 import { Mixpanel } from '@/utils/mixpanel';
 

@@ -8,8 +8,8 @@ import { useState } from 'react';
 import AppBar from '@/components/AppBar';
 import Hint from '@/components/Hint';
 import RollingNumber from '@/components/RollingNumber';
+import { StudentMachineContext } from '@/context/StudentMachineContext';
 import { usePostTimetable } from '@/hooks/usePostTimetable';
-import { StudentMachineContext } from '@/machines/studentMachine';
 import { useFlow } from '@/stackflow';
 import { Mixpanel } from '@/utils/mixpanel';
 

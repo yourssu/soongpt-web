@@ -9,8 +9,8 @@ import {
 } from 'react';
 
 import Timetable, { getMajorCredit, getTotalCredit, SharingHeader } from '@/components/Timetable';
+import { StudentMachineContext } from '@/context/StudentMachineContext';
 import { useGetTimetable } from '@/hooks/useGetTimetable';
-import { StudentMachineContext } from '@/machines/studentMachine';
 import { Mixpanel } from '@/utils/mixpanel';
 
 interface Color {

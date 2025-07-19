@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { StudentMachineContext } from '@/machines/studentMachine';
+import { StudentMachineContext } from '@/context/StudentMachineContext';
 import { Stack } from '@/stackflow';
 import { ChannelTalk } from '@/utils/channelTalk';
 import { Mixpanel } from '@/utils/mixpanel';
