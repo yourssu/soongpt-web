@@ -7,7 +7,7 @@ import AppBar from '@/components/AppBar';
 import CourseSelection from '@/components/CourseSelection/CourseSelection';
 import CourseSelectionFallback from '@/components/CourseSelection/CourseSelectionFallback';
 import SoongptErrorBoundary from '@/components/SoongptErrorBoundary';
-import { CourseTypeContext } from '@/context/CourseTypeContext';
+import { CourseTypeContext } from '@/contexts/CourseTypeContext';
 import { CourseType } from '@/types/course';
 import { courseSelectionInfo } from '@/types/courseSelectionInfo';
 

@@ -2,9 +2,9 @@ import _ from 'lodash';
 import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 
 import CourseSelectionView from '@/components/CourseSelection/CourseSelectionView';
-import { CourseListContext } from '@/context/CourseListContext';
-import { CourseTypeContext } from '@/context/CourseTypeContext';
-import { StudentMachineContext } from '@/context/StudentMachineContext';
+import { CourseListContext } from '@/contexts/CourseListContext';
+import { CourseTypeContext } from '@/contexts/CourseTypeContext';
+import { StudentMachineContext } from '@/contexts/StudentMachineContext';
 import { useGetCourses } from '@/hooks/useGetCourses';
 import { Course } from '@/schemas/courseSchema';
 import { Grade } from '@/schemas/studentSchema';

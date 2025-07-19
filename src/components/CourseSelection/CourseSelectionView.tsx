@@ -5,7 +5,7 @@ import Like from '@/assets/like.svg';
 import CourseListItem from '@/components/CourseListItem';
 import GradeChip from '@/components/GradeChip';
 import ViewSelectedCoursesButton from '@/components/ViewSelectedCoursesButton';
-import { CourseTypeContext } from '@/context/CourseTypeContext';
+import { CourseTypeContext } from '@/contexts/CourseTypeContext';
 import { ArrayState, useGetArrayState } from '@/hooks/useGetArrayState';
 import { Course } from '@/schemas/courseSchema';
 import { Grade } from '@/schemas/studentSchema';

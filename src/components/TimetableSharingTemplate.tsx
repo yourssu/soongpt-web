@@ -9,7 +9,7 @@ import {
 } from 'react';
 
 import Timetable, { getMajorCredit, getTotalCredit, SharingHeader } from '@/components/Timetable';
-import { StudentMachineContext } from '@/context/StudentMachineContext';
+import { StudentMachineContext } from '@/contexts/StudentMachineContext';
 import { useGetTimetable } from '@/hooks/useGetTimetable';
 import { Mixpanel } from '@/utils/mixpanel';
 
