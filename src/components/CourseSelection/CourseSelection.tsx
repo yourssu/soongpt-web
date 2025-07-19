@@ -10,7 +10,7 @@ import { StudentMachineContext } from '@/machines/studentMachine';
 import { Course } from '@/schemas/courseSchema';
 import { Grade } from '@/schemas/studentSchema';
 import { useFlow, useStepFlow } from '@/stackflow';
-import { CourseType } from '@/types/course.type';
+import { CourseType } from '@/types/course';
 import { isSameCourse } from '@/utils/course';
 import { Mixpanel } from '@/utils/mixpanel';
 

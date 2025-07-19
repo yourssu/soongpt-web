@@ -3,7 +3,7 @@ import mixpanel from 'mixpanel-browser';
 import { SoongptError } from '@/schemas/errorSchema';
 import { CoursePreference, Student } from '@/schemas/studentSchema';
 import { Timetable } from '@/schemas/timetableSchema';
-import { CourseType } from '@/types/course.type';
+import { CourseType } from '@/types/course';
 
 const MIXPANEL_TOKEN = import.meta.env.VITE_MIXPANEL_TOKEN;
 
