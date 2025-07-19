@@ -83,7 +83,6 @@ const config = tseslint.config(
             'object',
             'unknown',
           ],
-          internalPattern: ['~/*', '@/*'],
           newlinesBetween: 'always',
           customGroups: {
             type: {},
