@@ -8,7 +8,7 @@ import Warning from '@/assets/warning.svg';
 import { Mixpanel } from '@/bootstrap/mixpanel';
 import AppBar from '@/components/AppBar';
 import Timetable from '@/components/Timetable';
-import { TimetableSkeleton } from '@/components/TimetableSkeleton';
+import { TimetableSkeleton } from '@/pages/TimetableSharingActivity/components/TimetableSkeleton';
 import { SoongptError } from '@/schemas/errorSchema';
 import { TimetableArrayResponse } from '@/schemas/timetableSchema';
 import { useFlow } from '@/stackflow';

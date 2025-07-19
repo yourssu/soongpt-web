@@ -10,8 +10,8 @@ import {
 import { createPortal } from 'react-dom';
 import useMeasure from 'react-use-measure';
 
-import CourseListItem from '@/components/CourseListItem';
 import { CourseListContext } from '@/contexts/CourseListContext';
+import CourseListItem from '@/pages/CourseSelectionActivity/components/CourseListItem';
 
 interface SelectedCourseBottomSheetProps {
   handleClose: () => void;

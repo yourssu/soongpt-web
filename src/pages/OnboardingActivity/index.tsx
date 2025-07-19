@@ -4,12 +4,12 @@ import { motion } from 'motion/react';
 import { useEffect, useRef, useState } from 'react';
 
 import { Mixpanel } from '@/bootstrap/mixpanel';
-import AdmissionYearInput from '@/components/AdmissionYearInput';
 import AppBar from '@/components/AppBar';
-import ChapelInput from '@/components/ChapelInput';
-import DepartmentInput from '@/components/DepartmentInput';
-import GradeInput from '@/components/GradeInput';
 import { StudentMachineContext } from '@/contexts/StudentMachineContext';
+import AdmissionYearInput from '@/pages/OnboardingActivity/components/AdmissionYearInput';
+import ChapelInput from '@/pages/OnboardingActivity/components/ChapelInput';
+import DepartmentInput from '@/pages/OnboardingActivity/components/DepartmentInput';
+import GradeInput from '@/pages/OnboardingActivity/components/GradeInput';
 import { useFlow } from '@/stackflow';
 
 const OnboardingActivity: ActivityComponentType = () => {

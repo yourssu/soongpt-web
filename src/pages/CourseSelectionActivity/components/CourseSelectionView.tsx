@@ -2,11 +2,11 @@ import { motion } from 'motion/react';
 import { ReactElement, useContext } from 'react';
 
 import Like from '@/assets/like.svg';
-import CourseListItem from '@/components/CourseListItem';
-import GradeChip from '@/components/GradeChip';
-import ViewSelectedCoursesButton from '@/components/ViewSelectedCoursesButton';
 import { CourseTypeContext } from '@/contexts/CourseTypeContext';
 import { ArrayState, useGetArrayState } from '@/hooks/useGetArrayState';
+import CourseListItem from '@/pages/CourseSelectionActivity/components/CourseListItem';
+import GradeChip from '@/pages/CourseSelectionActivity/components/GradeChip';
+import ViewSelectedCoursesButton from '@/pages/CourseSelectionActivity/components/ViewSelectedCoursesButton';
 import { Course } from '@/schemas/courseSchema';
 import { Grade } from '@/schemas/studentSchema';
 import { courseSelectionInfo, gradeSelection } from '@/types/courseSelectionInfo';

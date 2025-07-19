@@ -4,10 +4,10 @@ import { AnimatePresence } from 'motion/react';
 import { Suspense } from 'react';
 
 import AppBar from '@/components/AppBar';
-import CourseSelection from '@/components/CourseSelection/CourseSelection';
-import CourseSelectionFallback from '@/components/CourseSelection/CourseSelectionFallback';
 import SoongptErrorBoundary from '@/components/SoongptErrorBoundary';
 import { CourseTypeContext } from '@/contexts/CourseTypeContext';
+import CourseSelection from '@/pages/CourseSelectionActivity/components/CourseSelection';
+import CourseSelectionFallback from '@/pages/CourseSelectionActivity/components/CourseSelectionFallback';
 import { CourseType } from '@/types/course';
 import { courseSelectionInfo } from '@/types/courseSelectionInfo';
 

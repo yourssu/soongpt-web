@@ -1,5 +1,5 @@
 import Warning from '@/assets/warning.svg';
-import CourseSelectionView from '@/components/CourseSelection/CourseSelectionView';
+import CourseSelectionView from '@/pages/CourseSelectionActivity/components/CourseSelectionView';
 import { emptyCourse } from '@/types/courseSelectionInfo';
 
 type CourseSelectionFallbackType = 'error' | 'pending';

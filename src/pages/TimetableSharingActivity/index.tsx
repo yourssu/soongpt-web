@@ -7,8 +7,8 @@ import { Suspense, useRef, useState } from 'react';
 
 import { Mixpanel } from '@/bootstrap/mixpanel';
 import AppBar from '@/components/AppBar';
-import TimetableSharingTemplate from '@/components/TimetableSharingTemplate';
-import { TemplateSkeleton } from '@/components/TimetableSkeleton';
+import TimetableSharingTemplate from '@/pages/TimetableSharingActivity/components/TimetableSharingTemplate';
+import { TemplateSkeleton } from '@/pages/TimetableSharingActivity/components/TimetableSkeleton';
 
 type TimetableSharingParams = {
   timetableId: number;

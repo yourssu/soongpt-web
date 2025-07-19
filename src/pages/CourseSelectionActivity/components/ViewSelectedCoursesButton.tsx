@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import SelectedCoursesBottomSheet from '@/components/SelectedCoursesBottomSheet';
+import SelectedCoursesBottomSheet from '@/pages/CourseSelectionActivity/components/SelectedCoursesBottomSheet';
 
 const ViewSelectedCoursesButton = () => {
   const [open, setOpen] = useState(false);

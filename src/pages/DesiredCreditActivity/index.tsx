@@ -8,9 +8,9 @@ import { useState } from 'react';
 import { Mixpanel } from '@/bootstrap/mixpanel';
 import AppBar from '@/components/AppBar';
 import Hint from '@/components/Hint';
-import RollingNumber from '@/components/RollingNumber';
 import { StudentMachineContext } from '@/contexts/StudentMachineContext';
 import { usePostTimetable } from '@/hooks/usePostTimetable';
+import RollingNumber from '@/pages/DesiredCreditActivity/components/RollingNumber';
 import { useFlow } from '@/stackflow';
 
 type DesiredCreditParams = {

@@ -2,11 +2,11 @@ import _ from 'lodash';
 import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Mixpanel } from '@/bootstrap/mixpanel';
-import CourseSelectionView from '@/components/CourseSelection/CourseSelectionView';
 import { CourseListContext } from '@/contexts/CourseListContext';
 import { CourseTypeContext } from '@/contexts/CourseTypeContext';
 import { StudentMachineContext } from '@/contexts/StudentMachineContext';
 import { useGetCourses } from '@/hooks/useGetCourses';
+import CourseSelectionView from '@/pages/CourseSelectionActivity/components/CourseSelectionView';
 import { Course } from '@/schemas/courseSchema';
 import { Grade } from '@/schemas/studentSchema';
 import { useFlow, useStepFlow } from '@/stackflow';
