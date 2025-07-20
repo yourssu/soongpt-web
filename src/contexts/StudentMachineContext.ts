@@ -3,7 +3,7 @@ import { assign, setup } from 'xstate';
 
 import { Grade } from '@/schemas/studentSchema';
 
-type Context = {
+export type StudentMachineContextType = {
   admissionYear: number; // 입학년도
   chapel: boolean; // 채플 수강 여부
   department: string; // 학과
@@ -18,7 +18,7 @@ type Event =
 
 const studentMachine = setup({
   types: {
-    context: {} as Context,
+    context: {} as StudentMachineContextType,
     events: {} as Event,
   },
 }).createMachine({
