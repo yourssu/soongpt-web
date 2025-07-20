@@ -1,5 +1,5 @@
 import CourseSelectionView from '@/pages/CourseSelectionActivity/components/CourseSelectionView';
-import { emptyCourse } from '@/types/courseSelectionInfo';
+import { Course } from '@/schemas/courseSchema';
 
 type CourseSelectionFallbackType = 'error' | 'pending';
 
@@ -34,12 +34,21 @@ const CourseSelectionFallback = ({ type }: CourseSelectionFallbackProps) => {
       courses={[emptyCourse, emptyCourse, emptyCourse]}
       description={courseSelectionFallbackInfo[type].description}
       image={courseSelectionFallbackInfo[type].image}
-      resultState={'FILLED'}
+      resultState="FILLED"
       selectedCourses={[]}
       selectedGrades={[]}
       title={courseSelectionFallbackInfo[type].title}
     />
   );
+};
+
+const emptyCourse: Course = {
+  courseName: '',
+  professorName: '',
+  courseTime: [],
+  classification: 'MAJOR_REQUIRED',
+  credit: 0,
+  target: [],
 };
 
 export default CourseSelectionFallback;

@@ -1,4 +1,3 @@
-import { Course } from '@/schemas/courseSchema';
 import { Grade } from '@/schemas/studentSchema';
 import { CourseSelectionInfo, CourseType } from '@/types/course';
 
@@ -54,12 +53,3 @@ export const courseSelectionInfo: Record<CourseType, CourseSelectionInfo> = {
 };
 
 export const gradeSelection: Grade[][] = [[1], [2], [3], [4, 5]];
-
-export const emptyCourse: Course = {
-  courseName: '',
-  professorName: '',
-  courseTime: [],
-  classification: 'MAJOR_REQUIRED',
-  credit: 0,
-  target: [],
-};
