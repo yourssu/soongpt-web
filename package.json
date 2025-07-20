@@ -28,6 +28,7 @@
     "@xstate/react": "^5.0.2",
     "clsx": "^2.1.1",
     "embla-carousel-react": "^8.5.2",
+    "es-toolkit": "^1.39.7",
     "html2canvas": "^1.4.1",
     "ky": "^1.7.4",
     "lodash": "^4.17.21",
