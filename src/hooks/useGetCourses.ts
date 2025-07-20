@@ -5,8 +5,6 @@ import { courseResponseSchema } from '@/schemas/courseSchema';
 import { StudentWithoutChapel } from '@/schemas/studentSchema';
 import { CourseType } from '@/types/course';
 
-const courseTypes = ['MAJOR_REQUIRED', 'MAJOR_ELECTIVE', 'GENERAL_REQUIRED'] as const;
-
 const url: Record<CourseType, string> = {
   MAJOR_REQUIRED: 'major/required',
   MAJOR_ELECTIVE: 'major/elective',
@@ -18,7 +16,7 @@ const getArrayState = <T>(array: T[]): 'EMPTY' | 'FILLED' =>
 
 export const useGetCourses = (info: StudentWithoutChapel) => {
   return useSuspenseQueries({
-    queries: courseTypes.map((type) => ({
+    queries: CourseType.map((type) => ({
       queryKey: [type, info],
       queryFn: async () => {
         const response = await api
