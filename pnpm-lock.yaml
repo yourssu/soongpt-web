@@ -77,6 +77,9 @@ importers:
       react-dom:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
+      react-simplikit:
+        specifier: ^0.0.40
+        version: 0.0.40(react@18.3.1)
       react-use-measure:
         specifier: ^2.1.7
         version: 2.1.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -2685,6 +2688,11 @@ packages:
     peerDependenciesMeta:
       '@types/react':
         optional: true
+
+  react-simplikit@0.0.40:
+    resolution: {integrity: sha512-1wTntmAcczPcGr8Aqd7N3IraM32jnqZoAjJHfyX0dYPMCdH1YM9iz0r0dmrPVjsPPujQy+YdfcfZfiHgtMoNEA==}
+    peerDependencies:
+      react: '*'
 
   react-style-singleton@2.2.3:
     resolution: {integrity: sha512-b6jSvxvVnyptAiLjbkWLE/lOnR4lfTtDAl+eUC7RZy+QQWc6wRzIV2CE6xBuMmDxc2qIihtDCZD5NPOFl7fRBQ==}
@@ -5699,6 +5707,10 @@ snapshots:
       use-sidecar: 1.1.3(@types/react@18.3.18)(react@18.3.1)
     optionalDependencies:
       '@types/react': 18.3.18
+
+  react-simplikit@0.0.40(react@18.3.1):
+    dependencies:
+      react: 18.3.1
 
   react-style-singleton@2.2.3(@types/react@18.3.18)(react@18.3.1):
     dependencies:
