@@ -14,6 +14,10 @@ export const WaitlistActivity: ActivityComponentType = () => {
   const [isTermsAgreed, setIsTermsAgreed] = useState(false);
 
   const [openToast, setOpenToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState({
+    title: '',
+    description: '',
+  });
 
   const { mutateAsync, isPending } = useMutation({
     mutationFn: (content: string) => {
@@ -28,11 +32,19 @@ export const WaitlistActivity: ActivityComponentType = () => {
   const onClickWaitlist = async () => {
     try {
       await mutateAsync(emailOrPhone);
+      setToastMessage({
+        title: '출시 알림 등록이 완료되었어요!',
+        description: '서비스가 출시되면 가장 먼저 안내드릴게요.',
+      });
       setOpenToast(true);
       setEmailOrPhone('');
       setIsTermsAgreed(false);
-    } catch (error) {
-      console.error(error);
+    } catch {
+      setToastMessage({
+        title: '출시 알림 등록에 실패했어요.',
+        description: '잠시후에 다시 시도해주세요.',
+      });
+      setOpenToast(true);
     }
   };
 
@@ -96,10 +108,10 @@ export const WaitlistActivity: ActivityComponentType = () => {
           open={openToast}
         >
           <Toast.Title className="mb-1 text-center font-medium text-gray-900">
-            출시 알림 등록이 완료되었어요!
+            {toastMessage.title}
           </Toast.Title>
           <Toast.Description className="text-sm text-gray-500">
-            서비스가 출시되면 가장 먼저 안내드릴게요.
+            {toastMessage.description}
           </Toast.Description>
         </Toast.Root>
         <Toast.Viewport className="fixed top-0 left-1/2 z-50 m-0 flex w-full -translate-x-1/2 justify-center p-6 outline-none" />
