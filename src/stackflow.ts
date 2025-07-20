@@ -8,6 +8,7 @@ import DesiredCreditActivity from '@/pages/DesiredCreditActivity';
 import OnboardingActivity from '@/pages/OnboardingActivity';
 import TimetableSelectionActivity from '@/pages/TimetableSelectionActivity';
 import TimetableSharingActivity from '@/pages/TimetableSharingActivity';
+import { WaitlistActivity } from '@/pages/WaitlistActivity';
 
 export const { Stack, useFlow, useStepFlow, activities } = stackflow({
   transitionDuration: 350,
@@ -18,7 +19,8 @@ export const { Stack, useFlow, useStepFlow, activities } = stackflow({
     }),
     historySyncPlugin({
       routes: {
-        OnboardingActivity: '/',
+        WaitlistActivity: '/',
+        OnboardingActivity: '/onboarding',
         CourseSelectionActivity: '/course-selection',
         DesiredCreditActivity: '/desired-credit',
         TimetableSelectionActivity: '/time-table-selection',
@@ -28,6 +30,7 @@ export const { Stack, useFlow, useStepFlow, activities } = stackflow({
     }),
   ],
   activities: {
+    WaitlistActivity,
     OnboardingActivity,
     CourseSelectionActivity,
     DesiredCreditActivity,
