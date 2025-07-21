@@ -5,11 +5,24 @@ import { useMutation } from '@tanstack/react-query';
 import { clsx } from 'clsx';
 import { CircleCheck } from 'lucide-react';
 import { useState } from 'react';
+import { tv } from 'tailwind-variants';
 
 import api from '@/api/client';
 import Wrench from '@/assets/wrench.svg';
+import { toPhoneNumber } from '@/utils/string';
+
+const button = tv({
+  base: 'h-[32px] cursor-pointer rounded-[10px] text-xs font-semibold',
+  variants: {
+    selected: {
+      true: 'bg-bg-brandLayerDefault text-brandSecondary',
+      false: 'text-text-buttonDisabled bg-bg-buttonDisabled',
+    },
+  },
+});
 
 export const WaitlistActivity: ActivityComponentType = () => {
+  const [formType, setFormType] = useState<'email' | 'phone'>('phone');
   const [emailOrPhone, setEmailOrPhone] = useState('');
   const [isTermsAgreed, setIsTermsAgreed] = useState(false);
 
@@ -30,6 +43,28 @@ export const WaitlistActivity: ActivityComponentType = () => {
   });
 
   const onClickWaitlist = async () => {
+    if (formType === 'phone') {
+      if (emailOrPhone.replace(/-/g, '').length < '02-123-1234'.replace(/-/g, '').length) {
+        setToastMessage({
+          title: '올바른 전화번호를 입력해주세요.',
+          description: '',
+        });
+        setOpenToast(true);
+        return;
+      }
+    }
+
+    if (formType === 'email') {
+      if (!new RegExp(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i).test(emailOrPhone)) {
+        setToastMessage({
+          title: '올바른 이메일을 입력해주세요.',
+          description: '',
+        });
+        setOpenToast(true);
+        return;
+      }
+    }
+
     try {
       await mutateAsync(emailOrPhone);
       setToastMessage({
@@ -62,15 +97,45 @@ export const WaitlistActivity: ActivityComponentType = () => {
             </div>
 
             <div className="flex w-full flex-col items-center gap-2">
+              <div className="grid w-full grid-cols-2 gap-2">
+                <button
+                  className={button({ selected: formType === 'phone' })}
+                  onClick={() => {
+                    setFormType('phone');
+                    setEmailOrPhone('');
+                  }}
+                >
+                  전화번호
+                </button>
+                <button
+                  className={button({ selected: formType === 'email' })}
+                  onClick={() => {
+                    setFormType('email');
+                    setEmailOrPhone('');
+                  }}
+                >
+                  이메일
+                </button>
+              </div>
               <input
                 className="bg-bg-layerDefault text-brandPrimary focus-visible:outline-borderRing w-full rounded-xl px-4 py-3 text-lg font-semibold"
-                onChange={(e) => setEmailOrPhone(e.target.value)}
-                placeholder="이메일 또는 전화번호"
+                onChange={(e) => {
+                  if (formType === 'email') {
+                    setEmailOrPhone(e.target.value);
+                    return;
+                  }
+                  const onlyNumbers = e.target.value.replace(/[^0-9]/g, '');
+                  setEmailOrPhone(toPhoneNumber(onlyNumbers));
+                }}
+                placeholder={formType === 'phone' ? '전화번호' : '이메일'}
                 type="text"
                 value={emailOrPhone}
               />
               <button
-                className="bg-bg-layerDefault focus-visible:outline-borderRing text-brandPrimary flex w-full cursor-pointer items-center justify-between rounded-xl px-4 py-3 text-lg font-medium"
+                className={clsx(
+                  'bg-bg-layerDefault focus-visible:outline-borderRing flex w-full cursor-pointer items-center justify-between rounded-xl px-4 py-3 text-lg font-medium',
+                  isTermsAgreed ? 'text-brandPrimary' : 'text-neutralSubtle',
+                )}
                 onClick={() => setIsTermsAgreed((prev) => !prev)}
                 type="button"
               >
