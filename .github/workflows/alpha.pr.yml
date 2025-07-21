@@ -10,6 +10,5 @@ jobs:
     uses: ./.github/workflows/build-and-deploy.yml
     with:
       STAGE: 'alpha'
-      APP_URL: 'https://soongpt-alpha.yourssu.com'
       BRANCH_NAME: 'develop'
       CLOUDFLARE_PROJECT_NAME: 'soongpt-web-alpha'

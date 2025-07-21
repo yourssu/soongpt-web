@@ -1,7 +1,9 @@
 import ky from 'ky';
 
+import { config } from '@/config';
+
 const api = ky.create({
-  prefixUrl: import.meta.env.VITE_API_URL,
+  prefixUrl: config.apiUrl,
 });
 
 export default api;

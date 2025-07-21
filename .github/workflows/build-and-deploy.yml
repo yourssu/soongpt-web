@@ -22,9 +22,6 @@ on:
         required: true
         type: string
     inputs:
-      APP_URL:
-        required: true
-        type: string
       STAGE:
         required: true
         type: string
@@ -52,7 +49,6 @@ jobs:
       - name: 🔒 Set Environment Variables
         run: |
           echo "VITE_STAGE=${{ inputs.STAGE }}" >> $GITHUB_ENV
-          echo "VITE_API_URL=${{ inputs.APP_URL }}" >> $GITHUB_ENV
           echo "VITE_MIXPANEL_TOKEN=${{ secrets.VITE_MIXPANEL_TOKEN }}" >> $GITHUB_ENV
           echo "VITE_CHANNEL_TALK_PLUGIN_KEY=${{ secrets.VITE_CHANNEL_TALK_PLUGIN_KEY }}" >> $GITHUB_ENV
           echo "VITE_SENTRY_DSN=${{ secrets.VITE_SENTRY_DSN }}" >> $GITHUB_ENV
