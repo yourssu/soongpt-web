@@ -5,22 +5,16 @@ on:
     secrets:
       CLOUDFLARE_ACCOUNT_ID:
         required: true
-        type: string
       CLOUDFLARE_API_TOKEN:
         required: true
-        type: string
       VITE_MIXPANEL_TOKEN:
         required: true
-        type: string
       VITE_CHANNEL_TALK_PLUGIN_KEY:
         required: true
-        type: string
       VITE_SENTRY_DSN:
         required: true
-        type: string
       VITE_SENTRY_AUTH_TOKEN:
         required: true
-        type: string
     inputs:
       STAGE:
         required: true
