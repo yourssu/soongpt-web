@@ -7,12 +7,11 @@ import { useState } from 'react';
 import { tv } from 'tailwind-variants';
 
 import api from '@/api/client';
-import Wrench from '@/assets/wrench.svg';
 import { useToast } from '@/hooks/useToast';
 import { toPhoneNumber } from '@/utils/string';
 
 const button = tv({
-  base: 'h-[32px] cursor-pointer rounded-[10px] text-xs font-semibold',
+  base: 'h-[32px] cursor-pointer rounded-[10px] text-sm font-semibold',
   variants: {
     selected: {
       true: 'bg-bg-brandLayerDefault text-brandSecondary',
@@ -67,7 +66,7 @@ export const WaitlistActivity: ActivityComponentType = () => {
     <AppScreen>
       <div className="flex min-h-dvh items-center justify-center">
         <div className="flex flex-col items-center gap-6">
-          <img alt="wrench" src={Wrench} width={107} />
+          <img alt="wrench" height={107} loading="eager" src="/images/wrench.webp" width={107} />
 
           <div className="flex flex-col items-center gap-2">
             <div className="text-brandPrimary font-medium">클릭 몇 번으로 최적의 시간표 완성</div>
