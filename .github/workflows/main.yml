@@ -1,12 +1,10 @@
-name: 😡 [PR] Deploy Alpha
-
+name: 😡 [Main] Deploy Production
 on:
-  pull_request:
-    types: [labeled, unlabeled, synchronize, opened]
+  push:
+    branches: [main]
 
 jobs:
-  alpha_build:
-    if: contains(github.event.pull_request.labels.*.name, 'alpha')
+  build_and_deploy_production:
     uses: ./.github/workflows/build-and-deploy.yml
     secrets:
       CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
@@ -16,6 +14,6 @@ jobs:
       VITE_SENTRY_DSN: ${{ secrets.VITE_SENTRY_DSN }}
       VITE_SENTRY_AUTH_TOKEN: ${{ secrets.VITE_SENTRY_AUTH_TOKEN }}
     with:
-      STAGE: 'alpha'
-      BRANCH_NAME: 'develop'
-      CLOUDFLARE_PROJECT_NAME: 'soongpt-web-alpha'
+      STAGE: 'prod'
+      BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+      CLOUDFLARE_PROJECT_NAME: 'soongpt-web'
