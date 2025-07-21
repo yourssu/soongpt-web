@@ -7,27 +7,27 @@ env:
   GH_TOKEN: ${{ github.token }}
 
 jobs:
-  check_for_deploy_label:
+  check_for_alpha_label:
     runs-on: ubuntu-latest
     outputs:
-      has_deploy_label: ${{ steps.check-labels.outputs.has-deploy-label }}
+      has_alpha_label: ${{ steps.check-labels.outputs.has-alpha-label }}
     steps:
       - name: 🏁 Checkout Repository
         uses: actions/checkout@v4
-      - name: Check for "deploy" label
+      - name: Check for "alpha" label
         id: check-labels
         run: |
-          HAS_DEPLOY_LABEL=false
+          HAS_ALPHA_LABEL=false
           PR_LIST=$(gh pr list --json labels)
-          if echo "$PR_LIST" | grep -q "\"name\":\"deploy\""; then
-            HAS_DEPLOY_LABEL=true
+          if echo "$PR_LIST" | grep -q "\"name\":\"alpha\""; then
+            HAS_ALPHA_LABEL=true
           else
-            HAS_DEPLOY_LABEL=false
+            HAS_ALPHA_LABEL=false
           fi
-          echo "has-deploy-label=${HAS_DEPLOY_LABEL}" >> $GITHUB_OUTPUT
+          echo "has-alpha-label=${HAS_ALPHA_LABEL}" >> $GITHUB_OUTPUT
   build_alpha:
-    needs: check_for_deploy_label
-    if: needs.check_for_deploy_label.outputs.has_deploy_label == 'false'
+    needs: check_for_alpha_label
+    if: needs.check_for_alpha_label.outputs.has_alpha_label == 'false'
     uses: ./.github/workflows/build-and-deploy.yml
     secrets:
       CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
