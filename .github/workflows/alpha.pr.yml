@@ -8,6 +8,13 @@ jobs:
   alpha_build:
     if: contains(github.event.pull_request.labels.*.name, 'alpha')
     uses: ./.github/workflows/build-and-deploy.yml
+    secrets:
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      VITE_MIXPANEL_TOKEN: ${{ secrets.VITE_MIXPANEL_TOKEN }}
+      VITE_CHANNEL_TALK_PLUGIN_KEY: ${{ secrets.VITE_CHANNEL_TALK_PLUGIN_KEY }}
+      VITE_SENTRY_DSN: ${{ secrets.VITE_SENTRY_DSN }}
+      VITE_SENTRY_AUTH_TOKEN: ${{ secrets.VITE_SENTRY_AUTH_TOKEN }}
     with:
       STAGE: 'alpha'
       BRANCH_NAME: 'develop'
