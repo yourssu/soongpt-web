@@ -11,6 +11,9 @@ importers:
       '@channel.io/channel-web-sdk-loader':
         specifier: ^2.0.0
         version: 2.0.0
+      '@lottiefiles/dotlottie-react':
+        specifier: ^0.14.3
+        version: 0.14.3(react@18.3.1)
       '@radix-ui/react-popover':
         specifier: ^1.1.5
         version: 1.1.5(@types/react-dom@18.3.5(@types/react@18.3.18))(@types/react@18.3.18)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -595,6 +598,14 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.29':
     resolution: {integrity: sha512-uw6guiW/gcAGPDhLmd77/6lW8QLeiV5RUTsAX46Db6oLhGaVj4lhnPwb184s1bkc8kdVg/+h988dro8GRDpmYQ==}
+
+  '@lottiefiles/dotlottie-react@0.14.3':
+    resolution: {integrity: sha512-O917vzFmacyC/F1NM2CLBsHqCMUBPiyI9Vw0o3ZohbZzRJYbgHPhdOpL83wE3zWs9VNr0JSbmJrkkUwaQizTWQ==}
+    peerDependencies:
+      react: ^17 || ^18 || ^19
+
+  '@lottiefiles/dotlottie-web@0.48.0':
+    resolution: {integrity: sha512-gcS6/3NYcpD2VUi2413wrZmdNLPbtwPaXqoFBqioLW/GsI/oTpTqmunsliRb4BL1ECLAUu0YOzHyK73UXMHrRg==}
 
   '@nodelib/fs.scandir@2.1.5':
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
@@ -3663,6 +3674,13 @@ snapshots:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.4
+
+  '@lottiefiles/dotlottie-react@0.14.3(react@18.3.1)':
+    dependencies:
+      '@lottiefiles/dotlottie-web': 0.48.0
+      react: 18.3.1
+
+  '@lottiefiles/dotlottie-web@0.48.0': {}
 
   '@nodelib/fs.scandir@2.1.5':
     dependencies:
