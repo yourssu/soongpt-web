@@ -31,7 +31,7 @@ export const ToastAnimationGroup = () => {
         return (
           <motion.div
             animate="visible"
-            className="fixed top-0 left-1/2 z-50"
+            className="fixed top-0 left-1/2 z-50 flex w-full items-center justify-center"
             custom={toasts.length - index - 1}
             exit="hidden"
             initial="hidden"
