@@ -1,0 +1,14 @@
+name: 😡 [PR] Deploy Alpha
+
+on:
+  pull_request:
+    types: [labeled, unlabeled, synchronize, opened]
+
+jobs:
+  alpha_build:
+    if: contains(github.event.pull_request.labels.*.name, 'alpha')
+    uses: ./.github/workflows/build-and-deploy.yml
+    with:
+      STAGE: 'alpha'
+      BRANCH_NAME: 'develop'
+      CLOUDFLARE_PROJECT_NAME: 'soongpt-web-alpha'
