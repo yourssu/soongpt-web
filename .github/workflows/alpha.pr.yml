@@ -1,4 +1,4 @@
-name: 😡 [ALPHA] Pull Request actions
+name: 😡 [PR] Deploy Alpha
 
 on:
   pull_request:
