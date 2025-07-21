@@ -1,21 +1,24 @@
 import '@stackflow/plugin-basic-ui/index.css';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-
-import App from '@/App';
 
 import './index.css';
 import './bootstrap/channelTalk';
 import './bootstrap/mixpanel';
 import './bootstrap/sentry';
-
-const queryClient = new QueryClient();
+import App from '@/App';
+import { TanstackQueryProvider } from '@/components/Providers/TanstackQueryProvider';
+import { ToastProvider } from '@/components/Providers/ToastProvider';
+import { StudentMachineContext } from '@/contexts/StudentMachineContext';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <App />
-    </QueryClientProvider>
+    <TanstackQueryProvider>
+      <StudentMachineContext.Provider>
+        <ToastProvider duration={3000}>
+          <App />
+        </ToastProvider>
+      </StudentMachineContext.Provider>
+    </TanstackQueryProvider>
   </StrictMode>,
 );

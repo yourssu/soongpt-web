@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 
 import { ChannelTalk } from '@/bootstrap/channelTalk';
 import { Mixpanel } from '@/bootstrap/mixpanel';
-import { StudentMachineContext } from '@/contexts/StudentMachineContext';
 import { Stack } from '@/stackflow';
 
 const App = () => {
@@ -15,11 +14,9 @@ const App = () => {
 
   return (
     <main className="font-pretendard">
-      <StudentMachineContext.Provider>
-        <div className="relative mx-auto min-h-dvh w-full max-w-[500px]">
-          <Stack />
-        </div>
-      </StudentMachineContext.Provider>
+      <div className="relative mx-auto min-h-dvh w-full max-w-[500px]">
+        <Stack />
+      </div>
     </main>
   );
 };
