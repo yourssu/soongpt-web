@@ -64,11 +64,9 @@ jobs:
 
       - name: 🚀 Deploy to CloudFlare
         id: deploy_to_cloudflare
-        uses: cloudflare/pages-action@1
+        uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: ${{ inputs.CLOUDFLARE_PROJECT_NAME }}
-          directory: 'dist'
-          branch: ${{ inputs.BRANCH_NAME }}
+          command: 'pages deploy dist --branch=${{ inputs.BRANCH_NAME }} --project-name=${{ inputs.CLOUDFLARE_PROJECT_NAME }}'
           wranglerVersion: '3'
