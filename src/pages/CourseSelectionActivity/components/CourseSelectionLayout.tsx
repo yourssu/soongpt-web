@@ -35,7 +35,9 @@ export const CourseSelectionHeader = ({ title, description }: CourseSelectionHea
       <h2 className="text-center text-[28px]/[normal] font-semibold whitespace-pre-wrap">
         {title}
       </h2>
-      {description && <div className="items mt-1 font-light">{description}</div>}
+      {description && (
+        <div className="items mt-1 text-center font-light whitespace-pre-wrap">{description}</div>
+      )}
     </div>
   );
 };

@@ -87,7 +87,9 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
                         />
                       ),
                       // Todo: 검색뷰 및 액티비티 푸시
-                      COURSE_SELECTION_RESULT: () => <CourseSelectionResultStep />,
+                      COURSE_SELECTION_RESULT: () => (
+                        <CourseSelectionResultStep onNextClick={() => {}} />
+                      ),
                     }}
                     value={type}
                   />
