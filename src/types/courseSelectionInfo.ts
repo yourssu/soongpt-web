@@ -1,4 +1,3 @@
-import Like from '@/assets/like.svg';
 import { Course } from '@/schemas/courseSchema';
 import { Grade } from '@/schemas/studentSchema';
 import { CourseSelectionInfo, CourseType } from '@/types/course';
@@ -14,7 +13,7 @@ export const courseSelectionInfo: Record<CourseType, CourseSelectionInfo> = {
       EMPTY: {
         title: '이번 학기에 이수해야 하는\n전공필수과목이 없어요.',
         okText: '확인했어요',
-        image: Like,
+        image: '/images/like.webp',
       },
     },
     next: 'GENERAL_REQUIRED',
@@ -29,7 +28,7 @@ export const courseSelectionInfo: Record<CourseType, CourseSelectionInfo> = {
       },
       EMPTY: {
         title: '이번 학기에 이수해야 하는\n교양필수과목이 없어요.',
-        image: Like,
+        image: '/images/like.webp',
         okText: '확인했어요',
       },
     },
