@@ -16,7 +16,6 @@
     "@channel.io/channel-web-sdk-loader": "^2.0.0",
     "@lottiefiles/dotlottie-react": "^0.14.3",
     "@radix-ui/react-popover": "^1.1.5",
-    "@radix-ui/react-toast": "^1.2.6",
     "@sentry/react": "^9.0.1",
     "@sentry/vite-plugin": "^3.1.2",
     "@stackflow/core": "^1.1.1",

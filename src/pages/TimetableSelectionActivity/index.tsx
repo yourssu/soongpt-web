@@ -4,7 +4,6 @@ import { MutationState, MutationStatus, useMutationState } from '@tanstack/react
 import { motion } from 'motion/react';
 import { ReactElement, useEffect, useRef, useState } from 'react';
 
-import Warning from '@/assets/warning.svg';
 import { Mixpanel } from '@/bootstrap/mixpanel';
 import AppBar from '@/components/AppBar';
 import Timetable from '@/components/Timetable';
@@ -128,7 +127,7 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
       buttonText: '다시 만들기',
       element: () => (
         <div className="flex flex-1 flex-col items-center justify-center">
-          <img alt="Warning" className="size-42.5" src={Warning} />
+          <img alt="Warning" className="size-42.5" src="/images/warning.webp" />
         </div>
       ),
     },

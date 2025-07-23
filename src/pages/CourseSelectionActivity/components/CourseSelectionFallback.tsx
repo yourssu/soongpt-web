@@ -1,4 +1,3 @@
-import Warning from '@/assets/warning.svg';
 import CourseSelectionView from '@/pages/CourseSelectionActivity/components/CourseSelectionView';
 import { emptyCourse } from '@/types/courseSelectionInfo';
 
@@ -21,7 +20,7 @@ const courseSelectionFallbackInfo: Record<
   error: {
     title: '이번 학기에 이수해야 하는\n과목을 불러오지 못했어요..',
     description: '인터넷 연결 상태를 확인해주세요!',
-    image: Warning,
+    image: '/images/warning.webp',
   },
 };
 

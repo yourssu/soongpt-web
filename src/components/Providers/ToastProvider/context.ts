@@ -1,12 +1,6 @@
 import { createContext } from 'react';
 
-export type ToastType = 'default' | 'error' | 'success';
-
-export type ToastItem = {
-  id: string;
-  text: string;
-  type: ToastType;
-};
+import { ToastItem, ToastType } from '@/components/Providers/ToastProvider/type';
 
 interface ToastContextProps {
   addToast: (props: { text: string; type: ToastType }) => void;

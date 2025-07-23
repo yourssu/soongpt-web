@@ -3,7 +3,6 @@ import { QueryErrorResetBoundary } from '@tanstack/react-query';
 import { motion } from 'motion/react';
 import { ReactElement, ReactNode } from 'react';
 
-import Wrench from '@/assets/wrench.svg';
 import { SoongptError } from '@/schemas/errorSchema';
 
 interface SoongptErrorBoundaryProps {
@@ -40,7 +39,7 @@ const SoongptErrorBoundary = ({ FallbackComponent, children }: SoongptErrorBound
                       </span>
                     </div>
                     <div className="flex flex-1 items-center justify-center">
-                      <img alt={'wrench'} className="my-auto" src={Wrench} />
+                      <img alt={'wrench'} className="my-auto" src="/images/wrench.webp" />
                     </div>
                     <div className="flex w-full items-center justify-center gap-3">
                       <button

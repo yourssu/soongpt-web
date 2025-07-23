@@ -1,7 +1,6 @@
 import { motion } from 'motion/react';
 import { ReactElement, useContext } from 'react';
 
-import Like from '@/assets/like.svg';
 import { CourseTypeContext } from '@/contexts/CourseTypeContext';
 import { ArrayState, useGetArrayState } from '@/hooks/useGetArrayState';
 import CourseListItem from '@/pages/CourseSelectionActivity/components/CourseListItem';
@@ -82,7 +81,7 @@ const CourseSelectionView = ({
             <span className="text-xl font-semibold tracking-tighter">
               해당 학년은 전공선택 과목이 없어요.
             </span>
-            <img alt={'like'} src={Like} width={100} />
+            <img alt={'like'} src="/images/like.webp" width={100} />
           </div>
         </div>
       </motion.div>
