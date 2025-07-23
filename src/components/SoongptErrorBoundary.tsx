@@ -39,7 +39,12 @@ const SoongptErrorBoundary = ({ FallbackComponent, children }: SoongptErrorBound
                       </span>
                     </div>
                     <div className="flex flex-1 items-center justify-center">
-                      <img alt={'wrench'} className="my-auto" src="/images/wrench.webp" />
+                      <img
+                        alt={'wrench'}
+                        className="my-auto"
+                        src="/images/wrench.webp"
+                        width={170}
+                      />
                     </div>
                     <div className="flex w-full items-center justify-center gap-3">
                       <button

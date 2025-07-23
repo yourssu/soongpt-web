@@ -127,7 +127,9 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
       buttonText: '다시 만들기',
       element: () => (
         <div className="flex flex-1 flex-col items-center justify-center">
-          <img alt="Warning" className="size-42.5" src="/images/warning.webp" />
+          <div className="flex size-[170px] items-center justify-center">
+            <img alt="Warning" className="object-contain" src="/images/warning.webp" width={170} />
+          </div>
         </div>
       ),
     },

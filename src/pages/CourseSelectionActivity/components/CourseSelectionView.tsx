@@ -102,7 +102,7 @@ const CourseSelectionView = ({
         </h2>
         <span className="items mt-1 font-light">{description}</span>
         {image ? (
-          <img alt="L-Like" className="my-auto" src={image} />
+          <img alt="L-Like" className="my-auto" src={image} width={170} />
         ) : (
           <div className="mt-6 flex w-full flex-1 flex-col gap-3 overflow-auto px-12">
             {type === 'MAJOR_ELECTIVE' && (
