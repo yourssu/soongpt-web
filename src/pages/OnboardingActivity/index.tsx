@@ -4,7 +4,7 @@ import { motion } from 'motion/react';
 import { useEffect, useRef, useState } from 'react';
 
 import { Mixpanel } from '@/bootstrap/mixpanel';
-import AppBar from '@/components/AppBar';
+import { ProgressAppBar } from '@/components/AppBar/ProgressAppBar';
 import { StudentMachineContext } from '@/contexts/StudentMachineContext';
 import AdmissionYearInput from '@/pages/OnboardingActivity/components/AdmissionYearInput';
 import ChapelInput from '@/pages/OnboardingActivity/components/ChapelInput';
@@ -64,7 +64,7 @@ const OnboardingActivity: ActivityComponentType = () => {
   return (
     <AppScreen>
       <div className="flex min-h-dvh flex-col py-6">
-        <AppBar progress={progress} />
+        <ProgressAppBar progress={progress} />
         <div className="mt-6 flex flex-1 flex-col items-center">
           <h2 className="text-[28px] font-semibold">사용자님에 대해 알려주세요!</h2>
           <span className="mt-1 font-light">시간표를 만들기 위한 최소한의 정보가 필요해요.</span>

@@ -1,14 +1,9 @@
 import { useActivity, useStep } from '@stackflow/react';
 import { ChevronLeft } from 'lucide-react';
 
-import ProgressBar from '@/components/ProgressBar';
 import { activities, useFlow, useStepFlow } from '@/stackflow';
 
-interface AppBarProps {
-  progress: number; // 0 to 100
-}
-
-const AppBar = ({ progress }: AppBarProps) => {
+export const BaseAppBar = ({ children }: React.PropsWithChildren<unknown>) => {
   const activity = useActivity();
   const step = useStep();
   const { pop } = useFlow();
@@ -19,7 +14,6 @@ const AppBar = ({ progress }: AppBarProps) => {
       stepPop();
       return;
     }
-
     pop();
   };
 
@@ -31,12 +25,8 @@ const AppBar = ({ progress }: AppBarProps) => {
       >
         <ChevronLeft />
       </button>
-      <div className="flex-1">
-        <ProgressBar width={progress} />
-      </div>
+      <div className="flex-1">{children}</div>
       <div aria-hidden="true" className="size-6" />
     </div>
   );
 };
-
-export default AppBar;

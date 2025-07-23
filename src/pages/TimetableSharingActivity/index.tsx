@@ -5,7 +5,7 @@ import ky from 'ky';
 import { Suspense, useRef } from 'react';
 
 import { Mixpanel } from '@/bootstrap/mixpanel';
-import AppBar from '@/components/AppBar';
+import { ProgressAppBar } from '@/components/AppBar/ProgressAppBar';
 import TimetableSharingTemplate from '@/pages/TimetableSharingActivity/components/TimetableSharingTemplate';
 import { TemplateSkeleton } from '@/pages/TimetableSharingActivity/components/TimetableSkeleton';
 
@@ -84,7 +84,7 @@ const TimetableSharingActivity: ActivityComponentType<TimetableSharingParams> = 
   return (
     <AppScreen>
       <div className="flex min-h-dvh flex-col py-6">
-        <AppBar progress={100} />
+        <ProgressAppBar progress={100} />
         <div className="mt-6 flex flex-1 flex-col items-center justify-evenly">
           <Suspense fallback={<TemplateSkeleton />}>
             <TimetableSharingTemplate ref={templateRef} timetableId={timetableId} />

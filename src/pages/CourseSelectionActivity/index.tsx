@@ -5,7 +5,7 @@ import { Suspense, useState } from 'react';
 import { SwitchCase } from 'react-simplikit';
 
 import { Mixpanel } from '@/bootstrap/mixpanel';
-import AppBar from '@/components/AppBar';
+import { ProgressAppBar } from '@/components/AppBar/ProgressAppBar';
 import SoongptErrorBoundary from '@/components/SoongptErrorBoundary';
 import { CourseTypeContext } from '@/contexts/CourseTypeContext';
 import CourseSelectionFallback from '@/pages/CourseSelectionActivity/components/CourseSelectionFallback';
@@ -42,7 +42,7 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
             value={{ selectedCourses, selectedCredit, setSelectedCourses }}
           >
             <div className="flex max-h-dvh min-h-dvh flex-col gap-6 py-6">
-              <AppBar progress={50} />
+              <ProgressAppBar progress={50} />
               <SoongptErrorBoundary FallbackComponent={<CourseSelectionFallback type="error" />}>
                 <Suspense fallback={<CourseSelectionFallback type="pending" />}>
                   <SwitchCase
