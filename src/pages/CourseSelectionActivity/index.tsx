@@ -4,6 +4,7 @@ import { AnimatePresence } from 'motion/react';
 import { Suspense, useState } from 'react';
 import { SwitchCase } from 'react-simplikit';
 
+import { Mixpanel } from '@/bootstrap/mixpanel';
 import AppBar from '@/components/AppBar';
 import SoongptErrorBoundary from '@/components/SoongptErrorBoundary';
 import { CourseTypeContext } from '@/contexts/CourseTypeContext';
@@ -48,29 +49,40 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
                     caseBy={{
                       MAJOR_REQUIRED: () => (
                         <MajorRequiredSelectionStep
-                          onNextClick={() => {
+                          onNextClick={(courses) => {
                             stepPush({
                               type: 'GENERAL_REQUIRED',
                             });
-                            // Todo: Mixpanel 이벤트 추적
+                            Mixpanel.trackCourseSelectionClick(
+                              'MAJOR_REQUIRED',
+                              courses.map((course) => course.courseName),
+                            );
                           }}
                         />
                       ),
                       GENERAL_REQUIRED: () => (
                         <GeneralRequiredSelectionStep
-                          onNextClick={() => {
+                          onNextClick={(courses) => {
                             stepPush({
                               type: 'MAJOR_ELECTIVE',
                             });
+                            Mixpanel.trackCourseSelectionClick(
+                              'GENERAL_REQUIRED',
+                              courses.map((course) => course.courseName),
+                            );
                           }}
                         />
                       ),
                       MAJOR_ELECTIVE: () => (
                         <MajorElectiveSelectionStep
-                          onNextClick={() => {
+                          onNextClick={(courses) => {
                             stepPush({
                               type: 'COURSE_SELECTION_RESULT',
                             });
+                            Mixpanel.trackCourseSelectionClick(
+                              'MAJOR_ELECTIVE',
+                              courses.map((course) => course.courseName),
+                            );
                           }}
                         />
                       ),
