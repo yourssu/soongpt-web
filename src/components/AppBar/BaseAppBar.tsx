@@ -1,9 +1,14 @@
 import { useActivity, useStep } from '@stackflow/react';
+import clsx from 'clsx';
 import { ChevronLeft } from 'lucide-react';
 
 import { activities, useFlow, useStepFlow } from '@/stackflow';
 
-export const BaseAppBar = ({ children }: React.PropsWithChildren<unknown>) => {
+interface BaseAppBarProps {
+  className?: string;
+}
+
+export const BaseAppBar = ({ children, className }: React.PropsWithChildren<BaseAppBarProps>) => {
   const activity = useActivity();
   const step = useStep();
   const { pop } = useFlow();
@@ -18,7 +23,7 @@ export const BaseAppBar = ({ children }: React.PropsWithChildren<unknown>) => {
   };
 
   return (
-    <div className="flex items-center gap-4 px-6">
+    <div className={clsx('flex items-center gap-4 px-6', className)}>
       <button
         className={`flex size-6 ${activity.isRoot && !step ? 'invisible' : ''}`}
         onClick={handleClickBackButton}
