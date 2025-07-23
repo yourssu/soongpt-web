@@ -10,11 +10,13 @@ import {
   StepContentType,
 } from '@/pages/CourseSelectionActivity/components/CourseSelectionSteps/type';
 import { Course } from '@/schemas/courseSchema';
+import { useFlow } from '@/stackflow';
 
 type SelectionTabType = '교양' | '전공';
 type CourseSelectionResultStepProps = BaseStepProps;
 
 export const CourseSelectionResultStep = ({ onNextClick }: CourseSelectionResultStepProps) => {
+  const { push } = useFlow();
   const [selectionTab, setSelectionTab] = useState<SelectionTabType>('교양');
 
   const courses: Course[] = [];
@@ -40,7 +42,12 @@ export const CourseSelectionResultStep = ({ onNextClick }: CourseSelectionResult
               전공
             </SelectableChip>
           </div>
-          <IcMonoSearch className="text-brandPrimary" size={18} />
+          <div
+            className="flex size-4.5 items-center justify-center"
+            onClick={() => push('CourseSearchActivity', {})}
+          >
+            <IcMonoSearch className="text-brandPrimary" size={18} />
+          </div>
         </div>
         <CourseSelectionList courses={courses} />
       </CourseSelectionLayout.Body>
