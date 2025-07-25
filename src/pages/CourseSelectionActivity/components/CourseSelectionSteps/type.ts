@@ -1,9 +1,10 @@
 import { Course } from '@/schemas/courseSchema';
 
 export type StepContentType = {
-  buttonText: string;
   description?: string;
   image?: string;
+  primaryButtonText: string;
+  secondaryButtonText?: string;
   title: string;
 };
 

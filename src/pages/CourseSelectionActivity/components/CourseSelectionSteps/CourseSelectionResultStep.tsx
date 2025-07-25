@@ -1,7 +1,6 @@
 import { useState } from 'react';
 
 import { SelectableChip } from '@/components/Chip/SelectableChip';
-import { IcMonoSearch } from '@/components/Icons/IcMonoSearch';
 import { ArrayState } from '@/hooks/useGetArrayState';
 import { CourseSelectionLayout } from '@/pages/CourseSelectionActivity/components/CourseSelectionLayout';
 import { CourseSelectionList } from '@/pages/CourseSelectionActivity/components/CourseSelectionList';
@@ -20,40 +19,37 @@ export const CourseSelectionResultStep = ({ onNextClick }: CourseSelectionResult
   const [selectionTab, setSelectionTab] = useState<SelectionTabType>('교양');
 
   const courses: Course[] = [];
-  const { description, buttonText, title } = contentMap['FILLED'];
+  const { description, primaryButtonText, secondaryButtonText, title } = contentMap['FILLED'];
 
   return (
     <CourseSelectionLayout>
       <CourseSelectionLayout.Header description={description} title={title} />
 
       <CourseSelectionLayout.Body>
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-1">
-            <SelectableChip
-              onSelectChange={() => setSelectionTab('교양')}
-              selected={selectionTab === '교양'}
-            >
-              교양
-            </SelectableChip>
-            <SelectableChip
-              onSelectChange={() => setSelectionTab('전공')}
-              selected={selectionTab === '전공'}
-            >
-              전공
-            </SelectableChip>
-          </div>
-          <div
-            className="flex size-4.5 items-center justify-center"
-            onClick={() => push('CourseSearchActivity', {})}
+        <div className="flex items-center gap-1">
+          <SelectableChip
+            onSelectChange={() => setSelectionTab('교양')}
+            selected={selectionTab === '교양'}
           >
-            <IcMonoSearch className="text-brandPrimary" size={18} />
-          </div>
+            교양
+          </SelectableChip>
+          <SelectableChip
+            onSelectChange={() => setSelectionTab('전공')}
+            selected={selectionTab === '전공'}
+          >
+            전공
+          </SelectableChip>
         </div>
+
         <CourseSelectionList courses={courses} />
       </CourseSelectionLayout.Body>
 
       <CourseSelectionLayout.Footer
-        buttonProps={{ children: buttonText, onClick: () => onNextClick([]) }}
+        primaryButtonProps={{ children: primaryButtonText, onClick: () => onNextClick([]) }}
+        secondaryButtonProps={{
+          children: secondaryButtonText,
+          onClick: () => push('CourseSearchActivity', {}),
+        }}
         selectedCredit={0}
       />
     </CourseSelectionLayout>
@@ -64,11 +60,12 @@ const contentMap: Record<ArrayState, StepContentType> = {
   FILLED: {
     title: '지금까지 선택한\n교양/전공 과목들이에요.',
     description: '과목을 추가할 수 있는 마지막 단계에요!\n필수로 수강할 과목을 모두 추가해주세요.',
-    buttonText: '다 선택했어요',
+    primaryButtonText: '다 선택했어요',
+    secondaryButtonText: '과목 추가 할래요',
   },
   EMPTY: {
     title: '이번 학기에 이수해야 하는\n교양필수과목이 없어요.',
     image: '/images/like.webp',
-    buttonText: '다 선택했어요',
+    primaryButtonText: '다 선택했어요',
   },
 };
