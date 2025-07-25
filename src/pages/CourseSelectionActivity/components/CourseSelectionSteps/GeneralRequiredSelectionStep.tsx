@@ -19,7 +19,7 @@ export const GeneralRequiredSelectionStep = ({
   const courseState = useGetArrayState(courses);
   const { selectedCredit } = useContext(SelectedCoursesContext);
 
-  const { description, image, buttonText, title } = contentMap[courseState];
+  const { description, image, primaryButtonText, title } = contentMap[courseState];
 
   return (
     <CourseSelectionLayout>
@@ -34,7 +34,7 @@ export const GeneralRequiredSelectionStep = ({
       )}
 
       <CourseSelectionLayout.Footer
-        buttonProps={{ children: buttonText, onClick: () => onNextClick(courses) }}
+        primaryButtonProps={{ children: primaryButtonText, onClick: () => onNextClick(courses) }}
         selectedCredit={selectedCredit}
       />
     </CourseSelectionLayout>
@@ -45,11 +45,11 @@ const contentMap: Record<ArrayState, StepContentType> = {
   FILLED: {
     title: '이번 학기에 이수해야 하는\n교양필수과목이에요.',
     description: '잘못되었다면 이수할 과목만 선택해주세요!',
-    buttonText: '확인했어요',
+    primaryButtonText: '확인했어요',
   },
   EMPTY: {
     title: '이번 학기에 이수해야 하는\n교양필수과목이 없어요.',
     image: '/images/like.webp',
-    buttonText: '확인했어요',
+    primaryButtonText: '확인했어요',
   },
 };

@@ -64,7 +64,7 @@ export const WaitlistActivity: ActivityComponentType = () => {
 
   return (
     <ActivityLayout>
-      <div className="flex w-full max-w-[300px] flex-col items-center gap-6">
+      <div className="flex w-full max-w-[300px] flex-1 flex-col items-center justify-center gap-6">
         <img alt="wrench" height={107} loading="eager" src="/images/wrench.webp" width={107} />
 
         <div className="flex flex-col items-center gap-2">

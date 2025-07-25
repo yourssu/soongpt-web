@@ -25,7 +25,7 @@ export const MajorElectiveSelectionStep = ({ onNextClick }: MajorElectiveSelecti
   const courses = useSuspenseGetCourses('MAJOR_ELECTIVE');
   const courseState = useGetArrayState(courses);
   const { selectedCredit } = useContext(SelectedCoursesContext);
-  const { description, image, buttonText, title } = contentMap[courseState];
+  const { description, image, primaryButtonText, title } = contentMap[courseState];
 
   const filteredCoursesBySelectedGrades = useFilteredCoursesBySelectedGrades({
     courses,
@@ -62,7 +62,7 @@ export const MajorElectiveSelectionStep = ({ onNextClick }: MajorElectiveSelecti
       )}
 
       <CourseSelectionLayout.Footer
-        buttonProps={{ children: buttonText, onClick: () => onNextClick(courses) }}
+        primaryButtonProps={{ children: primaryButtonText, onClick: () => onNextClick(courses) }}
         selectedCredit={selectedCredit}
       />
     </CourseSelectionLayout>
@@ -73,12 +73,12 @@ const contentMap: Record<ArrayState, StepContentType> = {
   FILLED: {
     title: '이번 학기에 이수할\n전공선택과목을 알려주세요!',
     description: '타학년 전공선택과목도 선택할 수 있어요.',
-    buttonText: '다 선택했어요',
+    primaryButtonText: '다 선택했어요',
   },
   EMPTY: {
     title: '이번 학기에 이수할\n전공선택과목이 없어요.',
     image: '/images/like.webp',
-    buttonText: '다 선택했어요',
+    primaryButtonText: '다 선택했어요',
   },
 };
 

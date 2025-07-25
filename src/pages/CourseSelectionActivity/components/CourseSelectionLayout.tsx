@@ -10,7 +10,8 @@ interface CourseSelectionImageContentProps {
 }
 
 interface CourseSelectionFooterProps {
-  buttonProps: React.ButtonHTMLAttributes<HTMLButtonElement>;
+  primaryButtonProps: React.ButtonHTMLAttributes<HTMLButtonElement>;
+  secondaryButtonProps?: React.ButtonHTMLAttributes<HTMLButtonElement>;
   selectedCredit: number;
 }
 
@@ -54,20 +55,30 @@ export const CourseSelectionBody = ({ children }: React.PropsWithChildren<unknow
 
 export const CourseSelectionFooter = ({
   selectedCredit,
-  buttonProps,
+  primaryButtonProps,
+  secondaryButtonProps,
 }: CourseSelectionFooterProps) => {
   return (
     <div className="order-3 flex w-full flex-col items-center gap-3">
       <span className="text-base font-light">
         현재 <span className="text-brandPrimary">{selectedCredit}학점</span> 선택했어요
       </span>
-      <div className="flex w-full items-center">
+      <div className="flex w-full items-center gap-1">
+        {secondaryButtonProps && (
+          <button
+            {...secondaryButtonProps}
+            className="bg-bg-brandLayerDefault text-brandSecondary flex-1 rounded-2xl py-3.5 font-semibold"
+            type="button"
+          >
+            {secondaryButtonProps.children}
+          </button>
+        )}
         <button
-          {...buttonProps}
+          {...primaryButtonProps}
           className="bg-brandPrimary flex-1 rounded-2xl py-3.5 font-semibold text-white"
           type="button"
         >
-          {buttonProps.children}
+          {primaryButtonProps.children}
         </button>
       </div>
     </div>
