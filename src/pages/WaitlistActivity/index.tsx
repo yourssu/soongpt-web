@@ -1,4 +1,3 @@
-import { AppScreen } from '@stackflow/plugin-basic-ui';
 import { ActivityComponentType } from '@stackflow/react';
 import { useMutation } from '@tanstack/react-query';
 import { clsx } from 'clsx';
@@ -7,6 +6,7 @@ import { useState } from 'react';
 import { tv } from 'tailwind-variants';
 
 import api from '@/api/client';
+import { ActivityLayout } from '@/components/ActivityLayout';
 import { useToast } from '@/hooks/useToast';
 import { toPhoneNumber } from '@/utils/string';
 
@@ -63,87 +63,85 @@ export const WaitlistActivity: ActivityComponentType = () => {
   };
 
   return (
-    <AppScreen>
-      <div className="flex min-h-dvh items-center justify-center">
-        <div className="flex flex-col items-center gap-6">
-          <img alt="wrench" height={107} loading="eager" src="/images/wrench.webp" width={107} />
+    <ActivityLayout>
+      <div className="flex w-full max-w-[300px] flex-col items-center gap-6">
+        <img alt="wrench" height={107} loading="eager" src="/images/wrench.webp" width={107} />
 
-          <div className="flex flex-col items-center gap-2">
-            <div className="text-brandPrimary font-medium">클릭 몇 번으로 최적의 시간표 완성</div>
-            <div className="text-[28px] font-semibold">숭피티가 준비 중이에요!</div>
-            <div className="font-light">서비스가 시작되면 가장 먼저 안내드릴게요.</div>
-          </div>
-
-          <div className="flex w-full flex-col items-center gap-2">
-            <div className="grid w-full grid-cols-2 gap-2">
-              <button
-                className={button({ selected: formType === 'phone' })}
-                onClick={() => {
-                  setFormType('phone');
-                  setEmailOrPhone('');
-                }}
-              >
-                전화번호
-              </button>
-              <button
-                className={button({ selected: formType === 'email' })}
-                onClick={() => {
-                  setFormType('email');
-                  setEmailOrPhone('');
-                }}
-              >
-                이메일
-              </button>
-            </div>
-            <input
-              className="bg-bg-layerDefault text-brandPrimary focus-visible:outline-borderRing w-full rounded-xl px-4 py-3 text-lg font-semibold"
-              onChange={(e) => {
-                if (formType === 'email') {
-                  setEmailOrPhone(e.target.value);
-                  return;
-                }
-                const onlyNumbers = e.target.value.replace(/[^0-9]/g, '');
-                setEmailOrPhone(toPhoneNumber(onlyNumbers));
-              }}
-              placeholder={formType === 'phone' ? '전화번호' : '이메일'}
-              type="text"
-              value={emailOrPhone}
-            />
-            <button
-              className={clsx(
-                'bg-bg-layerDefault focus-visible:outline-borderRing flex w-full cursor-pointer items-center justify-between rounded-xl px-4 py-3 text-lg font-medium',
-                isTermsAgreed ? 'text-brandPrimary' : 'text-neutralSubtle',
-              )}
-              onClick={() => setIsTermsAgreed((prev) => !prev)}
-              type="button"
-            >
-              개인정보 수집·이용 동의
-              <CircleCheck
-                className={clsx(
-                  'size-6',
-                  isTermsAgreed ? 'text-brandPrimary' : 'text-neutralDisabled',
-                )}
-              />
-            </button>
-            <a
-              className="text-neutralPlaceholder cursor-pointer text-sm underline"
-              href="https://yourssu.notion.site/2366915d69788192862bdd49f388ee16"
-              rel="noreferrer noopener"
-              target="_blank"
-            >
-              개인정보 수집·이용 동의서
-            </a>
-          </div>
-
-          <button
-            className="bg-brandPrimary disabled:bg-bg-buttonDisabled disabled:text-text-buttonDisabled h-[52px] w-full cursor-pointer rounded-2xl text-center font-semibold text-white disabled:cursor-not-allowed"
-            disabled={!isTermsAgreed || !emailOrPhone.trim() || isPending}
-            onClick={onClickWaitlist}
-          >
-            출시 알림 받기
-          </button>
+        <div className="flex flex-col items-center gap-2">
+          <div className="text-brandPrimary font-medium">클릭 몇 번으로 최적의 시간표 완성</div>
+          <div className="text-[28px] font-semibold">숭피티가 준비 중이에요!</div>
+          <div className="font-light">서비스가 시작되면 가장 먼저 안내드릴게요.</div>
         </div>
+
+        <div className="flex w-full flex-col items-center gap-2">
+          <div className="grid w-full grid-cols-2 gap-2">
+            <button
+              className={button({ selected: formType === 'phone' })}
+              onClick={() => {
+                setFormType('phone');
+                setEmailOrPhone('');
+              }}
+            >
+              전화번호
+            </button>
+            <button
+              className={button({ selected: formType === 'email' })}
+              onClick={() => {
+                setFormType('email');
+                setEmailOrPhone('');
+              }}
+            >
+              이메일
+            </button>
+          </div>
+          <input
+            className="bg-bg-layerDefault text-brandPrimary focus-visible:outline-borderRing w-full rounded-xl px-4 py-3 text-lg font-semibold"
+            onChange={(e) => {
+              if (formType === 'email') {
+                setEmailOrPhone(e.target.value);
+                return;
+              }
+              const onlyNumbers = e.target.value.replace(/[^0-9]/g, '');
+              setEmailOrPhone(toPhoneNumber(onlyNumbers));
+            }}
+            placeholder={formType === 'phone' ? '전화번호' : '이메일'}
+            type="text"
+            value={emailOrPhone}
+          />
+          <button
+            className={clsx(
+              'bg-bg-layerDefault focus-visible:outline-borderRing flex w-full cursor-pointer items-center justify-between rounded-xl px-4 py-3 text-lg font-medium',
+              isTermsAgreed ? 'text-brandPrimary' : 'text-neutralSubtle',
+            )}
+            onClick={() => setIsTermsAgreed((prev) => !prev)}
+            type="button"
+          >
+            개인정보 수집·이용 동의
+            <CircleCheck
+              className={clsx(
+                'size-6',
+                isTermsAgreed ? 'text-brandPrimary' : 'text-neutralDisabled',
+              )}
+            />
+          </button>
+          <a
+            className="text-neutralPlaceholder cursor-pointer text-sm underline"
+            href="https://yourssu.notion.site/2366915d69788192862bdd49f388ee16"
+            rel="noreferrer noopener"
+            target="_blank"
+          >
+            개인정보 수집·이용 동의서
+          </a>
+        </div>
+
+        <button
+          className="bg-brandPrimary disabled:bg-bg-buttonDisabled disabled:text-text-buttonDisabled h-[52px] w-full cursor-pointer rounded-2xl text-center font-semibold text-white disabled:cursor-not-allowed"
+          disabled={!isTermsAgreed || !emailOrPhone.trim() || isPending}
+          onClick={onClickWaitlist}
+        >
+          출시 알림 받기
+        </button>
       </div>
-    </AppScreen>
+    </ActivityLayout>
   );
 };

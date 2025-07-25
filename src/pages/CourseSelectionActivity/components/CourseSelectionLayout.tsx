@@ -48,9 +48,7 @@ export const CourseSelectionImageBody = ({ image }: CourseSelectionImageContentP
 
 export const CourseSelectionBody = ({ children }: React.PropsWithChildren<unknown>) => {
   return (
-    <div className="order-2 mt-6 flex w-full flex-1 flex-col gap-3 overflow-auto px-12">
-      {children}
-    </div>
+    <div className="order-2 mt-6 flex w-full flex-1 flex-col gap-3 overflow-auto">{children}</div>
   );
 };
 
@@ -59,7 +57,7 @@ export const CourseSelectionFooter = ({
   buttonProps,
 }: CourseSelectionFooterProps) => {
   return (
-    <div className="order-3 flex w-full flex-col items-center gap-3 px-12">
+    <div className="order-3 flex w-full flex-col items-center gap-3">
       <span className="text-base font-light">
         현재 <span className="text-brandPrimary">{selectedCredit}학점</span> 선택했어요
       </span>

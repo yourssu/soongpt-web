@@ -14,6 +14,8 @@ export const BaseAppBar = ({ children, className }: React.PropsWithChildren<Base
   const { pop } = useFlow();
   const { stepPop } = useStepFlow(activity.name as keyof typeof activities);
 
+  const hideBackButton = activity.isRoot && !step;
+
   const handleClickBackButton = () => {
     if (step) {
       stepPop();
@@ -23,15 +25,12 @@ export const BaseAppBar = ({ children, className }: React.PropsWithChildren<Base
   };
 
   return (
-    <div className={clsx('flex items-center gap-4 px-6', className)}>
-      <button
-        className={`flex size-6 ${activity.isRoot && !step ? 'invisible' : ''}`}
-        onClick={handleClickBackButton}
-      >
+    <div className={clsx('grid w-full grid-cols-[24px_1fr_24px] items-center gap-4', className)}>
+      <button className={clsx(hideBackButton ? 'invisible' : '')} onClick={handleClickBackButton}>
         <ChevronLeft />
       </button>
-      <div className="flex-1">{children}</div>
-      <div aria-hidden="true" className="size-6" />
+      <div className="flex">{children}</div>
+      <div aria-hidden="true" />
     </div>
   );
 };
