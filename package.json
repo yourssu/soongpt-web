@@ -18,6 +18,7 @@
     "@radix-ui/react-popover": "^1.1.5",
     "@sentry/react": "^9.0.1",
     "@sentry/vite-plugin": "^3.1.2",
+    "@stackflow/compat-await-push": "^1.1.13",
     "@stackflow/core": "^1.1.1",
     "@stackflow/plugin-basic-ui": "^1.11.1",
     "@stackflow/plugin-history-sync": "^1.7.1",

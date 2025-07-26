@@ -23,6 +23,9 @@ importers:
       '@sentry/vite-plugin':
         specifier: ^3.1.2
         version: 3.1.2
+      '@stackflow/compat-await-push':
+        specifier: ^1.1.13
+        version: 1.1.13(@stackflow/core@1.1.1)(@stackflow/react@1.4.2(@stackflow/config@1.2.1)(@stackflow/core@1.1.1)(@types/react@18.3.18)(react@18.3.1))(@types/react@18.3.18)(react@18.3.1)
       '@stackflow/core':
         specifier: ^1.1.1
         version: 1.1.1
@@ -1020,6 +1023,14 @@ packages:
   '@sentry/vite-plugin@3.1.2':
     resolution: {integrity: sha512-a927sabQKviA4PAs9cM3rFONHiVdfEHHkypmub+hFwJNL0sbeg/8uht0WyqDT5WjVT5pbyvLaKLDjGdwrRBY6Q==}
     engines: {node: '>= 14'}
+
+  '@stackflow/compat-await-push@1.1.13':
+    resolution: {integrity: sha512-7GtK4K0NzDRy2cP/qAHS7ixKKJv7w5TUHyg80OyM7aKpWvrxStI8XOLCz8f3tS7iAVTwaVwVdtiuHbMRyfq+9A==}
+    peerDependencies:
+      '@stackflow/core': ^1.1.0-canary.0
+      '@stackflow/react': ^1.3.2-canary.0
+      '@types/react': '>=16.8.0'
+      react: '>=16.8.0'
 
   '@stackflow/config@1.2.1':
     resolution: {integrity: sha512-ri2grP+BOOsIZvsFFLHZKhd1HJVPg4j8Ums09waP+voQm3hzFPnMKCEMh/cMzcSxKb+j9skWTCzDEJMTeXTQBA==}
@@ -3959,6 +3970,13 @@ snapshots:
     transitivePeerDependencies:
       - encoding
       - supports-color
+
+  '@stackflow/compat-await-push@1.1.13(@stackflow/core@1.1.1)(@stackflow/react@1.4.2(@stackflow/config@1.2.1)(@stackflow/core@1.1.1)(@types/react@18.3.18)(react@18.3.1))(@types/react@18.3.18)(react@18.3.1)':
+    dependencies:
+      '@stackflow/core': 1.1.1
+      '@stackflow/react': 1.4.2(@stackflow/config@1.2.1)(@stackflow/core@1.1.1)(@types/react@18.3.18)(react@18.3.1)
+      '@types/react': 18.3.18
+      react: 18.3.1
 
   '@stackflow/config@1.2.1': {}
 
