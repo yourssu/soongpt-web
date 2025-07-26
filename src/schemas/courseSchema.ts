@@ -11,13 +11,22 @@ export const courseTimeSchema = z.object({
   classroom: z.string(),
 });
 
+export const courseCategorySchema = z.enum(['전선', '전필', '교필', '교선', '채플', '기타']);
+
 export const courseSchema = z.object({
-  courseName: z.string(),
-  professorName: z.string(),
-  classification: courseClassificationSchema,
-  credit: z.number(),
-  target: z.array(z.string()),
-  courseTime: z.array(courseTimeSchema),
+  category: courseCategorySchema,
+  subCategory: z.string().nullable(),
+  field: z.string().nullable(),
+  code: z.number(),
+  name: z.string(),
+  professor: z.string().transform((professor) => professor.split('\n')), // <교수님>\n<교수님>...
+  department: z.string(),
+  division: z.string(),
+  time: z.string().transform((time) => Number(time)),
+  point: z.string().transform((point) => Number(point)),
+  personeel: z.number(),
+  scheduleRoom: z.string(),
+  target: z.string(),
 });
 
 export const courseResponseSchema = z.object({

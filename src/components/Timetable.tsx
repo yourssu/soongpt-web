@@ -30,15 +30,14 @@ const TIME_TABLE_TAG: Record<TimetableTag, string> = {
 };
 
 export const getTotalCredit = (courses: CourseWithoutTarget[]): number => {
-  return courses.reduce((acc, course) => acc + course.credit, 0);
+  return courses.reduce((acc, course) => acc + course.point, 0);
 };
 
 export const getMajorCredit = (courses: CourseWithoutTarget[]): number => {
   return courses.reduce((acc, course) => {
-    if (course.classification === 'MAJOR_REQUIRED' || course.classification === 'MAJOR_ELECTIVE') {
-      return acc + course.credit;
+    if (course.category === '전필' || course.category === '전선') {
+      return acc + course.point;
     }
-
     return acc;
   }, 0);
 };

@@ -27,7 +27,7 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
   const type = params.type ?? 'MAJOR_REQUIRED';
 
   const [selectedCourses, setSelectedCourses] = useState<Course[]>([]);
-  const selectedCredit = selectedCourses.reduce((acc, course) => acc + course.credit, 0);
+  const selectedCredit = selectedCourses.reduce((acc, course) => acc + course.point, 0);
 
   const { stepPush } = useStepFlow('CourseSelectionActivity');
 
@@ -53,7 +53,7 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
                           });
                           Mixpanel.trackCourseSelectionClick(
                             'MAJOR_REQUIRED',
-                            courses.map((course) => course.courseName),
+                            courses.map((course) => course.name),
                           );
                         }}
                       />
@@ -66,7 +66,7 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
                           });
                           Mixpanel.trackCourseSelectionClick(
                             'GENERAL_REQUIRED',
-                            courses.map((course) => course.courseName),
+                            courses.map((course) => course.name),
                           );
                         }}
                       />
@@ -79,7 +79,7 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
                           });
                           Mixpanel.trackCourseSelectionClick(
                             'MAJOR_ELECTIVE',
-                            courses.map((course) => course.courseName),
+                            courses.map((course) => course.name),
                           );
                         }}
                       />

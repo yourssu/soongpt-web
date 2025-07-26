@@ -1,23 +1,64 @@
+import { send } from '@stackflow/compat-await-push';
+import { ActivityComponentType } from '@stackflow/react';
+import { useActivity, useFlow } from '@stackflow/react/future';
+import { Suspense } from 'react';
+import { useInputState } from 'react-simplikit';
+
 import { ActivityLayout } from '@/components/ActivityLayout';
 import { BaseAppBar } from '@/components/AppBar/BaseAppBar';
-import { IcMonoSearch } from '@/components/Icons/IcMonoSearch';
+import { useDelayedValue } from '@/hooks/useDelayedValue';
+import { CourseSearchResult } from '@/pages/CourseSearchActivity/components/CourseSearchResult';
 import { useStackflowInputAutoFocusEffect } from '@/pages/CourseSearchActivity/hooks/useStackflowInputAutoFocusEffect';
+import { CourseSelectionChangeActionPayload } from '@/pages/CourseSearchActivity/type';
+import { Course } from '@/schemas/courseSchema';
 
-export const CourseSearchActivity = () => {
-  const inputRef = useStackflowInputAutoFocusEffect();
+interface CourseSearchActivityParams {
+  selectedCourses: Course[];
+}
+
+export const CourseSearchActivity: ActivityComponentType<CourseSearchActivityParams> = ({
+  params,
+}) => {
+  const { pop } = useFlow();
+  const { id } = useActivity();
+  const { selectedCourses } = params;
+
+  const [searchKeyword, setSearchKeyword] = useInputState('');
+  const debouncedSearchKeyword = useDelayedValue(searchKeyword);
+
+  const autoFocusRef = useStackflowInputAutoFocusEffect();
+
+  const onCourseSelectionChange = ({ course, type }: CourseSelectionChangeActionPayload) => {
+    pop();
+    send({
+      activityId: id,
+      data: {
+        type,
+        course,
+      },
+    });
+  };
 
   return (
     <ActivityLayout>
       <BaseAppBar className="!gap-0.5">
         <div className="bg-bg-layerDefault flex w-full items-center rounded-full px-5 py-2">
           <input
-            className="flex flex-1 pr-2 text-xs outline-none"
+            className="flex flex-1 pr-2 outline-none"
+            onChange={setSearchKeyword}
             placeholder="과목명을 입력해주세요"
-            ref={inputRef}
+            ref={autoFocusRef}
+            value={searchKeyword}
           />
-          <IcMonoSearch className="text-neutralPlaceholder" size={20} />
         </div>
       </BaseAppBar>
+      <Suspense fallback={<div>검색중...</div>}>
+        <CourseSearchResult
+          onCourseSelectionChange={onCourseSelectionChange}
+          searchKeyword={debouncedSearchKeyword}
+          selectedCourses={selectedCourses}
+        />
+      </Suspense>
     </ActivityLayout>
   );
 };

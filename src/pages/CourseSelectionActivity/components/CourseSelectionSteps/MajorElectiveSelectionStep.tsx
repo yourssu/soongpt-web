@@ -12,8 +12,8 @@ import {
 } from '@/pages/CourseSelectionActivity/components/CourseSelectionSteps/type';
 import GradeChip from '@/pages/CourseSelectionActivity/components/GradeChip';
 import { SelectedCoursesContext } from '@/pages/CourseSelectionActivity/context';
-import { useFilteredCoursesBySelectedGrades } from '@/pages/CourseSelectionActivity/hooks/useFilteredCoursesBySelectedGrades';
 import { useSuspenseGetCourses } from '@/pages/CourseSelectionActivity/hooks/useSuspenseGetCourses';
+import { useSuspenseGetMajorElectives } from '@/pages/CourseSelectionActivity/hooks/useSuspenseGetMajorElectives';
 import { Grade } from '@/schemas/studentSchema';
 
 type MajorElectiveSelectionStepProps = BaseStepProps;
@@ -22,16 +22,17 @@ export const MajorElectiveSelectionStep = ({ onNextClick }: MajorElectiveSelecti
   const state = StudentMachineContext.useSelector((state) => state);
   const [selectedGrades, setSelectedGrades] = useState<Grade[]>([state.context.grade]);
 
+  /* 
+    Todo: Watafall 처리
+  */
   const courses = useSuspenseGetCourses('MAJOR_ELECTIVE');
+  const filteredMajorElectivesByGrade = useSuspenseGetMajorElectives(selectedGrades);
+
   const courseState = useGetArrayState(courses);
+  const filteredCoursesState = useGetArrayState(filteredMajorElectivesByGrade);
+
   const { selectedCredit } = useContext(SelectedCoursesContext);
   const { description, image, primaryButtonText, title } = contentMap[courseState];
-
-  const filteredCoursesBySelectedGrades = useFilteredCoursesBySelectedGrades({
-    courses,
-    selectedGrades,
-  });
-  const filteredCoursesState = useGetArrayState(filteredCoursesBySelectedGrades);
 
   return (
     <CourseSelectionLayout>
@@ -53,7 +54,7 @@ export const MajorElectiveSelectionStep = ({ onNextClick }: MajorElectiveSelecti
           </div>
           <SwitchCase
             caseBy={{
-              FILLED: () => <CourseSelectionList courses={filteredCoursesBySelectedGrades} />,
+              FILLED: () => <CourseSelectionList courses={filteredMajorElectivesByGrade} />,
               EMPTY: () => <CourseBySelectedGradesEmpty />,
             }}
             value={filteredCoursesState}
