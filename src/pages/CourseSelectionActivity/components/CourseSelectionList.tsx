@@ -5,7 +5,7 @@ import { useContext, useMemo } from 'react';
 import CourseListItem from '@/pages/CourseSelectionActivity/components/CourseListItem';
 import { SelectedCoursesContext } from '@/pages/CourseSelectionActivity/context';
 import { Course } from '@/schemas/courseSchema';
-import { isSameCourse } from '@/utils/course';
+import { extractComparableCourseCode, isSameCourse } from '@/utils/course';
 
 interface CourseSelectionListProps {
   courses: Course[];
@@ -14,7 +14,7 @@ interface CourseSelectionListProps {
 export const CourseSelectionList = ({ courses }: CourseSelectionListProps) => {
   const { selectedCourses, setSelectedCourses } = useContext(SelectedCoursesContext);
 
-  const uniqueCourses = useMemo(() => uniqBy(courses, ({ courseName }) => courseName), [courses]);
+  const uniqueCourses = useMemo(() => uniqBy(courses, extractComparableCourseCode), [courses]);
 
   return (
     <motion.div
@@ -41,7 +41,7 @@ export const CourseSelectionList = ({ courses }: CourseSelectionListProps) => {
             <CourseListItem
               course={course}
               isSelected={isSelected}
-              key={course.courseName}
+              key={course.code}
               onClickCourseItem={handleClickCourseItem}
             />
           );

@@ -43,3 +43,5 @@ export const { Stack, useFlow, useStepFlow, activities } = stackflow({
     CourseSearchActivity,
   },
 });
+
+export type ActivityNames = keyof typeof activities;

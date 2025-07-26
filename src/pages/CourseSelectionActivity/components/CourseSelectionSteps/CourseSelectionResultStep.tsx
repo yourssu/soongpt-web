@@ -1,15 +1,18 @@
-import { useState } from 'react';
+import { receive } from '@stackflow/compat-await-push';
+import { useContext, useState } from 'react';
 
 import { SelectableChip } from '@/components/Chip/SelectableChip';
 import { ArrayState } from '@/hooks/useGetArrayState';
+import { CourseSelectionChangeActionPayload } from '@/pages/CourseSearchActivity/type';
 import { CourseSelectionLayout } from '@/pages/CourseSelectionActivity/components/CourseSelectionLayout';
 import { CourseSelectionList } from '@/pages/CourseSelectionActivity/components/CourseSelectionList';
 import {
   BaseStepProps,
   StepContentType,
 } from '@/pages/CourseSelectionActivity/components/CourseSelectionSteps/type';
-import { Course } from '@/schemas/courseSchema';
+import { SelectedCoursesContext } from '@/pages/CourseSelectionActivity/context';
 import { useFlow } from '@/stackflow';
+import { isSameCourse } from '@/utils/course';
 
 type SelectionTabType = '교양' | '전공';
 type CourseSelectionResultStepProps = BaseStepProps;
@@ -17,9 +20,23 @@ type CourseSelectionResultStepProps = BaseStepProps;
 export const CourseSelectionResultStep = ({ onNextClick }: CourseSelectionResultStepProps) => {
   const { push } = useFlow();
   const [selectionTab, setSelectionTab] = useState<SelectionTabType>('교양');
+  const { selectedCourses, setSelectedCourses } = useContext(SelectedCoursesContext);
 
-  const courses: Course[] = [];
   const { description, primaryButtonText, secondaryButtonText, title } = contentMap['FILLED'];
+
+  const onSecondaryButtonClick = async () => {
+    // Todo: useReceive로 리팩토링: type-safe receive, send
+    const { course, type } = await receive<CourseSelectionChangeActionPayload>(
+      push('CourseSearchActivity', {
+        selectedCourses,
+      }),
+    );
+    if (type === '추가') {
+      setSelectedCourses((prev) => [...prev, course]);
+    } else {
+      setSelectedCourses((prev) => prev.filter((c) => !isSameCourse(c, course)));
+    }
+  };
 
   return (
     <CourseSelectionLayout>
@@ -41,14 +58,14 @@ export const CourseSelectionResultStep = ({ onNextClick }: CourseSelectionResult
           </SelectableChip>
         </div>
 
-        <CourseSelectionList courses={courses} />
+        <CourseSelectionList courses={selectedCourses} />
       </CourseSelectionLayout.Body>
 
       <CourseSelectionLayout.Footer
         primaryButtonProps={{ children: primaryButtonText, onClick: () => onNextClick([]) }}
         secondaryButtonProps={{
           children: secondaryButtonText,
-          onClick: () => push('CourseSearchActivity', {}),
+          onClick: onSecondaryButtonClick,
         }}
         selectedCredit={0}
       />
