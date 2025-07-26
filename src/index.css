@@ -21,6 +21,7 @@
   --color-bg-brandLayerDefault: #c2c8ff;
   --color-bg-brandLayerLight: #ecefff;
   --color-bg-modalLayerDefault: #25262c;
+  --color-bg-modalLayerOpacity: rgba(37, 38, 44, 0.8);
   --color-bg-chipSelected: #dde1ff;
   --color-bg-chipUnselected: #f1f1f4;
   --color-bg-buttonDisabled: #f1f1f4;
