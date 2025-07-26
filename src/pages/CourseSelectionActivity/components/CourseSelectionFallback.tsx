@@ -1,5 +1,4 @@
-import CourseSelectionView from '@/pages/CourseSelectionActivity/components/CourseSelectionView';
-import { emptyCourse } from '@/types/courseSelectionInfo';
+import { CourseSelectionLayout } from '@/pages/CourseSelectionActivity/components/CourseSelectionLayout';
 
 type CourseSelectionFallbackType = 'error' | 'pending';
 
@@ -29,16 +28,13 @@ interface CourseSelectionFallbackProps {
 }
 
 const CourseSelectionFallback = ({ type }: CourseSelectionFallbackProps) => {
+  const { description, image, title } = courseSelectionFallbackInfo[type];
+
   return (
-    <CourseSelectionView
-      courses={[emptyCourse, emptyCourse, emptyCourse]}
-      description={courseSelectionFallbackInfo[type].description}
-      image={courseSelectionFallbackInfo[type].image}
-      resultState={'FILLED'}
-      selectedCourses={[]}
-      selectedGrades={[]}
-      title={courseSelectionFallbackInfo[type].title}
-    />
+    <CourseSelectionLayout>
+      <CourseSelectionLayout.Header description={description} title={title} />
+      {image && <CourseSelectionLayout.ImageBody image={image} />}
+    </CourseSelectionLayout>
   );
 };
 

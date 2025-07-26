@@ -5,7 +5,7 @@ import { motion } from 'motion/react';
 import { ReactElement, useEffect, useRef, useState } from 'react';
 
 import { Mixpanel } from '@/bootstrap/mixpanel';
-import AppBar from '@/components/AppBar';
+import { ProgressAppBar } from '@/components/AppBar/ProgressAppBar';
 import Timetable from '@/components/Timetable';
 import { TimetableSkeleton } from '@/pages/TimetableSharingActivity/components/TimetableSkeleton';
 import { SoongptError } from '@/schemas/errorSchema';
@@ -147,7 +147,7 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
   return (
     <AppScreen>
       <div className="flex min-h-dvh flex-col py-6">
-        <AppBar progress={100} />
+        <ProgressAppBar progress={100} />
         <motion.div
           animate={{ y: 0, opacity: 1 }}
           className="mt-4 flex flex-1 flex-col items-center"

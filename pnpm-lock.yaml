@@ -23,6 +23,9 @@ importers:
       '@sentry/vite-plugin':
         specifier: ^3.1.2
         version: 3.1.2
+      '@stackflow/compat-await-push':
+        specifier: ^1.1.13
+        version: 1.1.13(@stackflow/core@1.1.1)(@stackflow/react@1.4.2(@stackflow/config@1.2.1)(@stackflow/core@1.1.1)(@types/react@18.3.18)(react@18.3.1))(@types/react@18.3.18)(react@18.3.1)
       '@stackflow/core':
         specifier: ^1.1.1
         version: 1.1.1
@@ -53,6 +56,9 @@ importers:
       embla-carousel-react:
         specifier: ^8.5.2
         version: 8.5.2(react@18.3.1)
+      es-toolkit:
+        specifier: ^1.39.7
+        version: 1.39.7
       html2canvas:
         specifier: ^1.4.1
         version: 1.4.1
@@ -77,6 +83,9 @@ importers:
       react-dom:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
+      react-simplikit:
+        specifier: ^0.0.40
+        version: 0.0.40(react@18.3.1)
       react-use-measure:
         specifier: ^2.1.7
         version: 2.1.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -1015,6 +1024,14 @@ packages:
     resolution: {integrity: sha512-a927sabQKviA4PAs9cM3rFONHiVdfEHHkypmub+hFwJNL0sbeg/8uht0WyqDT5WjVT5pbyvLaKLDjGdwrRBY6Q==}
     engines: {node: '>= 14'}
 
+  '@stackflow/compat-await-push@1.1.13':
+    resolution: {integrity: sha512-7GtK4K0NzDRy2cP/qAHS7ixKKJv7w5TUHyg80OyM7aKpWvrxStI8XOLCz8f3tS7iAVTwaVwVdtiuHbMRyfq+9A==}
+    peerDependencies:
+      '@stackflow/core': ^1.1.0-canary.0
+      '@stackflow/react': ^1.3.2-canary.0
+      '@types/react': '>=16.8.0'
+      react: '>=16.8.0'
+
   '@stackflow/config@1.2.1':
     resolution: {integrity: sha512-ri2grP+BOOsIZvsFFLHZKhd1HJVPg4j8Ums09waP+voQm3hzFPnMKCEMh/cMzcSxKb+j9skWTCzDEJMTeXTQBA==}
 
@@ -1686,6 +1703,9 @@ packages:
   es-to-primitive@1.3.0:
     resolution: {integrity: sha512-w+5mJ3GuFL+NjVtJlvydShqE1eN3h3PbI7/5LAsYJP/2qtuMXjfL2LpHSRqo4b4eSF5K/DH1JXKUAHSB2UW50g==}
     engines: {node: '>= 0.4'}
+
+  es-toolkit@1.39.7:
+    resolution: {integrity: sha512-ek/wWryKouBrZIjkwW2BFf91CWOIMvoy2AE5YYgUrfWsJQM2Su1LoLtrw8uusEpN9RfqLlV/0FVNjT0WMv8Bxw==}
 
   esbuild@0.24.2:
     resolution: {integrity: sha512-+9egpBW8I3CD5XPe0n6BfT5fxLzxrlDzqydF3aviG+9ni1lDC/OvMHcxqEFV0+LANZG5R1bFMWfUrjVsdwxJvA==}
@@ -2685,6 +2705,11 @@ packages:
     peerDependenciesMeta:
       '@types/react':
         optional: true
+
+  react-simplikit@0.0.40:
+    resolution: {integrity: sha512-1wTntmAcczPcGr8Aqd7N3IraM32jnqZoAjJHfyX0dYPMCdH1YM9iz0r0dmrPVjsPPujQy+YdfcfZfiHgtMoNEA==}
+    peerDependencies:
+      react: '*'
 
   react-style-singleton@2.2.3:
     resolution: {integrity: sha512-b6jSvxvVnyptAiLjbkWLE/lOnR4lfTtDAl+eUC7RZy+QQWc6wRzIV2CE6xBuMmDxc2qIihtDCZD5NPOFl7fRBQ==}
@@ -3946,6 +3971,13 @@ snapshots:
       - encoding
       - supports-color
 
+  '@stackflow/compat-await-push@1.1.13(@stackflow/core@1.1.1)(@stackflow/react@1.4.2(@stackflow/config@1.2.1)(@stackflow/core@1.1.1)(@types/react@18.3.18)(react@18.3.1))(@types/react@18.3.18)(react@18.3.1)':
+    dependencies:
+      '@stackflow/core': 1.1.1
+      '@stackflow/react': 1.4.2(@stackflow/config@1.2.1)(@stackflow/core@1.1.1)(@types/react@18.3.18)(react@18.3.1)
+      '@types/react': 18.3.18
+      react: 18.3.1
+
   '@stackflow/config@1.2.1': {}
 
   '@stackflow/core@1.1.1':
@@ -4732,6 +4764,8 @@ snapshots:
       is-callable: 1.2.7
       is-date-object: 1.1.0
       is-symbol: 1.1.1
+
+  es-toolkit@1.39.7: {}
 
   esbuild@0.24.2:
     optionalDependencies:
@@ -5699,6 +5733,10 @@ snapshots:
       use-sidecar: 1.1.3(@types/react@18.3.18)(react@18.3.1)
     optionalDependencies:
       '@types/react': 18.3.18
+
+  react-simplikit@0.0.40(react@18.3.1):
+    dependencies:
+      react: 18.3.1
 
   react-style-singleton@2.2.3(@types/react@18.3.18)(react@18.3.1):
     dependencies:

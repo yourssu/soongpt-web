@@ -6,7 +6,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
 
 import { Mixpanel } from '@/bootstrap/mixpanel';
-import AppBar from '@/components/AppBar';
+import { ProgressAppBar } from '@/components/AppBar/ProgressAppBar';
 import Hint from '@/components/Hint';
 import { StudentMachineContext } from '@/contexts/StudentMachineContext';
 import { usePostTimetable } from '@/hooks/usePostTimetable';
@@ -119,7 +119,7 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
   return (
     <AppScreen>
       <div className="flex min-h-dvh flex-col py-6">
-        <AppBar progress={100} />
+        <ProgressAppBar progress={100} />
         <div className="mt-6 flex flex-1 flex-col items-center">
           <h2 className="text-center text-[28px] font-semibold">
             사용자님의 이번학기 <br />
