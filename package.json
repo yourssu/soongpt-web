@@ -15,7 +15,9 @@
   "dependencies": {
     "@channel.io/channel-web-sdk-loader": "^2.0.0",
     "@lottiefiles/dotlottie-react": "^0.14.3",
+    "@radix-ui/react-dialog": "^1.1.14",
     "@radix-ui/react-popover": "^1.1.5",
+    "@radix-ui/react-visually-hidden": "^1.2.3",
     "@sentry/react": "^9.0.1",
     "@sentry/vite-plugin": "^3.1.2",
     "@stackflow/compat-await-push": "^1.1.13",
@@ -36,6 +38,7 @@
     "lucide-react": "^0.473.0",
     "mixpanel-browser": "^2.60.0",
     "motion": "^12.0.6",
+    "overlay-kit": "^1.8.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-simplikit": "^0.0.40",
