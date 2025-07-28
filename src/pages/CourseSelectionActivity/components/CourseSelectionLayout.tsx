@@ -49,7 +49,9 @@ export const CourseSelectionImageBody = ({ image }: CourseSelectionImageContentP
 
 export const CourseSelectionBody = ({ children }: React.PropsWithChildren<unknown>) => {
   return (
-    <div className="order-2 mt-6 flex w-full flex-1 flex-col gap-3 overflow-auto">{children}</div>
+    <div className="order-2 mt-6 flex w-full flex-[1_1_0] flex-col gap-3 overflow-auto">
+      {children}
+    </div>
   );
 };
 

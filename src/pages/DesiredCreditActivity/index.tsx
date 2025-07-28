@@ -1,11 +1,11 @@
 import * as Popover from '@radix-ui/react-popover';
-import { AppScreen } from '@stackflow/plugin-basic-ui';
 import { ActivityComponentType } from '@stackflow/react';
 import { Check, ChevronDown } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
 
 import { Mixpanel } from '@/bootstrap/mixpanel';
+import { ActivityLayout } from '@/components/ActivityLayout';
 import { ProgressAppBar } from '@/components/AppBar/ProgressAppBar';
 import Hint from '@/components/Hint';
 import { StudentMachineContext } from '@/contexts/StudentMachineContext';
@@ -117,188 +117,186 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
   };
 
   return (
-    <AppScreen>
-      <div className="flex min-h-dvh flex-col py-6">
-        <ProgressAppBar progress={100} />
-        <div className="mt-6 flex flex-1 flex-col items-center">
-          <h2 className="text-center text-[28px] font-semibold">
-            사용자님의 이번학기 <br />
-            희망 학점은{' '}
-            <RollingNumber
-              className="text-brandPrimary"
-              decimals={context.chapel ? 1 : 0}
-              number={desiredCredit}
+    <ActivityLayout>
+      <ProgressAppBar progress={100} />
+      <div className="mt-6 flex flex-1 flex-col items-center">
+        <h2 className="text-center text-[28px] font-semibold">
+          사용자님의 이번학기 <br />
+          희망 학점은{' '}
+          <RollingNumber
+            className="text-brandPrimary"
+            decimals={context.chapel ? 1 : 0}
+            number={desiredCredit}
+          />
+          학점이군요!
+        </h2>
+        <span className="mt-1 font-light">희망 학점에 맞추어 선택과목을 추천해드릴게요.</span>
+        <div className="mt-6 grid grid-cols-2 gap-x-2.5 gap-y-6 px-12">
+          <div>
+            <label className="mb-1.5 block text-sm">전공필수 학점</label>
+            <input
+              className="bg-bg-layerDefault text-brandPrimary w-full rounded-xl px-4 py-3 text-lg font-semibold"
+              disabled
+              type="number"
+              value={params.majorRequired}
             />
-            학점이군요!
-          </h2>
-          <span className="mt-1 font-light">희망 학점에 맞추어 선택과목을 추천해드릴게요.</span>
-          <div className="mt-6 grid grid-cols-2 gap-x-2.5 gap-y-6 px-12">
-            <div>
-              <label className="mb-1.5 block text-sm">전공필수 학점</label>
-              <input
-                className="bg-bg-layerDefault text-brandPrimary w-full rounded-xl px-4 py-3 text-lg font-semibold"
-                disabled
-                type="number"
-                value={params.majorRequired}
-              />
-            </div>
-
-            <div>
-              <label className="mb-1.5 block text-sm">전공선택 학점</label>
-              <Popover.Root
-                onOpenChange={setShowMajorElectiveDropdown}
-                open={showMajorElectiveDropdown}
-              >
-                <Popover.Trigger asChild>
-                  <button
-                    className={`bg-bg-layerDefault focus-visible:outline-borderRing flex w-full items-center justify-between rounded-xl px-4 py-3 text-lg font-semibold ${majorElective === params.majorElective ? 'text-neutralPlaceholder' : 'text-brandPrimary'}`}
-                    type="button"
-                  >
-                    {majorElective}
-                    <ChevronDown className="text-neutral size-4" />
-                  </button>
-                </Popover.Trigger>
-
-                <AnimatePresence>
-                  {showMajorElectiveDropdown && (
-                    <Popover.Content asChild forceMount sideOffset={5}>
-                      <motion.ul
-                        animate={{
-                          opacity: 1,
-                          y: 0,
-                        }}
-                        className="bg-bg-layerDefault z-10 max-h-44 w-[var(--radix-popover-trigger-width)] overflow-y-auto rounded-xl border border-gray-200 shadow-sm"
-                        exit={{
-                          opacity: 0,
-                          y: -10,
-                        }}
-                        initial={{ opacity: 0, y: -10 }}
-                        transition={{
-                          duration: 0.2,
-                        }}
-                      >
-                        {availableMajorElective.map((availableCredit) => (
-                          <li key={availableCredit}>
-                            <button
-                              className="text-neutralSubtle focus-visible:outline-borderRing flex w-full items-center justify-between rounded-xl px-4 py-2 text-lg font-semibold hover:bg-gray-100 focus-visible:-outline-offset-1"
-                              onClick={() =>
-                                handleCreditSelect({
-                                  type: '전공선택',
-                                  selectedCredit: availableCredit,
-                                })
-                              }
-                              type="button"
-                            >
-                              {availableCredit}
-                              {availableCredit === majorElective && (
-                                <Check className="size-4 text-green-500" />
-                              )}
-                            </button>
-                          </li>
-                        ))}
-                      </motion.ul>
-                    </Popover.Content>
-                  )}
-                </AnimatePresence>
-              </Popover.Root>
-            </div>
-
-            <div>
-              <label className="mb-1.5 block text-sm">교양필수 학점</label>
-              <input
-                className="bg-bg-layerDefault text-brandPrimary w-full rounded-xl px-4 py-3 text-lg font-semibold"
-                disabled
-                type="number"
-                value={params.generalRequired}
-              />
-            </div>
-
-            <div>
-              <label className="mb-1.5 block text-sm">교양선택 학점</label>
-
-              <Popover.Root
-                onOpenChange={setShowGeneralElectiveDropdown}
-                open={showGeneralElectiveDropdown}
-              >
-                <Popover.Trigger asChild>
-                  <button
-                    className={`bg-bg-layerDefault focus-visible:outline-borderRing flex w-full items-center justify-between rounded-xl px-4 py-3 text-lg font-semibold ${generalElective === 0 ? 'text-neutralPlaceholder' : 'text-brandPrimary'}`}
-                    type="button"
-                  >
-                    {generalElective}
-                    <ChevronDown className="text-neutral size-4" />
-                  </button>
-                </Popover.Trigger>
-
-                <AnimatePresence>
-                  {showGeneralElectiveDropdown && (
-                    <Popover.Content asChild forceMount sideOffset={5}>
-                      <motion.ul
-                        animate={{
-                          opacity: 1,
-                          y: 0,
-                        }}
-                        className="bg-bg-layerDefault z-10 max-h-44 w-[var(--radix-popover-trigger-width)] overflow-y-auto rounded-xl border border-gray-200 shadow-sm"
-                        exit={{
-                          opacity: 0,
-                          y: -10,
-                        }}
-                        initial={{ opacity: 0, y: -10 }}
-                        transition={{
-                          duration: 0.2,
-                        }}
-                      >
-                        {availableGeneralElective.map((availableCredit) => (
-                          <li key={availableCredit}>
-                            <button
-                              className="text-neutralSubtle focus-visible:outline-borderRing flex w-full items-center justify-between rounded-xl px-4 py-2 text-lg font-semibold hover:bg-gray-100 focus-visible:-outline-offset-1"
-                              onClick={() =>
-                                handleCreditSelect({
-                                  type: '교양선택',
-                                  selectedCredit: availableCredit,
-                                })
-                              }
-                              type="button"
-                            >
-                              {availableCredit}
-                              {availableCredit === generalElective && (
-                                <Check className="size-4 text-green-500" />
-                              )}
-                            </button>
-                          </li>
-                        ))}
-                      </motion.ul>
-                    </Popover.Content>
-                  )}
-                </AnimatePresence>
-              </Popover.Root>
-            </div>
           </div>
 
-          <Hint className="mt-2 self-start px-12">
-            <Hint.Icon />
-            <Hint.Text>이수 가능한 최대 학점은 22학점이에요.</Hint.Text>
-          </Hint>
+          <div>
+            <label className="mb-1.5 block text-sm">전공선택 학점</label>
+            <Popover.Root
+              onOpenChange={setShowMajorElectiveDropdown}
+              open={showMajorElectiveDropdown}
+            >
+              <Popover.Trigger asChild>
+                <button
+                  className={`bg-bg-layerDefault focus-visible:outline-borderRing flex w-full items-center justify-between rounded-xl px-4 py-3 text-lg font-semibold ${majorElective === params.majorElective ? 'text-neutralPlaceholder' : 'text-brandPrimary'}`}
+                  type="button"
+                >
+                  {majorElective}
+                  <ChevronDown className="text-neutral size-4" />
+                </button>
+              </Popover.Trigger>
 
-          <motion.button
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-brandPrimary mt-auto w-50 rounded-2xl py-3.5 font-semibold text-white"
-            initial={{
-              opacity: 0,
-              y: 20,
-            }}
-            onClick={handleNextClick}
-            transition={{
-              duration: 0.3,
-              ease: 'easeOut',
-            }}
-            type="button"
-          >
-            네 맞아요
-          </motion.button>
+              <AnimatePresence>
+                {showMajorElectiveDropdown && (
+                  <Popover.Content asChild forceMount sideOffset={5}>
+                    <motion.ul
+                      animate={{
+                        opacity: 1,
+                        y: 0,
+                      }}
+                      className="bg-bg-layerDefault z-10 max-h-44 w-[var(--radix-popover-trigger-width)] overflow-y-auto rounded-xl border border-gray-200 shadow-sm"
+                      exit={{
+                        opacity: 0,
+                        y: -10,
+                      }}
+                      initial={{ opacity: 0, y: -10 }}
+                      transition={{
+                        duration: 0.2,
+                      }}
+                    >
+                      {availableMajorElective.map((availableCredit) => (
+                        <li key={availableCredit}>
+                          <button
+                            className="text-neutralSubtle focus-visible:outline-borderRing flex w-full items-center justify-between rounded-xl px-4 py-2 text-lg font-semibold hover:bg-gray-100 focus-visible:-outline-offset-1"
+                            onClick={() =>
+                              handleCreditSelect({
+                                type: '전공선택',
+                                selectedCredit: availableCredit,
+                              })
+                            }
+                            type="button"
+                          >
+                            {availableCredit}
+                            {availableCredit === majorElective && (
+                              <Check className="size-4 text-green-500" />
+                            )}
+                          </button>
+                        </li>
+                      ))}
+                    </motion.ul>
+                  </Popover.Content>
+                )}
+              </AnimatePresence>
+            </Popover.Root>
+          </div>
+
+          <div>
+            <label className="mb-1.5 block text-sm">교양필수 학점</label>
+            <input
+              className="bg-bg-layerDefault text-brandPrimary w-full rounded-xl px-4 py-3 text-lg font-semibold"
+              disabled
+              type="number"
+              value={params.generalRequired}
+            />
+          </div>
+
+          <div>
+            <label className="mb-1.5 block text-sm">교양선택 학점</label>
+
+            <Popover.Root
+              onOpenChange={setShowGeneralElectiveDropdown}
+              open={showGeneralElectiveDropdown}
+            >
+              <Popover.Trigger asChild>
+                <button
+                  className={`bg-bg-layerDefault focus-visible:outline-borderRing flex w-full items-center justify-between rounded-xl px-4 py-3 text-lg font-semibold ${generalElective === 0 ? 'text-neutralPlaceholder' : 'text-brandPrimary'}`}
+                  type="button"
+                >
+                  {generalElective}
+                  <ChevronDown className="text-neutral size-4" />
+                </button>
+              </Popover.Trigger>
+
+              <AnimatePresence>
+                {showGeneralElectiveDropdown && (
+                  <Popover.Content asChild forceMount sideOffset={5}>
+                    <motion.ul
+                      animate={{
+                        opacity: 1,
+                        y: 0,
+                      }}
+                      className="bg-bg-layerDefault z-10 max-h-44 w-[var(--radix-popover-trigger-width)] overflow-y-auto rounded-xl border border-gray-200 shadow-sm"
+                      exit={{
+                        opacity: 0,
+                        y: -10,
+                      }}
+                      initial={{ opacity: 0, y: -10 }}
+                      transition={{
+                        duration: 0.2,
+                      }}
+                    >
+                      {availableGeneralElective.map((availableCredit) => (
+                        <li key={availableCredit}>
+                          <button
+                            className="text-neutralSubtle focus-visible:outline-borderRing flex w-full items-center justify-between rounded-xl px-4 py-2 text-lg font-semibold hover:bg-gray-100 focus-visible:-outline-offset-1"
+                            onClick={() =>
+                              handleCreditSelect({
+                                type: '교양선택',
+                                selectedCredit: availableCredit,
+                              })
+                            }
+                            type="button"
+                          >
+                            {availableCredit}
+                            {availableCredit === generalElective && (
+                              <Check className="size-4 text-green-500" />
+                            )}
+                          </button>
+                        </li>
+                      ))}
+                    </motion.ul>
+                  </Popover.Content>
+                )}
+              </AnimatePresence>
+            </Popover.Root>
+          </div>
         </div>
+
+        <Hint className="mt-2 self-start px-12">
+          <Hint.Icon />
+          <Hint.Text>이수 가능한 최대 학점은 22학점이에요.</Hint.Text>
+        </Hint>
+
+        <motion.button
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-brandPrimary mt-auto w-50 rounded-2xl py-3.5 font-semibold text-white"
+          initial={{
+            opacity: 0,
+            y: 20,
+          }}
+          onClick={handleNextClick}
+          transition={{
+            duration: 0.3,
+            ease: 'easeOut',
+          }}
+          type="button"
+        >
+          네 맞아요
+        </motion.button>
       </div>
-    </AppScreen>
+    </ActivityLayout>
   );
 };
 

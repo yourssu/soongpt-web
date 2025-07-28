@@ -2,6 +2,7 @@ import { useContext, useState } from 'react';
 import { SwitchCase } from 'react-simplikit';
 
 import { StudentMachineContext } from '@/contexts/StudentMachineContext';
+import { useCombinedCourses } from '@/hooks/useCombinedCourses';
 import { ArrayState, useGetArrayState } from '@/hooks/useGetArrayState';
 import { CourseSelectionLayout } from '@/pages/CourseSelectionActivity/components/CourseSelectionLayout';
 import { CourseSelectionList } from '@/pages/CourseSelectionActivity/components/CourseSelectionList';
@@ -23,13 +24,14 @@ export const MajorElectiveSelectionStep = ({ onNextClick }: MajorElectiveSelecti
   const [selectedGrades, setSelectedGrades] = useState<Grade[]>([state.context.grade]);
 
   /* 
-    Todo: Watafall 처리
+    Todo: Watafall 처리 
   */
   const courses = useSuspenseGetCourses('MAJOR_ELECTIVE');
   const filteredMajorElectivesByGrade = useSuspenseGetMajorElectives(selectedGrades);
+  const combinedCourses = useCombinedCourses(filteredMajorElectivesByGrade);
 
   const courseState = useGetArrayState(courses);
-  const filteredCoursesState = useGetArrayState(filteredMajorElectivesByGrade);
+  const combinedCoursesState = useGetArrayState(combinedCourses);
 
   const { selectedCredit } = useContext(SelectedCoursesContext);
   const { description, image, primaryButtonText, title } = contentMap[courseState];
@@ -54,16 +56,16 @@ export const MajorElectiveSelectionStep = ({ onNextClick }: MajorElectiveSelecti
           </div>
           <SwitchCase
             caseBy={{
-              FILLED: () => <CourseSelectionList courses={filteredMajorElectivesByGrade} />,
+              FILLED: () => <CourseSelectionList courses={combinedCourses} />,
               EMPTY: () => <CourseBySelectedGradesEmpty />,
             }}
-            value={filteredCoursesState}
+            value={combinedCoursesState}
           />
         </CourseSelectionLayout.Body>
       )}
 
       <CourseSelectionLayout.Footer
-        primaryButtonProps={{ children: primaryButtonText, onClick: () => onNextClick(courses) }}
+        primaryButtonProps={{ children: primaryButtonText, onClick: onNextClick }}
         selectedCredit={selectedCredit}
       />
     </CourseSelectionLayout>

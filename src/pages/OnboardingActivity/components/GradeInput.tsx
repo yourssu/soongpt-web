@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
 
 import Hint from '@/components/Hint';
+import { useAlertDialog } from '@/hooks/useAlertDialog';
 import { Grade } from '@/schemas/studentSchema';
 import { grades } from '@/types/grades';
 
@@ -17,6 +18,8 @@ const GradeInput = ({ onNext, initialValue }: GradeInputProps) => {
   const [showLabel, setShowLabel] = useState(initialValue !== 0);
   const [showDropdown, setShowDropdown] = useState(false);
 
+  const openScheduleInfoDialog = useAlertDialog();
+
   const handleGradeSelect = (grade: Grade) => {
     setGrade(grade);
     setShowDropdown(false);
@@ -25,6 +28,33 @@ const GradeInput = ({ onNext, initialValue }: GradeInputProps) => {
     setShowLabel(true);
     // 다음 단계로 넘어가기
     onNext(grade);
+  };
+
+  const handleClickScheduleInfo = async () => {
+    if (grade === undefined || grade === 0) {
+      return;
+    }
+
+    const rawSchedule = courseResigtrationScheduleMap[grade];
+
+    openScheduleInfoDialog({
+      title: `${grade}학년 수강신청 일정`,
+      content: (
+        <>
+          <div>[{grade}학년 수강신청 기간]</div>
+          <div className="text-brandSecondary">{rawSchedule}</div>
+          <div>과목의 수강대상과 본인이 일치해야 신청 가능</div>
+          <br />
+          <div>[전체 수강신청 기간]</div>
+          <div className="text-brandSecondary">{courseResigtrationScheduleMap.common}</div>
+          <div>여석이 있는 모든 과목 신청 가능</div>
+          <br />
+          <div>*특정 학과를 제한하거나, 대상외 수강제한을 정한 과목은 불가능</div>
+        </>
+      ),
+      closeableWithOutside: true,
+      closeButton: true,
+    });
   };
 
   return (
@@ -94,8 +124,24 @@ const GradeInput = ({ onNext, initialValue }: GradeInputProps) => {
         <Hint.Icon />
         <Hint.Text>이번 학기에 이수 예정인 학년을 선택해주세요.</Hint.Text>
       </Hint>
+
+      <button
+        className="text-brandPrimary cursor-pointer text-xs underline"
+        onClick={handleClickScheduleInfo}
+      >
+        주요 수강신청 일정 안내
+      </button>
     </motion.div>
   );
+};
+
+const courseResigtrationScheduleMap = {
+  [1]: '8/4(월) 10:00~15:00',
+  [2]: '8/5(화) 10:00~15:00',
+  [3]: '8/6(수) 10:00~15:00',
+  [4]: '8/7(목) 10:00~15:00',
+  [5]: '8/8(금) 10:00~15:00',
+  common: '8/8(금) 10:00~15:00',
 };
 
 export default GradeInput;

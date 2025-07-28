@@ -6,14 +6,9 @@ import { activities, useFlow, useStepFlow } from '@/stackflow';
 
 interface BaseAppBarProps {
   className?: string;
-  onClickBackButton?: () => void;
 }
 
-export const BaseAppBar = ({
-  children,
-  className,
-  onClickBackButton,
-}: React.PropsWithChildren<BaseAppBarProps>) => {
+export const BaseAppBar = ({ children, className }: React.PropsWithChildren<BaseAppBarProps>) => {
   const activity = useActivity();
   const step = useStep();
   const { pop } = useFlow();
@@ -22,8 +17,6 @@ export const BaseAppBar = ({
   const hideBackButton = activity.isRoot && !step;
 
   const handleClickBackButton = () => {
-    onClickBackButton?.();
-
     if (step) {
       stepPop();
       return;

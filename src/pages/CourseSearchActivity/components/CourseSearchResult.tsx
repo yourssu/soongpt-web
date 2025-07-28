@@ -1,8 +1,11 @@
+import { useSuspenseQuery } from '@tanstack/react-query';
+
+import api from '@/api/client';
+import { SelectableCourseItem } from '@/components/CourseItem/SelectableCourseItem';
+import { useAlertDialog } from '@/hooks/useAlertDialog';
 import { useCombinedCourses } from '@/hooks/useCombinedCourses';
-import { useSuspensedSearchedCoursesMock } from '@/pages/CourseSearchActivity/mocks/courses';
 import { CourseSelectionChangeActionPayload } from '@/pages/CourseSearchActivity/type';
-import CourseListItem from '@/pages/CourseSelectionActivity/components/CourseListItem';
-import { Course } from '@/schemas/courseSchema';
+import { Course, paginatedCourseResponseSchema } from '@/schemas/courseSchema';
 import { isSameCourse } from '@/utils/course';
 
 interface CourseSearchResultProps {
@@ -16,11 +19,53 @@ export const CourseSearchResult = ({
   selectedCourses,
   onCourseSelectionChange,
 }: CourseSearchResultProps) => {
-  const searchedCourses = useSuspensedSearchedCoursesMock(searchKeyword);
+  const { data: searchedCourses } = useSuspenseQuery({
+    queryKey: ['searched-courses', searchKeyword],
+    queryFn: async () => {
+      if (searchKeyword === '') {
+        return [];
+      }
+      const response = await api
+        .get(`courses/search`, {
+          searchParams: {
+            q: searchKeyword,
+          },
+        })
+        .json();
+      return paginatedCourseResponseSchema.parse(response).result.content;
+    },
+  });
   const combinedCourses = useCombinedCourses(searchedCourses);
 
-  const onClickCourseItem = (course: Course, isSelected: boolean) => {
-    onCourseSelectionChange({ course, type: isSelected ? '삭제' : '추가' });
+  const open = useAlertDialog();
+
+  const onClickCourseItem = async (course: Course, isSelected: boolean) => {
+    const actionType = isSelected ? '삭제' : '추가';
+
+    const titleMap = {
+      삭제: '선택한 과목을 삭제할까요?',
+      추가: '선택한 과목을 추가할까요?',
+    };
+
+    const accepted = await open({
+      title: titleMap[actionType],
+      closeButton: false,
+      closeableWithOutside: true,
+      content: (
+        <ul>
+          <li>
+            <span className="px-2">•</span>
+            <span>{course.name}</span>
+          </li>
+        </ul>
+      ),
+      primaryButtonText: '네',
+      secondaryButtonText: '아니요',
+    });
+
+    if (accepted) {
+      onCourseSelectionChange({ course, type: actionType });
+    }
   };
 
   return (
@@ -28,7 +73,7 @@ export const CourseSearchResult = ({
       {combinedCourses.map((course) => {
         const isSelected = selectedCourses.some((c) => isSameCourse(c, course));
         return (
-          <CourseListItem
+          <SelectableCourseItem
             course={course}
             isSelected={isSelected}
             key={course.code}

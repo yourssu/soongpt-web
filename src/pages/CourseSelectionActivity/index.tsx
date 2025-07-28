@@ -7,6 +7,8 @@ import { ActivityLayout } from '@/components/ActivityLayout';
 import { ProgressAppBar } from '@/components/AppBar/ProgressAppBar';
 import SoongptErrorBoundary from '@/components/SoongptErrorBoundary';
 import { CourseTypeContext } from '@/contexts/CourseTypeContext';
+import { useFilterCoursesByCategory } from '@/hooks/useFilterCoursesByCategory';
+import { useTotalPointsByCategory } from '@/hooks/useFilterCreditByCategory';
 import CourseSelectionFallback from '@/pages/CourseSelectionActivity/components/CourseSelectionFallback';
 import { CourseSelectionResultStep } from '@/pages/CourseSelectionActivity/components/CourseSelectionSteps/CourseSelectionResultStep';
 import { GeneralRequiredSelectionStep } from '@/pages/CourseSelectionActivity/components/CourseSelectionSteps/GeneralRequiredSelectionStep';
@@ -14,7 +16,7 @@ import { MajorElectiveSelectionStep } from '@/pages/CourseSelectionActivity/comp
 import { MajorRequiredSelectionStep } from '@/pages/CourseSelectionActivity/components/CourseSelectionSteps/MajorRequiredSelectionStep';
 import { SelectedCoursesContext } from '@/pages/CourseSelectionActivity/context';
 import { Course } from '@/schemas/courseSchema';
-import { useStepFlow } from '@/stackflow';
+import { useFlow, useStepFlow } from '@/stackflow';
 import { CourseSelectionStepType } from '@/types/course';
 
 interface CourseSelectionActivityParams {
@@ -27,16 +29,19 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
   const type = params.type ?? 'MAJOR_REQUIRED';
 
   const [selectedCourses, setSelectedCourses] = useState<Course[]>([]);
-  const selectedCredit = selectedCourses.reduce((acc, course) => acc + course.point, 0);
 
+  const { push } = useFlow();
   const { stepPush } = useStepFlow('CourseSelectionActivity');
+
+  const filteredCoursesByCategory = useFilterCoursesByCategory(selectedCourses);
+  const totalPointsByCategory = useTotalPointsByCategory(selectedCourses);
 
   // Todo: 전필은 로딩시 무조건 선택되어야 함
 
   return (
     <CourseTypeContext.Provider value={type}>
       <SelectedCoursesContext.Provider
-        value={{ selectedCourses, selectedCredit, setSelectedCourses }}
+        value={{ selectedCourses, selectedCredit: totalPointsByCategory.total, setSelectedCourses }}
       >
         <ActivityLayout>
           <ProgressAppBar progress={50} />
@@ -47,46 +52,66 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
                   caseBy={{
                     MAJOR_REQUIRED: () => (
                       <MajorRequiredSelectionStep
-                        onNextClick={(courses) => {
+                        onNextClick={() => {
                           stepPush({
                             type: 'GENERAL_REQUIRED',
                           });
                           Mixpanel.trackCourseSelectionClick(
                             'MAJOR_REQUIRED',
-                            courses.map((course) => course.name),
+                            filteredCoursesByCategory.MAJOR_REQUIRED.map((course) => course.name),
                           );
                         }}
                       />
                     ),
                     GENERAL_REQUIRED: () => (
                       <GeneralRequiredSelectionStep
-                        onNextClick={(courses) => {
+                        onNextClick={() => {
                           stepPush({
                             type: 'MAJOR_ELECTIVE',
                           });
                           Mixpanel.trackCourseSelectionClick(
                             'GENERAL_REQUIRED',
-                            courses.map((course) => course.name),
+                            filteredCoursesByCategory.GENERAL_REQUIRED.map((course) => course.name),
                           );
                         }}
                       />
                     ),
                     MAJOR_ELECTIVE: () => (
                       <MajorElectiveSelectionStep
-                        onNextClick={(courses) => {
+                        onNextClick={() => {
                           stepPush({
                             type: 'COURSE_SELECTION_RESULT',
                           });
                           Mixpanel.trackCourseSelectionClick(
                             'MAJOR_ELECTIVE',
-                            courses.map((course) => course.name),
+                            filteredCoursesByCategory.MAJOR_ELECTIVE.map((course) => course.name),
                           );
                         }}
                       />
                     ),
                     // Todo: 검색뷰 및 액티비티 푸시
                     COURSE_SELECTION_RESULT: () => (
-                      <CourseSelectionResultStep onNextClick={() => {}} />
+                      <CourseSelectionResultStep
+                        onNextClick={() => {
+                          push('DesiredCreditActivity', {
+                            generalRequiredCourses: filteredCoursesByCategory.GENERAL_REQUIRED.map(
+                              ({ name }) => name,
+                            ),
+                            majorElectiveCourses: filteredCoursesByCategory.MAJOR_ELECTIVE.map(
+                              ({ name }) => name,
+                            ),
+                            majorRequiredCourses: filteredCoursesByCategory.MAJOR_REQUIRED.map(
+                              ({ name }) => name,
+                            ),
+                            generalRequired: totalPointsByCategory.GENERAL_REQUIRED,
+                            majorElective: totalPointsByCategory.MAJOR_ELECTIVE,
+                            majorRequired: totalPointsByCategory.MAJOR_REQUIRED,
+                          });
+                          Mixpanel.trackCourseSelectionResultClick(
+                            selectedCourses.map((course) => course.name),
+                          );
+                        }}
+                      />
                     ),
                   }}
                   value={type}

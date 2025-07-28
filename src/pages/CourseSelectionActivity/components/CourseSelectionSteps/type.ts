@@ -1,5 +1,3 @@
-import { Course } from '@/schemas/courseSchema';
-
 export type StepContentType = {
   description?: string;
   image?: string;
@@ -9,5 +7,5 @@ export type StepContentType = {
 };
 
 export type BaseStepProps = {
-  onNextClick: (courses: Course[]) => void;
+  onNextClick: () => void;
 };

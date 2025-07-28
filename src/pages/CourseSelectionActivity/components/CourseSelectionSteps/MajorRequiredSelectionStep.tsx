@@ -32,7 +32,7 @@ export const MajorRequiredSelectionStep = ({ onNextClick }: MajorRequiredSelecti
       )}
 
       <CourseSelectionLayout.Footer
-        primaryButtonProps={{ children: primaryButtonText, onClick: () => onNextClick(courses) }}
+        primaryButtonProps={{ children: primaryButtonText, onClick: onNextClick }}
         selectedCredit={selectedCredit}
       />
     </CourseSelectionLayout>

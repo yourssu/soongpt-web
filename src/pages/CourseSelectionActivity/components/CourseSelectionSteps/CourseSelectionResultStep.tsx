@@ -1,16 +1,16 @@
 import { receive } from '@stackflow/compat-await-push';
-import { useContext, useState } from 'react';
+import { motion } from 'motion/react';
+import { useContext, useMemo, useState } from 'react';
 
 import { SelectableChip } from '@/components/Chip/SelectableChip';
-import { ArrayState } from '@/hooks/useGetArrayState';
+import { RemovableCourseListItem } from '@/components/CourseItem/RemovableCourseItem';
+import { useAlertDialog } from '@/hooks/useAlertDialog';
+import { useFilterCoursesByCategory } from '@/hooks/useFilterCoursesByCategory';
 import { CourseSelectionChangeActionPayload } from '@/pages/CourseSearchActivity/type';
 import { CourseSelectionLayout } from '@/pages/CourseSelectionActivity/components/CourseSelectionLayout';
-import { CourseSelectionList } from '@/pages/CourseSelectionActivity/components/CourseSelectionList';
-import {
-  BaseStepProps,
-  StepContentType,
-} from '@/pages/CourseSelectionActivity/components/CourseSelectionSteps/type';
+import { BaseStepProps } from '@/pages/CourseSelectionActivity/components/CourseSelectionSteps/type';
 import { SelectedCoursesContext } from '@/pages/CourseSelectionActivity/context';
+import { Course } from '@/schemas/courseSchema';
 import { useFlow } from '@/stackflow';
 import { isSameCourse } from '@/utils/course';
 
@@ -19,12 +19,25 @@ type CourseSelectionResultStepProps = BaseStepProps;
 
 export const CourseSelectionResultStep = ({ onNextClick }: CourseSelectionResultStepProps) => {
   const { push } = useFlow();
+  const openRemoveAlertDialog = useAlertDialog();
   const [selectionTab, setSelectionTab] = useState<SelectionTabType>('교양');
-  const { selectedCourses, setSelectedCourses } = useContext(SelectedCoursesContext);
+  const { selectedCourses, selectedCredit, setSelectedCourses } =
+    useContext(SelectedCoursesContext);
+  const filteredCoursesByCategory = useFilterCoursesByCategory(selectedCourses);
+  const filteredCoursesBySelectionTab = useMemo(() => {
+    if (selectionTab === '교양') {
+      return [
+        ...filteredCoursesByCategory.GENERAL_REQUIRED,
+        ...filteredCoursesByCategory.GENERAL_ELECTIVE,
+      ];
+    }
+    return [
+      ...filteredCoursesByCategory.MAJOR_REQUIRED,
+      ...filteredCoursesByCategory.MAJOR_ELECTIVE,
+    ];
+  }, [filteredCoursesByCategory, selectionTab]);
 
-  const { description, primaryButtonText, secondaryButtonText, title } = contentMap['FILLED'];
-
-  const onSecondaryButtonClick = async () => {
+  const onSearchButtonClick = async () => {
     // Todo: useReceive로 리팩토링: type-safe receive, send
     const { course, type } = await receive<CourseSelectionChangeActionPayload>(
       push('CourseSearchActivity', {
@@ -38,9 +51,36 @@ export const CourseSelectionResultStep = ({ onNextClick }: CourseSelectionResult
     }
   };
 
+  const onRemoveCourse = async (course: Course) => {
+    const accepted = await openRemoveAlertDialog({
+      title: '선택한 과목을 삭제할까요?',
+      closeButton: false,
+      closeableWithOutside: true,
+      content: (
+        <ul>
+          <li>
+            <span className="px-2">•</span>
+            <span>{course.name}</span>
+          </li>
+        </ul>
+      ),
+      primaryButtonText: '네',
+      secondaryButtonText: '아니요',
+    });
+
+    if (accepted) {
+      setSelectedCourses((prev) => prev.filter((c) => !isSameCourse(c, course)));
+    }
+  };
+
   return (
     <CourseSelectionLayout>
-      <CourseSelectionLayout.Header description={description} title={title} />
+      <CourseSelectionLayout.Header
+        description={
+          '과목을 추가할 수 있는 마지막 단계에요!\n필수로 수강할 과목을 모두 추가해주세요.'
+        }
+        title={'지금까지 선택한\n교양/전공 과목들이에요.'}
+      />
 
       <CourseSelectionLayout.Body>
         <div className="flex items-center gap-1">
@@ -58,31 +98,40 @@ export const CourseSelectionResultStep = ({ onNextClick }: CourseSelectionResult
           </SelectableChip>
         </div>
 
-        <CourseSelectionList courses={selectedCourses} />
+        <motion.div
+          animate={{ y: 0, opacity: 1 }}
+          className="flex-[1_1_0] overflow-auto"
+          initial={{ y: 20, opacity: 0 }}
+          transition={{ duration: 0.4, ease: 'easeOut' }}
+        >
+          <div className="flex size-full flex-col gap-3.5">
+            {filteredCoursesBySelectionTab.length ? (
+              filteredCoursesBySelectionTab.map((course) => (
+                <RemovableCourseListItem
+                  course={course}
+                  key={course.code}
+                  onClickRemove={() => onRemoveCourse(course)}
+                />
+              ))
+            ) : (
+              <div className="bg-bg-layerDefault flex size-full items-center justify-center rounded-xl">
+                <span className="text-neutralHint text-2xl font-semibold">
+                  선택된 과목이 없어요
+                </span>
+              </div>
+            )}
+          </div>
+        </motion.div>
       </CourseSelectionLayout.Body>
 
       <CourseSelectionLayout.Footer
-        primaryButtonProps={{ children: primaryButtonText, onClick: () => onNextClick([]) }}
+        primaryButtonProps={{ children: '다 선택했어요', onClick: onNextClick }}
         secondaryButtonProps={{
-          children: secondaryButtonText,
-          onClick: onSecondaryButtonClick,
+          children: '과목 추가 할래요',
+          onClick: onSearchButtonClick,
         }}
-        selectedCredit={0}
+        selectedCredit={selectedCredit}
       />
     </CourseSelectionLayout>
   );
-};
-
-const contentMap: Record<ArrayState, StepContentType> = {
-  FILLED: {
-    title: '지금까지 선택한\n교양/전공 과목들이에요.',
-    description: '과목을 추가할 수 있는 마지막 단계에요!\n필수로 수강할 과목을 모두 추가해주세요.',
-    primaryButtonText: '다 선택했어요',
-    secondaryButtonText: '과목 추가 할래요',
-  },
-  EMPTY: {
-    title: '이번 학기에 이수해야 하는\n교양필수과목이 없어요.',
-    image: '/images/like.webp',
-    primaryButtonText: '다 선택했어요',
-  },
 };

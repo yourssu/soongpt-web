@@ -2,7 +2,7 @@ import { uniqBy } from 'es-toolkit';
 import { motion } from 'motion/react';
 import { useContext, useMemo } from 'react';
 
-import CourseListItem from '@/pages/CourseSelectionActivity/components/CourseListItem';
+import { SelectableCourseItem } from '@/components/CourseItem/SelectableCourseItem';
 import { SelectedCoursesContext } from '@/pages/CourseSelectionActivity/context';
 import { Course } from '@/schemas/courseSchema';
 import { extractComparableCourseCode, isSameCourse } from '@/utils/course';
@@ -38,7 +38,7 @@ export const CourseSelectionList = ({ courses }: CourseSelectionListProps) => {
           };
 
           return (
-            <CourseListItem
+            <SelectableCourseItem
               course={course}
               isSelected={isSelected}
               key={course.code}

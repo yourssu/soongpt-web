@@ -70,6 +70,7 @@ const OnboardingActivity: ActivityComponentType = () => {
         <div className="my-8 flex w-full flex-1 flex-col gap-6">
           {state.matches('채플수강여부입력') && (
             <ChapelInput
+              grade={state?.context?.grade}
               initialValue={state?.context?.chapel}
               onNext={(chapel) =>
                 actorRef.send({

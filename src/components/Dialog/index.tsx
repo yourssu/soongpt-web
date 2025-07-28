@@ -36,11 +36,11 @@ const Header = ({
 };
 
 const Title = ({ children }: React.PropsWithChildren<unknown>) => {
-  return <div className="text-base font-semibold">{children}</div>;
+  return <div className="text-xl font-semibold">{children}</div>;
 };
 
 const Content = ({ children, className }: React.PropsWithChildren<{ className?: string }>) => {
-  return <div className={clsx('flex max-w-[343px] flex-col px-5 py-3', className)}>{children}</div>;
+  return <div className={clsx('flex flex-col px-5 py-3 text-sm', className)}>{children}</div>;
 };
 
 const ButtonGroup = ({ children }: React.PropsWithChildren<unknown>) => {
@@ -116,7 +116,7 @@ export const Dialog = ({
             </DialogPrimitive.Overlay>
             <DialogPrimitive.Content
               {...contentProps}
-              className="absolute top-1/2 left-1/2 z-50 min-w-[280px] -translate-1/2"
+              className="absolute top-1/2 left-1/2 z-50 w-full max-w-[343px] -translate-1/2"
               onInteractOutside={onCloseWithOutside}
               onPointerDownOutside={onCloseWithOutside}
             >
