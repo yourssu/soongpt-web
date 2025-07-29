@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { courseClassificationSchema, courseTimeSchema } from '@/schemas/courseSchema';
+import { courseSchema, courseTimeSchema } from '@/schemas/courseSchema';
 
 const timetableTagSchema = z.enum([
   'DEFAULT',
@@ -12,18 +12,15 @@ const timetableTagSchema = z.enum([
   'NO_EVENING_CLASSES',
 ]);
 
-const timetableCourseSchema = z.object({
-  courseName: z.string(),
-  professorName: z.string(),
-  classification: courseClassificationSchema,
-  credit: z.number(),
-  courseTime: z.array(courseTimeSchema),
+const timetableCourseSchema = courseSchema.extend({
+  courseTimes: z.array(courseTimeSchema),
 });
 
 const timetableSchema = z.object({
   timetableId: z.number(),
   tag: timetableTagSchema,
   score: z.number().nullable(),
+  totalPoint: z.number(),
   courses: z.array(timetableCourseSchema),
 });
 
