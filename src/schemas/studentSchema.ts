@@ -20,11 +20,12 @@ export const studentSchema = z.object({
 });
 
 export const coursePreferenceSchema = z.object({
-  majorRequiredCourses: z.array(z.string()).describe('전공필수 과목 목록'),
-  majorElectiveCourses: z.array(z.string()).describe('전공선택 과목 목록'),
-  generalRequiredCourses: z.array(z.string()).describe('교양필수 과목 목록'),
-  majorElectiveCredit: z.number().int().nonnegative().describe('희망 전공선택 학점'),
-  generalElectiveCredit: z.number().int().nonnegative().describe('희망 교양선택 학점'),
+  codes: z.array(z.number()).describe('모든 과목 목록'),
+  majorRequiredCodes: z.array(z.number()).describe('전공필수 과목 목록'),
+  majorElectiveCodes: z.array(z.number()).describe('전공선택 과목 목록'),
+  generalRequiredCodes: z.array(z.number()).describe('교양필수 과목 목록'),
+  generalElectivePoint: z.number().int().nonnegative().describe('희망 전공선택 학점'),
+  preferredGeneralElectives: z.array(z.string()).describe('희망 교양 과목 목록'),
 });
 
 export const studentTimetableSchema = studentSchema.merge(coursePreferenceSchema);

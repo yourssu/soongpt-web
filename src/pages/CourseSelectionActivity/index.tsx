@@ -94,18 +94,17 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
                       <CourseSelectionResultStep
                         onNextClick={() => {
                           push('DesiredCreditActivity', {
-                            generalRequiredCourses: filteredCoursesByCategory.GENERAL_REQUIRED.map(
-                              ({ name }) => name,
+                            generalRequiredCodes: filteredCoursesByCategory.GENERAL_REQUIRED.map(
+                              ({ code }) => code,
                             ),
-                            majorElectiveCourses: filteredCoursesByCategory.MAJOR_ELECTIVE.map(
-                              ({ name }) => name,
+                            majorElectiveCodes: filteredCoursesByCategory.MAJOR_ELECTIVE.map(
+                              ({ code }) => code,
                             ),
-                            majorRequiredCourses: filteredCoursesByCategory.MAJOR_REQUIRED.map(
-                              ({ name }) => name,
+                            majorRequiredCodes: filteredCoursesByCategory.MAJOR_REQUIRED.map(
+                              ({ code }) => code,
                             ),
-                            generalRequired: totalPointsByCategory.GENERAL_REQUIRED,
-                            majorElective: totalPointsByCategory.MAJOR_ELECTIVE,
-                            majorRequired: totalPointsByCategory.MAJOR_REQUIRED,
+                            selectedTotalPoints: totalPointsByCategory.total,
+                            codes: selectedCourses.map((course) => course.code),
                           });
                           Mixpanel.trackCourseSelectionResultClick(
                             selectedCourses.map((course) => course.name),

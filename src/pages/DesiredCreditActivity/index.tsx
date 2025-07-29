@@ -1,5 +1,6 @@
 import * as Popover from '@radix-ui/react-popover';
 import { ActivityComponentType } from '@stackflow/react';
+import { range } from 'es-toolkit';
 import { Check, ChevronDown } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
@@ -9,85 +10,64 @@ import { ActivityLayout } from '@/components/ActivityLayout';
 import { ProgressAppBar } from '@/components/AppBar/ProgressAppBar';
 import Hint from '@/components/Hint';
 import { StudentMachineContext } from '@/contexts/StudentMachineContext';
+import { useAlertDialog } from '@/hooks/useAlertDialog';
 import { usePostTimetable } from '@/hooks/usePostTimetable';
+import { PointCarryOverCalculator } from '@/pages/DesiredCreditActivity/components/PointCarryOverCalculator';
+import { PreferedGeneralElectivesChipGroup } from '@/pages/DesiredCreditActivity/components/PreferedGeneralElectivesChipGroup';
 import RollingNumber from '@/pages/DesiredCreditActivity/components/RollingNumber';
 import { useFlow } from '@/stackflow';
 
 type DesiredCreditParams = {
-  generalRequired: number;
-  generalRequiredCourses: string[];
-  majorElective: number;
-  majorElectiveCourses: string[];
-  majorRequired: number;
-  majorRequiredCourses: string[];
+  codes: number[];
+  generalRequiredCodes: number[];
+  majorElectiveCodes: number[];
+  majorRequiredCodes: number[];
+  selectedTotalPoints: number;
 };
 
-const getAvailableCredits = (currentCredit: number, baseCredit: number = 0): number[] => {
-  return Array.from({ length: MAX_CREDIT - currentCredit + 1 }, (_, i) => i + baseCredit);
-};
-
-type Classification = '교양선택' | '교양필수' | '전공선택' | '전공필수';
-
-const MAX_CREDIT = 22.5;
+const MAX_CREDIT = 22 + 3; // 최대 학점 22 + 이월학점 3
 
 const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ params }) => {
   const context = StudentMachineContext.useSelector((state) => state.context);
-  const chapelCredit = context.chapel ? 0.5 : 0;
+  const chapelPoints = context.chapel ? 0.5 : 0;
+  const totalPoints = params.selectedTotalPoints + chapelPoints;
 
-  const previousCredit =
-    params.majorRequired + params.majorElective + params.generalRequired + chapelCredit; // 과목 선택 페이지에서 선택한 전필 + 전선 + 교필 학점 + 채플 학점
-
-  const [desiredCredit, setDesiredCredit] = useState(previousCredit); // 희망 학점
-
-  const [availableMajorElective, setAvailableMajorElective] = useState(() =>
-    getAvailableCredits(previousCredit, params.majorElective),
-  ); // 수강 가능한 전공선택 학점
-  const [availableGeneralElective, setAvailableGeneralElective] = useState(() =>
-    getAvailableCredits(previousCredit),
-  ); // 수강 가능한 교양선택 학점
-
-  const [majorElective, setMajorElective] = useState(params.majorElective); // 전공선택 학점
   const [generalElective, setGeneralElective] = useState(0); // 교양선택 학점
-
-  const [showMajorElectiveDropdown, setShowMajorElectiveDropdown] = useState(false);
   const [showGeneralElectiveDropdown, setShowGeneralElectiveDropdown] = useState(false);
-
+  const [preferredGeneralElectives, setPreferredGeneralElectives] = useState<string[]>([]);
   const postTimetableMutation = usePostTimetable();
+  const openDialog = useAlertDialog();
+
+  const availableGeneralElective = range(MAX_CREDIT - totalPoints + 1);
+  const desiredCredit = totalPoints + generalElective;
 
   const { push } = useFlow();
 
-  const handleCreditSelect = ({
-    type,
-    selectedCredit,
-  }: {
-    selectedCredit: number;
-    type: Classification;
-  }) => {
-    if (type === '전공선택') {
-      const majorElectiveDiff = selectedCredit - majorElective;
+  const handleCreditSelect = (selectedCredit: number) => {
+    setGeneralElective(selectedCredit);
+    setShowGeneralElectiveDropdown(false);
+  };
 
-      setMajorElective(selectedCredit);
-      setDesiredCredit((prev) => prev + majorElectiveDiff);
-      setAvailableGeneralElective(
-        getAvailableCredits(desiredCredit + majorElectiveDiff - generalElective),
-      );
+  const handleMaxPointInfoClick = () => {
+    const contentType = context.grade === 1 ? '1학년' : '2학년_이상';
 
-      setShowMajorElectiveDropdown(false);
-    } else if (type === '교양선택') {
-      const generalElectiveDiff = selectedCredit - generalElective;
-      const majorElectiveDiff = majorElective - params.majorElective;
+    openDialog({
+      title: maxPointInfoDialogContent[contentType].title,
+      content: maxPointInfoDialogContent[contentType].content,
+      closeButton: true,
+      closeableWithOutside: true,
+    });
+  };
 
-      setGeneralElective(selectedCredit);
-      setDesiredCredit((prev) => prev + generalElectiveDiff);
-      setAvailableMajorElective(
-        getAvailableCredits(
-          desiredCredit + generalElectiveDiff - majorElectiveDiff,
-          params.majorElective,
-        ),
-      );
+  const handleGeneralElectiveInfoClick = () => {
+    const contentType = context.admissionYear >= 23 ? '23학번_이상' : '22학번_이하';
 
-      setShowGeneralElectiveDropdown(false);
-    }
+    openDialog({
+      title: '교양과목 이수 체계 안내',
+      content: generalElectiveInfoDialogContent[contentType],
+      closeButton: true,
+      closeableWithOutside: true,
+    });
   };
 
   const handleNextClick = () => {
@@ -97,20 +77,22 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
       department: context.department,
       grade: context.grade,
       isChapel: context.chapel,
-      majorRequiredCourses: params.majorRequiredCourses,
-      majorElectiveCourses: params.majorElectiveCourses,
-      generalRequiredCourses: params.generalRequiredCourses,
-      majorElectiveCredit: majorElective,
-      generalElectiveCredit: generalElective,
+      codes: params.codes,
+      generalRequiredCodes: params.generalRequiredCodes,
+      majorElectiveCodes: params.majorElectiveCodes,
+      majorRequiredCodes: params.majorRequiredCodes,
+      generalElectivePoint: generalElective,
+      preferredGeneralElectives,
     });
 
     // Mixpanel 이벤트 추적
     Mixpanel.trackDesiredCreditClick({
-      majorRequiredCourses: params.majorRequiredCourses,
-      majorElectiveCourses: params.majorElectiveCourses,
-      generalRequiredCourses: params.generalRequiredCourses,
-      majorElectiveCredit: majorElective,
-      generalElectiveCredit: generalElective,
+      codes: params.codes,
+      generalElectivePoint: generalElective,
+      majorElectiveCodes: params.majorElectiveCodes,
+      majorRequiredCodes: params.majorRequiredCodes,
+      generalRequiredCodes: params.generalRequiredCodes,
+      preferredGeneralElectives,
     });
 
     push('TimetableSelectionActivity', {});
@@ -118,7 +100,7 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
 
   return (
     <ActivityLayout>
-      <ProgressAppBar progress={100} />
+      <ProgressAppBar progress={75} />
       <div className="mt-6 flex flex-1 flex-col items-center">
         <h2 className="text-center text-[28px] font-semibold">
           사용자님의 이번학기 <br />
@@ -131,90 +113,19 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
           학점이군요!
         </h2>
         <span className="mt-1 font-light">희망 학점에 맞추어 선택과목을 추천해드릴게요.</span>
-        <div className="mt-6 grid grid-cols-2 gap-x-2.5 gap-y-6 px-12">
+        <div className="mt-10 grid grid-cols-2 gap-x-2.5 gap-y-6">
           <div>
-            <label className="mb-1.5 block text-sm">전공필수 학점</label>
+            <label className="mb-1.5 block text-sm">현재 선택한 학점</label>
             <input
               className="bg-bg-layerDefault text-brandPrimary w-full rounded-xl px-4 py-3 text-lg font-semibold"
               disabled
               type="number"
-              value={params.majorRequired}
+              value={totalPoints}
             />
           </div>
 
           <div>
-            <label className="mb-1.5 block text-sm">전공선택 학점</label>
-            <Popover.Root
-              onOpenChange={setShowMajorElectiveDropdown}
-              open={showMajorElectiveDropdown}
-            >
-              <Popover.Trigger asChild>
-                <button
-                  className={`bg-bg-layerDefault focus-visible:outline-borderRing flex w-full items-center justify-between rounded-xl px-4 py-3 text-lg font-semibold ${majorElective === params.majorElective ? 'text-neutralPlaceholder' : 'text-brandPrimary'}`}
-                  type="button"
-                >
-                  {majorElective}
-                  <ChevronDown className="text-neutral size-4" />
-                </button>
-              </Popover.Trigger>
-
-              <AnimatePresence>
-                {showMajorElectiveDropdown && (
-                  <Popover.Content asChild forceMount sideOffset={5}>
-                    <motion.ul
-                      animate={{
-                        opacity: 1,
-                        y: 0,
-                      }}
-                      className="bg-bg-layerDefault z-10 max-h-44 w-[var(--radix-popover-trigger-width)] overflow-y-auto rounded-xl border border-gray-200 shadow-sm"
-                      exit={{
-                        opacity: 0,
-                        y: -10,
-                      }}
-                      initial={{ opacity: 0, y: -10 }}
-                      transition={{
-                        duration: 0.2,
-                      }}
-                    >
-                      {availableMajorElective.map((availableCredit) => (
-                        <li key={availableCredit}>
-                          <button
-                            className="text-neutralSubtle focus-visible:outline-borderRing flex w-full items-center justify-between rounded-xl px-4 py-2 text-lg font-semibold hover:bg-gray-100 focus-visible:-outline-offset-1"
-                            onClick={() =>
-                              handleCreditSelect({
-                                type: '전공선택',
-                                selectedCredit: availableCredit,
-                              })
-                            }
-                            type="button"
-                          >
-                            {availableCredit}
-                            {availableCredit === majorElective && (
-                              <Check className="size-4 text-green-500" />
-                            )}
-                          </button>
-                        </li>
-                      ))}
-                    </motion.ul>
-                  </Popover.Content>
-                )}
-              </AnimatePresence>
-            </Popover.Root>
-          </div>
-
-          <div>
-            <label className="mb-1.5 block text-sm">교양필수 학점</label>
-            <input
-              className="bg-bg-layerDefault text-brandPrimary w-full rounded-xl px-4 py-3 text-lg font-semibold"
-              disabled
-              type="number"
-              value={params.generalRequired}
-            />
-          </div>
-
-          <div>
-            <label className="mb-1.5 block text-sm">교양선택 학점</label>
-
+            <label className="mb-1.5 block text-sm">추천받을 교양 학점</label>
             <Popover.Root
               onOpenChange={setShowGeneralElectiveDropdown}
               open={showGeneralElectiveDropdown}
@@ -251,12 +162,7 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
                         <li key={availableCredit}>
                           <button
                             className="text-neutralSubtle focus-visible:outline-borderRing flex w-full items-center justify-between rounded-xl px-4 py-2 text-lg font-semibold hover:bg-gray-100 focus-visible:-outline-offset-1"
-                            onClick={() =>
-                              handleCreditSelect({
-                                type: '교양선택',
-                                selectedCredit: availableCredit,
-                              })
-                            }
+                            onClick={() => handleCreditSelect(availableCredit)}
                             type="button"
                           >
                             {availableCredit}
@@ -273,15 +179,32 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
             </Popover.Root>
           </div>
         </div>
+        <button
+          className="text-brandPrimary mt-2 cursor-pointer self-start text-xs underline"
+          onClick={handleMaxPointInfoClick}
+        >
+          수강 신청 최대 학점 안내
+        </button>
 
-        <Hint className="mt-2 self-start px-12">
-          <Hint.Icon />
-          <Hint.Text>이수 가능한 최대 학점은 22학점이에요.</Hint.Text>
-        </Hint>
+        <div className="mt-5 flex flex-col gap-2.5 text-sm">
+          <div>추천받을 교양과목 분야</div>
+          <PreferedGeneralElectivesChipGroup
+            onChange={setPreferredGeneralElectives}
+            values={preferredGeneralElectives}
+          />
+          <Hint className="text-xs">분야를 선택하지 않으면 임의로 추천해드려요.</Hint>
+          <button
+            className="text-brandPrimary cursor-pointer self-start text-xs underline"
+            onClick={handleGeneralElectiveInfoClick}
+          >
+            교양과목 이수 체계 안내(
+            {context.admissionYear >= 23 ? '2023학년도 이후' : '2022학년도 이전'} 입학자)
+          </button>
+        </div>
 
         <motion.button
           animate={{ opacity: 1, y: 0 }}
-          className="bg-brandPrimary mt-auto w-50 rounded-2xl py-3.5 font-semibold text-white"
+          className="bg-brandPrimary mt-auto w-full rounded-2xl py-3.5 font-semibold text-white"
           initial={{
             opacity: 0,
             y: 20,
@@ -298,6 +221,153 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
       </div>
     </ActivityLayout>
   );
+};
+
+const generalElectiveInfoDialogContent = {
+  '23학번_이상': (
+    <div className="font-medium">
+      <div>
+        교양필수 19학점 + <span className="text-brandSecondary">교양선택 9학점</span> 필수 이수
+      </div>
+      <br />
+      <div>[교양선택]</div>
+      <div>
+        아래 영역 중 <span className="text-brandSecondary">3개 영역 이상 이수</span>
+      </div>
+      <ul>
+        <li className="pl-4">
+          <span>a. 인간・언어</span>
+        </li>
+        <li className="pl-4">
+          <span>b. 문화・예술</span>
+        </li>
+        <li className="pl-4">
+          <span>c. 사회・정치・경제</span>
+        </li>
+        <li className="pl-4">
+          <span>d. Bridge 교과(수리・물리・화학・생물)</span>
+        </li>
+        <li className="pl-4">e. 자기개발・진로탐색</li>
+      </ul>
+    </div>
+  ),
+  '22학번_이하': (
+    <div className="font-medium">
+      <div>
+        교양필수 16학점 + <span className="text-brandSecondary">교양선택 12학점</span> 필수 이수
+      </div>
+      <br />
+      <div>[교양선택]</div>
+      <div>
+        아래 영역 중 1개 영역 선택하여 <span className="text-brandSecondary">1과목 필수</span>
+      </div>
+      <ul>
+        <li className="pl-4">
+          <span>a. 인성과 리더십</span>
+        </li>
+        <li className="pl-4">
+          <span>b. 자기계발과 진로탐색</span>
+        </li>
+      </ul>
+      <br />
+      <div>
+        아래 영역 중 1개 영역 선택하여 <span className="text-brandSecondary">1과목 필수</span>
+      </div>
+      <ul>
+        <li className="pl-4">
+          <span>a. 한국어의사소통</span>
+        </li>
+        <li className="pl-4">
+          <span>b. 국제어문</span>
+        </li>
+      </ul>
+      <br />
+      <div>
+        아래 영역 중 1개 영역 선택하여 <span className="text-brandSecondary">2과목 필수</span>
+      </div>
+      <ul>
+        <li className="pl-4">
+          <span>a. 문학・예술</span>
+        </li>
+        <li className="pl-4">
+          <span>b. 역사・철학・종교</span>
+        </li>
+        <li className="pl-4">
+          <span>c. 정치・경제・경영</span>
+        </li>
+        <li className="pl-4">
+          <span>d. 사회・문화・심리</span>
+        </li>
+        <li className="pl-4">
+          <span>e. 자연과학・공학・기술</span>
+        </li>
+      </ul>
+    </div>
+  ),
+};
+
+const maxPointInfoDialogContent = {
+  '1학년': {
+    title: '1학년 수강신청 최대 학점 안내',
+    content: (
+      <div className="font-medium">
+        <div>
+          수강신청 최대 학점: <span className="text-brandSecondary">22학점</span>
+        </div>
+        <div>
+          단, 1・2학기 <span className="text-brandSecondary">총 38학점 이내</span>
+        </div>
+        <br />
+        <div>예) 1-1에 22학점을 수강신청 했다면, 1-2에는 최대 16학점 신청 가능</div>
+        <br />
+        <div>
+          1학년은 <span className="text-brandSecondary">이월학점제 해당 없음</span>
+        </div>
+        <br />
+        <div>*수강신청 최대 학점을 채워야 하는 것은 아니며,</div>
+        <div>
+          <span className="text-brandSecondary">수강신청 최소 학점은 없음</span>
+        </div>
+      </div>
+    ),
+  },
+  '2학년_이상': {
+    title: '2학년 이상 수강신청 최대 학점 안내',
+    content: (
+      <div className="font-medium">
+        <div>
+          수강신청 최대 학점: <span className="text-brandSecondary">19학점</span>
+        </div>
+        <div>
+          ① <span className="text-brandSecondary">직전학기 평균평점이 4.0 이상인 경우, 22학점</span>
+        </div>
+        <div>② 직전학기 평균평점이 1.5 미만인 경우, 15학점</div>
+        <br />
+        <div>이월학점:</div>
+        <ul>
+          <li className="text-brandSecondary">
+            <span className="px-2">•</span>
+            <span>19학점-(직전학기 수강신청 학점)</span>
+          </li>
+          <li className="text-brandSecondary">
+            <span className="px-2">•</span>
+            <span>3학점</span>
+          </li>
+        </ul>
+        <div>
+          <span className="text-brandSecondary">중 작은 값</span> (최대 3학점 이월 가능, -학점은
+          없음)
+        </div>
+        <br />
+        <PointCarryOverCalculator />
+        <br />
+        <div>*수강신청 최대 학점을 채워야 하는 것은 아니며,</div>
+        <div>
+          <span className="text-brandSecondary">수강신청 최소 학점은 없음</span>
+        </div>
+      </div>
+    ),
+  },
 };
 
 export default DesiredCreditActivity;
