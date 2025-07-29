@@ -1,42 +1,36 @@
 import { useActivity, useStep } from '@stackflow/react';
+import clsx from 'clsx';
 import { ChevronLeft } from 'lucide-react';
 
-import ProgressBar from '@/components/ProgressBar';
 import { activities, useFlow, useStepFlow } from '@/stackflow';
 
-interface AppBarProps {
-  progress: number; // 0 to 100
+interface BaseAppBarProps {
+  className?: string;
 }
 
-const AppBar = ({ progress }: AppBarProps) => {
+export const BaseAppBar = ({ children, className }: React.PropsWithChildren<BaseAppBarProps>) => {
   const activity = useActivity();
   const step = useStep();
   const { pop } = useFlow();
   const { stepPop } = useStepFlow(activity.name as keyof typeof activities);
+
+  const hideBackButton = activity.isRoot && !step;
 
   const handleClickBackButton = () => {
     if (step) {
       stepPop();
       return;
     }
-
     pop();
   };
 
   return (
-    <div className="flex items-center gap-4 px-6">
-      <button
-        className={`flex size-6 ${activity.isRoot && !step ? 'invisible' : ''}`}
-        onClick={handleClickBackButton}
-      >
+    <div className={clsx('grid w-full grid-cols-[24px_1fr_24px] items-center gap-4', className)}>
+      <button className={clsx(hideBackButton ? 'invisible' : '')} onClick={handleClickBackButton}>
         <ChevronLeft />
       </button>
-      <div className="flex-1">
-        <ProgressBar width={progress} />
-      </div>
-      <div aria-hidden="true" className="size-6" />
+      <div className="flex">{children}</div>
+      <div aria-hidden="true" />
     </div>
   );
 };
-
-export default AppBar;

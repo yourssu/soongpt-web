@@ -46,6 +46,12 @@ export const Mixpanel = {
     });
   },
 
+  trackCourseSelectionResultClick: (courses: string[]) => {
+    mixpanel.track('Course Selection Result Click', {
+      courses,
+    });
+  },
+
   trackDesiredCreditClick: (credit: CoursePreference) => {
     mixpanel.track('Desired Credit Click', credit);
   },

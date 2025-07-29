@@ -1,18 +1,26 @@
-import { AppScreen } from '@stackflow/plugin-basic-ui';
 import { ActivityComponentType } from '@stackflow/react';
-import { AnimatePresence } from 'motion/react';
-import { Suspense } from 'react';
+import { Suspense, useState } from 'react';
+import { SwitchCase } from 'react-simplikit';
 
-import AppBar from '@/components/AppBar';
+import { Mixpanel } from '@/bootstrap/mixpanel';
+import { ActivityLayout } from '@/components/ActivityLayout';
+import { ProgressAppBar } from '@/components/AppBar/ProgressAppBar';
 import SoongptErrorBoundary from '@/components/SoongptErrorBoundary';
 import { CourseTypeContext } from '@/contexts/CourseTypeContext';
-import CourseSelection from '@/pages/CourseSelectionActivity/components/CourseSelection';
+import { useFilterCoursesByCategory } from '@/hooks/useFilterCoursesByCategory';
+import { useTotalPointsByCategory } from '@/hooks/useFilterCreditByCategory';
 import CourseSelectionFallback from '@/pages/CourseSelectionActivity/components/CourseSelectionFallback';
-import { CourseType } from '@/types/course';
-import { courseSelectionInfo } from '@/types/courseSelectionInfo';
+import { CourseSelectionResultStep } from '@/pages/CourseSelectionActivity/components/CourseSelectionSteps/CourseSelectionResultStep';
+import { GeneralRequiredSelectionStep } from '@/pages/CourseSelectionActivity/components/CourseSelectionSteps/GeneralRequiredSelectionStep';
+import { MajorElectiveSelectionStep } from '@/pages/CourseSelectionActivity/components/CourseSelectionSteps/MajorElectiveSelectionStep';
+import { MajorRequiredSelectionStep } from '@/pages/CourseSelectionActivity/components/CourseSelectionSteps/MajorRequiredSelectionStep';
+import { SelectedCoursesContext } from '@/pages/CourseSelectionActivity/context';
+import { Course } from '@/schemas/courseSchema';
+import { useFlow, useStepFlow } from '@/stackflow';
+import { CourseSelectionStepType } from '@/types/course';
 
 interface CourseSelectionActivityParams {
-  type?: CourseType;
+  type?: CourseSelectionStepType;
 }
 
 const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityParams> = ({
@@ -20,21 +28,99 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
 }) => {
   const type = params.type ?? 'MAJOR_REQUIRED';
 
+  const [selectedCourses, setSelectedCourses] = useState<Course[]>([]);
+
+  const { push } = useFlow();
+  const { stepPush } = useStepFlow('CourseSelectionActivity');
+
+  const filteredCoursesByCategory = useFilterCoursesByCategory(selectedCourses);
+  const totalPointsByCategory = useTotalPointsByCategory(selectedCourses);
+
+  // Todo: 전필은 로딩시 무조건 선택되어야 함
+
   return (
-    <AppScreen>
-      <AnimatePresence mode="wait">
-        <CourseTypeContext.Provider value={type}>
-          <div className="flex max-h-dvh min-h-dvh flex-col gap-6 py-6">
-            <AppBar progress={courseSelectionInfo[type].progress} />
-            <SoongptErrorBoundary FallbackComponent={<CourseSelectionFallback type={'error'} />}>
-              <Suspense fallback={<CourseSelectionFallback type={'pending'} />}>
-                <CourseSelection />
+    <CourseTypeContext.Provider value={type}>
+      <SelectedCoursesContext.Provider
+        value={{ selectedCourses, selectedCredit: totalPointsByCategory.total, setSelectedCourses }}
+      >
+        <ActivityLayout>
+          <ProgressAppBar progress={50} />
+          <div className="mt-6 flex w-full flex-1">
+            <SoongptErrorBoundary FallbackComponent={<CourseSelectionFallback type="error" />}>
+              <Suspense fallback={<CourseSelectionFallback type="pending" />}>
+                <SwitchCase
+                  caseBy={{
+                    MAJOR_REQUIRED: () => (
+                      <MajorRequiredSelectionStep
+                        onNextClick={() => {
+                          stepPush({
+                            type: 'GENERAL_REQUIRED',
+                          });
+                          Mixpanel.trackCourseSelectionClick(
+                            'MAJOR_REQUIRED',
+                            filteredCoursesByCategory.MAJOR_REQUIRED.map((course) => course.name),
+                          );
+                        }}
+                      />
+                    ),
+                    GENERAL_REQUIRED: () => (
+                      <GeneralRequiredSelectionStep
+                        onNextClick={() => {
+                          stepPush({
+                            type: 'MAJOR_ELECTIVE',
+                          });
+                          Mixpanel.trackCourseSelectionClick(
+                            'GENERAL_REQUIRED',
+                            filteredCoursesByCategory.GENERAL_REQUIRED.map((course) => course.name),
+                          );
+                        }}
+                      />
+                    ),
+                    MAJOR_ELECTIVE: () => (
+                      <MajorElectiveSelectionStep
+                        onNextClick={() => {
+                          stepPush({
+                            type: 'COURSE_SELECTION_RESULT',
+                          });
+                          Mixpanel.trackCourseSelectionClick(
+                            'MAJOR_ELECTIVE',
+                            filteredCoursesByCategory.MAJOR_ELECTIVE.map((course) => course.name),
+                          );
+                        }}
+                      />
+                    ),
+                    // Todo: 검색뷰 및 액티비티 푸시
+                    COURSE_SELECTION_RESULT: () => (
+                      <CourseSelectionResultStep
+                        onNextClick={() => {
+                          push('DesiredCreditActivity', {
+                            generalRequiredCodes: filteredCoursesByCategory.GENERAL_REQUIRED.map(
+                              ({ code }) => code,
+                            ),
+                            majorElectiveCodes: filteredCoursesByCategory.MAJOR_ELECTIVE.map(
+                              ({ code }) => code,
+                            ),
+                            majorRequiredCodes: filteredCoursesByCategory.MAJOR_REQUIRED.map(
+                              ({ code }) => code,
+                            ),
+                            selectedTotalPoints: totalPointsByCategory.total,
+                            codes: selectedCourses.map((course) => course.code),
+                          });
+                          Mixpanel.trackCourseSelectionResultClick(
+                            selectedCourses.map((course) => course.name),
+                          );
+                        }}
+                      />
+                    ),
+                  }}
+                  value={type}
+                />
               </Suspense>
             </SoongptErrorBoundary>
           </div>
-        </CourseTypeContext.Provider>
-      </AnimatePresence>
-    </AppScreen>
+        </ActivityLayout>
+      </SelectedCoursesContext.Provider>
+    </CourseTypeContext.Provider>
   );
 };
 

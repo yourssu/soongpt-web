@@ -30,40 +30,39 @@ const TIME_TABLE_TAG: Record<TimetableTag, string> = {
 };
 
 export const getTotalCredit = (courses: CourseWithoutTarget[]): number => {
-  return courses.reduce((acc, course) => acc + course.credit, 0);
+  return courses.reduce((acc, course) => acc + course.point, 0);
 };
 
 export const getMajorCredit = (courses: CourseWithoutTarget[]): number => {
   return courses.reduce((acc, course) => {
-    if (course.classification === 'MAJOR_REQUIRED' || course.classification === 'MAJOR_ELECTIVE') {
-      return acc + course.credit;
+    if (course.category === 'MAJOR_REQUIRED' || course.category === 'MAJOR_ELECTIVE') {
+      return acc + course.point;
     }
-
     return acc;
   }, 0);
 };
 
-const getDays = (courses: CourseWithoutTarget[]): string[] => {
-  const hasWeekend = courses.some((course) => course.courseTime.some((time) => time.week === '토'));
+// const getDays = (courses: CourseWithoutTarget[]): string[] => {
+//   const hasWeekend = courses.some((course) => course.courseTime.some((time) => time.week === '토'));
 
-  const baseDays = ['월', '화', '수', '목', '금'];
-  return hasWeekend ? [...baseDays, '토'] : baseDays;
-};
+//   const baseDays = ['월', '화', '수', '목', '금'];
+//   return hasWeekend ? [...baseDays, '토'] : baseDays;
+// };
 
-const getTimeRange = (courses: CourseWithoutTarget[]): number[] => {
-  const earliestHour = 9;
-  let latestHour = 0;
+// const getTimeRange = (courses: CourseWithoutTarget[]): number[] => {
+//   const earliestHour = 9;
+//   let latestHour = 0;
 
-  courses.forEach((course) => {
-    course.courseTime.forEach((time) => {
-      const endHour = Number(time.end.split(':')[0]);
+//   courses.forEach((course) => {
+//     course.courseTime.forEach((time) => {
+//       const endHour = Number(time.end.split(':')[0]);
 
-      latestHour = Math.max(latestHour, endHour);
-    });
-  });
+//       latestHour = Math.max(latestHour, endHour);
+//     });
+//   });
 
-  return Array.from({ length: latestHour - earliestHour + 1 }, (_, i) => i + earliestHour);
-};
+//   return Array.from({ length: latestHour - earliestHour + 1 }, (_, i) => i + earliestHour);
+// };
 
 export const getGridTemplateCols = (length: number): string => {
   return `1fr repeat(${length}, 3fr)`;
@@ -169,9 +168,12 @@ const TimetableHeader = ({ as: Header = DefaultHeader, ...props }: TimetableHead
 const Timetable = ({ children, timetable, className, ...props }: TimetableProps) => {
   const courses = timetable.courses;
 
-  const totalCredit = getTotalCredit(courses);
-  const days = getDays(courses);
-  const timeRange = getTimeRange(courses);
+  // const totalCredit = getTotalCredit(courses);
+  // const days = getDays(courses);
+  // const timeRange = getTimeRange(courses);
+  const totalCredit = 22;
+  const days = ['월', '화', '수', '목', '금'];
+  const timeRange = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24];
 
   return (
     <TimetableContext.Provider value={{ totalCredit, tag: timetable.tag }}>
@@ -216,19 +218,19 @@ const Timetable = ({ children, timetable, className, ...props }: TimetableProps)
                   key={`${timetable.timetableId}-${tableTime}-${tableDay}`}
                 >
                   {courses.map((course) => {
-                    const courseTime = course.courseTime.find(
+                    const courseTime = course.courseTimes.find(
                       (time) =>
                         time.week === tableDay && Number(time.start.split(':')[0]) === tableTime,
                     );
                     if (courseTime) {
                       const { top, height } = getCoursePosition(courseTime);
                       const bgColor =
-                        TIME_TABLE_COLOR[course.courseName.length % TIME_TABLE_COLOR.length];
+                        TIME_TABLE_COLOR[course.name.length % TIME_TABLE_COLOR.length];
 
                       return (
                         <div
                           className="absolute w-full p-0.5 text-xs font-bold text-white"
-                          key={`${timetable.timetableId}-${course.courseName}-${courseTime.start}`}
+                          key={`${timetable.timetableId}-${course.name}-${courseTime.start}`}
                           style={{
                             backgroundColor: bgColor,
                             borderColor: bgColor,
@@ -240,7 +242,7 @@ const Timetable = ({ children, timetable, className, ...props }: TimetableProps)
                             overflow: 'hidden',
                           }}
                         >
-                          {course.courseName}
+                          {course.name}
                         </div>
                       );
                     }

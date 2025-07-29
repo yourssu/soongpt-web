@@ -1,12 +1,8 @@
 import { z } from 'zod';
 
-export const courseClassificationSchema = z.enum([
-  'MAJOR_REQUIRED',
-  'MAJOR_ELECTIVE',
-  'GENERAL_REQUIRED',
-  'GENERAL_ELECTIVE',
-  'CHAPEL',
-]);
+import { CourseClassification } from '@/types/course';
+
+export const courseClassificationSchema = z.enum(CourseClassification);
 
 export const courseTimeSchema = z.object({
   week: z.string(),
@@ -16,12 +12,22 @@ export const courseTimeSchema = z.object({
 });
 
 export const courseSchema = z.object({
-  courseName: z.string(),
-  professorName: z.string(),
-  classification: courseClassificationSchema,
-  credit: z.number(),
-  target: z.array(z.string()),
-  courseTime: z.array(courseTimeSchema),
+  category: z.enum(CourseClassification),
+  subCategory: z.string().nullable(),
+  field: z.string().nullable(),
+  code: z.number(),
+  name: z.string(),
+  professor: z
+    .string()
+    .nullable()
+    .transform((professor) => professor?.split('\n') ?? []), // <교수님>\n<교수님>...
+  department: z.string(),
+  division: z.string().nullable(),
+  time: z.string().transform((time) => Number(time)),
+  point: z.string().transform((point) => Number(point)),
+  personeel: z.number(),
+  scheduleRoom: z.string(),
+  target: z.string(),
 });
 
 export const courseResponseSchema = z.object({
@@ -29,7 +35,18 @@ export const courseResponseSchema = z.object({
   result: z.array(courseSchema),
 });
 
+// Todo: 페이지네이션 스키마 공통화
+export const paginatedCourseResponseSchema = z.object({
+  timestamp: z.string(),
+  result: z.object({
+    content: z.array(courseSchema),
+    totalElements: z.number(),
+    totalPages: z.number(),
+    size: z.number(),
+    number: z.number(),
+  }),
+});
+
 export type Course = z.infer<typeof courseSchema>;
-export type CourseClassification = z.infer<typeof courseClassificationSchema>;
 export type CourseWithoutTarget = Omit<Course, 'target'>;
 export type CourseTime = z.infer<typeof courseTimeSchema>;

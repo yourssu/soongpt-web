@@ -14,7 +14,7 @@ const App = () => {
 
   return (
     <main className="font-pretendard">
-      <div className="relative mx-auto min-h-dvh w-full max-w-[500px]">
+      <div className="relative mx-auto min-h-dvh w-full max-w-[500px]" data-app-container>
         <Stack />
       </div>
     </main>
