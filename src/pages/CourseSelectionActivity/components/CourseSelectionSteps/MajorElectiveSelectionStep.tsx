@@ -1,4 +1,4 @@
-import { useContext, useMemo, useState } from 'react';
+import { Suspense, useContext, useMemo, useState } from 'react';
 import { SwitchCase, useInputState } from 'react-simplikit';
 
 import { IcMonoSearch } from '@/components/Icons/IcMonoSearch';
@@ -21,16 +21,10 @@ import { Grade } from '@/schemas/studentSchema';
 
 type MajorElectiveSelectionStepProps = BaseStepProps;
 
-export const MajorElectiveSelectionStep = ({ onNextClick }: MajorElectiveSelectionStepProps) => {
-  const state = StudentMachineContext.useSelector((state) => state);
-  const [selectedGrades, setSelectedGrades] = useState<Grade[]>([state.context.grade]);
+const MajorElectiveContent = ({ selectedGrades }: { selectedGrades: Grade[] }) => {
   const [searchKeyword, setSearchKeyword] = useInputState('');
   const delayedSearchKeyword = useDelayedValue(searchKeyword);
 
-  /* 
-    Todo: Watafall 처리, 레이아웃 바디 Suspense 경계 추가
-  */
-  const courses = useSuspenseGetCourses('MAJOR_ELECTIVE');
   const filteredMajorElectivesByGrade = useSuspenseGetMajorElectives(selectedGrades);
   const combinedCourses = useCombinedCourses(filteredMajorElectivesByGrade);
   const searchedCombinedCourses = useMemo(() => {
@@ -40,8 +34,41 @@ export const MajorElectiveSelectionStep = ({ onNextClick }: MajorElectiveSelecti
     return combinedCourses.filter((course) => course.name.includes(delayedSearchKeyword));
   }, [combinedCourses, delayedSearchKeyword]);
 
-  const courseState = useGetArrayState(courses);
   const combinedCoursesState = useGetArrayState(combinedCourses);
+
+  return (
+    <>
+      <div className="sticky top-0 flex flex-col gap-3 bg-white pb-3">
+        <div className="bg-bg-layerDefault sticky top-0 flex w-full items-center rounded-xl">
+          <div className="py-2 pl-3">
+            <IcMonoSearch className="text-brandPrimary" size={18} />
+          </div>
+          <input
+            className="grow px-3 py-2 outline-0"
+            onChange={setSearchKeyword}
+            placeholder={`${selectedGrades[0] >= 4 ? '4학년 이상' : `${selectedGrades.join(',')}학년`} 전공선택과목`}
+            type="text"
+            value={searchKeyword}
+          />
+        </div>
+      </div>
+      <SwitchCase
+        caseBy={{
+          FILLED: () => <CourseSelectionList courses={searchedCombinedCourses} />,
+          EMPTY: () => <CourseBySelectedGradesEmpty />,
+        }}
+        value={combinedCoursesState}
+      />
+    </>
+  );
+};
+
+export const MajorElectiveSelectionStep = ({ onNextClick }: MajorElectiveSelectionStepProps) => {
+  const state = StudentMachineContext.useSelector((state) => state);
+  const [selectedGrades, setSelectedGrades] = useState<Grade[]>([state.context.grade]);
+
+  const courses = useSuspenseGetCourses('MAJOR_ELECTIVE');
+  const courseState = useGetArrayState(courses);
 
   const { selectedCredit } = useContext(SelectedCoursesContext);
   const { description, image, primaryButtonText, title } = contentMap[courseState];
@@ -64,27 +91,9 @@ export const MajorElectiveSelectionStep = ({ onNextClick }: MajorElectiveSelecti
               />
             ))}
           </div>
-          <div className="sticky top-0 flex flex-col gap-3 bg-white pb-3">
-            <div className="bg-bg-layerDefault sticky top-0 flex w-full items-center rounded-xl">
-              <div className="py-2 pl-3">
-                <IcMonoSearch className="text-brandPrimary" size={18} />
-              </div>
-              <input
-                className="grow px-3 py-2 outline-0"
-                onChange={setSearchKeyword}
-                placeholder={`${selectedGrades[0] >= 4 ? '4학년 이상' : `${selectedGrades.join(',')}학년`} 전공선택과목`}
-                type="text"
-                value={searchKeyword}
-              />
-            </div>
-          </div>
-          <SwitchCase
-            caseBy={{
-              FILLED: () => <CourseSelectionList courses={searchedCombinedCourses} />,
-              EMPTY: () => <CourseBySelectedGradesEmpty />,
-            }}
-            value={combinedCoursesState}
-          />
+          <Suspense fallback={null}>
+            <MajorElectiveContent selectedGrades={selectedGrades} />
+          </Suspense>
         </CourseSelectionLayout.Body>
       )}
 
