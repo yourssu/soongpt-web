@@ -1,11 +1,11 @@
-import { uniqBy } from 'es-toolkit';
 import { motion } from 'motion/react';
-import { useContext, useMemo } from 'react';
+import { useContext } from 'react';
 
 import { SelectableCourseItem } from '@/components/CourseItem/SelectableCourseItem';
+import { useCombinedCourses } from '@/hooks/useCombinedCourses';
 import { SelectedCoursesContext } from '@/pages/CourseSelectionActivity/context';
 import { Course } from '@/schemas/courseSchema';
-import { extractComparableCourseCode, isSameCourse } from '@/utils/course';
+import { isSameCourse } from '@/utils/course';
 
 interface CourseSelectionListProps {
   courses: Course[];
@@ -13,8 +13,7 @@ interface CourseSelectionListProps {
 
 export const CourseSelectionList = ({ courses }: CourseSelectionListProps) => {
   const { selectedCourses, setSelectedCourses } = useContext(SelectedCoursesContext);
-
-  const uniqueCourses = useMemo(() => uniqBy(courses, extractComparableCourseCode), [courses]);
+  const uniqueCourses = useCombinedCourses(courses);
 
   return (
     <motion.div
