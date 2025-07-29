@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { motion, Variants } from 'motion/react';
 
 interface CourseSelectionHeaderProps {
@@ -47,9 +48,17 @@ export const CourseSelectionImageBody = ({ image }: CourseSelectionImageContentP
   return <img alt="L-Like" className="order-2 my-auto" src={image} width={170} />;
 };
 
-export const CourseSelectionBody = ({ children }: React.PropsWithChildren<unknown>) => {
+export const CourseSelectionBody = ({
+  children,
+  className,
+}: React.PropsWithChildren<{ className?: string }>) => {
   return (
-    <div className="order-2 mt-6 flex w-full flex-[1_1_0] flex-col gap-3 overflow-auto">
+    <div
+      className={clsx(
+        'order-2 mt-6 flex w-full flex-[1_1_0] flex-col gap-3 overflow-auto',
+        className,
+      )}
+    >
       {children}
     </div>
   );

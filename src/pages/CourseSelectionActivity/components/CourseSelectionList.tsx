@@ -19,7 +19,6 @@ export const CourseSelectionList = ({ courses }: CourseSelectionListProps) => {
   return (
     <motion.div
       animate={{ y: 0, opacity: 1 }}
-      className="overflow-auto"
       initial={{ y: 20, opacity: 0 }}
       transition={{ duration: 0.4, ease: 'easeOut' }}
     >

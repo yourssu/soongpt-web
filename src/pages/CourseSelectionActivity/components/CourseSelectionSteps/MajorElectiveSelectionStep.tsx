@@ -1,8 +1,10 @@
-import { useContext, useState } from 'react';
-import { SwitchCase } from 'react-simplikit';
+import { useContext, useMemo, useState } from 'react';
+import { SwitchCase, useInputState } from 'react-simplikit';
 
+import { IcMonoSearch } from '@/components/Icons/IcMonoSearch';
 import { StudentMachineContext } from '@/contexts/StudentMachineContext';
 import { useCombinedCourses } from '@/hooks/useCombinedCourses';
+import { useDelayedValue } from '@/hooks/useDelayedValue';
 import { ArrayState, useGetArrayState } from '@/hooks/useGetArrayState';
 import { CourseSelectionLayout } from '@/pages/CourseSelectionActivity/components/CourseSelectionLayout';
 import { CourseSelectionList } from '@/pages/CourseSelectionActivity/components/CourseSelectionList';
@@ -22,13 +24,21 @@ type MajorElectiveSelectionStepProps = BaseStepProps;
 export const MajorElectiveSelectionStep = ({ onNextClick }: MajorElectiveSelectionStepProps) => {
   const state = StudentMachineContext.useSelector((state) => state);
   const [selectedGrades, setSelectedGrades] = useState<Grade[]>([state.context.grade]);
+  const [searchKeyword, setSearchKeyword] = useInputState('');
+  const delayedSearchKeyword = useDelayedValue(searchKeyword);
 
   /* 
-    Todo: Watafall 처리 
+    Todo: Watafall 처리, 레이아웃 바디 Suspense 경계 추가
   */
   const courses = useSuspenseGetCourses('MAJOR_ELECTIVE');
   const filteredMajorElectivesByGrade = useSuspenseGetMajorElectives(selectedGrades);
   const combinedCourses = useCombinedCourses(filteredMajorElectivesByGrade);
+  const searchedCombinedCourses = useMemo(() => {
+    if (delayedSearchKeyword === '') {
+      return combinedCourses;
+    }
+    return combinedCourses.filter((course) => course.name.includes(delayedSearchKeyword));
+  }, [combinedCourses, delayedSearchKeyword]);
 
   const courseState = useGetArrayState(courses);
   const combinedCoursesState = useGetArrayState(combinedCourses);
@@ -43,8 +53,8 @@ export const MajorElectiveSelectionStep = ({ onNextClick }: MajorElectiveSelecti
       {image ? (
         <CourseSelectionLayout.ImageBody image={image} />
       ) : (
-        <CourseSelectionLayout.Body>
-          <div className="flex gap-1.5">
+        <CourseSelectionLayout.Body className="!gap-0">
+          <div className="flex gap-1.5 pb-3">
             {selectableGrades.map((grades) => (
               <GradeChip
                 grades={grades}
@@ -54,9 +64,23 @@ export const MajorElectiveSelectionStep = ({ onNextClick }: MajorElectiveSelecti
               />
             ))}
           </div>
+          <div className="sticky top-0 flex flex-col gap-3 bg-white pb-3">
+            <div className="bg-bg-layerDefault sticky top-0 flex w-full items-center rounded-xl">
+              <div className="py-2 pl-3">
+                <IcMonoSearch className="text-brandPrimary" size={18} />
+              </div>
+              <input
+                className="grow px-3 py-2 outline-0"
+                onChange={setSearchKeyword}
+                placeholder={`${selectedGrades[0] >= 4 ? '4학년 이상' : `${selectedGrades.join(',')}학년`} 전공선택과목`}
+                type="text"
+                value={searchKeyword}
+              />
+            </div>
+          </div>
           <SwitchCase
             caseBy={{
-              FILLED: () => <CourseSelectionList courses={combinedCourses} />,
+              FILLED: () => <CourseSelectionList courses={searchedCombinedCourses} />,
               EMPTY: () => <CourseBySelectedGradesEmpty />,
             }}
             value={combinedCoursesState}

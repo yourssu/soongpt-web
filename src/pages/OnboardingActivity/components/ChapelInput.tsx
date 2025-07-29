@@ -11,13 +11,13 @@ interface ChapelInputProps {
   onNext: (chapel: boolean) => void;
 }
 
-type ChapelType = 'ASSIGNED_CHAPEL' | 'SMALL_GROUPED_CHAPEL';
+type ChapelType = 'SMALL_GROUPED_CHAPEL' | 'VISION_CHAPEL';
 
 const ChapelInput = ({ onNext, initialValue, grade }: ChapelInputProps) => {
   const [chapel, setChapel] = useState(initialValue ?? true);
   const openChapleInfoDialog = useAlertDialog();
 
-  const chapelType: ChapelType = grade >= 2 ? 'ASSIGNED_CHAPEL' : 'SMALL_GROUPED_CHAPEL';
+  const chapelType: ChapelType = grade >= 2 ? 'VISION_CHAPEL' : 'SMALL_GROUPED_CHAPEL';
 
   const handleClickChapel = () => {
     setChapel(!chapel);
@@ -70,7 +70,7 @@ const ChapelInput = ({ onNext, initialValue, grade }: ChapelInputProps) => {
 
 const chapelNameMap = {
   SMALL_GROUPED_CHAPEL: '소그룹 채플',
-  ASSIGNED_CHAPEL: '지정 채플',
+  VISION_CHAPEL: '비전 채플',
 } as const satisfies Record<ChapelType, string>;
 
 const chapelInfoDialogContentMap = {
@@ -79,18 +79,18 @@ const chapelInfoDialogContentMap = {
     content: (
       <>
         <div>
-          소그룹채플은 <span className="text-brandSecondary">관리자 수강신청</span>이 원칙
+          소그룹 채플은 <span className="text-brandSecondary">관리자 수강신청</span>이 원칙
         </div>
         <div>취소 후 재신청 불가</div>
       </>
     ),
   },
-  ASSIGNED_CHAPEL: {
-    title: '비전채플 수강신청',
+  VISION_CHAPEL: {
+    title: '비전 채플 수강신청',
     content: (
       <>
         <div>
-          소그룹채플은 <span className="text-brandSecondary">관리자 수강신청</span>이 원칙
+          비전 채플은 <span className="text-brandSecondary">관리자 수강신청</span>이 원칙
         </div>
         <div>
           수강신청 목록에서 <span className="text-brandSecondary">취소 후 재신청 가능</span>

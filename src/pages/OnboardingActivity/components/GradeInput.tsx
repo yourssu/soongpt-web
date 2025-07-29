@@ -35,10 +35,11 @@ const GradeInput = ({ onNext, initialValue }: GradeInputProps) => {
       return;
     }
 
+    const gradeTitle = grade >= 4 ? '4학년 이상' : `${grade}학년`;
     const rawSchedule = courseResigtrationScheduleMap[grade];
 
     openScheduleInfoDialog({
-      title: `${grade}학년 수강신청 일정`,
+      title: `${gradeTitle} 수강신청 일정`,
       content: (
         <>
           <div>[{grade}학년 수강신청 기간]</div>
@@ -125,12 +126,14 @@ const GradeInput = ({ onNext, initialValue }: GradeInputProps) => {
         <Hint.Text>이번 학기에 이수 예정인 학년을 선택해주세요.</Hint.Text>
       </Hint>
 
-      <button
-        className="text-brandPrimary cursor-pointer text-xs underline"
-        onClick={handleClickScheduleInfo}
-      >
-        주요 수강신청 일정 안내
-      </button>
+      {!!grade && (
+        <button
+          className="text-brandPrimary cursor-pointer text-xs underline"
+          onClick={handleClickScheduleInfo}
+        >
+          주요 수강신청 일정 안내
+        </button>
+      )}
     </motion.div>
   );
 };
@@ -140,7 +143,7 @@ const courseResigtrationScheduleMap = {
   [2]: '8/5(화) 10:00~15:00',
   [3]: '8/6(수) 10:00~15:00',
   [4]: '8/7(목) 10:00~15:00',
-  [5]: '8/8(금) 10:00~15:00',
+  [5]: '8/7(금) 10:00~15:00', // 4학년과 동일
   common: '8/8(금) 10:00~15:00',
 };
 
