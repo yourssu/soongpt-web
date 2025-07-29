@@ -12,6 +12,7 @@ export const useTotalPointsByCategory = (
   };
 
   return {
+    OTHER: reduceCoursePoints(filteredCoursesByCategory.OTHER),
     CHAPEL: reduceCoursePoints(filteredCoursesByCategory.CHAPEL),
     GENERAL_REQUIRED: reduceCoursePoints(filteredCoursesByCategory.GENERAL_REQUIRED),
     GENERAL_ELECTIVE: reduceCoursePoints(filteredCoursesByCategory.GENERAL_ELECTIVE),
