@@ -69,7 +69,7 @@ export const CourseSearchResult = ({
   };
 
   return (
-    <div className="mt-6 flex w-full flex-col gap-2">
+    <div className="flex w-full flex-col gap-2">
       {combinedCourses.map((course) => {
         const isSelected = selectedCourses.some((c) => isSameCourse(c, course));
         return (

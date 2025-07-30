@@ -100,125 +100,134 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
 
   return (
     <ActivityLayout>
-      <ProgressAppBar progress={75} />
-      <div className="mt-6 flex flex-1 flex-col items-center">
-        <h2 className="text-center text-[28px] font-semibold">
-          사용자님의 이번학기 <br />
-          희망 학점은{' '}
-          <RollingNumber
-            className="text-brandPrimary"
-            decimals={context.chapel ? 1 : 0}
-            number={desiredCredit}
-          />
-          학점이군요!
-        </h2>
-        <span className="mt-1 font-light">희망 학점에 맞추어 선택과목을 추천해드릴게요.</span>
-        <div className="mt-10 grid grid-cols-2 gap-x-2.5 gap-y-6">
-          <div>
-            <label className="mb-1.5 block text-sm">현재 선택한 학점</label>
-            <input
-              className="bg-bg-layerDefault text-brandPrimary w-full rounded-xl px-4 py-3 text-lg font-semibold"
-              disabled
-              type="number"
-              value={totalPoints}
-            />
+      <ActivityLayout.ScrollArea>
+        <ActivityLayout.Header>
+          <ProgressAppBar progress={75} />
+          <div className="mt-6 flex flex-1 flex-col items-center">
+            <h2 className="text-center text-[28px]/[normal] font-semibold">
+              사용자님의 이번학기 <br />
+              희망 학점은{' '}
+              <RollingNumber
+                className="text-brandPrimary"
+                decimals={context.chapel ? 1 : 0}
+                number={desiredCredit}
+              />
+              학점이군요!
+            </h2>
+            <span className="mt-1 font-light">희망 학점에 맞추어 선택과목을 추천해드릴게요.</span>
           </div>
+        </ActivityLayout.Header>
 
-          <div>
-            <label className="mb-1.5 block text-sm">추천받을 교양 학점</label>
-            <Popover.Root
-              onOpenChange={setShowGeneralElectiveDropdown}
-              open={showGeneralElectiveDropdown}
-            >
-              <Popover.Trigger asChild>
-                <button
-                  className={`bg-bg-layerDefault focus-visible:outline-borderRing flex w-full items-center justify-between rounded-xl px-4 py-3 text-lg font-semibold ${generalElective === 0 ? 'text-neutralPlaceholder' : 'text-brandPrimary'}`}
-                  type="button"
-                >
-                  {generalElective}
-                  <ChevronDown className="text-neutral size-4" />
-                </button>
-              </Popover.Trigger>
+        <ActivityLayout.Body>
+          <div className="grid grid-cols-2 gap-x-2.5 gap-y-6">
+            <div>
+              <label className="mb-1.5 block text-sm">현재 선택한 학점</label>
+              <input
+                className="bg-bg-layerDefault text-brandPrimary w-full rounded-xl px-4 py-3 text-lg font-semibold"
+                disabled
+                type="number"
+                value={totalPoints}
+              />
+            </div>
 
-              <AnimatePresence>
-                {showGeneralElectiveDropdown && (
-                  <Popover.Content asChild forceMount sideOffset={5}>
-                    <motion.ul
-                      animate={{
-                        opacity: 1,
-                        y: 0,
-                      }}
-                      className="bg-bg-layerDefault z-10 max-h-44 w-[var(--radix-popover-trigger-width)] overflow-y-auto rounded-xl border border-gray-200 shadow-sm"
-                      exit={{
-                        opacity: 0,
-                        y: -10,
-                      }}
-                      initial={{ opacity: 0, y: -10 }}
-                      transition={{
-                        duration: 0.2,
-                      }}
-                    >
-                      {availableGeneralElective.map((availableCredit) => (
-                        <li key={availableCredit}>
-                          <button
-                            className="text-neutralSubtle focus-visible:outline-borderRing flex w-full items-center justify-between rounded-xl px-4 py-2 text-lg font-semibold hover:bg-gray-100 focus-visible:-outline-offset-1"
-                            onClick={() => handleCreditSelect(availableCredit)}
-                            type="button"
-                          >
-                            {availableCredit}
-                            {availableCredit === generalElective && (
-                              <Check className="size-4 text-green-500" />
-                            )}
-                          </button>
-                        </li>
-                      ))}
-                    </motion.ul>
-                  </Popover.Content>
-                )}
-              </AnimatePresence>
-            </Popover.Root>
+            <div>
+              <label className="mb-1.5 block text-sm">추천받을 교양 학점</label>
+              <Popover.Root
+                onOpenChange={setShowGeneralElectiveDropdown}
+                open={showGeneralElectiveDropdown}
+              >
+                <Popover.Trigger asChild>
+                  <button
+                    className={`bg-bg-layerDefault focus-visible:outline-borderRing flex w-full items-center justify-between rounded-xl px-4 py-3 text-lg font-semibold ${generalElective === 0 ? 'text-neutralPlaceholder' : 'text-brandPrimary'}`}
+                    type="button"
+                  >
+                    {generalElective}
+                    <ChevronDown className="text-neutral size-4" />
+                  </button>
+                </Popover.Trigger>
+
+                <AnimatePresence>
+                  {showGeneralElectiveDropdown && (
+                    <Popover.Content asChild forceMount sideOffset={5}>
+                      <motion.ul
+                        animate={{
+                          opacity: 1,
+                          y: 0,
+                        }}
+                        className="bg-bg-layerDefault z-10 max-h-44 w-[var(--radix-popover-trigger-width)] overflow-y-auto rounded-xl border border-gray-200 shadow-sm"
+                        exit={{
+                          opacity: 0,
+                          y: -10,
+                        }}
+                        initial={{ opacity: 0, y: -10 }}
+                        transition={{
+                          duration: 0.2,
+                        }}
+                      >
+                        {availableGeneralElective.map((availableCredit) => (
+                          <li key={availableCredit}>
+                            <button
+                              className="text-neutralSubtle focus-visible:outline-borderRing flex w-full items-center justify-between rounded-xl px-4 py-2 text-lg font-semibold hover:bg-gray-100 focus-visible:-outline-offset-1"
+                              onClick={() => handleCreditSelect(availableCredit)}
+                              type="button"
+                            >
+                              {availableCredit}
+                              {availableCredit === generalElective && (
+                                <Check className="size-4 text-green-500" />
+                              )}
+                            </button>
+                          </li>
+                        ))}
+                      </motion.ul>
+                    </Popover.Content>
+                  )}
+                </AnimatePresence>
+              </Popover.Root>
+            </div>
           </div>
-        </div>
-        <button
-          className="text-brandPrimary mt-2 cursor-pointer self-start text-xs underline"
-          onClick={handleMaxPointInfoClick}
-        >
-          수강 신청 최대 학점 안내
-        </button>
-
-        <div className="mt-5 flex flex-col gap-2.5 text-sm">
-          <div>추천받을 교양과목 분야</div>
-          <PreferedGeneralElectivesChipGroup
-            onChange={setPreferredGeneralElectives}
-            values={preferredGeneralElectives}
-          />
-          <Hint className="text-xs">분야를 선택하지 않으면 임의로 추천해드려요.</Hint>
           <button
-            className="text-brandPrimary cursor-pointer self-start text-xs underline"
-            onClick={handleGeneralElectiveInfoClick}
+            className="text-brandPrimary mt-2 cursor-pointer self-start text-xs underline"
+            onClick={handleMaxPointInfoClick}
           >
-            교양과목 이수 체계 안내(
-            {context.admissionYear >= 23 ? '2023학년도 이후' : '2022학년도 이전'} 입학자)
+            수강 신청 최대 학점 안내
           </button>
-        </div>
 
-        <motion.button
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-brandPrimary mt-auto w-full rounded-2xl py-3.5 font-semibold text-white"
-          initial={{
-            opacity: 0,
-            y: 20,
-          }}
-          onClick={handleNextClick}
-          transition={{
-            duration: 0.3,
-            ease: 'easeOut',
-          }}
-          type="button"
-        >
-          네 맞아요
-        </motion.button>
-      </div>
+          <div className="mt-5 flex flex-col gap-2.5 text-sm">
+            <div>추천받을 교양과목 분야</div>
+            <PreferedGeneralElectivesChipGroup
+              onChange={setPreferredGeneralElectives}
+              values={preferredGeneralElectives}
+            />
+            <Hint className="text-xs">분야를 선택하지 않으면 임의로 추천해드려요.</Hint>
+            <button
+              className="text-brandPrimary cursor-pointer self-start text-xs underline"
+              onClick={handleGeneralElectiveInfoClick}
+            >
+              교양과목 이수 체계 안내(
+              {context.admissionYear >= 23 ? '2023학년도 이후' : '2022학년도 이전'} 입학자)
+            </button>
+          </div>
+        </ActivityLayout.Body>
+
+        <ActivityLayout.Footer>
+          <motion.button
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-brandPrimary mt-auto w-full rounded-2xl py-3.5 font-semibold text-white"
+            initial={{
+              opacity: 0,
+              y: 20,
+            }}
+            onClick={handleNextClick}
+            transition={{
+              duration: 0.3,
+              ease: 'easeOut',
+            }}
+            type="button"
+          >
+            네 맞아요
+          </motion.button>
+        </ActivityLayout.Footer>
+      </ActivityLayout.ScrollArea>
     </ActivityLayout>
   );
 };

@@ -1,6 +1,9 @@
 import clsx from 'clsx';
 import { motion, Variants } from 'motion/react';
 
+import { ActivityLayout } from '@/components/ActivityLayout';
+import { ProgressAppBar } from '@/components/AppBar/ProgressAppBar';
+
 interface CourseSelectionHeaderProps {
   description?: string;
   title: string;
@@ -33,19 +36,26 @@ const fadeInVariants: Variants = {
 
 export const CourseSelectionHeader = ({ title, description }: CourseSelectionHeaderProps) => {
   return (
-    <div className="order-1">
-      <h2 className="text-center text-[28px]/[normal] font-semibold whitespace-pre-wrap">
-        {title}
-      </h2>
-      {description && (
-        <div className="items mt-1 text-center font-light whitespace-pre-wrap">{description}</div>
-      )}
-    </div>
+    <ActivityLayout.Header>
+      <ProgressAppBar progress={50} />
+      <div className="mt-6 flex w-full flex-col items-center">
+        <h2 className="text-center text-[28px]/[normal] font-semibold whitespace-pre-wrap">
+          {title}
+        </h2>
+        {description && (
+          <div className="items mt-1 text-center font-light whitespace-pre-wrap">{description}</div>
+        )}
+      </div>
+    </ActivityLayout.Header>
   );
 };
 
 export const CourseSelectionImageBody = ({ image }: CourseSelectionImageContentProps) => {
-  return <img alt="L-Like" className="order-2 my-auto" src={image} width={170} />;
+  return (
+    <ActivityLayout.Body>
+      <img alt="L-Like" className="order-2 my-auto" src={image} width={170} />
+    </ActivityLayout.Body>
+  );
 };
 
 export const CourseSelectionBody = ({
@@ -53,14 +63,9 @@ export const CourseSelectionBody = ({
   className,
 }: React.PropsWithChildren<{ className?: string }>) => {
   return (
-    <div
-      className={clsx(
-        'order-2 mt-6 flex w-full flex-[1_1_0] flex-col gap-3 overflow-auto',
-        className,
-      )}
-    >
-      {children}
-    </div>
+    <ActivityLayout.Body>
+      <div className={clsx('flex w-full flex-[1_1_0] flex-col gap-3', className)}>{children}</div>
+    </ActivityLayout.Body>
   );
 };
 
@@ -70,42 +75,41 @@ export const CourseSelectionFooter = ({
   secondaryButtonProps,
 }: CourseSelectionFooterProps) => {
   return (
-    <div className="order-3 flex w-full flex-col items-center gap-3">
-      <span className="text-base font-light">
-        현재 <span className="text-brandPrimary">{selectedCredit}학점</span> 선택했어요
-      </span>
-      <div className="flex w-full items-center gap-1">
-        {secondaryButtonProps && (
+    <ActivityLayout.Footer>
+      <div className="flex w-full flex-col items-center gap-3">
+        <span className="text-base font-light">
+          현재 <span className="text-brandPrimary">{selectedCredit}학점</span> 선택했어요
+        </span>
+        <div className="flex w-full items-center gap-1">
+          {secondaryButtonProps && (
+            <button
+              {...secondaryButtonProps}
+              className="bg-bg-brandLayerDefault text-brandSecondary flex-1 rounded-2xl py-3.5 font-semibold"
+              type="button"
+            >
+              {secondaryButtonProps.children}
+            </button>
+          )}
           <button
-            {...secondaryButtonProps}
-            className="bg-bg-brandLayerDefault text-brandSecondary flex-1 rounded-2xl py-3.5 font-semibold"
+            {...primaryButtonProps}
+            className="bg-brandPrimary flex-1 rounded-2xl py-3.5 font-semibold text-white"
             type="button"
           >
-            {secondaryButtonProps.children}
+            {primaryButtonProps.children}
           </button>
-        )}
-        <button
-          {...primaryButtonProps}
-          className="bg-brandPrimary flex-1 rounded-2xl py-3.5 font-semibold text-white"
-          type="button"
-        >
-          {primaryButtonProps.children}
-        </button>
+        </div>
       </div>
-    </div>
+    </ActivityLayout.Footer>
   );
 };
 
 export const CourseSelectionLayout = ({ children }: React.PropsWithChildren<unknown>) => {
   return (
-    <motion.div
-      animate="animate"
-      className="flex flex-1 flex-col items-center gap-6 overflow-auto"
-      initial="initial"
-      variants={fadeInVariants}
-    >
-      <div className="flex w-full flex-1 flex-col items-center overflow-auto">{children}</div>
-    </motion.div>
+    <ActivityLayout>
+      <motion.div animate="animate" initial="initial" variants={fadeInVariants}>
+        <ActivityLayout.ScrollArea>{children}</ActivityLayout.ScrollArea>
+      </motion.div>
+    </ActivityLayout>
   );
 };
 

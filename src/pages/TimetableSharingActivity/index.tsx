@@ -83,11 +83,17 @@ const TimetableSharingActivity: ActivityComponentType<TimetableSharingParams> = 
 
   return (
     <ActivityLayout>
-      <ProgressAppBar progress={100} />
-      <div className="mt-6 flex w-full flex-1 flex-col items-center justify-evenly">
-        <Suspense fallback={<TemplateSkeleton />}>
-          <TimetableSharingTemplate ref={templateRef} timetableId={timetableId} />
-          <div className="mt-4 flex justify-center gap-2">
+      <ActivityLayout.ScrollArea>
+        <ActivityLayout.Header>
+          <ProgressAppBar progress={100} />
+        </ActivityLayout.Header>
+        <ActivityLayout.Body className="!py-0">
+          <Suspense fallback={<TemplateSkeleton />}>
+            <TimetableSharingTemplate ref={templateRef} timetableId={timetableId} />
+          </Suspense>
+        </ActivityLayout.Body>
+        <ActivityLayout.Footer>
+          <div className="mt-4 flex w-full justify-center gap-2">
             <button
               className="text-brandSecondary bg-bg-brandLayerDefault rounded-2xl px-9 py-3 font-semibold"
               onClick={handleClickSave}
@@ -103,10 +109,8 @@ const TimetableSharingActivity: ActivityComponentType<TimetableSharingParams> = 
               공유할래요
             </button>
           </div>
-        </Suspense>
-      </div>
-      {/* <div className="flex min-h-dvh flex-col py-6">
-        </div> */}
+        </ActivityLayout.Footer>
+      </ActivityLayout.ScrollArea>
     </ActivityLayout>
   );
 };

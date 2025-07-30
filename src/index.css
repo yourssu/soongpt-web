@@ -34,14 +34,42 @@
     rgba(0, 0, 0, 0.09) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px,
     rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px,
     rgba(0, 0, 0, 0.09) 0px 32px 16px;
+
+  /* Scrollbar Semantics */
+  --scrollbarThumb: rgba(0, 29, 58, 0.18);
 }
 
 @layer base {
+  * {
+    box-sizing: border-box;
+
+    scrollbar-width: thin;
+    scrollbar-color: var(--scrollbarThumb) transparent;
+  }
+
+  html,
+  body,
+  #root {
+    width: 100%;
+    height: 100%;
+  }
+
+  html,
+  body {
+    position: fixed;
+    overflow: hidden;
+  }
+
   body {
     color: var(--color-neutral);
+  }
 
-    overflow: hidden;
+  #root,
+  [data-stackflow-activity-id],
+  [data-part='paper'] {
+    -webkit-overflow-scrolling: touch;
     overscroll-behavior: none;
+    overflow-y: hidden !important;
   }
 
   img {

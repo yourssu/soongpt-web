@@ -3,8 +3,6 @@ import { Suspense, useState } from 'react';
 import { SwitchCase } from 'react-simplikit';
 
 import { Mixpanel } from '@/bootstrap/mixpanel';
-import { ActivityLayout } from '@/components/ActivityLayout';
-import { ProgressAppBar } from '@/components/AppBar/ProgressAppBar';
 import SoongptErrorBoundary from '@/components/SoongptErrorBoundary';
 import { CourseTypeContext } from '@/contexts/CourseTypeContext';
 import { useFilterCoursesByCategory } from '@/hooks/useFilterCoursesByCategory';
@@ -43,84 +41,79 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
       <SelectedCoursesContext.Provider
         value={{ selectedCourses, selectedCredit: totalPointsByCategory.total, setSelectedCourses }}
       >
-        <ActivityLayout>
-          <ProgressAppBar progress={50} />
-          <div className="mt-6 flex w-full flex-1">
-            <SoongptErrorBoundary FallbackComponent={<CourseSelectionFallback type="error" />}>
-              <Suspense fallback={<CourseSelectionFallback type="pending" />}>
-                <SwitchCase
-                  caseBy={{
-                    MAJOR_REQUIRED: () => (
-                      <MajorRequiredSelectionStep
-                        onNextClick={() => {
-                          stepPush({
-                            type: 'GENERAL_REQUIRED',
-                          });
-                          Mixpanel.trackCourseSelectionClick(
-                            'MAJOR_REQUIRED',
-                            filteredCoursesByCategory.MAJOR_REQUIRED.map((course) => course.name),
-                          );
-                        }}
-                      />
-                    ),
-                    GENERAL_REQUIRED: () => (
-                      <GeneralRequiredSelectionStep
-                        onNextClick={() => {
-                          stepPush({
-                            type: 'MAJOR_ELECTIVE',
-                          });
-                          Mixpanel.trackCourseSelectionClick(
-                            'GENERAL_REQUIRED',
-                            filteredCoursesByCategory.GENERAL_REQUIRED.map((course) => course.name),
-                          );
-                        }}
-                      />
-                    ),
-                    MAJOR_ELECTIVE: () => (
-                      <MajorElectiveSelectionStep
-                        onNextClick={() => {
-                          stepPush({
-                            type: 'COURSE_SELECTION_RESULT',
-                          });
-                          Mixpanel.trackCourseSelectionClick(
-                            'MAJOR_ELECTIVE',
-                            filteredCoursesByCategory.MAJOR_ELECTIVE.map((course) => course.name),
-                          );
-                        }}
-                      />
-                    ),
-                    // Todo: 검색뷰 및 액티비티 푸시
-                    COURSE_SELECTION_RESULT: () => (
-                      <CourseSelectionResultStep
-                        onNextClick={() => {
-                          push('DesiredCreditActivity', {
-                            generalRequiredCodes: filteredCoursesByCategory.GENERAL_REQUIRED.map(
-                              ({ code }) => code,
-                            ),
-                            majorElectiveCodes: filteredCoursesByCategory.MAJOR_ELECTIVE.map(
-                              ({ code }) => code,
-                            ),
-                            majorRequiredCodes: filteredCoursesByCategory.MAJOR_REQUIRED.map(
-                              ({ code }) => code,
-                            ),
-                            selectedTotalPoints: totalPointsByCategory.total,
-                            codes: selectedCourses
-                              .filter((course) => !!course.selectedBySearch)
-                              .map((course) => course.code),
-                          });
-                          Mixpanel.trackCourseSelectionResultClick(
-                            selectedCourses.map((course) => course.name),
-                          );
-                        }}
-                      />
-                    ),
-                  }}
-                  value={type}
-                />
-              </Suspense>
-            </SoongptErrorBoundary>
-          </div>
-        </ActivityLayout>
+        <SoongptErrorBoundary FallbackComponent={<CourseSelectionFallback type="error" />}>
+          <Suspense fallback={<CourseSelectionFallback type="pending" />}>
+            <SwitchCase
+              caseBy={{
+                MAJOR_REQUIRED: () => (
+                  <MajorRequiredSelectionStep
+                    onNextClick={() => {
+                      stepPush({
+                        type: 'GENERAL_REQUIRED',
+                      });
+                      Mixpanel.trackCourseSelectionClick(
+                        'MAJOR_REQUIRED',
+                        filteredCoursesByCategory.MAJOR_REQUIRED.map((course) => course.name),
+                      );
+                    }}
+                  />
+                ),
+                GENERAL_REQUIRED: () => (
+                  <GeneralRequiredSelectionStep
+                    onNextClick={() => {
+                      stepPush({
+                        type: 'MAJOR_ELECTIVE',
+                      });
+                      Mixpanel.trackCourseSelectionClick(
+                        'GENERAL_REQUIRED',
+                        filteredCoursesByCategory.GENERAL_REQUIRED.map((course) => course.name),
+                      );
+                    }}
+                  />
+                ),
+                MAJOR_ELECTIVE: () => (
+                  <MajorElectiveSelectionStep
+                    onNextClick={() => {
+                      stepPush({
+                        type: 'COURSE_SELECTION_RESULT',
+                      });
+                      Mixpanel.trackCourseSelectionClick(
+                        'MAJOR_ELECTIVE',
+                        filteredCoursesByCategory.MAJOR_ELECTIVE.map((course) => course.name),
+                      );
+                    }}
+                  />
+                ),
+                // Todo: 검색뷰 및 액티비티 푸시
+                COURSE_SELECTION_RESULT: () => (
+                  <CourseSelectionResultStep
+                    onNextClick={() => {
+                      push('DesiredCreditActivity', {
+                        generalRequiredCodes: filteredCoursesByCategory.GENERAL_REQUIRED.map(
+                          ({ code }) => code,
+                        ),
+                        majorElectiveCodes: filteredCoursesByCategory.MAJOR_ELECTIVE.map(
+                          ({ code }) => code,
+                        ),
+                        majorRequiredCodes: filteredCoursesByCategory.MAJOR_REQUIRED.map(
+                          ({ code }) => code,
+                        ),
+                        selectedTotalPoints: totalPointsByCategory.total,
+                        codes: selectedCourses
+                          .filter((course) => !!course.selectedBySearch)
+                          .map((course) => course.code),
+                      });
+                      Mixpanel.trackCourseSelectionResultClick(
+                        selectedCourses.map((course) => course.name),
+                      );
+                    }}
+                  />
+                ),
+              }}
+              value={type}
+            />
+          </Suspense>
+        </SoongptErrorBoundary>
       </SelectedCoursesContext.Provider>
     </CourseTypeContext.Provider>
   );

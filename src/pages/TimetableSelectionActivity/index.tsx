@@ -146,30 +146,35 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
 
   return (
     <ActivityLayout>
-      <ProgressAppBar progress={100} />
       <motion.div
         animate={{ y: 0, opacity: 1 }}
-        className="mt-4 flex w-full flex-1 flex-col items-center"
+        className="flex w-full flex-1 flex-col items-center"
         initial={{ y: 20, opacity: 0 }}
         key={latestMutation.status}
         transition={{ duration: 0.4, ease: 'easeOut' }}
       >
-        <h2 className="text-center text-[28px] font-semibold whitespace-pre-wrap">
-          {`사용자님을 위한\n시간표를 ${timetableSelection[latestMutation.status].title}`}
-        </h2>
-        <div className="mt-4 flex w-full flex-1 flex-col pb-4">
-          {timetableSelection[latestMutation.status].element()}
-        </div>
-        <div className="sticky bottom-6 flex w-full justify-center">
-          <button
-            className={`w-full rounded-2xl py-3.5 font-semibold text-white shadow-sm ${latestMutation.status === 'pending' ? 'bg-gray-300' : 'bg-brandPrimary'}`}
-            disabled={latestMutation.status === 'pending'}
-            onClick={handleNextClick}
-            type="button"
-          >
-            {timetableSelection[latestMutation.status].buttonText}
-          </button>
-        </div>
+        <ActivityLayout.ScrollArea>
+          <ActivityLayout.Body>
+            <ProgressAppBar progress={100} />
+            <div className="flex flex-col items-center gap-2">
+              <h2 className="mt-6 text-center text-[28px]/[normal] font-semibold whitespace-pre-wrap">
+                {`사용자님을 위한\n시간표를 ${timetableSelection[latestMutation.status].title}`}
+              </h2>
+              <span className="font-light">원하는 시간표를 장바구니에 담아보세요</span>
+            </div>
+            <div className="mt-7.5 flex w-full flex-1 flex-col pb-4">
+              {timetableSelection[latestMutation.status].element()}
+            </div>
+            <button
+              className={`sticky bottom-6 w-full rounded-2xl py-3.5 font-semibold text-white shadow-sm ${latestMutation.status === 'pending' ? 'bg-gray-300' : 'bg-brandPrimary'}`}
+              disabled={latestMutation.status === 'pending'}
+              onClick={handleNextClick}
+              type="button"
+            >
+              {timetableSelection[latestMutation.status].buttonText}
+            </button>
+          </ActivityLayout.Body>
+        </ActivityLayout.ScrollArea>
       </motion.div>
     </ActivityLayout>
   );

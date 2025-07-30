@@ -189,8 +189,8 @@ const TimetableSharingTemplate = forwardRef<HTMLDivElement, TimetableSharingTemp
 
     return (
       <>
-        <div className="w-full overflow-hidden px-5" ref={emblaRef}>
-          <div className="-ml-5 flex">
+        <div className="w-full flex-[1_1_0] overflow-hidden px-5" ref={emblaRef}>
+          <div className="-ml-5 flex flex-[1_1_0]">
             {TEMPLATE_COLORS.map((color, index) => (
               <div className="min-w-0 flex-[0_0_100%] transform-gpu pl-5" key={`template-${index}`}>
                 <Template
@@ -222,10 +222,10 @@ const TimetableSharingTemplate = forwardRef<HTMLDivElement, TimetableSharingTemp
             ))}
           </div>
         </div>
-        <div className="mt-4 flex justify-center gap-3">
+        <div className="flex justify-center gap-3">
           {TEMPLATE_COLORS.map((color, index) => (
             <button
-              className={`size-7.5 rounded-full shadow-sm outline-2 transition-colors ${index === selectedIndex ? 'outline-brandPrimary' : 'outline-neutralPlaceholder'}`}
+              className={`size-7.5 rounded-full border-2 shadow-sm transition-colors ${index === selectedIndex ? 'border-brandPrimary' : 'border-neutralPlaceholder'}`}
               key={`button-${index}`}
               onClick={() => scrollTo(index)}
               style={{
