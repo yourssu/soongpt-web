@@ -1,8 +1,13 @@
 import { Code } from 'lucide-react';
+import { useState } from 'react';
 
 import { STAGE } from '@/config';
+import { StudentMachineContext, StudentMachineContextType } from '@/contexts/StudentMachineContext';
 import { useAlertDialog } from '@/hooks/useAlertDialog';
+import { usePostTimetable } from '@/hooks/usePostTimetable';
 import { useToast } from '@/hooks/useToast';
+import { StudentTimetable } from '@/schemas/studentSchema';
+import { useFlow } from '@/stackflow';
 
 interface ToolItemProps {
   description?: string;
@@ -12,13 +17,13 @@ interface ToolItemProps {
 
 const ToolItem = ({ title, description, onClick }: ToolItemProps) => {
   return (
-    <div className="flex w-full items-center justify-between">
+    <div className="flex w-full items-center justify-between gap-2">
       <div className="flex flex-col">
         <div className="text-[15px] font-semibold">{title}</div>
         {description && <span className="text-neutralSubtle text-[13px]">{description}</span>}
       </div>
       <button
-        className="bg-brandPrimary cursor-pointer rounded-md px-4 py-1.5 font-semibold text-white"
+        className="bg-brandPrimary shrink-0 cursor-pointer rounded-md px-4 py-1.5 font-semibold text-white"
         onClick={onClick}
       >
         실행
@@ -27,14 +32,82 @@ const ToolItem = ({ title, description, onClick }: ToolItemProps) => {
   );
 };
 
+const TimetableInjectionToolItem = ({
+  context,
+  mutation,
+  onMutate,
+}: {
+  context: StudentMachineContextType;
+  mutation: ReturnType<typeof usePostTimetable>;
+  onMutate: () => void;
+}) => {
+  const [timetableData, setTimetableData] = useState(
+    JSON.stringify(
+      {
+        schoolId: 22,
+        department: '법학과',
+        grade: 2,
+        isChapel: true,
+        majorRequiredCodes: ['2150545501'],
+        majorElectiveCodes: ['2150143401', '2150225101'],
+        generalRequiredCodes: ['2150102701'],
+        codes: ['2150145301'],
+        generalElectivePoint: 6,
+        preferredGeneralElectives: ['문화·예술'],
+      },
+      null,
+      2,
+    ),
+  );
+
+  return (
+    <div>
+      <ToolItem
+        description="하단의 데이터를 조작해서 바로 시간표를 만들어요."
+        onClick={async () => {
+          const data = JSON.parse(timetableData) as StudentTimetable;
+          const schoolId = data.schoolId ?? context.admissionYear;
+          const department = data.department ?? context.department;
+          const grade = data.grade ?? context.grade;
+          const isChapel = data.isChapel ?? context.chapel;
+          await mutation.mutateAsync({
+            schoolId,
+            department,
+            grade,
+            isChapel,
+            codes: data.codes,
+            generalRequiredCodes: data.generalRequiredCodes,
+            majorElectiveCodes: data.majorElectiveCodes,
+            majorRequiredCodes: data.majorRequiredCodes,
+            generalElectivePoint: data.generalElectivePoint,
+            preferredGeneralElectives: data.preferredGeneralElectives,
+          });
+          onMutate();
+        }}
+        title="바로 시간표 만들기"
+      />
+      <textarea
+        className="border-neutralSubtle min-h-[200px] w-full border"
+        onChange={(e) => {
+          setTimetableData(e.target.value);
+        }}
+        value={timetableData}
+      />
+    </div>
+  );
+};
+
 export const Devtools = () => {
   const open = useAlertDialog();
   const toast = useToast();
+  const context = StudentMachineContext.useSelector((state) => state.context);
+  const postTimetableMutation = usePostTimetable();
+  const { push } = useFlow();
 
   const showDevtools = () => {
     open({
       title: 'Devtools (알파)',
-      content: (
+      content: ({ closeAsTrue }) => (
         <>
           <div className="flex w-full flex-col items-center justify-between gap-5">
             <ToolItem
@@ -51,6 +124,15 @@ export const Devtools = () => {
                 window.location.href = '/';
               }}
               title="처음 화면으로 돌아가기"
+            />
+            <TimetableInjectionToolItem
+              context={context}
+              mutation={postTimetableMutation}
+              onMutate={() => {
+                push('TimetableSelectionActivity', {});
+                toast.success('시간표 페이지로 이동해요');
+                closeAsTrue();
+              }}
             />
           </div>
         </>
