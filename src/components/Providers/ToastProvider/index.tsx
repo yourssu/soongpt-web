@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 import { ToastContext } from '@/components/Providers/ToastProvider/context';
 import {
@@ -41,7 +42,7 @@ export const ToastProvider = ({
   }, []);
 
   const addToast = ({ text, type }: { text: string; type: ToastType }) => {
-    const id = crypto.randomUUID();
+    const id = uuidv4();
     setToasts((prev) => [...prev, { id, text, type }]);
 
     const timeout = setTimeout(() => {
