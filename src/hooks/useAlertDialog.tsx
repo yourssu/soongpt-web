@@ -3,10 +3,15 @@ import React from 'react';
 
 import { Dialog } from '@/components/Dialog';
 
+type OpenPayload = {
+  closeAsFalse: () => void;
+  closeAsTrue: () => void;
+};
+
 interface UseAlertDialogOpenProps {
   closeableWithOutside?: boolean;
   closeButton?: boolean;
-  content: React.ReactNode;
+  content: ((payload: OpenPayload) => React.ReactNode) | React.ReactNode;
   primaryButtonText?: string;
   secondaryButtonText?: string;
   title: string;
@@ -26,13 +31,15 @@ export const useAlertDialog = () => {
       const closeAsFalse = () => close(false);
 
       const renderAnyButton = !!primaryButtonText || !!secondaryButtonText;
+      const renderedContent =
+        typeof content === 'function' ? content({ closeAsTrue, closeAsFalse }) : content;
 
       return (
         <Dialog closeableWithOutside={closeableWithOutside} onClose={closeAsFalse} open={isOpen}>
           <Dialog.Header onClickCloseButton={closeButton ? closeAsFalse : undefined}>
             <Dialog.Title>{title}</Dialog.Title>
           </Dialog.Header>
-          <Dialog.Content>{content}</Dialog.Content>
+          <Dialog.Content>{renderedContent}</Dialog.Content>
           {renderAnyButton && (
             <Dialog.ButtonGroup>
               {!!secondaryButtonText && (
