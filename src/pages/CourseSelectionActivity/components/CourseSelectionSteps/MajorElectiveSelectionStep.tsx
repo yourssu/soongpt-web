@@ -109,12 +109,12 @@ const contentMap: Record<ArrayState, StepContentType> = {
   FILLED: {
     title: '이번 학기에 이수할\n전공선택과목을 알려주세요!',
     description: '타학년 전공선택과목도 선택할 수 있어요.',
-    primaryButtonText: '다 선택했어요',
+    primaryButtonText: '확인했어요',
   },
   EMPTY: {
     title: '이번 학기에 이수할\n전공선택과목이 없어요.',
     image: '/images/like.webp',
-    primaryButtonText: '다 선택했어요',
+    primaryButtonText: '확인했어요',
   },
 };
 
