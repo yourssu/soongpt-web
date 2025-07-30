@@ -41,7 +41,10 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
       <SelectedCoursesContext.Provider
         value={{ selectedCourses, selectedCredit: totalPointsByCategory.total, setSelectedCourses }}
       >
-        <SoongptErrorBoundary FallbackComponent={<CourseSelectionFallback type="error" />}>
+        <SoongptErrorBoundary
+          FallbackComponent={<CourseSelectionFallback type="error" />}
+          progress={50}
+        >
           <Suspense fallback={<CourseSelectionFallback type="pending" />}>
             <SwitchCase
               caseBy={{
