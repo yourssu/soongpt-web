@@ -48,5 +48,4 @@ export const paginatedCourseResponseSchema = z.object({
 });
 
 export type Course = z.infer<typeof courseSchema>;
-export type CourseWithoutTarget = Omit<Course, 'target'>;
 export type CourseTime = z.infer<typeof courseTimeSchema>;
