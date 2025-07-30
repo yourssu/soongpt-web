@@ -1,10 +1,10 @@
-import { AppScreen } from '@stackflow/plugin-basic-ui';
 import { ActivityComponentType } from '@stackflow/react';
 import html2canvas from 'html2canvas';
 import ky from 'ky';
 import { Suspense, useRef } from 'react';
 
 import { Mixpanel } from '@/bootstrap/mixpanel';
+import { ActivityLayout } from '@/components/ActivityLayout';
 import { ProgressAppBar } from '@/components/AppBar/ProgressAppBar';
 import TimetableSharingTemplate from '@/pages/TimetableSharingActivity/components/TimetableSharingTemplate';
 import { TemplateSkeleton } from '@/pages/TimetableSharingActivity/components/TimetableSkeleton';
@@ -82,32 +82,32 @@ const TimetableSharingActivity: ActivityComponentType<TimetableSharingParams> = 
   };
 
   return (
-    <AppScreen>
-      <div className="flex min-h-dvh flex-col py-6">
-        <ProgressAppBar progress={100} />
-        <div className="mt-6 flex flex-1 flex-col items-center justify-evenly">
-          <Suspense fallback={<TemplateSkeleton />}>
-            <TimetableSharingTemplate ref={templateRef} timetableId={timetableId} />
-            <div className="mt-4 flex justify-center gap-2">
-              <button
-                className="text-brandSecondary bg-bg-brandLayerDefault rounded-2xl px-9 py-3 font-semibold"
-                onClick={handleClickSave}
-                type="button"
-              >
-                저장할래요
-              </button>
-              <button
-                className="bg-brandPrimary rounded-2xl px-9 py-3 font-semibold text-white"
-                onClick={handleClickShare}
-                type="button"
-              >
-                공유할래요
-              </button>
-            </div>
-          </Suspense>
-        </div>
+    <ActivityLayout>
+      <ProgressAppBar progress={100} />
+      <div className="mt-6 flex w-full flex-1 flex-col items-center justify-evenly">
+        <Suspense fallback={<TemplateSkeleton />}>
+          <TimetableSharingTemplate ref={templateRef} timetableId={timetableId} />
+          <div className="mt-4 flex justify-center gap-2">
+            <button
+              className="text-brandSecondary bg-bg-brandLayerDefault rounded-2xl px-9 py-3 font-semibold"
+              onClick={handleClickSave}
+              type="button"
+            >
+              저장할래요
+            </button>
+            <button
+              className="bg-brandPrimary rounded-2xl px-9 py-3 font-semibold text-white"
+              onClick={handleClickShare}
+              type="button"
+            >
+              공유할래요
+            </button>
+          </div>
+        </Suspense>
       </div>
-    </AppScreen>
+      {/* <div className="flex min-h-dvh flex-col py-6">
+        </div> */}
+    </ActivityLayout>
   );
 };
 
