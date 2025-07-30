@@ -14,7 +14,7 @@ import { Course } from '@/schemas/courseSchema';
 import { useFlow } from '@/stackflow';
 import { isSameCourse } from '@/utils/course';
 
-type SelectionTabType = '교양' | '전공';
+type SelectionTabType = '교양' | '기타' | '전공';
 type CourseSelectionResultStepProps = BaseStepProps;
 
 export const CourseSelectionResultStep = ({ onNextClick }: CourseSelectionResultStepProps) => {
@@ -34,6 +34,7 @@ export const CourseSelectionResultStep = ({ onNextClick }: CourseSelectionResult
     return [
       ...filteredCoursesByCategory.MAJOR_REQUIRED,
       ...filteredCoursesByCategory.MAJOR_ELECTIVE,
+      ...filteredCoursesByCategory.OTHER,
     ];
   }, [filteredCoursesByCategory, selectionTab]);
 
