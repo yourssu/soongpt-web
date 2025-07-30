@@ -13,6 +13,7 @@ import { SelectedCoursesContext } from '@/pages/CourseSelectionActivity/context'
 import { useGroupCoursesByField } from '@/pages/CourseSelectionActivity/hooks/useGroupCoursesByField';
 import { useSuspenseGetCourses } from '@/pages/CourseSelectionActivity/hooks/useSuspenseGetCourses';
 import { Course } from '@/schemas/courseSchema';
+import { isSameCourse } from '@/utils/course';
 
 type GeneralRequiredSelectionStepProps = BaseStepProps;
 
@@ -24,7 +25,7 @@ const GeneralRequiredCourseFieldGroup = ({
   title: string;
 }) => {
   const { setSelectedCourses } = useContext(SelectedCoursesContext);
-  const [selectedCode, setSelectedCode] = useState<null | number>(null);
+  const [selectedGroupCourse, setSelectedGroupCourse] = useState<Course | null>(null);
 
   const nameWithoutFieldCourses = courses.map((course) => ({
     ...course,
@@ -35,16 +36,32 @@ const GeneralRequiredCourseFieldGroup = ({
     <div className="flex w-full flex-col gap-2">
       <div className="text-sm">[{title}]</div>
       {nameWithoutFieldCourses.map((course) => {
-        const isSelected = selectedCode === course.code;
+        const isSelected = !!selectedGroupCourse && isSameCourse(selectedGroupCourse, course);
+        const hasAnySelectedInGroup = selectedGroupCourse !== null;
 
         const handleClickCourseItem = () => {
-          if (isSelected) {
-            setSelectedCourses((prev) => prev.filter((c) => c.code !== course.code));
-            setSelectedCode(null);
-          } else {
+          const unSelectCourse = (course: Course) => {
+            setSelectedCourses((prev) => prev.filter((c) => !isSameCourse(c, course)));
+            setSelectedGroupCourse(null);
+          };
+
+          const selectCourse = (course: Course) => {
             setSelectedCourses((prev) => [...prev, course]);
-            setSelectedCode(course.code);
+            setSelectedGroupCourse(course);
+          };
+
+          if (isSelected) {
+            unSelectCourse(course);
+            return;
           }
+
+          if (hasAnySelectedInGroup) {
+            unSelectCourse(selectedGroupCourse);
+            selectCourse(course);
+            return;
+          }
+
+          selectCourse(course);
         };
 
         return (
