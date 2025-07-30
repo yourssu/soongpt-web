@@ -11,7 +11,10 @@ import { extractComparableCourseCode, isSameCourse } from '@/utils/course';
   - 나머지 값들은 아무거나 골라서 반환해요.
 */
 export const useCombinedCourses = (courses: Course[]) => {
-  const uniqueCodeCourses = useMemo(() => uniqBy(courses, extractComparableCourseCode), [courses]);
+  const uniqueCodeCourses = useMemo(
+    () => uniqBy(courses, (c) => extractComparableCourseCode(c.code)),
+    [courses],
+  );
 
   const getSameCodeProfessorsOf = (course: Course) => {
     const sameCodeCourses = courses.filter((c) => isSameCourse(c, course));
