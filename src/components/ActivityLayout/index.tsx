@@ -47,7 +47,7 @@ const ScrollArea = ({ children, className }: React.PropsWithChildren<{ className
 export const ActivityLayout = ({ children }: React.PropsWithChildren<unknown>) => {
   return (
     <div>
-      <AppScreen>{children}</AppScreen>
+      <AppScreen preventSwipeBack>{children}</AppScreen>
       <Devtools />
     </div>
   );
