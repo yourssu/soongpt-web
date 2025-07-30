@@ -1,10 +1,10 @@
-import { AppScreen } from '@stackflow/plugin-basic-ui';
 import { ActivityComponentType } from '@stackflow/react';
 import { MutationState, MutationStatus, useMutationState } from '@tanstack/react-query';
 import { motion } from 'motion/react';
 import { ReactElement, useEffect, useRef, useState } from 'react';
 
 import { Mixpanel } from '@/bootstrap/mixpanel';
+import { ActivityLayout } from '@/components/ActivityLayout';
 import { ProgressAppBar } from '@/components/AppBar/ProgressAppBar';
 import Timetable from '@/components/Timetable';
 import { TimetableSkeleton } from '@/pages/TimetableSharingActivity/components/TimetableSkeleton';
@@ -145,35 +145,33 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
   }
 
   return (
-    <AppScreen>
-      <div className="flex min-h-dvh flex-col py-6">
-        <ProgressAppBar progress={100} />
-        <motion.div
-          animate={{ y: 0, opacity: 1 }}
-          className="mt-4 flex flex-1 flex-col items-center"
-          initial={{ y: 20, opacity: 0 }}
-          key={latestMutation.status}
-          transition={{ duration: 0.4, ease: 'easeOut' }}
-        >
-          <h2 className="text-center text-[28px] font-semibold whitespace-pre-wrap">
-            {`사용자님을 위한\n시간표를 ${timetableSelection[latestMutation.status].title}`}
-          </h2>
-          <div className="mt-4 flex w-full flex-1 flex-col px-10 pb-4">
-            {timetableSelection[latestMutation.status].element()}
-          </div>
-          <div className="sticky bottom-6 flex w-full justify-center">
-            <button
-              className={`w-50 rounded-2xl py-3.5 font-semibold text-white shadow-sm ${latestMutation.status === 'pending' ? 'bg-gray-300' : 'bg-brandPrimary'}`}
-              disabled={latestMutation.status === 'pending'}
-              onClick={handleNextClick}
-              type="button"
-            >
-              {timetableSelection[latestMutation.status].buttonText}
-            </button>
-          </div>
-        </motion.div>
-      </div>
-    </AppScreen>
+    <ActivityLayout>
+      <ProgressAppBar progress={100} />
+      <motion.div
+        animate={{ y: 0, opacity: 1 }}
+        className="mt-4 flex w-full flex-1 flex-col items-center"
+        initial={{ y: 20, opacity: 0 }}
+        key={latestMutation.status}
+        transition={{ duration: 0.4, ease: 'easeOut' }}
+      >
+        <h2 className="text-center text-[28px] font-semibold whitespace-pre-wrap">
+          {`사용자님을 위한\n시간표를 ${timetableSelection[latestMutation.status].title}`}
+        </h2>
+        <div className="mt-4 flex w-full flex-1 flex-col pb-4">
+          {timetableSelection[latestMutation.status].element()}
+        </div>
+        <div className="sticky bottom-6 flex w-full justify-center">
+          <button
+            className={`w-full rounded-2xl py-3.5 font-semibold text-white shadow-sm ${latestMutation.status === 'pending' ? 'bg-gray-300' : 'bg-brandPrimary'}`}
+            disabled={latestMutation.status === 'pending'}
+            onClick={handleNextClick}
+            type="button"
+          >
+            {timetableSelection[latestMutation.status].buttonText}
+          </button>
+        </div>
+      </motion.div>
+    </ActivityLayout>
   );
 };
 

@@ -3,13 +3,12 @@ import { z } from 'zod';
 import { courseSchema, courseTimeSchema } from '@/schemas/courseSchema';
 
 const timetableTagSchema = z.enum([
-  'DEFAULT',
-  'HAS_FREE_DAY',
-  'NO_MORNING_CLASSES',
-  'NO_LONG_BREAKS',
-  'EVENLY_DISTRIBUTED',
-  'GUARANTEED_LUNCH_TIME',
-  'NO_EVENING_CLASSES',
+  '기본 태그',
+  '아침 수업이 없는 시간표',
+  '공강 날이 있는 시간표',
+  '우주 공강이 없는 시간표',
+  '점심시간 보장되는 시간표',
+  '저녁수업이 없는 시간표',
 ]);
 
 const timetableCourseSchema = courseSchema.extend({
@@ -39,3 +38,4 @@ export const timetableArrayResponseSchema = z.object({
 export type Timetable = z.infer<typeof timetableSchema>;
 export type TimetableTag = z.infer<typeof timetableTagSchema>;
 export type TimetableArrayResponse = z.infer<typeof timetableArrayResponseSchema>;
+export type TimetableCourse = z.infer<typeof timetableCourseSchema>;

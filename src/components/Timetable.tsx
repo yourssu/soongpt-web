@@ -1,8 +1,12 @@
 import { createContext, ElementType, HTMLAttributes, useContext } from 'react';
 import { twMerge } from 'tailwind-merge';
 
-import { CourseTime, CourseWithoutTarget } from '@/schemas/courseSchema';
-import { TimetableTag, Timetable as TimetableType } from '@/schemas/timetableSchema';
+import { CourseTime } from '@/schemas/courseSchema';
+import {
+  TimetableCourse,
+  TimetableTag,
+  Timetable as TimetableType,
+} from '@/schemas/timetableSchema';
 
 const MINUTES_PER_SLOT = 5;
 export const SLOT_HEIGHT = 3.5;
@@ -20,20 +24,19 @@ const TIME_TABLE_COLOR = [
 ];
 
 const TIME_TABLE_TAG: Record<TimetableTag, string> = {
-  DEFAULT: '🤔 뭔가 좋아보이는 시간표',
-  HAS_FREE_DAY: '🥳 공강 날이 있는 시간표',
-  NO_MORNING_CLASSES: '⏰ 아침 수업이 없는 시간표',
-  NO_LONG_BREAKS: '🚀 우주 공강이 없는 시간표 ',
-  EVENLY_DISTRIBUTED: '⚖️ 균등하게 배분되어 있는 시간표',
-  GUARANTEED_LUNCH_TIME: '🍔 점심시간 보장되는 시간표',
-  NO_EVENING_CLASSES: '🛏 저녁수업이 없는 시간표',
+  '기본 태그': '🤔 뭔가 좋아보이는 시간표',
+  '공강 날이 있는 시간표': '🥳 공강 날이 있는 시간표',
+  '아침 수업이 없는 시간표': '⏰ 아침 수업이 없는 시간표',
+  '우주 공강이 없는 시간표': '🚀 우주 공강이 없는 시간표 ',
+  '점심시간 보장되는 시간표': '🍔 점심시간 보장되는 시간표',
+  '저녁수업이 없는 시간표': '🛏 저녁수업이 없는 시간표',
 };
 
-export const getTotalCredit = (courses: CourseWithoutTarget[]): number => {
+export const getTotalCredit = (courses: TimetableCourse[]): number => {
   return courses.reduce((acc, course) => acc + course.point, 0);
 };
 
-export const getMajorCredit = (courses: CourseWithoutTarget[]): number => {
+export const getMajorCredit = (courses: TimetableCourse[]): number => {
   return courses.reduce((acc, course) => {
     if (course.category === 'MAJOR_REQUIRED' || course.category === 'MAJOR_ELECTIVE') {
       return acc + course.point;
@@ -42,27 +45,29 @@ export const getMajorCredit = (courses: CourseWithoutTarget[]): number => {
   }, 0);
 };
 
-// const getDays = (courses: CourseWithoutTarget[]): string[] => {
-//   const hasWeekend = courses.some((course) => course.courseTime.some((time) => time.week === '토'));
+const getDays = (courses: TimetableCourse[]): string[] => {
+  const hasWeekend = courses.some((course) =>
+    course.courseTimes.some((time) => time.week === '토'),
+  );
 
-//   const baseDays = ['월', '화', '수', '목', '금'];
-//   return hasWeekend ? [...baseDays, '토'] : baseDays;
-// };
+  const baseDays = ['월', '화', '수', '목', '금'];
+  return hasWeekend ? [...baseDays, '토'] : baseDays;
+};
 
-// const getTimeRange = (courses: CourseWithoutTarget[]): number[] => {
-//   const earliestHour = 9;
-//   let latestHour = 0;
+const getTimeRange = (courses: TimetableCourse[]): number[] => {
+  const earliestHour = 9;
+  let latestHour = 0;
 
-//   courses.forEach((course) => {
-//     course.courseTime.forEach((time) => {
-//       const endHour = Number(time.end.split(':')[0]);
+  courses.forEach((course) => {
+    course.courseTimes.forEach((time) => {
+      const endHour = Number(time.end.split(':')[0]);
 
-//       latestHour = Math.max(latestHour, endHour);
-//     });
-//   });
+      latestHour = Math.max(latestHour, endHour);
+    });
+  });
 
-//   return Array.from({ length: latestHour - earliestHour + 1 }, (_, i) => i + earliestHour);
-// };
+  return Array.from({ length: latestHour - earliestHour + 1 }, (_, i) => i + earliestHour);
+};
 
 export const getGridTemplateCols = (length: number): string => {
   return `1fr repeat(${length}, 3fr)`;
@@ -120,7 +125,7 @@ const TimetableContext = createContext<{
   totalCredit: number;
 }>({
   totalCredit: 0,
-  tag: 'DEFAULT',
+  tag: '기본 태그',
 });
 
 const DefaultHeader = ({ className }: TimetableHeaderProps) => {
@@ -168,12 +173,9 @@ const TimetableHeader = ({ as: Header = DefaultHeader, ...props }: TimetableHead
 const Timetable = ({ children, timetable, className, ...props }: TimetableProps) => {
   const courses = timetable.courses;
 
-  // const totalCredit = getTotalCredit(courses);
-  // const days = getDays(courses);
-  // const timeRange = getTimeRange(courses);
-  const totalCredit = 22;
-  const days = ['월', '화', '수', '목', '금'];
-  const timeRange = [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24];
+  const totalCredit = getTotalCredit(courses);
+  const days = getDays(courses);
+  const timeRange = getTimeRange(courses);
 
   return (
     <TimetableContext.Provider value={{ totalCredit, tag: timetable.tag }}>
