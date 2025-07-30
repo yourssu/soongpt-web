@@ -26,7 +26,7 @@ export const PreferedGeneralElectivesChipGroup = ({
   const chipValues = chipContentValues[chipValueType];
 
   const parseToUsableChipValue = (chipValue: string) => {
-    return chipValue.replace(/s+/g, ' ');
+    return chipValue.replace(/\s+/g, ' ');
   };
 
   return (

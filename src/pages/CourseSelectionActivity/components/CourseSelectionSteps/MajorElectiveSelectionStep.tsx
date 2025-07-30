@@ -17,6 +17,7 @@ import GradeChip from '@/pages/CourseSelectionActivity/components/GradeChip';
 import { SelectedCoursesContext } from '@/pages/CourseSelectionActivity/context';
 import { useSuspenseGetCourses } from '@/pages/CourseSelectionActivity/hooks/useSuspenseGetCourses';
 import { useSuspenseGetMajorElectives } from '@/pages/CourseSelectionActivity/hooks/useSuspenseGetMajorElectives';
+import { Course } from '@/schemas/courseSchema';
 import { Grade } from '@/schemas/studentSchema';
 
 type MajorElectiveSelectionStepProps = BaseStepProps;
@@ -31,7 +32,15 @@ const MajorElectiveContent = ({ selectedGrades }: { selectedGrades: Grade[] }) =
     if (delayedSearchKeyword === '') {
       return combinedCourses;
     }
-    return combinedCourses.filter((course) => course.name.includes(delayedSearchKeyword));
+    const preprocessKeyword = (keyword: string) => keyword.toLowerCase().replace(/\s+/g, '');
+    const matchKeyword = ({ name, professor }: Course) => {
+      const nameMatched = preprocessKeyword(name).includes(preprocessKeyword(delayedSearchKeyword));
+      const professorMatched = professor.some((p) =>
+        preprocessKeyword(p).includes(preprocessKeyword(delayedSearchKeyword)),
+      );
+      return nameMatched || professorMatched;
+    };
+    return combinedCourses.filter(matchKeyword);
   }, [combinedCourses, delayedSearchKeyword]);
 
   const combinedCoursesState = useGetArrayState(combinedCourses);
