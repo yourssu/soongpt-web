@@ -15,7 +15,7 @@ import { GeneralRequiredSelectionStep } from '@/pages/CourseSelectionActivity/co
 import { MajorElectiveSelectionStep } from '@/pages/CourseSelectionActivity/components/CourseSelectionSteps/MajorElectiveSelectionStep';
 import { MajorRequiredSelectionStep } from '@/pages/CourseSelectionActivity/components/CourseSelectionSteps/MajorRequiredSelectionStep';
 import { SelectedCoursesContext } from '@/pages/CourseSelectionActivity/context';
-import { Course } from '@/schemas/courseSchema';
+import { SelectedCourseType } from '@/pages/CourseSelectionActivity/type';
 import { useFlow, useStepFlow } from '@/stackflow';
 import { CourseSelectionStepType } from '@/types/course';
 
@@ -28,7 +28,7 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
 }) => {
   const type = params.type ?? 'MAJOR_REQUIRED';
 
-  const [selectedCourses, setSelectedCourses] = useState<Course[]>([]);
+  const [selectedCourses, setSelectedCourses] = useState<SelectedCourseType[]>([]);
 
   const { push } = useFlow();
   const { stepPush } = useStepFlow('CourseSelectionActivity');
@@ -104,7 +104,9 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
                               ({ code }) => code,
                             ),
                             selectedTotalPoints: totalPointsByCategory.total,
-                            codes: selectedCourses.map((course) => course.code),
+                            codes: selectedCourses
+                              .filter((course) => !!course.selectedBySearch)
+                              .map((course) => course.code),
                           });
                           Mixpanel.trackCourseSelectionResultClick(
                             selectedCourses.map((course) => course.name),
