@@ -26,10 +26,15 @@ const GeneralRequiredCourseFieldGroup = ({
   const { setSelectedCourses } = useContext(SelectedCoursesContext);
   const [selectedCode, setSelectedCode] = useState<null | number>(null);
 
+  const nameWithoutFieldCourses = courses.map((course) => ({
+    ...course,
+    name: course.name.replace(/\[.*?\]/g, ''),
+  }));
+
   return (
     <div className="flex w-full flex-col gap-2">
       <div className="text-sm">[{title}]</div>
-      {courses.map((course) => {
+      {nameWithoutFieldCourses.map((course) => {
         const isSelected = selectedCode === course.code;
 
         const handleClickCourseItem = () => {
