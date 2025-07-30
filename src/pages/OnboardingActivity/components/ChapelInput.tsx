@@ -1,7 +1,9 @@
+import clsx from 'clsx';
 import { CircleCheck } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useState } from 'react';
 
+import Hint from '@/components/Hint';
 import { useAlertDialog } from '@/hooks/useAlertDialog';
 import { Grade } from '@/schemas/studentSchema';
 
@@ -49,15 +51,23 @@ const ChapelInput = ({ onNext, initialValue, grade }: ChapelInputProps) => {
       <label className="mb-1.5 block text-sm">채플 수강 여부</label>
 
       <button
-        className="bg-bg-layerDefault focus-visible:outline-borderRing text-brandPrimary flex w-full items-center justify-between rounded-xl px-4 py-3 text-lg font-semibold"
+        className={clsx(
+          'bg-bg-layerDefault focus-visible:outline-borderRing flex w-full items-center justify-between rounded-xl px-4 py-3 text-lg font-medium',
+          chapel ? 'text-brandPrimary' : 'text-neutralPlaceholder',
+        )}
         onClick={handleClickChapel}
         type="button"
       >
-        {chapel ? `${chapelNameMap[chapelType]} 수강` : '채플 미수강'}
+        {chapelNameMap[chapelType]} 수강
         <CircleCheck
           className={`size-6 ${chapel ? 'text-brandPrimary' : 'text-neutralDisabled'}`}
         />
       </button>
+      {chapelType === 'VISION_CHAPEL' && !!chapel && (
+        <Hint className="mt-2">
+          <Hint.Text>지정 채플이 아닌 다른 시간대의 채플이 추천될 수 있어요.</Hint.Text>
+        </Hint>
+      )}
       <button
         className="text-brandPrimary cursor-pointer text-xs underline"
         onClick={handleClickChapelInfo}
