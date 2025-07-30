@@ -102,7 +102,7 @@ export const CourseSelectionResultStep = ({ onNextClick }: CourseSelectionResult
 
         <motion.div
           animate={{ y: 0, opacity: 1 }}
-          className="flex-[1_1_0] overflow-auto"
+          className="flex-[1_1_0]"
           initial={{ y: 20, opacity: 0 }}
           transition={{ duration: 0.4, ease: 'easeOut' }}
         >

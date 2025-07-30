@@ -41,24 +41,31 @@ export const CourseSearchActivity: ActivityComponentType<CourseSearchActivityPar
 
   return (
     <ActivityLayout>
-      <BaseAppBar className="!gap-0.5">
-        <div className="bg-bg-layerDefault flex w-full items-center rounded-full px-5 py-2">
-          <input
-            className="flex flex-1 pr-2 outline-none"
-            onChange={setSearchKeyword}
-            placeholder="과목명을 입력해주세요"
-            ref={autoFocusRef}
-            value={searchKeyword}
-          />
-        </div>
-      </BaseAppBar>
-      <Suspense fallback={<div>검색중...</div>}>
-        <CourseSearchResult
-          onCourseSelectionChange={onCourseSelectionChange}
-          searchKeyword={debouncedSearchKeyword}
-          selectedCourses={selectedCourses}
-        />
-      </Suspense>
+      <ActivityLayout.ScrollArea>
+        <ActivityLayout.Header>
+          <BaseAppBar className="!gap-0.5">
+            <div className="bg-bg-layerDefault flex w-full items-center rounded-full px-5 py-2">
+              <input
+                className="flex flex-1 pr-2 outline-none"
+                onChange={setSearchKeyword}
+                placeholder="과목명을 입력해주세요"
+                ref={autoFocusRef}
+                value={searchKeyword}
+              />
+            </div>
+          </BaseAppBar>
+        </ActivityLayout.Header>
+
+        <ActivityLayout.Body className="!py-2">
+          <Suspense>
+            <CourseSearchResult
+              onCourseSelectionChange={onCourseSelectionChange}
+              searchKeyword={debouncedSearchKeyword}
+              selectedCourses={selectedCourses}
+            />
+          </Suspense>
+        </ActivityLayout.Body>
+      </ActivityLayout.ScrollArea>
     </ActivityLayout>
   );
 };

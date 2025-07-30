@@ -26,11 +26,11 @@ const SoongptErrorBoundary = ({ FallbackComponent, children }: SoongptErrorBound
                 return (
                   <motion.div
                     animate={{ y: 0, opacity: 1 }}
-                    className="flex flex-1 flex-col items-center gap-6 overflow-auto"
+                    className="flex flex-1 flex-col items-center gap-6 overflow-y-auto"
                     initial={{ y: 20, opacity: 0 }}
                     transition={{ duration: 0.3, ease: 'easeOut' }}
                   >
-                    <div className="flex w-full flex-col items-center overflow-auto">
+                    <div className="flex w-full flex-col items-center overflow-y-auto">
                       <h2 className="text-center text-[28px]/[normal] font-semibold whitespace-pre-wrap">
                         {'서버와의 연결이\n원활하지 않아요.'}
                       </h2>
