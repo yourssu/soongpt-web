@@ -45,7 +45,8 @@ export const CourseSelectionResultStep = ({ onNextClick }: CourseSelectionResult
       }),
     );
     if (type === '추가') {
-      setSelectedCourses((prev) => [...prev, course]);
+      const newCourse = { ...course, selectedBySearch: true };
+      setSelectedCourses((prev) => [...prev, newCourse]);
     } else {
       setSelectedCourses((prev) => prev.filter((c) => !isSameCourse(c, course)));
     }

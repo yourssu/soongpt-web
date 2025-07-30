@@ -1,11 +1,11 @@
 import { createContext, Dispatch, SetStateAction } from 'react';
 
-import { Course } from '@/schemas/courseSchema';
+import { SelectedCourseType } from '@/pages/CourseSelectionActivity/type';
 
 interface SelectedCoursesContextType {
-  selectedCourses: Course[];
+  selectedCourses: SelectedCourseType[];
   selectedCredit: number;
-  setSelectedCourses: Dispatch<SetStateAction<Course[]>>;
+  setSelectedCourses: Dispatch<SetStateAction<SelectedCourseType[]>>;
 }
 
 export const SelectedCoursesContext = createContext<SelectedCoursesContextType>({
