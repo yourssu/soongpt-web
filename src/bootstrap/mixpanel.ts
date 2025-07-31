@@ -3,7 +3,6 @@ import mixpanel from 'mixpanel-browser';
 import { SoongptError } from '@/schemas/errorSchema';
 import { CoursePreference, Student } from '@/schemas/studentSchema';
 import { Timetable } from '@/schemas/timetableSchema';
-import { CourseType } from '@/types/course';
 
 const MIXPANEL_TOKEN = import.meta.env.VITE_MIXPANEL_TOKEN;
 
@@ -22,33 +21,90 @@ export const Mixpanel = {
     mixpanel.identify(id);
   },
 
-  registerUser: (student: Student) => {
-    mixpanel.register({
-      ...student,
-    });
-  },
-
   setUser: (student: Student) => {
     mixpanel.people.set({
       $name: `${student.department}-${student.schoolId}-${student.grade}학년`,
       $created: new Date(),
+      count: 0, // 시간표 생성 횟수
       ...student,
     });
   },
 
-  trackUserInformationClick: (student: Student) => {
-    mixpanel.track('User Information Click', student);
+  incrementUserCount: () => {
+    mixpanel.people.increment('count', 1);
   },
 
-  trackCourseSelectionClick: (type: CourseType, courses: string[]) => {
-    mixpanel.track(`${type} Course Selection Click`, {
+  trackUserInformationClick: () => {
+    mixpanel.track('User Information Click');
+  },
+
+  trackRegistrationInformationClick: (
+    type: 'SCHEDULE' | 'SMALL_GROUPED_CHAPEL' | 'VISION_CHAPEL',
+  ) => {
+    mixpanel.track('Registration Information Click', {
+      type,
+    });
+  },
+
+  trackRequiredCourseSelectionClick: ({
+    type,
+    courses,
+  }: {
+    courses: string[];
+    type: 'GENERAL_REQUIRED' | 'MAJOR_REQUIRED';
+  }) => {
+    mixpanel.track(`${type} Required Course Selection Click`, {
+      type,
+      courses,
+      courseCount: courses.length,
+    });
+  },
+
+  trackMajorElectiveCourseSelectionClick: ({
+    courses,
+    otherGradeCourses,
+  }: {
+    courses: string[];
+    otherGradeCourses: string[];
+  }) => {
+    mixpanel.track('MAJOR_ELECTIVE Course Selection Click', {
+      courses,
+      otherGradeCourses,
+      courseCount: courses.length + otherGradeCourses.length,
+    });
+  },
+
+  trackCourseSelectionFinishClick: (courses: string[]) => {
+    mixpanel.track('Course Selection Finish Click', {
       courses,
     });
   },
 
-  trackCourseSelectionResultClick: (courses: string[]) => {
-    mixpanel.track('Course Selection Result Click', {
-      courses,
+  trackCourseDeleteClick: (course: string) => {
+    mixpanel.track('Course Delete Click', {
+      course,
+    });
+  },
+
+  trackCourseDeleteConfirmClick: (course: string) => {
+    mixpanel.track('Course Delete Confirm Click', {
+      course,
+    });
+  },
+
+  trackCourseSearchClick: () => {
+    mixpanel.track('Course Search Click');
+  },
+
+  trackSearchCourseAddClick: (course: string) => {
+    mixpanel.track('Search Course Add Click', {
+      course,
+    });
+  },
+
+  trackSearchCourseAddConfirmClick: (course: string) => {
+    mixpanel.track('Search Course Add Confirm Click', {
+      course,
     });
   },
 
@@ -56,13 +112,13 @@ export const Mixpanel = {
     mixpanel.track('Desired Credit Click', credit);
   },
 
-  trackTimetableSelectionClick: (
-    selectedTimetable: Timetable,
-    unselectedTimetables: Timetable[],
-  ) => {
+  trackTimetableGenerateComplete: () => {
+    mixpanel.track('Timetable Generate Complete');
+  },
+
+  trackTimetableSelectionClick: (selectedTimetable: Timetable) => {
     mixpanel.track('Timetable Selection Click', {
       selectedTimetable,
-      unselectedTimetables,
     });
   },
 
@@ -70,19 +126,5 @@ export const Mixpanel = {
     mixpanel.track('Timetable Selection Error', {
       error,
     });
-  },
-
-  trackTimetableSharingEnter: (timetable: Timetable) => {
-    mixpanel.track('Timetable Sharing Enter', {
-      timetable,
-    });
-  },
-
-  trackTimetableSaveClick: () => {
-    mixpanel.track('Timetable Save Click');
-  },
-
-  trackTimetableShareClick: () => {
-    mixpanel.track('Timetable Share Click');
   },
 };

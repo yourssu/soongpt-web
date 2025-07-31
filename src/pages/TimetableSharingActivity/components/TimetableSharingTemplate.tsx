@@ -8,7 +8,6 @@ import {
   useState,
 } from 'react';
 
-import { Mixpanel } from '@/bootstrap/mixpanel';
 import Timetable, { getMajorCredit, getTotalCredit, SharingHeader } from '@/components/Timetable';
 import { StudentMachineContext } from '@/contexts/StudentMachineContext';
 import { useGetTimetable } from '@/hooks/useGetTimetable';
@@ -181,11 +180,6 @@ const TimetableSharingTemplate = forwardRef<HTMLDivElement, TimetableSharingTemp
         };
       }
     }, [emblaApi, onSelect]);
-
-    // Mixpanel 이벤트 추적
-    useEffect(() => {
-      Mixpanel.trackTimetableSharingEnter(timetable);
-    }, [timetable]);
 
     return (
       <>

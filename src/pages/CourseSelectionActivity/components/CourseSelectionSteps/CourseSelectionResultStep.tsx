@@ -2,6 +2,7 @@ import { receive } from '@stackflow/compat-await-push';
 import { motion } from 'motion/react';
 import { useContext, useMemo, useState } from 'react';
 
+import { Mixpanel } from '@/bootstrap/mixpanel';
 import { SelectableChip } from '@/components/Chip/SelectableChip';
 import { RemovableCourseListItem } from '@/components/CourseItem/RemovableCourseItem';
 import { useAlertDialog } from '@/hooks/useAlertDialog';
@@ -40,6 +41,7 @@ export const CourseSelectionResultStep = ({ onNextClick }: CourseSelectionResult
 
   const onSearchButtonClick = async () => {
     // Todo: useReceive로 리팩토링: type-safe receive, send
+    Mixpanel.trackCourseSearchClick();
     const { course, type } = await receive<CourseSelectionChangeActionPayload>(
       push('CourseSearchActivity', {
         selectedCourses,
@@ -48,6 +50,7 @@ export const CourseSelectionResultStep = ({ onNextClick }: CourseSelectionResult
     if (type === '추가') {
       const newCourse = { ...course, selectedBySearch: true };
       setSelectedCourses((prev) => [...prev, newCourse]);
+      Mixpanel.trackSearchCourseAddConfirmClick(course.name);
     } else {
       setSelectedCourses((prev) => prev.filter((c) => !isSameCourse(c, course)));
     }
@@ -71,6 +74,7 @@ export const CourseSelectionResultStep = ({ onNextClick }: CourseSelectionResult
     });
 
     if (accepted) {
+      Mixpanel.trackCourseDeleteConfirmClick(course.name);
       setSelectedCourses((prev) => prev.filter((c) => !isSameCourse(c, course)));
     }
   };
@@ -112,7 +116,10 @@ export const CourseSelectionResultStep = ({ onNextClick }: CourseSelectionResult
                 <RemovableCourseListItem
                   course={course}
                   key={course.code}
-                  onClickRemove={() => onRemoveCourse(course)}
+                  onClickRemove={() => {
+                    Mixpanel.trackCourseDeleteClick(course.name);
+                    onRemoveCourse(course);
+                  }}
                 />
               ))
             ) : (
