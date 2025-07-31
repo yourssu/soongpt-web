@@ -27,7 +27,7 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
 
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  const { push, replace, pop } = useFlow();
+  const { replace, pop } = useFlow();
 
   const timetableRefs = useRef<(HTMLDivElement | null)[]>([]);
 
@@ -37,26 +37,6 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
       behavior: 'smooth',
       block: 'center',
     });
-  };
-
-  const handleNextClick = () => {
-    if (latestMutation.status === 'error') {
-      pop(2);
-    }
-
-    if (latestMutation.data) {
-      const selectedTimetable = latestMutation.data.result.timetables[selectedIndex];
-      const unSelectedTimetable = latestMutation.data.result.timetables.filter(
-        (timetable) => timetable.timetableId !== selectedTimetable.timetableId,
-      );
-
-      // Mixpanel 이벤트 추적
-      Mixpanel.trackTimetableSelectionClick(selectedTimetable, unSelectedTimetable);
-
-      push('TimetableSharingActivity', {
-        timetableId: selectedTimetable.timetableId,
-      });
-    }
   };
 
   useEffect(() => {
@@ -165,14 +145,16 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
             <div className="mt-7.5 flex w-full flex-1 flex-col pb-4">
               {timetableSelection[latestMutation.status].element()}
             </div>
-            <button
-              className={`sticky bottom-6 w-full rounded-2xl py-3.5 font-semibold text-white shadow-sm ${latestMutation.status === 'pending' ? 'bg-gray-300' : 'bg-brandPrimary'}`}
-              disabled={latestMutation.status === 'pending'}
-              onClick={handleNextClick}
-              type="button"
-            >
-              {timetableSelection[latestMutation.status].buttonText}
-            </button>
+            {/* Todo: 에러일때만 버튼 보이도록 컴포넌트 구조 및 로직 자체를 변경 */}
+            {latestMutation.status === 'error' && (
+              <button
+                className="bg-brandPrimary sticky bottom-6 w-full rounded-2xl py-3.5 font-semibold text-white shadow-sm"
+                onClick={() => pop(2)}
+                type="button"
+              >
+                {timetableSelection[latestMutation.status].buttonText}
+              </button>
+            )}
           </ActivityLayout.Body>
         </ActivityLayout.ScrollArea>
       </motion.div>

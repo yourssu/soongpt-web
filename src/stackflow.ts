@@ -8,7 +8,6 @@ import CourseSelectionActivity from '@/pages/CourseSelectionActivity';
 import DesiredCreditActivity from '@/pages/DesiredCreditActivity';
 import OnboardingActivity from '@/pages/OnboardingActivity';
 import TimetableSelectionActivity from '@/pages/TimetableSelectionActivity';
-import TimetableSharingActivity from '@/pages/TimetableSharingActivity';
 
 export const stackflowTransitionDuration = 350;
 
@@ -25,7 +24,6 @@ export const { Stack, useFlow, useStepFlow, activities } = stackflow({
         CourseSelectionActivity: '/course-selection',
         DesiredCreditActivity: '/desired-credit',
         TimetableSelectionActivity: '/time-table-selection',
-        TimetableSharingActivity: '/time-table-sharing',
         CourseSearchActivity: '/course-search',
       },
       fallbackActivity: () => 'OnboardingActivity',
@@ -36,7 +34,6 @@ export const { Stack, useFlow, useStepFlow, activities } = stackflow({
     CourseSelectionActivity,
     DesiredCreditActivity,
     TimetableSelectionActivity,
-    TimetableSharingActivity,
     CourseSearchActivity,
   },
 });
