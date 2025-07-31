@@ -1,7 +1,7 @@
 import { ActivityComponentType } from '@stackflow/react';
 import { MutationState, MutationStatus, useMutationState } from '@tanstack/react-query';
 import { motion } from 'motion/react';
-import { ReactElement, useEffect, useRef, useState } from 'react';
+import { ReactElement, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Mixpanel } from '@/bootstrap/mixpanel';
 import { ActivityLayout } from '@/components/ActivityLayout';
@@ -18,12 +18,23 @@ interface TimetableSelection {
   title: string;
 }
 
+type TimetableMutationStatus = 'error400' | 'error500' | Exclude<MutationStatus, 'error'>;
+
 const TimetableSelectionActivity: ActivityComponentType = () => {
   const timetableMutation = useMutationState<MutationState<TimetableArrayResponse, SoongptError>>({
     filters: { mutationKey: ['timetables'] },
   });
 
   const latestMutation = timetableMutation[timetableMutation.length - 1];
+
+  const mutationStatus = useMemo(() => {
+    const { status, error } = latestMutation;
+    if (status === 'error' && error) {
+      const errorRange = Math.floor(((latestMutation.error as SoongptError).status ?? 500) / 100);
+      return errorRange === 5 ? 'error500' : 'error400';
+    }
+    return status as Exclude<MutationStatus, 'error'>;
+  }, [latestMutation]);
 
   const [selectedIndex, setSelectedIndex] = useState(0);
 
@@ -54,9 +65,9 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
     }
   }, [latestMutation]);
 
-  const timetableSelection: Record<MutationStatus, TimetableSelection> = {
+  const timetableSelection: Record<TimetableMutationStatus, TimetableSelection> = {
     pending: {
-      title: '가져오는 중이에요!',
+      title: '사용자님을 위한\n시간표를 가져오는 중이에요!',
       buttonText: '이 시간표가 좋아요',
       element: () => (
         <TimetableSkeleton className="pt-4">
@@ -65,7 +76,7 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
       ),
     },
     success: {
-      title: '가져왔어요!',
+      title: '사용자님을 위한\n시간표를 가져왔어요!',
       buttonText: '이 시간표가 좋아요',
       element: () => (
         <>
@@ -102,8 +113,19 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
         </>
       ),
     },
-    error: {
-      title: '찾지 못했어요..',
+    error400: {
+      title: '사용자님을 위한\n시간표를 찾지 못했어요..',
+      buttonText: '다시 만들기',
+      element: () => (
+        <div className="flex flex-1 flex-col items-center justify-center">
+          <div className="flex size-[170px] items-center justify-center">
+            <img alt="Warning" className="object-contain" src="/images/warning.webp" width={170} />
+          </div>
+        </div>
+      ),
+    },
+    error500: {
+      title: '현재 서버에 문제가 있어요.\n잠시 후 다시 시도해주세요.',
       buttonText: '다시 만들기',
       element: () => (
         <div className="flex flex-1 flex-col items-center justify-center">
@@ -114,7 +136,7 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
       ),
     },
     idle: {
-      title: '가져오는 중이에요!',
+      title: '사용자님을 위한\n시간표를 가져오는 중이에요!',
       buttonText: '이 시간표가 좋아요',
       element: () => <></>,
     },
@@ -138,23 +160,24 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
             <ProgressAppBar progress={100} />
             <div className="flex flex-col items-center gap-2">
               <h2 className="mt-6 text-center text-[28px]/[normal] font-semibold whitespace-pre-wrap">
-                {`사용자님을 위한\n시간표를 ${timetableSelection[latestMutation.status].title}`}
+                {timetableSelection[mutationStatus].title}
               </h2>
               <span className="font-light">원하는 시간표를 장바구니에 담아보세요</span>
             </div>
             <div className="mt-7.5 flex w-full flex-1 flex-col pb-4">
-              {timetableSelection[latestMutation.status].element()}
+              {timetableSelection[mutationStatus].element()}
             </div>
             {/* Todo: 에러일때만 버튼 보이도록 컴포넌트 구조 및 로직 자체를 변경 */}
-            {latestMutation.status === 'error' && (
-              <button
-                className="bg-brandPrimary sticky bottom-6 w-full rounded-2xl py-3.5 font-semibold text-white shadow-sm"
-                onClick={() => pop(2)}
-                type="button"
-              >
-                {timetableSelection[latestMutation.status].buttonText}
-              </button>
-            )}
+            {mutationStatus === 'error400' ||
+              (mutationStatus === 'error500' && (
+                <button
+                  className="bg-brandPrimary sticky bottom-6 w-full rounded-2xl py-3.5 font-semibold text-white shadow-sm"
+                  onClick={() => pop(2)}
+                  type="button"
+                >
+                  {timetableSelection[mutationStatus].buttonText}
+                </button>
+              ))}
           </ActivityLayout.Body>
         </ActivityLayout.ScrollArea>
       </motion.div>
