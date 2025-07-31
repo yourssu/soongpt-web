@@ -25,6 +25,10 @@ const Footer = ({ children }: React.PropsWithChildren<unknown>) => {
   );
 };
 
+/* 
+  - 레이아웃 높이에 1px 더하는 이유: https://channel.io/ko/blog/articles/cross-browsing-ios15-12bccbc3 
+  - Devtools는 반드시 AppScreen 외부에 있어야해요.
+*/
 const ScrollArea = ({ children, className }: React.PropsWithChildren<{ className?: string }>) => {
   return (
     <div className="size-full overflow-y-hidden">
@@ -40,10 +44,6 @@ const ScrollArea = ({ children, className }: React.PropsWithChildren<{ className
   );
 };
 
-/* 
-  - 레이아웃 높이에 1px 더하는 이유: https://channel.io/ko/blog/articles/cross-browsing-ios15-12bccbc3 
-  - Devtools는 반드시 AppScreen 외부에 있어야해요.
-*/
 export const ActivityLayout = ({ children }: React.PropsWithChildren<unknown>) => {
   return (
     <div>

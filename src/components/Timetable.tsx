@@ -172,6 +172,7 @@ const TimetableHeader = ({ as: Header = DefaultHeader, ...props }: TimetableHead
 
 const Timetable = ({ children, timetable, className, ...props }: TimetableProps) => {
   const courses = timetable.courses;
+  const emptyCourseTimeCourses = courses.filter((course) => course.courseTimes.length === 0);
 
   const totalCredit = getTotalCredit(courses);
   const days = getDays(courses);
@@ -224,36 +225,51 @@ const Timetable = ({ children, timetable, className, ...props }: TimetableProps)
                       (time) =>
                         time.week === tableDay && Number(time.start.split(':')[0]) === tableTime,
                     );
-                    if (courseTime) {
-                      const { top, height } = getCoursePosition(courseTime);
-                      const bgColor =
-                        TIME_TABLE_COLOR[course.name.length % TIME_TABLE_COLOR.length];
 
-                      return (
-                        <div
-                          className="absolute w-full p-0.5 text-xs font-bold text-white"
-                          key={`${timetable.timetableId}-${course.name}-${courseTime.start}`}
-                          style={{
-                            backgroundColor: bgColor,
-                            borderColor: bgColor,
-                            top: `${top}px`,
-                            height: `${height}px`,
-                            display: '-webkit-box',
-                            WebkitBoxOrient: 'vertical',
-                            WebkitLineClamp: getLineClamp(courseTime),
-                            overflow: 'hidden',
-                          }}
-                        >
-                          {course.name}
-                        </div>
-                      );
+                    if (!courseTime) {
+                      return undefined;
                     }
+
+                    const { top, height } = getCoursePosition(courseTime);
+                    const bgColor = TIME_TABLE_COLOR[course.name.length % TIME_TABLE_COLOR.length];
+                    return (
+                      <div
+                        className="absolute w-full p-0.5 text-xs font-bold text-white"
+                        key={`${timetable.timetableId}-${course.name}-${courseTime.start}`}
+                        style={{
+                          backgroundColor: bgColor,
+                          borderColor: bgColor,
+                          top: `${top}px`,
+                          height: `${height}px`,
+                          display: '-webkit-box',
+                          WebkitBoxOrient: 'vertical',
+                          WebkitLineClamp: getLineClamp(courseTime),
+                          overflow: 'hidden',
+                        }}
+                      >
+                        {course.name}
+                      </div>
+                    );
                   })}
                 </div>
               ))}
             </div>
           ))}
         </div>
+        {emptyCourseTimeCourses.length > 0 && (
+          <div
+            className="border-neutralPlaceholder grid w-full border-t-1 py-2 text-xs font-semibold"
+            style={{
+              gridTemplateColumns: getGridTemplateCols(days.length),
+            }}
+          >
+            <div className="col-start-2 -col-end-1 flex flex-col gap-0.5">
+              {emptyCourseTimeCourses.map((course) => (
+                <div key={`${timetable.timetableId}-${course.code}`}>{course.name}</div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </TimetableContext.Provider>
   );
