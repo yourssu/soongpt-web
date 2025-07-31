@@ -3,7 +3,6 @@ import html2canvas from 'html2canvas';
 import ky from 'ky';
 import { Suspense, useRef } from 'react';
 
-import { Mixpanel } from '@/bootstrap/mixpanel';
 import { ActivityLayout } from '@/components/ActivityLayout';
 import { ProgressAppBar } from '@/components/AppBar/ProgressAppBar';
 import TimetableSharingTemplate from '@/pages/TimetableSharingActivity/components/TimetableSharingTemplate';
@@ -32,9 +31,6 @@ const TimetableSharingActivity: ActivityComponentType<TimetableSharingParams> = 
   };
 
   const handleClickSave = async () => {
-    // Mixpanel 이벤트 추적
-    Mixpanel.trackTimetableSaveClick();
-
     try {
       const imageUrl = await captureTemplate();
       if (imageUrl) {
@@ -54,9 +50,6 @@ const TimetableSharingActivity: ActivityComponentType<TimetableSharingParams> = 
   };
 
   const handleClickShare = async () => {
-    // Mixpanel 이벤트 추적
-    Mixpanel.trackTimetableShareClick();
-
     try {
       const imageUrl = await captureTemplate();
 

@@ -1,6 +1,7 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 import api from '@/api/client';
+import { Mixpanel } from '@/bootstrap/mixpanel';
 import { SelectableCourseItem } from '@/components/CourseItem/SelectableCourseItem';
 import { useAlertDialog } from '@/hooks/useAlertDialog';
 import { useCombinedCourses } from '@/hooks/useCombinedCourses';
@@ -74,6 +75,7 @@ export const CourseSearchResult = ({
         return;
       }
 
+      Mixpanel.trackSearchCourseAddClick(course.name);
       onCourseSelectionChange({ course, type: actionType });
     }
   };

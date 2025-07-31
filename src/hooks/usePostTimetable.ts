@@ -1,6 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 
 import api from '@/api/client';
+import { Mixpanel } from '@/bootstrap/mixpanel';
 import { StudentTimetable } from '@/schemas/studentSchema';
 import { timetableArrayResponseSchema } from '@/schemas/timetableSchema';
 import { transformError } from '@/utils/error';
@@ -20,6 +21,10 @@ export const usePostTimetable = () => {
         });
 
       return timetableArrayResponseSchema.parse(response);
+    },
+    onMutate: () => {
+      Mixpanel.incrementUserCount();
+      Mixpanel.trackTimetableGenerateComplete();
     },
   });
 };

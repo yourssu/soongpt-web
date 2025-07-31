@@ -3,6 +3,7 @@ import { Check, ChevronDown } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
 
+import { Mixpanel } from '@/bootstrap/mixpanel';
 import Hint from '@/components/Hint';
 import { useAlertDialog } from '@/hooks/useAlertDialog';
 import { Grade } from '@/schemas/studentSchema';
@@ -31,6 +32,8 @@ const GradeInput = ({ onNext, initialValue }: GradeInputProps) => {
   };
 
   const handleClickScheduleInfo = async () => {
+    Mixpanel.trackRegistrationInformationClick('SCHEDULE');
+
     if (grade === undefined || grade === 0) {
       return;
     }

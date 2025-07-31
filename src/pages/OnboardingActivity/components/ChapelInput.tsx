@@ -3,6 +3,7 @@ import { CircleCheck } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useState } from 'react';
 
+import { Mixpanel } from '@/bootstrap/mixpanel';
 import Hint from '@/components/Hint';
 import { useAlertDialog } from '@/hooks/useAlertDialog';
 import { Grade } from '@/schemas/studentSchema';
@@ -27,6 +28,7 @@ const ChapelInput = ({ onNext, initialValue, grade }: ChapelInputProps) => {
   };
 
   const handleClickChapelInfo = async () => {
+    Mixpanel.trackRegistrationInformationClick(chapelType);
     const { content, title } = chapelInfoDialogContentMap[chapelType];
     openChapleInfoDialog({
       content,
