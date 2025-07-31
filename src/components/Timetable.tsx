@@ -7,6 +7,7 @@ import {
   TimetableTag,
   Timetable as TimetableType,
 } from '@/schemas/timetableSchema';
+import { Merge } from '@/utils/type';
 
 const MINUTES_PER_SLOT = 5;
 export const SLOT_HEIGHT = 3.5;
@@ -166,12 +167,69 @@ export const SharingHeader = ({ bgColor, textColor }: TimetableHeaderProps) => {
   );
 };
 
+type InjectedCourseTime = Merge<TimetableCourse['courseTimes'][number], { concat?: boolean }>;
+type InjectedTimetableCourse = Merge<TimetableCourse, { courseTimes: InjectedCourseTime[] }>;
+
+const useBreaktimeInjectedCourses = (courses: TimetableCourse[]) => {
+  const maxBreakTimeMinutes = 15;
+  const result: InjectedTimetableCourse[] = [];
+
+  const stringTimeToMinutes = (time: string) => {
+    const [hour, minute] = time.split(':').map(Number);
+    return hour * 60 + minute;
+  };
+
+  courses.forEach(({ courseTimes, ...course }) => {
+    /* 
+      휴리스틱: courseTimes는 rusaint 내부적으로 날짜별, 시간별 오름차순 정렬이 되어있음.
+    */
+    const newCourse: InjectedTimetableCourse = { ...course, courseTimes: [] };
+
+    for (let i = courseTimes.length - 1; i > 0; i--) {
+      const currentCourseTime = courseTimes[i - 1];
+      const nextCourseTime = courseTimes[i];
+
+      if (currentCourseTime.week !== nextCourseTime.week) {
+        newCourse.courseTimes.unshift(nextCourseTime);
+        continue;
+      }
+
+      const end = stringTimeToMinutes(currentCourseTime.end);
+      const start = stringTimeToMinutes(nextCourseTime.start);
+
+      if (Math.abs(end - start) <= maxBreakTimeMinutes) {
+        newCourse.courseTimes.unshift(
+          {
+            week: currentCourseTime.week,
+            start: currentCourseTime.end,
+            end: nextCourseTime.start,
+            classroom: currentCourseTime.classroom,
+            concat: true,
+          },
+          { ...nextCourseTime, concat: true },
+        );
+        continue;
+      }
+
+      newCourse.courseTimes.unshift(nextCourseTime);
+    }
+
+    // 마지막에 추가 안된거 보정
+    if (courseTimes.length > 0) {
+      newCourse.courseTimes.unshift(courseTimes[0]);
+    }
+    result.push(newCourse);
+  });
+
+  return result;
+};
+
 const TimetableHeader = ({ as: Header = DefaultHeader, ...props }: TimetableHeaderProps) => {
   return <Header {...props} />;
 };
 
 const Timetable = ({ children, timetable, className, ...props }: TimetableProps) => {
-  const courses = timetable.courses;
+  const courses = useBreaktimeInjectedCourses(timetable.courses);
   const emptyCourseTimeCourses = courses.filter((course) => course.courseTimes.length === 0);
 
   const totalCredit = getTotalCredit(courses);
@@ -221,35 +279,35 @@ const Timetable = ({ children, timetable, className, ...props }: TimetableProps)
                   key={`${timetable.timetableId}-${tableTime}-${tableDay}`}
                 >
                   {courses.map((course) => {
-                    const courseTime = course.courseTimes.find(
-                      (time) =>
-                        time.week === tableDay && Number(time.start.split(':')[0]) === tableTime,
+                    const courseTimes = course.courseTimes.filter(
+                      ({ week, start }) =>
+                        week === tableDay && Number(start.split(':')[0]) === tableTime,
                     );
 
-                    if (!courseTime) {
-                      return undefined;
-                    }
+                    return courseTimes.map((courseTime) => {
+                      const { top, height } = getCoursePosition(courseTime);
+                      const bgColor =
+                        TIME_TABLE_COLOR[course.name.length % TIME_TABLE_COLOR.length];
 
-                    const { top, height } = getCoursePosition(courseTime);
-                    const bgColor = TIME_TABLE_COLOR[course.name.length % TIME_TABLE_COLOR.length];
-                    return (
-                      <div
-                        className="absolute w-full p-0.5 text-xs font-bold text-white"
-                        key={`${timetable.timetableId}-${course.name}-${courseTime.start}`}
-                        style={{
-                          backgroundColor: bgColor,
-                          borderColor: bgColor,
-                          top: `${top}px`,
-                          height: `${height}px`,
-                          display: '-webkit-box',
-                          WebkitBoxOrient: 'vertical',
-                          WebkitLineClamp: getLineClamp(courseTime),
-                          overflow: 'hidden',
-                        }}
-                      >
-                        {course.name}
-                      </div>
-                    );
+                      return (
+                        <div
+                          className="absolute w-full p-0.5 text-xs font-bold text-white"
+                          key={`${timetable.timetableId}-${course.name}-${courseTime.start}`}
+                          style={{
+                            backgroundColor: bgColor,
+                            borderColor: bgColor,
+                            top: `${top}px`,
+                            height: `${height}px`,
+                            display: '-webkit-box',
+                            WebkitBoxOrient: 'vertical',
+                            WebkitLineClamp: getLineClamp(courseTime),
+                            overflow: 'hidden',
+                          }}
+                        >
+                          {!courseTime.concat && course.name}
+                        </div>
+                      );
+                    });
                   })}
                 </div>
               ))}
