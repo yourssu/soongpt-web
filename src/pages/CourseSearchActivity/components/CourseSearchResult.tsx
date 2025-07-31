@@ -4,6 +4,7 @@ import api from '@/api/client';
 import { SelectableCourseItem } from '@/components/CourseItem/SelectableCourseItem';
 import { useAlertDialog } from '@/hooks/useAlertDialog';
 import { useCombinedCourses } from '@/hooks/useCombinedCourses';
+import { useToast } from '@/hooks/useToast';
 import { CourseSelectionChangeActionPayload } from '@/pages/CourseSearchActivity/type';
 import { Course, paginatedCourseResponseSchema } from '@/schemas/courseSchema';
 import { isSameCourse } from '@/utils/course';
@@ -13,6 +14,8 @@ interface CourseSearchResultProps {
   searchKeyword: string;
   selectedCourses: Course[];
 }
+
+const MAX_COURSE_POINT = 25;
 
 export const CourseSearchResult = ({
   searchKeyword,
@@ -36,8 +39,10 @@ export const CourseSearchResult = ({
     },
   });
   const combinedCourses = useCombinedCourses(searchedCourses);
+  const totalSelectedPoints = selectedCourses.reduce((acc, course) => acc + course.point, 0);
 
   const open = useAlertDialog();
+  const toast = useToast();
 
   const onClickCourseItem = async (course: Course, isSelected: boolean) => {
     const actionType = isSelected ? '삭제' : '추가';
@@ -64,6 +69,11 @@ export const CourseSearchResult = ({
     });
 
     if (accepted) {
+      if (totalSelectedPoints + course.point > MAX_COURSE_POINT) {
+        toast.error(`최대 ${MAX_COURSE_POINT}학점까지만 고를 수 있어요`);
+        return;
+      }
+
       onCourseSelectionChange({ course, type: actionType });
     }
   };
