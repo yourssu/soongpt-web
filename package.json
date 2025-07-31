@@ -30,6 +30,7 @@
     "@tanstack/react-query": "^5.64.2",
     "@xstate/react": "^5.0.2",
     "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
     "embla-carousel-react": "^8.5.2",
     "es-toolkit": "^1.39.7",
     "html2canvas": "^1.4.1",
