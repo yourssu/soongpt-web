@@ -19,6 +19,8 @@ interface CourseSelectionFooterProps {
   selectedCredit: number;
 }
 
+const MAX_COURSE_POINT = 25;
+
 const fadeInVariants: Variants = {
   initial: {
     y: 20,
@@ -92,7 +94,8 @@ export const CourseSelectionFooter = ({
           )}
           <button
             {...primaryButtonProps}
-            className="bg-brandPrimary flex-1 rounded-2xl py-3.5 font-semibold text-white"
+            className="bg-brandPrimary disabled:bg-bg-brandLayerDefault flex-1 rounded-2xl py-3.5 font-semibold text-white disabled:cursor-not-allowed"
+            disabled={primaryButtonProps.disabled || selectedCredit > MAX_COURSE_POINT}
             type="button"
           >
             {primaryButtonProps.children}
