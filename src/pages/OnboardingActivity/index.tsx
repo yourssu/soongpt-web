@@ -41,8 +41,7 @@ const OnboardingActivity: ActivityComponentType = () => {
 
     // MixPanel에 사용자 정보 설정
     Mixpanel.setUser(student);
-    Mixpanel.registerUser(student);
-    Mixpanel.trackUserInformationClick(student);
+    Mixpanel.trackUserInformationClick();
 
     push('CourseSelectionActivity', {
       type: 'MAJOR_REQUIRED',

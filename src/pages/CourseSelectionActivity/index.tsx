@@ -54,10 +54,12 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
                       stepPush({
                         type: 'GENERAL_REQUIRED',
                       });
-                      Mixpanel.trackCourseSelectionClick(
-                        'MAJOR_REQUIRED',
-                        filteredCoursesByCategory.MAJOR_REQUIRED.map((course) => course.name),
-                      );
+                      Mixpanel.trackRequiredCourseSelectionClick({
+                        type: 'MAJOR_REQUIRED',
+                        courses: filteredCoursesByCategory.MAJOR_REQUIRED.map(
+                          (course) => course.name,
+                        ),
+                      });
                     }}
                   />
                 ),
@@ -67,10 +69,12 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
                       stepPush({
                         type: 'MAJOR_ELECTIVE',
                       });
-                      Mixpanel.trackCourseSelectionClick(
-                        'GENERAL_REQUIRED',
-                        filteredCoursesByCategory.GENERAL_REQUIRED.map((course) => course.name),
-                      );
+                      Mixpanel.trackRequiredCourseSelectionClick({
+                        type: 'GENERAL_REQUIRED',
+                        courses: filteredCoursesByCategory.GENERAL_REQUIRED.map(
+                          (course) => course.name,
+                        ),
+                      });
                     }}
                   />
                 ),
@@ -80,10 +84,12 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
                       stepPush({
                         type: 'COURSE_SELECTION_RESULT',
                       });
-                      Mixpanel.trackCourseSelectionClick(
-                        'MAJOR_ELECTIVE',
-                        filteredCoursesByCategory.MAJOR_ELECTIVE.map((course) => course.name),
-                      );
+                      Mixpanel.trackMajorElectiveCourseSelectionClick({
+                        courses: filteredCoursesByCategory.MAJOR_ELECTIVE.map(
+                          (course) => course.name,
+                        ),
+                        otherGradeCourses: [],
+                      });
                     }}
                   />
                 ),
@@ -106,7 +112,7 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
                           .filter((course) => !!course.selectedBySearch)
                           .map((course) => course.code),
                       });
-                      Mixpanel.trackCourseSelectionResultClick(
+                      Mixpanel.trackCourseSelectionFinishClick(
                         selectedCourses.map((course) => course.name),
                       );
                     }}
