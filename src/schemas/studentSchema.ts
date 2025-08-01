@@ -33,5 +33,4 @@ export const studentTimetableSchema = studentSchema.merge(coursePreferenceSchema
 export type Grade = z.infer<typeof Grade>;
 export type Student = z.infer<typeof studentSchema>;
 export type StudentWithoutChapel = Omit<Student, 'isChapel'>;
-export type CoursePreference = z.infer<typeof coursePreferenceSchema>;
 export type StudentTimetable = z.infer<typeof studentTimetableSchema>;
