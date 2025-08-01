@@ -17,12 +17,14 @@ import GradeChip from '@/pages/CourseSelectionActivity/components/GradeChip';
 import { SelectedCoursesContext } from '@/pages/CourseSelectionActivity/context';
 import { useSuspenseGetCourses } from '@/pages/CourseSelectionActivity/hooks/useSuspenseGetCourses';
 import { useSuspenseGetMajorElectives } from '@/pages/CourseSelectionActivity/hooks/useSuspenseGetMajorElectives';
+import { SelectedCourseType } from '@/pages/CourseSelectionActivity/type';
 import { Course } from '@/schemas/courseSchema';
 import { Grade } from '@/schemas/studentSchema';
 
 type MajorElectiveSelectionStepProps = BaseStepProps;
 
 const MajorElectiveContent = ({ selectedGrades }: { selectedGrades: Grade[] }) => {
+  const context = StudentMachineContext.useSelector((state) => state.context);
   const [searchKeyword, setSearchKeyword] = useInputState('');
   const delayedSearchKeyword = useDelayedValue(searchKeyword);
 
@@ -45,6 +47,13 @@ const MajorElectiveContent = ({ selectedGrades }: { selectedGrades: Grade[] }) =
 
   const combinedCoursesState = useGetArrayState(combinedCourses);
 
+  const parseSelectedCourseOnPush = (course: Course): SelectedCourseType => {
+    if (!selectedGrades.includes(context.grade)) {
+      return { ...course, fromOtherGrade: true };
+    }
+    return course;
+  };
+
   return (
     <>
       <div className="sticky top-[183px] flex flex-col gap-3 bg-white pb-3">
@@ -63,7 +72,12 @@ const MajorElectiveContent = ({ selectedGrades }: { selectedGrades: Grade[] }) =
       </div>
       <SwitchCase
         caseBy={{
-          FILLED: () => <CourseSelectionList courses={searchedCombinedCourses} />,
+          FILLED: () => (
+            <CourseSelectionList
+              courses={searchedCombinedCourses}
+              parseSelectedCourseOnPush={parseSelectedCourseOnPush}
+            />
+          ),
           EMPTY: () => <CourseBySelectedGradesEmpty />,
         }}
         value={combinedCoursesState}
@@ -73,8 +87,8 @@ const MajorElectiveContent = ({ selectedGrades }: { selectedGrades: Grade[] }) =
 };
 
 export const MajorElectiveSelectionStep = ({ onNextClick }: MajorElectiveSelectionStepProps) => {
-  const state = StudentMachineContext.useSelector((state) => state);
-  const [selectedGrades, setSelectedGrades] = useState<Grade[]>([state.context.grade]);
+  const context = StudentMachineContext.useSelector((state) => state.context);
+  const [selectedGrades, setSelectedGrades] = useState<Grade[]>([context.grade]);
 
   const courses = useSuspenseGetCourses('MAJOR_ELECTIVE');
   const courseState = useGetArrayState(courses);
@@ -107,7 +121,10 @@ export const MajorElectiveSelectionStep = ({ onNextClick }: MajorElectiveSelecti
       )}
 
       <CourseSelectionLayout.Footer
-        primaryButtonProps={{ children: primaryButtonText, onClick: onNextClick }}
+        primaryButtonProps={{
+          children: primaryButtonText,
+          onClick: onNextClick,
+        }}
         selectedCredit={selectedCredit}
       />
     </CourseSelectionLayout>

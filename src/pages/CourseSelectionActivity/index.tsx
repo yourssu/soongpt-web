@@ -88,7 +88,9 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
                         courses: filteredCoursesByCategory.MAJOR_ELECTIVE.map(
                           (course) => course.name,
                         ),
-                        otherGradeCourses: [],
+                        otherGradeCourse: filteredCoursesByCategory.MAJOR_ELECTIVE.some(
+                          (course) => course.fromOtherGrade,
+                        ),
                       });
                     }}
                   />

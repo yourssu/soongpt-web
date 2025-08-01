@@ -67,15 +67,15 @@ export const Mixpanel = {
 
   trackMajorElectiveCourseSelectionClick: ({
     courses,
-    otherGradeCourses,
+    otherGradeCourse,
   }: {
     courses: string[];
-    otherGradeCourses: string[];
+    otherGradeCourse: boolean;
   }) => {
     mixpanel.track('MAJOR_ELECTIVE Course Selection Click', {
       courses,
-      otherGradeCourses,
-      courseCount: courses.length + otherGradeCourses.length,
+      otherGradeCourse,
+      courseCount: courses.length,
     });
   },
 
