@@ -57,6 +57,8 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
       closeButton: true,
       closeableWithOutside: true,
     });
+
+    Mixpanel.trackRegistrationInformationClick('MAX_POINT_INFO');
   };
 
   const handleGeneralElectiveInfoClick = () => {
@@ -87,12 +89,10 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
 
     // Mixpanel 이벤트 추적
     Mixpanel.trackDesiredCreditClick({
-      codes: params.codes,
-      generalElectivePoint: generalElective,
-      majorElectiveCodes: params.majorElectiveCodes,
-      majorRequiredCodes: params.majorRequiredCodes,
-      generalRequiredCodes: params.generalRequiredCodes,
-      preferredGeneralElectives,
+      existCredit: totalPoints,
+      addCredit: generalElective,
+      sumCredit: desiredCredit,
+      fieldSelect: preferredGeneralElectives.length > 0,
     });
 
     push('TimetableSelectionActivity', {});

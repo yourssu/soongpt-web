@@ -4,14 +4,19 @@ import { useContext } from 'react';
 import { SelectableCourseItem } from '@/components/CourseItem/SelectableCourseItem';
 import { useCombinedCourses } from '@/hooks/useCombinedCourses';
 import { SelectedCoursesContext } from '@/pages/CourseSelectionActivity/context';
+import { SelectedCourseType } from '@/pages/CourseSelectionActivity/type';
 import { Course } from '@/schemas/courseSchema';
 import { isSameCourse } from '@/utils/course';
 
 interface CourseSelectionListProps {
   courses: Course[];
+  parseSelectedCourseOnPush?: (course: Course) => SelectedCourseType;
 }
 
-export const CourseSelectionList = ({ courses }: CourseSelectionListProps) => {
+export const CourseSelectionList = ({
+  courses,
+  parseSelectedCourseOnPush,
+}: CourseSelectionListProps) => {
   const { selectedCourses, setSelectedCourses } = useContext(SelectedCoursesContext);
   const uniqueCourses = useCombinedCourses(courses);
 
@@ -28,10 +33,11 @@ export const CourseSelectionList = ({ courses }: CourseSelectionListProps) => {
           );
 
           const handleClickCourseItem = () => {
+            const parsedCourse = parseSelectedCourseOnPush?.(course) ?? course;
             setSelectedCourses((prev) =>
               isSelected
                 ? prev.filter((selectedCourse) => !isSameCourse(course, selectedCourse))
-                : [...prev, course],
+                : [...prev, parsedCourse],
             );
           };
 

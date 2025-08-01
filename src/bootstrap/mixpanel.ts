@@ -1,7 +1,7 @@
 import mixpanel from 'mixpanel-browser';
 
 import { SoongptError } from '@/schemas/errorSchema';
-import { CoursePreference, Student } from '@/schemas/studentSchema';
+import { Student } from '@/schemas/studentSchema';
 import { Timetable } from '@/schemas/timetableSchema';
 
 const MIXPANEL_TOKEN = import.meta.env.VITE_MIXPANEL_TOKEN;
@@ -39,7 +39,12 @@ export const Mixpanel = {
   },
 
   trackRegistrationInformationClick: (
-    type: 'SCHEDULE' | 'SMALL_GROUPED_CHAPEL' | 'VISION_CHAPEL',
+    type:
+      | 'MAX_POINT_INFO'
+      | 'SCHEDULE'
+      | 'SHOPPING_CART'
+      | 'SMALL_GROUPED_CHAPEL'
+      | 'VISION_CHAPEL',
   ) => {
     mixpanel.track('Registration Information Click', {
       type,
@@ -62,15 +67,15 @@ export const Mixpanel = {
 
   trackMajorElectiveCourseSelectionClick: ({
     courses,
-    otherGradeCourses,
+    otherGradeCourse,
   }: {
     courses: string[];
-    otherGradeCourses: string[];
+    otherGradeCourse: boolean;
   }) => {
     mixpanel.track('MAJOR_ELECTIVE Course Selection Click', {
       courses,
-      otherGradeCourses,
-      courseCount: courses.length + otherGradeCourses.length,
+      otherGradeCourse,
+      courseCount: courses.length,
     });
   },
 
@@ -108,7 +113,12 @@ export const Mixpanel = {
     });
   },
 
-  trackDesiredCreditClick: (credit: CoursePreference) => {
+  trackDesiredCreditClick: (credit: {
+    addCredit: number;
+    existCredit: number;
+    fieldSelect: boolean;
+    sumCredit: number;
+  }) => {
     mixpanel.track('Desired Credit Click', credit);
   },
 
@@ -124,7 +134,8 @@ export const Mixpanel = {
 
   trackTimetableSelectionError: (error: SoongptError) => {
     mixpanel.track('Timetable Selection Error', {
-      error,
+      status: error.status,
+      message: error.message,
     });
   },
 };

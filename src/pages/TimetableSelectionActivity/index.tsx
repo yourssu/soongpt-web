@@ -173,6 +173,7 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
         </div>
       ),
     });
+    Mixpanel.trackRegistrationInformationClick('SHOPPING_CART');
   };
 
   if (!latestMutation) {
