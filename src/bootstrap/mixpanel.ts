@@ -39,7 +39,12 @@ export const Mixpanel = {
   },
 
   trackRegistrationInformationClick: (
-    type: 'SCHEDULE' | 'SMALL_GROUPED_CHAPEL' | 'VISION_CHAPEL',
+    type:
+      | 'MAX_POINT_INFO'
+      | 'SCHEDULE'
+      | 'SHOPPING_CART'
+      | 'SMALL_GROUPED_CHAPEL'
+      | 'VISION_CHAPEL',
   ) => {
     mixpanel.track('Registration Information Click', {
       type,

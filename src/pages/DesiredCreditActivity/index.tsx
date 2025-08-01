@@ -57,6 +57,8 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
       closeButton: true,
       closeableWithOutside: true,
     });
+
+    Mixpanel.trackRegistrationInformationClick('MAX_POINT_INFO');
   };
 
   const handleGeneralElectiveInfoClick = () => {
