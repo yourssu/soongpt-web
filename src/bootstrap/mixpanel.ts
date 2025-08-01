@@ -124,7 +124,8 @@ export const Mixpanel = {
 
   trackTimetableSelectionError: (error: SoongptError) => {
     mixpanel.track('Timetable Selection Error', {
-      error,
+      status: error.status,
+      message: error.message,
     });
   },
 };
