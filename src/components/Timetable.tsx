@@ -1,12 +1,8 @@
 import { createContext, ElementType, HTMLAttributes, useContext } from 'react';
 import { twMerge } from 'tailwind-merge';
 
-import { CourseTime } from '@/schemas/courseSchema';
-import {
-  TimetableCourse,
-  TimetableTag,
-  Timetable as TimetableType,
-} from '@/schemas/timetableSchema';
+import { CourseTimeType } from '@/schemas/courseSchema';
+import { TimetableCourseType, TimetableTagType, TimetableType } from '@/schemas/timetableSchema';
 import { Merge } from '@/utils/type';
 
 const MINUTES_PER_SLOT = 5;
@@ -24,7 +20,7 @@ const TIME_TABLE_COLOR = [
   '#f08676',
 ];
 
-const TIME_TABLE_TAG: Record<TimetableTag, string> = {
+const TIME_TABLE_TAG: Record<TimetableTagType, string> = {
   '기본 태그': '🤔 뭔가 좋아보이는 시간표',
   '공강 날이 있는 시간표': '🥳 공강 날이 있는 시간표',
   '아침 수업이 없는 시간표': '⏰ 아침 수업이 없는 시간표',
@@ -33,11 +29,11 @@ const TIME_TABLE_TAG: Record<TimetableTag, string> = {
   '저녁수업이 없는 시간표': '🛏 저녁수업이 없는 시간표',
 };
 
-export const getTotalCredit = (courses: TimetableCourse[]): number => {
+export const getTotalCredit = (courses: TimetableCourseType[]): number => {
   return courses.reduce((acc, course) => acc + course.point, 0);
 };
 
-export const getMajorCredit = (courses: TimetableCourse[]): number => {
+export const getMajorCredit = (courses: TimetableCourseType[]): number => {
   return courses.reduce((acc, course) => {
     if (course.category === 'MAJOR_REQUIRED' || course.category === 'MAJOR_ELECTIVE') {
       return acc + course.point;
@@ -46,7 +42,7 @@ export const getMajorCredit = (courses: TimetableCourse[]): number => {
   }, 0);
 };
 
-const getDays = (courses: TimetableCourse[]): string[] => {
+const getDays = (courses: TimetableCourseType[]): string[] => {
   const hasWeekend = courses.some((course) =>
     course.courseTimes.some((time) => time.week === '토'),
   );
@@ -55,7 +51,7 @@ const getDays = (courses: TimetableCourse[]): string[] => {
   return hasWeekend ? [...baseDays, '토'] : baseDays;
 };
 
-const getTimeRange = (courses: TimetableCourse[]): number[] => {
+const getTimeRange = (courses: TimetableCourseType[]): number[] => {
   const earliestHour = 9;
   let latestHour = 0;
 
@@ -79,7 +75,7 @@ export const getGridTemplateRows = (length: number): string => {
   return `${headerHeight}px repeat(${length}, ${SLOT_HEIGHT * 12}px)`;
 };
 
-const getCoursePosition = (courseTime: CourseTime): { height: number; top: number } => {
+const getCoursePosition = (courseTime: CourseTimeType): { height: number; top: number } => {
   const [startHour, startMinute] = courseTime.start.split(':').map(Number);
   const [endHour, endMinute] = courseTime.end.split(':').map(Number);
 
@@ -92,7 +88,7 @@ const getCoursePosition = (courseTime: CourseTime): { height: number; top: numbe
   return { top, height };
 };
 
-const getLineClamp = (courseTime: CourseTime): number => {
+const getLineClamp = (courseTime: CourseTimeType): number => {
   const [startHour, startMinute] = courseTime.start.split(':').map(Number);
   const [endHour, endMinute] = courseTime.end.split(':').map(Number);
 
@@ -122,7 +118,7 @@ interface TimetableHeaderProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 const TimetableContext = createContext<{
-  tag: TimetableTag;
+  tag: TimetableTagType;
   totalCredit: number;
 }>({
   totalCredit: 0,
@@ -167,10 +163,10 @@ export const SharingHeader = ({ bgColor, textColor }: TimetableHeaderProps) => {
   );
 };
 
-type InjectedCourseTime = Merge<TimetableCourse['courseTimes'][number], { concat?: boolean }>;
-type InjectedTimetableCourse = Merge<TimetableCourse, { courseTimes: InjectedCourseTime[] }>;
+type InjectedCourseTime = Merge<TimetableCourseType['courseTimes'][number], { concat?: boolean }>;
+type InjectedTimetableCourse = Merge<TimetableCourseType, { courseTimes: InjectedCourseTime[] }>;
 
-const useBreaktimeInjectedCourses = (courses: TimetableCourse[]) => {
+const useBreaktimeInjectedCourses = (courses: TimetableCourseType[]) => {
   const maxBreakTimeMinutes = 15;
   const result: InjectedTimetableCourse[] = [];
 

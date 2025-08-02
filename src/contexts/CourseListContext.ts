@@ -1,5 +1,5 @@
 import { createContext } from 'react';
 
-import { Course } from '@/schemas/courseSchema';
+import { CourseType } from '@/schemas/courseSchema';
 
-export const CourseListContext = createContext<Course[]>([]);
+export const CourseListContext = createContext<CourseType[]>([]);

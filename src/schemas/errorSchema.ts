@@ -2,9 +2,8 @@ import { z } from 'zod';
 
 import { BaseResponseSchema } from '@/schemas/response';
 
-export const soongptErrorSchema = BaseResponseSchema.extend({
+export const SoongptErrorSchema = BaseResponseSchema.extend({
   message: z.string(),
   status: z.number(),
 });
-
-export type SoongptError = z.infer<typeof soongptErrorSchema>;
+export type SoongptErrorType = z.infer<typeof SoongptErrorSchema>;

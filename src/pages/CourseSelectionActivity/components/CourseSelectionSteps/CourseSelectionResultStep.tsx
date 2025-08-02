@@ -11,7 +11,7 @@ import { CourseSelectionChangeActionPayload } from '@/pages/CourseSearchActivity
 import { CourseSelectionLayout } from '@/pages/CourseSelectionActivity/components/CourseSelectionLayout';
 import { BaseStepProps } from '@/pages/CourseSelectionActivity/components/CourseSelectionSteps/type';
 import { SelectedCoursesContext } from '@/pages/CourseSelectionActivity/context';
-import { Course } from '@/schemas/courseSchema';
+import { CourseType } from '@/schemas/courseSchema';
 import { useFlow } from '@/stackflow';
 import { isSameCourse } from '@/utils/course';
 
@@ -56,7 +56,7 @@ export const CourseSelectionResultStep = ({ onNextClick }: CourseSelectionResult
     }
   };
 
-  const onRemoveCourse = async (course: Course) => {
+  const onRemoveCourse = async (course: CourseType) => {
     const accepted = await openRemoveAlertDialog({
       title: '선택한 과목을 삭제할까요?',
       closeButton: false,

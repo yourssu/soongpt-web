@@ -9,8 +9,8 @@ import { ProgressAppBar } from '@/components/AppBar/ProgressAppBar';
 import Timetable from '@/components/Timetable';
 import { useAlertDialog } from '@/hooks/useAlertDialog';
 import { TimetableSkeleton } from '@/pages/TimetableSharingActivity/components/TimetableSkeleton';
-import { SoongptError } from '@/schemas/errorSchema';
-import { TimetableArrayResponse } from '@/schemas/timetableSchema';
+import { SoongptErrorType } from '@/schemas/errorSchema';
+import { TimetableArrayResponseType } from '@/schemas/timetableSchema';
 import { useFlow } from '@/stackflow';
 
 interface TimetableSelection {
@@ -23,7 +23,9 @@ type TimetableMutationStatus = 'error400' | 'error500' | Exclude<MutationStatus,
 
 const TimetableSelectionActivity: ActivityComponentType = () => {
   const openShoppingCartDialog = useAlertDialog();
-  const timetableMutation = useMutationState<MutationState<TimetableArrayResponse, SoongptError>>({
+  const timetableMutation = useMutationState<
+    MutationState<TimetableArrayResponseType, SoongptErrorType>
+  >({
     filters: { mutationKey: ['timetables'] },
   });
 
@@ -32,7 +34,9 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
   const mutationStatus = useMemo(() => {
     const { status, error } = latestMutation;
     if (status === 'error' && error) {
-      const errorRange = Math.floor(((latestMutation.error as SoongptError).status ?? 500) / 100);
+      const errorRange = Math.floor(
+        ((latestMutation.error as SoongptErrorType).status ?? 500) / 100,
+      );
       return errorRange === 5 ? 'error500' : 'error400';
     }
     return status as Exclude<MutationStatus, 'error'>;

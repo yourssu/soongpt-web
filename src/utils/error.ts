@@ -1,9 +1,9 @@
 import { HTTPError } from 'ky';
 import { ZodError } from 'zod';
 
-import { SoongptError, soongptErrorSchema } from '@/schemas/errorSchema';
+import { SoongptErrorSchema, SoongptErrorType } from '@/schemas/errorSchema';
 
-export async function transformError(e: unknown): Promise<SoongptError> {
+export async function transformError(e: unknown): Promise<SoongptErrorType> {
   if (!(e instanceof HTTPError)) {
     return {
       message: '알 수 없는 에러가 발생했습니다.',
@@ -13,7 +13,7 @@ export async function transformError(e: unknown): Promise<SoongptError> {
   }
   return e.response
     .json()
-    .then((res) => soongptErrorSchema.parse(res))
+    .then((res) => SoongptErrorSchema.parse(res))
     .catch((err) => {
       if (err instanceof ZodError) {
         return {

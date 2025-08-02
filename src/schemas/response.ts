@@ -11,13 +11,13 @@ export const BasePaginatedSchema = z.object({
   totalPages: z.number(),
 });
 
-export const makeResponseSchema = <T extends z.ZodTypeAny>(schema: T) => {
+export const ResponseSchema = <T extends z.ZodTypeAny>(schema: T) => {
   return BaseResponseSchema.extend({
     result: schema,
   });
 };
 
-export const makePaginatedSchema = <T extends z.ZodTypeAny>(schema: T) => {
+export const PaginatedSchema = <T extends z.ZodTypeAny>(schema: T) => {
   return BasePaginatedSchema.extend({
     content: z.array(schema),
   });

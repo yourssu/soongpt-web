@@ -10,10 +10,10 @@ import { useDelayedValue } from '@/hooks/useDelayedValue';
 import { CourseSearchResult } from '@/pages/CourseSearchActivity/components/CourseSearchResult';
 import { useStackflowInputAutoFocusEffect } from '@/pages/CourseSearchActivity/hooks/useStackflowInputAutoFocusEffect';
 import { CourseSelectionChangeActionPayload } from '@/pages/CourseSearchActivity/type';
-import { Course } from '@/schemas/courseSchema';
+import { CourseType } from '@/schemas/courseSchema';
 
 interface CourseSearchActivityParams {
-  selectedCourses: Course[];
+  selectedCourses: CourseType[];
 }
 
 export const CourseSearchActivity: ActivityComponentType<CourseSearchActivityParams> = ({

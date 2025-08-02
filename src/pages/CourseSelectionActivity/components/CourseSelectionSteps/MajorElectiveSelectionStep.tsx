@@ -18,7 +18,7 @@ import { SelectedCoursesContext } from '@/pages/CourseSelectionActivity/context'
 import { useSuspenseGetCourses } from '@/pages/CourseSelectionActivity/hooks/useSuspenseGetCourses';
 import { useSuspenseGetMajorElectives } from '@/pages/CourseSelectionActivity/hooks/useSuspenseGetMajorElectives';
 import { SelectedCourseType } from '@/pages/CourseSelectionActivity/type';
-import { Course } from '@/schemas/courseSchema';
+import { CourseType } from '@/schemas/courseSchema';
 import { Grade } from '@/schemas/studentSchema';
 
 type MajorElectiveSelectionStepProps = BaseStepProps;
@@ -35,7 +35,7 @@ const MajorElectiveContent = ({ selectedGrades }: { selectedGrades: Grade[] }) =
       return combinedCourses;
     }
     const preprocessKeyword = (keyword: string) => keyword.toLowerCase().replace(/\s+/g, '');
-    const matchKeyword = ({ name, professor }: Course) => {
+    const matchKeyword = ({ name, professor }: CourseType) => {
       const nameMatched = preprocessKeyword(name).includes(preprocessKeyword(delayedSearchKeyword));
       const professorMatched = professor.some((p) =>
         preprocessKeyword(p).includes(preprocessKeyword(delayedSearchKeyword)),
@@ -47,7 +47,7 @@ const MajorElectiveContent = ({ selectedGrades }: { selectedGrades: Grade[] }) =
 
   const combinedCoursesState = useGetArrayState(combinedCourses);
 
-  const parseSelectedCourseOnPush = (course: Course): SelectedCourseType => {
+  const parseSelectedCourseOnPush = (course: CourseType): SelectedCourseType => {
     if (!selectedGrades.includes(context.grade)) {
       return { ...course, fromOtherGrade: true };
     }

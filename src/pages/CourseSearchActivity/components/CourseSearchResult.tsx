@@ -7,13 +7,13 @@ import { useAlertDialog } from '@/hooks/useAlertDialog';
 import { useCombinedCourses } from '@/hooks/useCombinedCourses';
 import { useToast } from '@/hooks/useToast';
 import { CourseSelectionChangeActionPayload } from '@/pages/CourseSearchActivity/type';
-import { Course } from '@/schemas/courseSchema';
+import { CourseType } from '@/schemas/courseSchema';
 import { isSameCourse } from '@/utils/course';
 
 interface CourseSearchResultProps {
   onCourseSelectionChange: (payload: CourseSelectionChangeActionPayload) => void;
   searchKeyword: string;
-  selectedCourses: Course[];
+  selectedCourses: CourseType[];
 }
 
 const MAX_COURSE_POINT = 25;
@@ -33,7 +33,7 @@ export const CourseSearchResult = ({
   const open = useAlertDialog();
   const toast = useToast();
 
-  const onClickCourseItem = async (course: Course, isSelected: boolean) => {
+  const onClickCourseItem = async (course: CourseType, isSelected: boolean) => {
     const actionType = isSelected ? '삭제' : '추가';
 
     const titleMap = {

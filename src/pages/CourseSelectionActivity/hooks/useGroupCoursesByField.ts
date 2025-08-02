@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 
-import { Course } from '@/schemas/courseSchema';
+import { CourseType } from '@/schemas/courseSchema';
 
-type GroupedByFieldCourses = Record<string, Course[]>;
+type GroupedByFieldCourses = Record<string, CourseType[]>;
 
 /**
  * 과목들을 `Course.field` 값으로 다시 그루핑해요.
@@ -10,11 +10,11 @@ type GroupedByFieldCourses = Record<string, Course[]>;
  * - XXXX 형태인 경우는 XXXX를 기준으로 그룹지어요.
  * - 빈 문자열인 경우는 `Course.name` 자체를 기준으로 그룹지어요.
  */
-export const useGroupCoursesByField = (courses: Course[]): GroupedByFieldCourses => {
+export const useGroupCoursesByField = (courses: CourseType[]): GroupedByFieldCourses => {
   return useMemo(() => {
     const group: GroupedByFieldCourses = {};
 
-    const addToGroup = (field: string, course: Course) => {
+    const addToGroup = (field: string, course: CourseType) => {
       group[field] = [...(group[field] || []), course];
     };
 

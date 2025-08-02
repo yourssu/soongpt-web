@@ -1,13 +1,13 @@
 import { useFilterCoursesByCategory } from '@/hooks/useFilterCoursesByCategory';
-import { Course } from '@/schemas/courseSchema';
+import { CourseType } from '@/schemas/courseSchema';
 import { CourseClassification } from '@/types/course';
 
 export const useTotalPointsByCategory = (
-  courses: Course[],
+  courses: CourseType[],
 ): Record<'total' | CourseClassification, number> => {
   const filteredCoursesByCategory = useFilterCoursesByCategory(courses);
 
-  const reduceCoursePoints = (courses: Course[]) => {
+  const reduceCoursePoints = (courses: CourseType[]) => {
     return courses.reduce((acc, course) => acc + course.point, 0);
   };
 

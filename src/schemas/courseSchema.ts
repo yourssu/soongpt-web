@@ -1,18 +1,17 @@
 import { z } from 'zod';
 
-import { makePaginatedSchema, makeResponseSchema } from '@/schemas/response';
+import { PaginatedSchema, ResponseSchema } from '@/schemas/response';
 import { CourseClassification } from '@/types/course';
 
-export const courseClassificationSchema = z.enum(CourseClassification);
-
-export const courseTimeSchema = z.object({
+export const CourseTimeSchema = z.object({
   week: z.string(),
   start: z.string(),
   end: z.string(),
   classroom: z.string(),
 });
+export type CourseTimeType = z.infer<typeof CourseTimeSchema>;
 
-export const courseSchema = z.object({
+export const CourseSchema = z.object({
   category: z.enum(CourseClassification),
   subCategory: z.string().nullable(),
   field: z.string().nullable(),
@@ -30,9 +29,7 @@ export const courseSchema = z.object({
   scheduleRoom: z.string(),
   target: z.string(),
 });
+export type CourseType = z.infer<typeof CourseSchema>;
 
-export const courseResponseSchema = makeResponseSchema(z.array(courseSchema));
-export const paginatedCourseResponseSchema = makeResponseSchema(makePaginatedSchema(courseSchema));
-
-export type Course = z.infer<typeof courseSchema>;
-export type CourseTime = z.infer<typeof courseTimeSchema>;
+export const courseResponseSchema = ResponseSchema(z.array(CourseSchema));
+export const paginatedCourseResponseSchema = ResponseSchema(PaginatedSchema(CourseSchema));

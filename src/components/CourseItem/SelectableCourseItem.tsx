@@ -3,12 +3,12 @@ import { motion } from 'motion/react';
 
 import { useCourseItemAnimationVariants } from '@/components/CourseItem/hook';
 import { useGetArrayState } from '@/hooks/useGetArrayState';
-import { Course } from '@/schemas/courseSchema';
+import { CourseType } from '@/schemas/courseSchema';
 
 interface SelectableCourseItemProps {
-  course: Course;
+  course: CourseType;
   isSelected: boolean;
-  onClickCourseItem: (course: Course) => void;
+  onClickCourseItem: (course: CourseType) => void;
 }
 
 export const SelectableCourseItem = ({

@@ -1,8 +1,8 @@
 import { IcMonoCircleMinus } from '@/components/Icons/IcMonoCircleMinus';
-import { Course } from '@/schemas/courseSchema';
+import { CourseType } from '@/schemas/courseSchema';
 
 interface RemovableCourseListItemProps {
-  course: Course;
+  course: CourseType;
   onClickRemove: () => void;
 }
 

@@ -1,8 +1,8 @@
 import mixpanel from 'mixpanel-browser';
 
-import { SoongptError } from '@/schemas/errorSchema';
-import { Student } from '@/schemas/studentSchema';
-import { Timetable } from '@/schemas/timetableSchema';
+import { SoongptErrorType } from '@/schemas/errorSchema';
+import { TimetableType } from '@/schemas/timetableSchema';
+import { StudentType } from '@/types/student';
 
 const MIXPANEL_TOKEN = import.meta.env.VITE_MIXPANEL_TOKEN;
 
@@ -21,7 +21,7 @@ export const Mixpanel = {
     mixpanel.identify(id);
   },
 
-  setUser: (student: Student) => {
+  setUser: (student: StudentType) => {
     mixpanel.people.set({
       $name: `${student.department}-${student.schoolId}-${student.grade}학년`,
       $created: new Date(),
@@ -126,13 +126,13 @@ export const Mixpanel = {
     mixpanel.track('Timetable Generate Complete');
   },
 
-  trackTimetableSelectionClick: (selectedTimetable: Timetable) => {
+  trackTimetableSelectionClick: (selectedTimetable: TimetableType) => {
     mixpanel.track('Timetable Selection Click', {
       selectedTimetable,
     });
   },
 
-  trackTimetableSelectionError: (error: SoongptError) => {
+  trackTimetableSelectionError: (error: SoongptErrorType) => {
     mixpanel.track('Timetable Selection Error', {
       status: error.status,
       message: error.message,

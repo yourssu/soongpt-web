@@ -1,12 +1,12 @@
 import { Code } from 'lucide-react';
 import { useState } from 'react';
 
+import { TimetablePayloadType } from '@/api/timetables';
 import { STAGE } from '@/config';
 import { StudentMachineContext, StudentMachineContextType } from '@/contexts/StudentMachineContext';
 import { usePostTimetable } from '@/hooks/api/usePostTimetable';
 import { useAlertDialog } from '@/hooks/useAlertDialog';
 import { useToast } from '@/hooks/useToast';
-import { StudentTimetable } from '@/schemas/studentSchema';
 import { useFlow } from '@/stackflow';
 
 interface ToolItemProps {
@@ -65,7 +65,7 @@ const TimetableInjectionToolItem = ({
       <ToolItem
         description="하단의 데이터를 조작해서 바로 시간표를 만들어요."
         onClick={async () => {
-          const data = JSON.parse(timetableData) as StudentTimetable;
+          const data = JSON.parse(timetableData) as TimetablePayloadType;
           const schoolId = data.schoolId ?? context.admissionYear;
           const department = data.department ?? context.department;
           const grade = data.grade ?? context.grade;

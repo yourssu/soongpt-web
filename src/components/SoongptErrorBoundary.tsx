@@ -5,7 +5,7 @@ import { ReactElement, ReactNode } from 'react';
 
 import { ActivityLayout } from '@/components/ActivityLayout';
 import { ProgressAppBar } from '@/components/AppBar/ProgressAppBar';
-import { SoongptError } from '@/schemas/errorSchema';
+import { SoongptErrorType } from '@/schemas/errorSchema';
 
 interface SoongptErrorBoundaryProps {
   children: ReactNode;
@@ -24,7 +24,7 @@ const SoongptErrorBoundary = ({
       {({ reset }) => (
         <Sentry.ErrorBoundary
           fallback={({ error, resetError }) => {
-            const errorRange = Math.floor(((error as SoongptError).status ?? 500) / 100);
+            const errorRange = Math.floor(((error as SoongptErrorType).status ?? 500) / 100);
 
             switch (errorRange) {
               case 4:
