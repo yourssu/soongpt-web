@@ -5,7 +5,7 @@ import { CircleCheck } from 'lucide-react';
 import { useState } from 'react';
 import { tv } from 'tailwind-variants';
 
-import api from '@/api/client';
+import { postContact } from '@/api/contacts';
 import { ActivityLayout } from '@/components/ActivityLayout';
 import { useToast } from '@/hooks/useToast';
 import { toPhoneNumber } from '@/utils/string';
@@ -28,13 +28,7 @@ export const WaitlistActivity: ActivityComponentType = () => {
   const toast = useToast();
 
   const { mutateAsync, isPending } = useMutation({
-    mutationFn: (content: string) => {
-      return api.post('contacts', {
-        json: {
-          content,
-        },
-      });
-    },
+    mutationFn: postContact,
   });
 
   const onClickWaitlist = async () => {

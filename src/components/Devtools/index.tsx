@@ -3,8 +3,8 @@ import { useState } from 'react';
 
 import { STAGE } from '@/config';
 import { StudentMachineContext, StudentMachineContextType } from '@/contexts/StudentMachineContext';
+import { usePostTimetable } from '@/hooks/api/usePostTimetable';
 import { useAlertDialog } from '@/hooks/useAlertDialog';
-import { usePostTimetable } from '@/hooks/usePostTimetable';
 import { useToast } from '@/hooks/useToast';
 import { StudentTimetable } from '@/schemas/studentSchema';
 import { useFlow } from '@/stackflow';

@@ -1,5 +1,4 @@
-import { uniq } from 'es-toolkit';
-import { uniqBy } from 'lodash';
+import { uniq, uniqBy } from 'es-toolkit';
 import { useMemo } from 'react';
 
 import { Course } from '@/schemas/courseSchema';

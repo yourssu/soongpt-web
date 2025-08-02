@@ -10,7 +10,7 @@ import {
 
 import Timetable, { getMajorCredit, getTotalCredit, SharingHeader } from '@/components/Timetable';
 import { StudentMachineContext } from '@/contexts/StudentMachineContext';
-import { useGetTimetable } from '@/hooks/useGetTimetable';
+import { useGetTimetable } from '@/hooks/api/useGetTimetable';
 
 interface Color {
   chipBg: string;
