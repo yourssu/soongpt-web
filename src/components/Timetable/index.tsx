@@ -8,7 +8,7 @@ import { TimetableContext } from '@/components/Timetable/context';
 import { useBreaktimeInjectedCourses } from '@/components/Timetable/hooks/useBreaktimeInjectedCourses';
 import { useTimetableDayRange } from '@/components/Timetable/hooks/useTimetableDayRange';
 import { useTimetableHourRange } from '@/components/Timetable/hooks/useTimetableHourRange';
-import { useTotalPointsByCategory } from '@/hooks/useTotalPointsByCategory';
+import { useCoursesTotalPoint } from '@/hooks/useCoursesTotalPoint';
 import { TimetableCourseType, TimetableType } from '@/schemas/timetableSchema';
 export const getTotalCredit = (courses: TimetableCourseType[]): number => {
   return courses.reduce((acc, course) => acc + course.point, 0);
@@ -42,7 +42,7 @@ export const Timetable = ({ timetable, isSelected }: TimetableProps) => {
   const courses = useBreaktimeInjectedCourses(timetable.courses);
   const emptyCourseTimeCourses = courses.filter((course) => course.courseTimes.length === 0);
 
-  const { total: totalPoint } = useTotalPointsByCategory(courses);
+  const totalPoint = useCoursesTotalPoint(courses);
   const days = useTimetableDayRange(courses);
   const hours = useTimetableHourRange(courses);
 

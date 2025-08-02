@@ -4,8 +4,8 @@ import { SwitchCase } from 'react-simplikit';
 
 import { Mixpanel } from '@/bootstrap/mixpanel';
 import { ActivityLayout } from '@/components/ActivityLayout';
+import { useCoursesTotalPoint } from '@/hooks/useCoursesTotalPoint';
 import { useFilterCoursesByCategory } from '@/hooks/useFilterCoursesByCategory';
-import { useTotalPointsByCategory } from '@/hooks/useTotalPointsByCategory';
 import CourseSelectionFallback from '@/pages/CourseSelectionActivity/components/CourseSelectionFallback';
 import { CourseSelectionResultStep } from '@/pages/CourseSelectionActivity/components/CourseSelectionSteps/CourseSelectionResultStep';
 import { GeneralRequiredSelectionStep } from '@/pages/CourseSelectionActivity/components/CourseSelectionSteps/GeneralRequiredSelectionStep';
@@ -32,13 +32,13 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
   const { stepPush } = useStepFlow('CourseSelectionActivity');
 
   const filteredCoursesByCategory = useFilterCoursesByCategory(selectedCourses);
-  const totalPointsByCategory = useTotalPointsByCategory(selectedCourses);
+  const totalPoints = useCoursesTotalPoint(selectedCourses);
 
   // Todo: 전필은 로딩시 무조건 선택되어야 함
 
   return (
     <SelectedCoursesContext.Provider
-      value={{ selectedCourses, selectedCredit: totalPointsByCategory.total, setSelectedCourses }}
+      value={{ selectedCourses, selectedCredit: totalPoints, setSelectedCourses }}
     >
       <ActivityLayout>
         <SoongptErrorBoundary
@@ -109,7 +109,7 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
                         majorRequiredCodes: filteredCoursesByCategory.MAJOR_REQUIRED.map(
                           ({ code }) => code,
                         ),
-                        selectedTotalPoints: totalPointsByCategory.total,
+                        selectedTotalPoints: totalPoints,
                         codes: selectedCourses
                           .filter((course) => !!course.selectedBySearch)
                           .map((course) => course.code),
