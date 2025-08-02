@@ -5,7 +5,7 @@ import { useMemo, useRef } from 'react';
 import { Mixpanel } from '@/bootstrap/mixpanel';
 import { ActivityLayout } from '@/components/ActivityLayout';
 import { ProgressAppBar } from '@/components/AppBar/ProgressAppBar';
-import { useStudentInfoContext } from '@/contexts/StudentInfoContext';
+import { useStudentInfoContext } from '@/components/Providers/StudentInfoProvider/hook';
 import ChapelInput from '@/pages/OnboardingActivity/components/ChapelInput';
 import DepartmentInput from '@/pages/OnboardingActivity/components/DepartmentInput';
 import GradeInput from '@/pages/OnboardingActivity/components/GradeInput';

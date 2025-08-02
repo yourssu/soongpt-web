@@ -1,6 +1,6 @@
 import { tv } from 'tailwind-variants';
 
-import { useAssertedStudentInfoContext } from '@/contexts/StudentInfoContext';
+import { useAssertedStudentInfoContext } from '@/components/Providers/StudentInfoProvider/hook';
 
 interface PreferedGeneralElectivesChipGroupProps {
   onChange: (selectedChips: string[]) => void;

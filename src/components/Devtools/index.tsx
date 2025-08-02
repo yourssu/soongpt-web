@@ -3,8 +3,8 @@ import { Code } from 'lucide-react';
 import { useState } from 'react';
 
 import { postTimetable, TimetablePayloadType } from '@/api/timetables';
+import { useStudentInfoContext } from '@/components/Providers/StudentInfoProvider/hook';
 import { STAGE } from '@/config';
-import { useStudentInfoContext } from '@/contexts/StudentInfoContext';
 import { useAlertDialog } from '@/hooks/useAlertDialog';
 import { useToast } from '@/hooks/useToast';
 import { useFlow } from '@/stackflow';

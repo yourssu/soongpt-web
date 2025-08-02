@@ -5,7 +5,7 @@ import {
   getMajorElectiveCourses,
   getMajorRequiredCourses,
 } from '@/api/courses';
-import { useAssertedStudentInfoContext } from '@/contexts/StudentInfoContext';
+import { useAssertedStudentInfoContext } from '@/components/Providers/StudentInfoProvider/hook';
 import { CourseType } from '@/types/course';
 
 export const useSuspenseGetCourses = (type: CourseType) => {

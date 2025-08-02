@@ -11,7 +11,7 @@ import { Mixpanel } from '@/bootstrap/mixpanel';
 import { ActivityLayout } from '@/components/ActivityLayout';
 import { ProgressAppBar } from '@/components/AppBar/ProgressAppBar';
 import { Hint } from '@/components/Hint';
-import { useAssertedStudentInfoContext } from '@/contexts/StudentInfoContext';
+import { useAssertedStudentInfoContext } from '@/components/Providers/StudentInfoProvider/hook';
 import { useAlertDialog } from '@/hooks/useAlertDialog';
 import { PointCarryOverCalculator } from '@/pages/DesiredCreditActivity/components/PointCarryOverCalculator';
 import { PreferedGeneralElectivesChipGroup } from '@/pages/DesiredCreditActivity/components/PreferedGeneralElectivesChipGroup';

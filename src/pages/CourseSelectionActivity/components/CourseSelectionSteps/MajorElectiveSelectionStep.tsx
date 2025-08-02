@@ -2,7 +2,7 @@ import { Suspense, useContext, useMemo, useState } from 'react';
 import { SwitchCase, useInputState } from 'react-simplikit';
 
 import { IcMonoSearch } from '@/components/Icons/IcMonoSearch';
-import { useAssertedStudentInfoContext } from '@/contexts/StudentInfoContext';
+import { useAssertedStudentInfoContext } from '@/components/Providers/StudentInfoProvider/hook';
 import { useCombinedCourses } from '@/hooks/course/useCombinedCourses';
 import { useDelayedValue } from '@/hooks/useDelayedValue';
 import { ArrayState, useGetArrayState } from '@/hooks/useGetArrayState';

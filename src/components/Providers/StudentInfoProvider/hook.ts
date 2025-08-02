@@ -1,30 +1,7 @@
-import { createContext, Dispatch, SetStateAction, useContext, useLayoutEffect } from 'react';
+import { useContext, useLayoutEffect } from 'react';
 
-import { StudentGrade, StudentType } from '@/types/student';
-import { Merge } from '@/utils/type';
-
-export type StudentInfoFormType = Merge<
-  StudentType,
-  {
-    grade: StudentGrade | undefined;
-    schoolId: number | undefined;
-  }
->;
-
-interface StudentInfoContextProps {
-  setStudentInfo: Dispatch<SetStateAction<StudentInfoFormType>>;
-  studentInfo: StudentInfoFormType;
-}
-
-export const StudentInfoContext = createContext<StudentInfoContextProps>({
-  studentInfo: {
-    department: '',
-    grade: undefined,
-    isChapel: true,
-    schoolId: undefined,
-  },
-  setStudentInfo: () => {},
-});
+import { StudentInfoContext } from '@/components/Providers/StudentInfoProvider/context';
+import { StudentType } from '@/types/student';
 
 /**
  * 사용자 정보 입력 폼에서 사용해주세요.

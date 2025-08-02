@@ -1,7 +1,7 @@
 import { useSuspenseQueries } from '@tanstack/react-query';
 
 import { getMajorElectiveCourses } from '@/api/courses';
-import { useAssertedStudentInfoContext } from '@/contexts/StudentInfoContext';
+import { useAssertedStudentInfoContext } from '@/components/Providers/StudentInfoProvider/hook';
 import { StudentGrade } from '@/types/student';
 
 export const useSuspenseGetMajorElectives = (grades: StudentGrade[]) => {
