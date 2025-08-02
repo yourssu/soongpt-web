@@ -5,7 +5,7 @@ export const BaseResponseSchema = z.object({
 });
 
 export const BasePaginatedSchema = z.object({
-  number: z.number(), // Todo: page로 바꿔야함, 백엔드 팔로업 필요
+  page: z.number(),
   size: z.number(),
   totalElements: z.number(),
   totalPages: z.number(),

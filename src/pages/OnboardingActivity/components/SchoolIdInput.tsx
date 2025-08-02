@@ -6,19 +6,19 @@ import { useState } from 'react';
 
 import { admissionYears } from '@/types/admissionYears';
 
-interface AdmissionYearInputProps {
+interface SchoolIdInputProps {
   a?: ErrorBoundaryProps;
   initialValue: number | undefined;
   onNext: (admissionYear: number) => void;
 }
 
-const AdmissionYearInput = ({ onNext, initialValue }: AdmissionYearInputProps) => {
-  const [admissionYear, setAdmissionYear] = useState(initialValue);
-  const [showLabel, setShowLabel] = useState(admissionYear !== 0);
+const SchoolIdInput = ({ onNext, initialValue }: SchoolIdInputProps) => {
+  const [schoolId, setSchoolId] = useState(initialValue);
+  const [showLabel, setShowLabel] = useState(schoolId !== 0);
   const [showDropdown, setShowDropdown] = useState(false);
 
   const handleAdmissionYearSelect = (year: number) => {
-    setAdmissionYear(year);
+    setSchoolId(year);
     setShowDropdown(false);
 
     // 라벨 보이기
@@ -44,10 +44,10 @@ const AdmissionYearInput = ({ onNext, initialValue }: AdmissionYearInputProps) =
       <Popover.Root onOpenChange={setShowDropdown} open={showDropdown}>
         <Popover.Trigger asChild>
           <button
-            className={`bg-bg-layerDefault focus-visible:outline-borderRing flex w-full items-center justify-between rounded-xl px-4 py-3 text-lg font-semibold ${admissionYear === 0 ? 'text-neutralPlaceholder' : 'text-brandPrimary'}`}
+            className={`bg-bg-layerDefault focus-visible:outline-borderRing flex w-full items-center justify-between rounded-xl px-4 py-3 text-lg font-semibold ${!schoolId ? 'text-neutralPlaceholder' : 'text-brandPrimary'}`}
             type="button"
           >
-            {admissionYear === 0 ? '입학년도(학번)' : admissionYear}
+            {schoolId ?? '입학년도(학번)'}
             <ChevronDown className="text-neutral size-4" />
           </button>
         </Popover.Trigger>
@@ -80,7 +80,7 @@ const AdmissionYearInput = ({ onNext, initialValue }: AdmissionYearInputProps) =
                       type="button"
                     >
                       {year}
-                      {admissionYear === year && <Check className="size-4 text-green-500" />}
+                      {schoolId === year && <Check className="size-4 text-green-500" />}
                     </button>
                   </li>
                 ))}
@@ -93,4 +93,4 @@ const AdmissionYearInput = ({ onNext, initialValue }: AdmissionYearInputProps) =
   );
 };
 
-export default AdmissionYearInput;
+export default SchoolIdInput;

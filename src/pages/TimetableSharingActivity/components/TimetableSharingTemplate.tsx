@@ -9,7 +9,7 @@ import {
 } from 'react';
 
 import Timetable, { getMajorCredit, getTotalCredit, SharingHeader } from '@/components/Timetable';
-import { StudentMachineContext } from '@/contexts/StudentMachineContext';
+import { useAssertedStudentInfoContext } from '@/contexts/StudentInfoContext';
 import { useGetTimetable } from '@/hooks/api/useGetTimetable';
 
 interface Color {
@@ -106,7 +106,7 @@ const TemplateContent = ({ children, bgImage }: PropsWithChildren<{ bgImage: str
 };
 
 const TemplateStudent = ({ textColor }: PropsWithChildren<{ textColor: string }>) => {
-  const context = StudentMachineContext.useSelector((state) => state.context);
+  const { grade, department } = useAssertedStudentInfoContext();
 
   return (
     <div
@@ -115,8 +115,8 @@ const TemplateStudent = ({ textColor }: PropsWithChildren<{ textColor: string }>
         color: textColor,
       }}
     >
-      <div className="text-xs font-semibold">{context.grade}학년</div>
-      <div className="text-[10px] font-semibold">{context.department}</div>
+      <div className="text-xs font-semibold">{grade}학년</div>
+      <div className="text-[10px] font-semibold">{department}</div>
     </div>
   );
 };

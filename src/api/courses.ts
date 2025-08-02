@@ -1,10 +1,10 @@
 import { api } from '@/api/client';
 import { courseResponseSchema, paginatedCourseResponseSchema } from '@/schemas/courseSchema';
-import { Grade } from '@/schemas/studentSchema';
+import { StudentGrade } from '@/types/student';
 
 type GetCoursesSearchParams = {
   department: string;
-  grade: Grade;
+  grade: StudentGrade;
   schoolId: number;
 };
 

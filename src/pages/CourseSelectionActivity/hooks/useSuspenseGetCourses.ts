@@ -5,16 +5,16 @@ import {
   getMajorElectiveCourses,
   getMajorRequiredCourses,
 } from '@/api/courses';
-import { StudentMachineContext } from '@/contexts/StudentMachineContext';
+import { useAssertedStudentInfoContext } from '@/contexts/StudentInfoContext';
 import { CourseType } from '@/types/course';
 
 export const useSuspenseGetCourses = (type: CourseType) => {
-  const state = StudentMachineContext.useSelector((state) => state);
+  const { schoolId, grade, department } = useAssertedStudentInfoContext();
 
   const searchParams = {
-    schoolId: state.context.admissionYear,
-    grade: state.context.grade,
-    department: state.context.department,
+    schoolId,
+    grade,
+    department,
   };
 
   const { data } = useSuspenseQuery({

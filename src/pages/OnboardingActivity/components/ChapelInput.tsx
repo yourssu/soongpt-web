@@ -6,10 +6,10 @@ import { useState } from 'react';
 import { Mixpanel } from '@/bootstrap/mixpanel';
 import Hint from '@/components/Hint';
 import { useAlertDialog } from '@/hooks/useAlertDialog';
-import { Grade } from '@/schemas/studentSchema';
+import { StudentGrade } from '@/types/student';
 
 interface ChapelInputProps {
-  grade: Grade;
+  grade: StudentGrade;
   initialValue: boolean | undefined;
   onNext: (chapel: boolean) => void;
 }

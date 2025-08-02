@@ -9,7 +9,7 @@ import { Mixpanel } from '@/bootstrap/mixpanel';
 import { ActivityLayout } from '@/components/ActivityLayout';
 import { ProgressAppBar } from '@/components/AppBar/ProgressAppBar';
 import Hint from '@/components/Hint';
-import { StudentMachineContext } from '@/contexts/StudentMachineContext';
+import { useAssertedStudentInfoContext } from '@/contexts/StudentInfoContext';
 import { usePostTimetable } from '@/hooks/api/usePostTimetable';
 import { useAlertDialog } from '@/hooks/useAlertDialog';
 import { PointCarryOverCalculator } from '@/pages/DesiredCreditActivity/components/PointCarryOverCalculator';
@@ -28,8 +28,9 @@ type DesiredCreditParams = {
 const MAX_CREDIT = 22 + 3; // 최대 학점 22 + 이월학점 3
 
 const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ params }) => {
-  const context = StudentMachineContext.useSelector((state) => state.context);
-  const chapelPoints = context.chapel ? 0.5 : 0;
+  const { grade, schoolId, department, isChapel } = useAssertedStudentInfoContext();
+
+  const chapelPoints = isChapel ? 0.5 : 0;
   const totalPoints = params.selectedTotalPoints + chapelPoints;
 
   const [generalElective, setGeneralElective] = useState(0); // 교양선택 학점
@@ -49,7 +50,7 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
   };
 
   const handleMaxPointInfoClick = () => {
-    const contentType = context.grade === 1 ? '1학년' : '2학년_이상';
+    const contentType = grade === 1 ? '1학년' : '2학년_이상';
 
     openDialog({
       title: maxPointInfoDialogContent[contentType].title,
@@ -62,7 +63,7 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
   };
 
   const handleGeneralElectiveInfoClick = () => {
-    const contentType = context.admissionYear >= 23 ? '23학번_이상' : '22학번_이하';
+    const contentType = schoolId >= 23 ? '23학번_이상' : '22학번_이하';
 
     openDialog({
       title: '교양과목 이수 체계 안내',
@@ -75,10 +76,10 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
   const handleNextClick = () => {
     // 시간표 추천 API 요청
     postTimetableMutation.mutate({
-      schoolId: context.admissionYear,
-      department: context.department,
-      grade: context.grade,
-      isChapel: context.chapel,
+      schoolId,
+      department,
+      grade,
+      isChapel,
       codes: params.codes,
       generalRequiredCodes: params.generalRequiredCodes,
       majorElectiveCodes: params.majorElectiveCodes,
@@ -109,7 +110,7 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
               희망 학점은{' '}
               <RollingNumber
                 className="text-brandPrimary"
-                decimals={context.chapel ? 1 : 0}
+                decimals={isChapel ? 1 : 0}
                 number={desiredCredit}
               />
               학점이군요!
@@ -204,7 +205,7 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
               onClick={handleGeneralElectiveInfoClick}
             >
               교양과목 이수 체계 안내(
-              {context.admissionYear >= 23 ? '2023학년도 이후' : '2022학년도 이전'} 입학자)
+              {schoolId >= 23 ? '2023학년도 이후' : '2022학년도 이전'} 입학자)
             </button>
           </div>
         </ActivityLayout.Body>

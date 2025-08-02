@@ -1,15 +1,15 @@
 import { useSuspenseQueries } from '@tanstack/react-query';
 
 import { getMajorElectiveCourses } from '@/api/courses';
-import { StudentMachineContext } from '@/contexts/StudentMachineContext';
-import { Grade } from '@/schemas/studentSchema';
+import { useAssertedStudentInfoContext } from '@/contexts/StudentInfoContext';
+import { StudentGrade } from '@/types/student';
 
-export const useSuspenseGetMajorElectives = (grades: Grade[]) => {
-  const state = StudentMachineContext.useSelector((state) => state);
+export const useSuspenseGetMajorElectives = (grades: StudentGrade[]) => {
+  const { schoolId, department } = useAssertedStudentInfoContext();
 
-  const getSearchParams = (grade: Grade) => ({
-    schoolId: state.context.admissionYear,
-    department: state.context.department,
+  const getSearchParams = (grade: StudentGrade) => ({
+    schoolId,
+    department,
     grade,
   });
 

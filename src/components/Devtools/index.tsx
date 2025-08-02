@@ -3,11 +3,12 @@ import { useState } from 'react';
 
 import { TimetablePayloadType } from '@/api/timetables';
 import { STAGE } from '@/config';
-import { StudentMachineContext, StudentMachineContextType } from '@/contexts/StudentMachineContext';
+import { useStudentInfoContext } from '@/contexts/StudentInfoContext';
 import { usePostTimetable } from '@/hooks/api/usePostTimetable';
 import { useAlertDialog } from '@/hooks/useAlertDialog';
 import { useToast } from '@/hooks/useToast';
 import { useFlow } from '@/stackflow';
+import { assertNonNullish } from '@/utils/assertion';
 
 interface ToolItemProps {
   description?: string;
@@ -33,14 +34,14 @@ const ToolItem = ({ title, description, onClick }: ToolItemProps) => {
 };
 
 const TimetableInjectionToolItem = ({
-  context,
   mutation,
   onMutate,
 }: {
-  context: StudentMachineContextType;
   mutation: ReturnType<typeof usePostTimetable>;
   onMutate: () => void;
 }) => {
+  const { studentInfo } = useStudentInfoContext();
+
   const [timetableData, setTimetableData] = useState(
     JSON.stringify(
       {
@@ -66,10 +67,16 @@ const TimetableInjectionToolItem = ({
         description="하단의 데이터를 조작해서 바로 시간표를 만들어요."
         onClick={async () => {
           const data = JSON.parse(timetableData) as TimetablePayloadType;
-          const schoolId = data.schoolId ?? context.admissionYear;
-          const department = data.department ?? context.department;
-          const grade = data.grade ?? context.grade;
-          const isChapel = data.isChapel ?? context.chapel;
+          const schoolId = data.schoolId ?? studentInfo.schoolId;
+          const department = data.department ?? studentInfo.department;
+          const grade = data.grade ?? studentInfo.grade;
+          const isChapel = data.isChapel ?? studentInfo.isChapel;
+
+          assertNonNullish(schoolId);
+          assertNonNullish(department);
+          assertNonNullish(grade);
+          assertNonNullish(isChapel);
+
           await mutation.mutateAsync({
             schoolId,
             department,
@@ -100,7 +107,6 @@ const TimetableInjectionToolItem = ({
 export const Devtools = () => {
   const open = useAlertDialog();
   const toast = useToast();
-  const context = StudentMachineContext.useSelector((state) => state.context);
   const postTimetableMutation = usePostTimetable();
   const { push } = useFlow();
 
@@ -126,7 +132,6 @@ export const Devtools = () => {
               title="처음 화면으로 돌아가기"
             />
             <TimetableInjectionToolItem
-              context={context}
               mutation={postTimetableMutation}
               onMutate={() => {
                 push('TimetableSelectionActivity', {});
