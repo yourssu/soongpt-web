@@ -6,12 +6,12 @@ import { ToastProvider } from '@/components/Providers/ToastProvider';
 
 export const Providers = ({ children }: React.PropsWithChildren<unknown>) => {
   return (
-    <OverlayProvider>
-      <TanstackQueryProvider>
-        <StudentInfoProvider>
-          <ToastProvider duration={3000}>{children}</ToastProvider>
-        </StudentInfoProvider>
-      </TanstackQueryProvider>
-    </OverlayProvider>
+    <TanstackQueryProvider>
+      <StudentInfoProvider>
+        <ToastProvider duration={3000}>
+          <OverlayProvider>{children}</OverlayProvider>
+        </ToastProvider>
+      </StudentInfoProvider>
+    </TanstackQueryProvider>
   );
 };

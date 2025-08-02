@@ -1,16 +1,17 @@
 import * as Popover from '@radix-ui/react-popover';
 import { ActivityComponentType } from '@stackflow/react';
+import { useMutation } from '@tanstack/react-query';
 import { range } from 'es-toolkit';
 import { Check, ChevronDown } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
 
+import { postTimetable } from '@/api/timetables';
 import { Mixpanel } from '@/bootstrap/mixpanel';
 import { ActivityLayout } from '@/components/ActivityLayout';
 import { ProgressAppBar } from '@/components/AppBar/ProgressAppBar';
 import { Hint } from '@/components/Hint';
 import { useAssertedStudentInfoContext } from '@/contexts/StudentInfoContext';
-import { usePostTimetable } from '@/hooks/api/usePostTimetable';
 import { useAlertDialog } from '@/hooks/useAlertDialog';
 import { PointCarryOverCalculator } from '@/pages/DesiredCreditActivity/components/PointCarryOverCalculator';
 import { PreferedGeneralElectivesChipGroup } from '@/pages/DesiredCreditActivity/components/PreferedGeneralElectivesChipGroup';
@@ -36,7 +37,15 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
   const [generalElective, setGeneralElective] = useState(0); // 교양선택 학점
   const [showGeneralElectiveDropdown, setShowGeneralElectiveDropdown] = useState(false);
   const [preferredGeneralElectives, setPreferredGeneralElectives] = useState<string[]>([]);
-  const postTimetableMutation = usePostTimetable();
+
+  const { mutate: mutateTimetable } = useMutation({
+    mutationKey: ['timetables'],
+    mutationFn: postTimetable,
+    onSuccess: () => {
+      Mixpanel.incrementUserCount();
+      Mixpanel.trackTimetableGenerateComplete();
+    },
+  });
   const openDialog = useAlertDialog();
 
   const availableGeneralElective = range(MAX_CREDIT - totalPoints + 1);
@@ -73,9 +82,15 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
     });
   };
 
-  const handleNextClick = () => {
-    // 시간표 추천 API 요청
-    postTimetableMutation.mutate({
+  const handleNextClick = async () => {
+    Mixpanel.trackDesiredCreditClick({
+      existCredit: totalPoints,
+      addCredit: generalElective,
+      sumCredit: desiredCredit,
+      fieldSelect: preferredGeneralElectives.length > 0,
+    });
+
+    mutateTimetable({
       schoolId,
       department,
       grade,
@@ -86,14 +101,6 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
       majorRequiredCodes: params.majorRequiredCodes,
       generalElectivePoint: generalElective,
       preferredGeneralElectives,
-    });
-
-    // Mixpanel 이벤트 추적
-    Mixpanel.trackDesiredCreditClick({
-      existCredit: totalPoints,
-      addCredit: generalElective,
-      sumCredit: desiredCredit,
-      fieldSelect: preferredGeneralElectives.length > 0,
     });
 
     push('TimetableSelectionActivity', {});

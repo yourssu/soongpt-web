@@ -1,10 +1,10 @@
+import { useMutation } from '@tanstack/react-query';
 import { Code } from 'lucide-react';
 import { useState } from 'react';
 
-import { TimetablePayloadType } from '@/api/timetables';
+import { postTimetable, TimetablePayloadType } from '@/api/timetables';
 import { STAGE } from '@/config';
 import { useStudentInfoContext } from '@/contexts/StudentInfoContext';
-import { usePostTimetable } from '@/hooks/api/usePostTimetable';
 import { useAlertDialog } from '@/hooks/useAlertDialog';
 import { useToast } from '@/hooks/useToast';
 import { useFlow } from '@/stackflow';
@@ -33,13 +33,11 @@ const ToolItem = ({ title, description, onClick }: ToolItemProps) => {
   );
 };
 
-const TimetableInjectionToolItem = ({
-  mutation,
-  onMutate,
-}: {
-  mutation: ReturnType<typeof usePostTimetable>;
-  onMutate: () => void;
-}) => {
+const TimetableInjectionToolItem = ({ onMutateSuccess }: { onMutateSuccess: () => void }) => {
+  const { mutateAsync } = useMutation({
+    mutationKey: ['timetables'],
+    mutationFn: postTimetable,
+  });
   const { studentInfo } = useStudentInfoContext();
 
   const [timetableData, setTimetableData] = useState(
@@ -77,7 +75,7 @@ const TimetableInjectionToolItem = ({
           assertNonNullish(grade);
           assertNonNullish(isChapel);
 
-          await mutation.mutateAsync({
+          await mutateAsync({
             schoolId,
             department,
             grade,
@@ -89,7 +87,7 @@ const TimetableInjectionToolItem = ({
             generalElectivePoint: data.generalElectivePoint,
             preferredGeneralElectives: data.preferredGeneralElectives,
           });
-          onMutate();
+          onMutateSuccess();
         }}
         title="바로 시간표 만들기"
       />
@@ -107,7 +105,6 @@ const TimetableInjectionToolItem = ({
 export const Devtools = () => {
   const open = useAlertDialog();
   const toast = useToast();
-  const postTimetableMutation = usePostTimetable();
   const { push } = useFlow();
 
   const showDevtools = () => {
@@ -132,8 +129,7 @@ export const Devtools = () => {
               title="처음 화면으로 돌아가기"
             />
             <TimetableInjectionToolItem
-              mutation={postTimetableMutation}
-              onMutate={() => {
+              onMutateSuccess={() => {
                 push('TimetableSelectionActivity', {});
                 toast.success('시간표 페이지로 이동해요');
                 closeAsTrue();
