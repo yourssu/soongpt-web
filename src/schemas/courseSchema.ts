@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from 'zod/v4';
 
 import { PaginatedSchema, ResponseSchema } from '@/schemas/response';
 import { CourseClassification } from '@/types/course';
