@@ -106,13 +106,14 @@ export const CourseSelectionFooter = ({
   );
 };
 
+/**
+ * 주의) 상위에 `ActivityLayout` 컴포넌트가 있어야 해요.
+ */
 export const CourseSelectionLayout = ({ children }: React.PropsWithChildren<unknown>) => {
   return (
-    <ActivityLayout>
-      <motion.div animate="animate" initial="initial" variants={fadeInVariants}>
-        <ActivityLayout.ScrollArea>{children}</ActivityLayout.ScrollArea>
-      </motion.div>
-    </ActivityLayout>
+    <motion.div animate="animate" initial="initial" variants={fadeInVariants}>
+      <ActivityLayout.ScrollArea>{children}</ActivityLayout.ScrollArea>
+    </motion.div>
   );
 };
 

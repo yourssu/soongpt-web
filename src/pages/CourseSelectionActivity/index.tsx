@@ -3,8 +3,8 @@ import { Suspense, useState } from 'react';
 import { SwitchCase } from 'react-simplikit';
 
 import { Mixpanel } from '@/bootstrap/mixpanel';
+import { ActivityLayout } from '@/components/ActivityLayout';
 import SoongptErrorBoundary from '@/components/SoongptErrorBoundary';
-import { CourseTypeContext } from '@/contexts/CourseTypeContext';
 import { useFilterCoursesByCategory } from '@/hooks/useFilterCoursesByCategory';
 import { useTotalPointsByCategory } from '@/hooks/useFilterCreditByCategory';
 import CourseSelectionFallback from '@/pages/CourseSelectionActivity/components/CourseSelectionFallback';
@@ -37,10 +37,10 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
   // Todo: 전필은 로딩시 무조건 선택되어야 함
 
   return (
-    <CourseTypeContext.Provider value={type}>
-      <SelectedCoursesContext.Provider
-        value={{ selectedCourses, selectedCredit: totalPointsByCategory.total, setSelectedCourses }}
-      >
+    <SelectedCoursesContext.Provider
+      value={{ selectedCourses, selectedCredit: totalPointsByCategory.total, setSelectedCourses }}
+    >
+      <ActivityLayout>
         <SoongptErrorBoundary
           FallbackComponent={<CourseSelectionFallback type="error" />}
           progress={50}
@@ -125,8 +125,8 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
             />
           </Suspense>
         </SoongptErrorBoundary>
-      </SelectedCoursesContext.Provider>
-    </CourseTypeContext.Provider>
+      </ActivityLayout>
+    </SelectedCoursesContext.Provider>
   );
 };
 
