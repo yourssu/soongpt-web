@@ -2,7 +2,7 @@ import { motion } from 'motion/react';
 import { useContext } from 'react';
 
 import { SelectableCourseItem } from '@/components/CourseItem/SelectableCourseItem';
-import { useCombinedCourses } from '@/hooks/useCombinedCourses';
+import { useCombinedCourses } from '@/hooks/course/useCombinedCourses';
 import { SelectedCoursesContext } from '@/pages/CourseSelectionActivity/context';
 import { SelectedCourseType } from '@/pages/CourseSelectionActivity/type';
 import { CourseType } from '@/schemas/courseSchema';

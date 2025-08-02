@@ -4,8 +4,8 @@ import { SwitchCase } from 'react-simplikit';
 
 import { Mixpanel } from '@/bootstrap/mixpanel';
 import { ActivityLayout } from '@/components/ActivityLayout';
-import { useCoursesTotalPoint } from '@/hooks/useCoursesTotalPoint';
-import { useFilterCoursesByCategory } from '@/hooks/useFilterCoursesByCategory';
+import { useCoursesTotalPoint } from '@/hooks/course/useCoursesTotalPoint';
+import { useFilteredCoursesByCategory } from '@/hooks/course/useFilteredCoursesByCategory';
 import CourseSelectionFallback from '@/pages/CourseSelectionActivity/components/CourseSelectionFallback';
 import { CourseSelectionResultStep } from '@/pages/CourseSelectionActivity/components/CourseSelectionSteps/CourseSelectionResultStep';
 import { GeneralRequiredSelectionStep } from '@/pages/CourseSelectionActivity/components/CourseSelectionSteps/GeneralRequiredSelectionStep';
@@ -31,7 +31,7 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
   const { push } = useFlow();
   const { stepPush } = useStepFlow('CourseSelectionActivity');
 
-  const filteredCoursesByCategory = useFilterCoursesByCategory(selectedCourses);
+  const filteredCoursesByCategory = useFilteredCoursesByCategory(selectedCourses);
   const totalPoints = useCoursesTotalPoint(selectedCourses);
 
   // Todo: 전필은 로딩시 무조건 선택되어야 함

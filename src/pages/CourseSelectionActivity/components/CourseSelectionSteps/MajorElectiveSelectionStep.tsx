@@ -3,7 +3,7 @@ import { SwitchCase, useInputState } from 'react-simplikit';
 
 import { IcMonoSearch } from '@/components/Icons/IcMonoSearch';
 import { useAssertedStudentInfoContext } from '@/contexts/StudentInfoContext';
-import { useCombinedCourses } from '@/hooks/useCombinedCourses';
+import { useCombinedCourses } from '@/hooks/course/useCombinedCourses';
 import { useDelayedValue } from '@/hooks/useDelayedValue';
 import { ArrayState, useGetArrayState } from '@/hooks/useGetArrayState';
 import { CourseSelectionLayout } from '@/pages/CourseSelectionActivity/components/CourseSelectionLayout';

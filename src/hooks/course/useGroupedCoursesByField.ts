@@ -10,7 +10,7 @@ type GroupedByFieldCourses = Record<string, CourseType[]>;
  * - XXXX 형태인 경우는 XXXX를 기준으로 그룹지어요.
  * - 빈 문자열인 경우는 `Course.name` 자체를 기준으로 그룹지어요.
  */
-export const useGroupCoursesByField = (courses: CourseType[]): GroupedByFieldCourses => {
+export const useGroupedCoursesByField = (courses: CourseType[]): GroupedByFieldCourses => {
   return useMemo(() => {
     const group: GroupedByFieldCourses = {};
 

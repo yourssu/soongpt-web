@@ -2,7 +2,8 @@ import { motion } from 'motion/react';
 import { useContext, useState } from 'react';
 
 import { SelectableCourseItem } from '@/components/CourseItem/SelectableCourseItem';
-import { useCombinedCourses } from '@/hooks/useCombinedCourses';
+import { useCombinedCourses } from '@/hooks/course/useCombinedCourses';
+import { useGroupedCoursesByField } from '@/hooks/course/useGroupedCoursesByField';
 import { ArrayState, useGetArrayState } from '@/hooks/useGetArrayState';
 import { CourseSelectionLayout } from '@/pages/CourseSelectionActivity/components/CourseSelectionLayout';
 import {
@@ -10,7 +11,6 @@ import {
   StepContentType,
 } from '@/pages/CourseSelectionActivity/components/CourseSelectionSteps/type';
 import { SelectedCoursesContext } from '@/pages/CourseSelectionActivity/context';
-import { useGroupCoursesByField } from '@/pages/CourseSelectionActivity/hooks/useGroupCoursesByField';
 import { useSuspenseGetCourses } from '@/pages/CourseSelectionActivity/hooks/useSuspenseGetCourses';
 import { CourseType } from '@/schemas/courseSchema';
 import { isSameCourse } from '@/utils/course';
@@ -79,7 +79,7 @@ const GeneralRequiredCourseFieldGroup = ({
 
 // Todo: 컴포넌트 분리 리팩토링
 const GeneralRequiredCoursesList = ({ courses }: { courses: CourseType[] }) => {
-  const groupedCourses = useGroupCoursesByField(useCombinedCourses(courses));
+  const groupedCourses = useGroupedCoursesByField(useCombinedCourses(courses));
   const fieldTitles = Object.keys(groupedCourses);
 
   return (

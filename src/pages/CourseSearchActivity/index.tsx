@@ -7,8 +7,8 @@ import { useInputState } from 'react-simplikit';
 import { ActivityLayout } from '@/components/ActivityLayout';
 import { BaseAppBar } from '@/components/AppBar/BaseAppBar';
 import { useDelayedValue } from '@/hooks/useDelayedValue';
+import { useStackflowInputAutoFocusEffect } from '@/hooks/useStackflowInputAutoFocusEffect';
 import { CourseSearchResult } from '@/pages/CourseSearchActivity/components/CourseSearchResult';
-import { useStackflowInputAutoFocusEffect } from '@/pages/CourseSearchActivity/hooks/useStackflowInputAutoFocusEffect';
 import { CourseSelectionChangeActionPayload } from '@/pages/CourseSearchActivity/type';
 import { CourseType } from '@/schemas/courseSchema';
 

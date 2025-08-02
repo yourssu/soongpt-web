@@ -11,7 +11,7 @@ type FilteredCoursesMapType<TCourse extends CourseType> = {
   [key in CourseClassification]: CourseWithCategory<key, TCourse>[];
 };
 
-export const useFilterCoursesByCategory = <TCourse extends CourseType>(courses: TCourse[]) => {
+export const useFilteredCoursesByCategory = <TCourse extends CourseType>(courses: TCourse[]) => {
   return Object.fromEntries(
     CourseClassification.map((category) => [
       category,
