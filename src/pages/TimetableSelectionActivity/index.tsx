@@ -6,9 +6,8 @@ import { ReactElement, useEffect, useMemo, useRef, useState } from 'react';
 import { Mixpanel } from '@/bootstrap/mixpanel';
 import { ActivityLayout } from '@/components/ActivityLayout';
 import { ProgressAppBar } from '@/components/AppBar/ProgressAppBar';
-import Timetable from '@/components/Timetable';
+import { Timetable } from '@/components/Timetable';
 import { useAlertDialog } from '@/hooks/useAlertDialog';
-import { TimetableSkeleton } from '@/pages/TimetableSharingActivity/components/TimetableSkeleton';
 import { SoongptErrorType } from '@/schemas/errorSchema';
 import { TimetableArrayResponseType } from '@/schemas/timetableSchema';
 import { useFlow } from '@/stackflow';
@@ -75,11 +74,7 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
     pending: {
       title: '사용자님을 위한\n시간표를 가져오는 중이에요!',
       buttonText: '이 시간표가 좋아요',
-      element: () => (
-        <TimetableSkeleton className="pt-4">
-          <TimetableSkeleton.Header />
-        </TimetableSkeleton>
-      ),
+      element: () => <Timetable.Skeleton className="pt-4" />,
     },
     success: {
       title: '사용자님을 위한\n시간표를 가져왔어요!',
@@ -100,20 +95,7 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
                   timetableRefs.current[index] = element;
                 }}
               >
-                <Timetable
-                  className={`${
-                    index === selectedIndex ? 'border-brandPrimary' : 'border-neutralPlaceholder'
-                  } transition-colors duration-300`}
-                  timetable={timetable}
-                >
-                  <Timetable.Header
-                    className={`${
-                      index === selectedIndex
-                        ? 'bg-brandPrimary text-white'
-                        : 'border-neutralPlaceholder border-b-1'
-                    } transition-colors duration-300`}
-                  />
-                </Timetable>
+                <Timetable isSelected={index === selectedIndex} timetable={timetable} />
               </div>
             ))}
         </>

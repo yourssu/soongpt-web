@@ -6,7 +6,7 @@ import { Mixpanel } from '@/bootstrap/mixpanel';
 import { ActivityLayout } from '@/components/ActivityLayout';
 import SoongptErrorBoundary from '@/components/SoongptErrorBoundary';
 import { useFilterCoursesByCategory } from '@/hooks/useFilterCoursesByCategory';
-import { useTotalPointsByCategory } from '@/hooks/useFilterCreditByCategory';
+import { useTotalPointsByCategory } from '@/hooks/useTotalPointsByCategory';
 import CourseSelectionFallback from '@/pages/CourseSelectionActivity/components/CourseSelectionFallback';
 import { CourseSelectionResultStep } from '@/pages/CourseSelectionActivity/components/CourseSelectionSteps/CourseSelectionResultStep';
 import { GeneralRequiredSelectionStep } from '@/pages/CourseSelectionActivity/components/CourseSelectionSteps/GeneralRequiredSelectionStep';

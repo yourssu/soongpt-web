@@ -1,11 +1,13 @@
-import { ElementType, HTMLAttributes } from 'react';
+import { range } from 'es-toolkit';
+import { HTMLAttributes } from 'react';
 import { twMerge } from 'tailwind-merge';
 
-import { getGridTemplateCols, getGridTemplateRows, SLOT_HEIGHT } from '@/components/Timetable';
-
-interface TimetableSkeletonHeaderProps extends HTMLAttributes<HTMLDivElement> {
-  as?: ElementType;
-}
+import { timetableBaseDays } from '@/components/Timetable/hooks/useTimetableDayRange';
+import { SLOT_HEIGHT } from '@/components/Timetable/type';
+import {
+  getGridTemplateCols,
+  getGridTemplateRows,
+} from '@/components/Timetable/utils/getTimetableGridStyle';
 
 const DefaultSkeltonHeader = () => {
   return (
@@ -16,56 +18,8 @@ const DefaultSkeltonHeader = () => {
   );
 };
 
-const SharingSkeletonHeader = () => {
-  return (
-    <div className={`relative h-6 bg-white`}>
-      <div
-        className={`absolute top-0 left-1/2 flex h-6 w-32 -translate-x-1/2 items-center rounded-b-xl bg-gray-300`}
-      />
-    </div>
-  );
-};
-
-const TimetableSkeletonHeader = ({
-  as: Header = DefaultSkeltonHeader,
-  ...props
-}: TimetableSkeletonHeaderProps) => {
-  return <Header {...props} />;
-};
-
-export const TemplateSkeleton = () => {
-  return (
-    <div className="w-full px-5">
-      <div className="w-full overflow-hidden rounded-xl bg-gray-200 px-6 py-16">
-        <div className="rounded-xl bg-gray-300 px-3 py-2">
-          <TimetableSkeleton className="!border-0 bg-white">
-            <TimetableSkeleton.Header as={SharingSkeletonHeader} />
-          </TimetableSkeleton>
-
-          {/* Student Info Skeleton */}
-          <div className="mt-1.5 pl-2">
-            <div className="h-4 w-16 rounded bg-gray-200" />
-            <div className="mt-1 h-3 w-24 rounded bg-gray-200" />
-          </div>
-
-          {/* Credits Skeleton */}
-          <div className="mt-1.5 flex items-center justify-between px-2">
-            <div className="h-4 w-20 rounded-xl bg-gray-200" />
-            <div className="h-4 w-20 rounded-xl bg-gray-200" />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export const TimetableSkeleton = ({
-  children,
-  className,
-  ...props
-}: HTMLAttributes<HTMLDivElement>) => {
-  const days = ['월', '화', '수', '목', '금'];
-  const times = Array.from({ length: 8 }, (_, i) => i + 9); // 9시부터 16시까지
+export const TimetableSkeleton = ({ className, ...props }: HTMLAttributes<HTMLDivElement>) => {
+  const times = range(9, 16 + 1); // 9시부터 16시까지
 
   const borderClass = className
     ?.split(' ')
@@ -78,20 +32,20 @@ export const TimetableSkeleton = ({
         className={`border-neutralPlaceholder overflow-hidden rounded-xl border-2 ${twMerge(borderClass)}`}
       >
         {/* Header */}
-        {children}
+        <DefaultSkeltonHeader />
 
         {/* Timetable Grid */}
         <div
           className="divide-neutralPlaceholder grid"
           style={{
-            gridTemplateColumns: getGridTemplateCols(days.length),
+            gridTemplateColumns: getGridTemplateCols(timetableBaseDays.length),
             gridTemplateRows: getGridTemplateRows(times.length),
           }}
         >
           {/* Days Header */}
           <div className="border-neutralPlaceholder col-span-full grid grid-cols-subgrid border-b-1">
             <div className="border-neutralPlaceholder border-r-1" />
-            {days.map((day) => (
+            {timetableBaseDays.map((day) => (
               <div
                 className="border-neutralPlaceholder flex items-center justify-center border-r-1 text-xs font-light last:border-r-0"
                 key={day}
@@ -110,7 +64,7 @@ export const TimetableSkeleton = ({
               <div className="border-neutralPlaceholder flex justify-end border-r-1 p-0.5 text-xs font-light">
                 {time}
               </div>
-              {days.map((day) => (
+              {timetableBaseDays.map((day) => (
                 <div
                   className="border-neutralPlaceholder relative border-r-1 last:border-r-0"
                   key={`${time}-${day}`}
@@ -133,5 +87,3 @@ export const TimetableSkeleton = ({
     </div>
   );
 };
-
-TimetableSkeleton.Header = TimetableSkeletonHeader;
