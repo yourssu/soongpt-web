@@ -4,7 +4,7 @@ import { Check, ChevronDown } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
 
-import { admissionYears } from '@/types/admissionYears';
+import { schoolIds } from '@/types/student';
 
 interface SchoolIdInputProps {
   a?: ErrorBoundaryProps;
@@ -70,7 +70,7 @@ const SchoolIdInput = ({ onNext, initialValue }: SchoolIdInputProps) => {
                   duration: 0.2,
                 }}
               >
-                {admissionYears.map((year) => (
+                {schoolIds.map((year) => (
                   <li key={year}>
                     <button
                       className="text-neutralSubtle focus-visible:outline-borderRing flex w-full items-center justify-between rounded-xl px-4 py-2 text-lg font-semibold hover:bg-gray-100 focus-visible:-outline-offset-1"
