@@ -6,14 +6,6 @@ interface HintIconProps extends HTMLAttributes<SVGSVGElement> {
   as?: ElementType;
 }
 
-const Hint = ({ children, className, ...props }: HTMLAttributes<HTMLDivElement>) => {
-  return (
-    <div className={`text-neutralHint flex items-center gap-2 ${twMerge(className)}`} {...props}>
-      {children}
-    </div>
-  );
-};
-
 const HintText = ({ children, className, ...props }: HTMLAttributes<HTMLSpanElement>) => {
   return (
     <span className={`text-xs ${twMerge(className)}`} {...props}>
@@ -26,7 +18,13 @@ const HintIcon = ({ as: Icon = Info, className, ...props }: HintIconProps) => {
   return <Icon className={`size-3 ${twMerge(className)}`} {...props} />;
 };
 
+export const Hint = ({ children, className, ...props }: HTMLAttributes<HTMLDivElement>) => {
+  return (
+    <div className={`text-neutralHint flex items-center gap-2 ${twMerge(className)}`} {...props}>
+      {children}
+    </div>
+  );
+};
+
 Hint.Text = HintText;
 Hint.Icon = HintIcon;
-
-export default Hint;

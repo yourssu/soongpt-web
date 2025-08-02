@@ -8,7 +8,7 @@ import { useState } from 'react';
 import { Mixpanel } from '@/bootstrap/mixpanel';
 import { ActivityLayout } from '@/components/ActivityLayout';
 import { ProgressAppBar } from '@/components/AppBar/ProgressAppBar';
-import Hint from '@/components/Hint';
+import { Hint } from '@/components/Hint';
 import { useAssertedStudentInfoContext } from '@/contexts/StudentInfoContext';
 import { usePostTimetable } from '@/hooks/api/usePostTimetable';
 import { useAlertDialog } from '@/hooks/useAlertDialog';

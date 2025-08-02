@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
 
 import { Mixpanel } from '@/bootstrap/mixpanel';
-import Hint from '@/components/Hint';
+import { Hint } from '@/components/Hint';
 import { useAlertDialog } from '@/hooks/useAlertDialog';
 import { StudentGrade } from '@/types/student';
 
