@@ -4,7 +4,6 @@ import { SwitchCase } from 'react-simplikit';
 
 import { Mixpanel } from '@/bootstrap/mixpanel';
 import { ActivityLayout } from '@/components/ActivityLayout';
-import SoongptErrorBoundary from '@/components/SoongptErrorBoundary';
 import { useFilterCoursesByCategory } from '@/hooks/useFilterCoursesByCategory';
 import { useTotalPointsByCategory } from '@/hooks/useTotalPointsByCategory';
 import CourseSelectionFallback from '@/pages/CourseSelectionActivity/components/CourseSelectionFallback';
@@ -12,6 +11,7 @@ import { CourseSelectionResultStep } from '@/pages/CourseSelectionActivity/compo
 import { GeneralRequiredSelectionStep } from '@/pages/CourseSelectionActivity/components/CourseSelectionSteps/GeneralRequiredSelectionStep';
 import { MajorElectiveSelectionStep } from '@/pages/CourseSelectionActivity/components/CourseSelectionSteps/MajorElectiveSelectionStep';
 import { MajorRequiredSelectionStep } from '@/pages/CourseSelectionActivity/components/CourseSelectionSteps/MajorRequiredSelectionStep';
+import SoongptErrorBoundary from '@/pages/CourseSelectionActivity/components/SoongptErrorBoundary';
 import { SelectedCoursesContext } from '@/pages/CourseSelectionActivity/context';
 import { SelectedCourseType } from '@/pages/CourseSelectionActivity/type';
 import { useFlow, useStepFlow } from '@/stackflow';
