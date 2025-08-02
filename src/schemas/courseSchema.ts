@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+import { makePaginatedSchema, makeResponseSchema } from '@/schemas/response';
 import { CourseClassification } from '@/types/course';
 
 export const courseClassificationSchema = z.enum(CourseClassification);
@@ -30,22 +31,8 @@ export const courseSchema = z.object({
   target: z.string(),
 });
 
-export const courseResponseSchema = z.object({
-  timestamp: z.string(),
-  result: z.array(courseSchema),
-});
-
-// Todo: 페이지네이션 스키마 공통화
-export const paginatedCourseResponseSchema = z.object({
-  timestamp: z.string(),
-  result: z.object({
-    content: z.array(courseSchema),
-    totalElements: z.number(),
-    totalPages: z.number(),
-    size: z.number(),
-    number: z.number(),
-  }),
-});
+export const courseResponseSchema = makeResponseSchema(z.array(courseSchema));
+export const paginatedCourseResponseSchema = makeResponseSchema(makePaginatedSchema(courseSchema));
 
 export type Course = z.infer<typeof courseSchema>;
 export type CourseTime = z.infer<typeof courseTimeSchema>;

@@ -8,7 +8,7 @@ export async function transformError(e: unknown): Promise<SoongptError> {
     return {
       message: '알 수 없는 에러가 발생했습니다.',
       status: 500,
-      timestamp: new Date(),
+      timestamp: new Date().toISOString(),
     };
   }
   return e.response
@@ -19,20 +19,20 @@ export async function transformError(e: unknown): Promise<SoongptError> {
         return {
           message: 'ZodError',
           status: 500,
-          timestamp: new Date(),
+          timestamp: new Date().toISOString(),
         };
       }
       if (err instanceof HTTPError) {
         return {
           message: 'Failed to parse JSON',
           status: 500,
-          timestamp: new Date(),
+          timestamp: new Date().toISOString(),
         };
       }
       return {
         message: '알 수 없는 에러가 발생했습니다.',
         status: 500,
-        timestamp: new Date(),
+        timestamp: new Date().toISOString(),
       };
     });
 }

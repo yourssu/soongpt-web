@@ -1,10 +1,10 @@
 import { z } from 'zod';
 
-export const soongptErrorSchema = z.object({
+import { BaseResponseSchema } from '@/schemas/response';
+
+export const soongptErrorSchema = BaseResponseSchema.extend({
   message: z.string(),
   status: z.number(),
-  timestamp: z.string().transform((s) => new Date(s)),
 });
 
-export type SoongptErrorResponse = z.input<typeof soongptErrorSchema>;
-export type SoongptError = z.output<typeof soongptErrorSchema>;
+export type SoongptError = z.infer<typeof soongptErrorSchema>;

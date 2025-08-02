@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import { courseSchema, courseTimeSchema } from '@/schemas/courseSchema';
+import { makeResponseSchema } from '@/schemas/response';
 
 const timetableTagSchema = z.enum([
   '기본 태그',
@@ -23,17 +24,13 @@ const timetableSchema = z.object({
   courses: z.array(timetableCourseSchema),
 });
 
-export const timetableResponseSchema = z.object({
-  timestamp: z.string(),
-  result: timetableSchema,
-});
+export const timetableResponseSchema = makeResponseSchema(timetableSchema);
 
-export const timetableArrayResponseSchema = z.object({
-  timestamp: z.string(),
-  result: z.object({
+export const timetableArrayResponseSchema = makeResponseSchema(
+  z.object({
     timetables: z.array(timetableSchema),
   }),
-});
+);
 
 export type Timetable = z.infer<typeof timetableSchema>;
 export type TimetableTag = z.infer<typeof timetableTagSchema>;

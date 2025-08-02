@@ -11,11 +11,8 @@ const Grade = z.union([
 
 export const studentSchema = z.object({
   schoolId: z.number().int().min(15).max(25).describe('입학년도'),
-
   department: z.string().describe('학과명'),
-
   grade: Grade.describe('학년'),
-
   isChapel: z.boolean().describe('채플 수강 여부'),
 });
 
