@@ -2,7 +2,8 @@ import { createContext, ElementType, HTMLAttributes, useContext } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 import { CourseTimeType } from '@/schemas/courseSchema';
-import { TimetableCourseType, TimetableTagType, TimetableType } from '@/schemas/timetableSchema';
+import { TimetableCourseType, TimetableType } from '@/schemas/timetableSchema';
+import { TimetableTagType } from '@/types/timetable';
 import { Merge } from '@/utils/type';
 
 const MINUTES_PER_SLOT = 5;
