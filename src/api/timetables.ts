@@ -1,7 +1,6 @@
 import { api } from '@/api/client';
 import { TimetableArrayResponseSchema, TimetableResponseSchema } from '@/schemas/timetableSchema';
 import { StudentType } from '@/types/student';
-import { transformError } from '@/utils/error';
 
 export type TimetablePayloadType = StudentType & {
   codes: number[];
@@ -23,10 +22,7 @@ export const postTimetable = async (payload: TimetablePayloadType) => {
       json: payload,
       timeout: false,
     })
-    .json()
-    .catch(async (e) => {
-      throw await transformError(e);
-    });
+    .json();
 
   return TimetableArrayResponseSchema.parse(response);
 };

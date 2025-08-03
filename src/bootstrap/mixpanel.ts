@@ -1,6 +1,5 @@
 import mixpanel from 'mixpanel-browser';
 
-import { SoongptErrorType } from '@/schemas/errorSchema';
 import { TimetableType } from '@/schemas/timetableSchema';
 import { StudentType } from '@/types/student';
 
@@ -132,10 +131,16 @@ export const Mixpanel = {
     });
   },
 
-  trackTimetableSelectionError: (error: SoongptErrorType) => {
+  trackTimetableSelectionError: async ({
+    status,
+    message,
+  }: {
+    message: string;
+    status: number;
+  }) => {
     mixpanel.track('Timetable Selection Error', {
-      status: error.status,
-      message: error.message,
+      status,
+      message,
     });
   },
 };

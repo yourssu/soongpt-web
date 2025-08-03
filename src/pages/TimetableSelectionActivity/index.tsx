@@ -8,9 +8,10 @@ import { ActivityLayout } from '@/components/ActivityLayout';
 import { ProgressAppBar } from '@/components/AppBar/ProgressAppBar';
 import { Timetable } from '@/components/Timetable';
 import { useAlertDialog } from '@/hooks/useAlertDialog';
-import { SoongptErrorType } from '@/schemas/errorSchema';
 import { TimetableArrayResponseType } from '@/schemas/timetableSchema';
 import { useFlow } from '@/stackflow';
+import { handleError } from '@/utils/error';
+import { getKyHTTPErrorRange } from '@/utils/ky';
 
 interface TimetableSelection {
   buttonText: string;
@@ -18,27 +19,31 @@ interface TimetableSelection {
   title: string;
 }
 
+type TimetableMutationState = MutationState<TimetableArrayResponseType>;
+
 type TimetableMutationStatus = 'error400' | 'error500' | Exclude<MutationStatus, 'error'>;
 
 const TimetableSelectionActivity: ActivityComponentType = () => {
   const openShoppingCartDialog = useAlertDialog();
-  const timetableMutation = useMutationState<
-    MutationState<TimetableArrayResponseType, SoongptErrorType>
-  >({
+
+  const timetableMutation = useMutationState<TimetableMutationState>({
     filters: { mutationKey: ['timetables'] },
   });
 
   const latestMutation = timetableMutation[timetableMutation.length - 1];
 
   const mutationStatus = useMemo(() => {
-    const { status, error } = latestMutation;
-    if (status === 'error' && error) {
-      const errorRange = Math.floor(
-        ((latestMutation.error as SoongptErrorType).status ?? 500) / 100,
-      );
-      return errorRange === 5 ? 'error500' : 'error400';
+    const { status, error: unknownError } = latestMutation;
+    if (!unknownError) {
+      return status as Exclude<MutationStatus, 'error'>;
     }
-    return status as Exclude<MutationStatus, 'error'>;
+
+    const { error, type } = handleError(unknownError);
+    if (type !== 'KyHTTPError') {
+      throw error;
+    }
+
+    return getKyHTTPErrorRange(error) === '500' ? 'error500' : 'error400';
   }, [latestMutation]);
 
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -63,11 +68,22 @@ const TimetableSelectionActivity: ActivityComponentType = () => {
 
   // Mixpanel 이벤트 추적
   useEffect(() => {
-    if (latestMutation.status === 'error') {
-      if (latestMutation.error) {
-        Mixpanel.trackTimetableSelectionError(latestMutation.error);
+    (async () => {
+      const { status, error: unknownError } = latestMutation;
+      if (status !== 'error' || !unknownError) {
+        return;
       }
-    }
+
+      const { error, type, message } = handleError(unknownError);
+      if (type !== 'KyHTTPError') {
+        throw error;
+      }
+
+      Mixpanel.trackTimetableSelectionError({
+        message: await message(),
+        status: error.response.status,
+      });
+    })();
   }, [latestMutation]);
 
   const timetableSelection: Record<TimetableMutationStatus, TimetableSelection> = {
