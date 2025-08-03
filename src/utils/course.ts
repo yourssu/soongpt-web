@@ -1,10 +1,10 @@
-import { Course } from '@/schemas/courseSchema';
+import { CourseType } from '@/schemas/courseSchema';
 
 export const extractComparableCourseCode = (code: number) => {
   return code.toString().slice(0, 8);
 };
 
-export const isSameCourse = (a: Course, b: Course) => {
+export const isSameCourse = (a: CourseType, b: CourseType) => {
   return extractComparableCourseCode(a.code) === extractComparableCourseCode(b.code);
 };
 

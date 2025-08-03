@@ -1,35 +1,33 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 
-import api from '@/api/client';
-import { StudentMachineContext } from '@/contexts/StudentMachineContext';
-import { courseResponseSchema } from '@/schemas/courseSchema';
+import {
+  getGeneralRequiredCourses,
+  getMajorElectiveCourses,
+  getMajorRequiredCourses,
+} from '@/api/courses';
+import { useAssertedStudentInfoContext } from '@/components/Providers/StudentInfoProvider/hook';
 import { CourseType } from '@/types/course';
 
-const url: Record<CourseType, string> = {
-  MAJOR_REQUIRED: 'major/required',
-  MAJOR_ELECTIVE: 'major/elective',
-  GENERAL_REQUIRED: 'general/required',
-};
-
 export const useSuspenseGetCourses = (type: CourseType) => {
-  const state = StudentMachineContext.useSelector((state) => state);
+  const { schoolId, grade, department } = useAssertedStudentInfoContext();
 
   const searchParams = {
-    schoolId: state.context.admissionYear,
-    grade: state.context.grade,
-    department: state.context.department,
+    schoolId,
+    grade,
+    department,
   };
 
   const { data } = useSuspenseQuery({
     queryKey: [type, searchParams],
-    queryFn: async () => {
-      const response = await api
-        .get(`courses/${url[type]}`, {
-          searchParams,
-          timeout: false,
-        })
-        .json();
-      return courseResponseSchema.parse(response);
+    queryFn: () => {
+      switch (type) {
+        case 'GENERAL_REQUIRED':
+          return getGeneralRequiredCourses(searchParams);
+        case 'MAJOR_ELECTIVE':
+          return getMajorElectiveCourses(searchParams);
+        case 'MAJOR_REQUIRED':
+          return getMajorRequiredCourses(searchParams);
+      }
     },
     staleTime: Infinity,
   });

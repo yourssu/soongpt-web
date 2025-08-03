@@ -3,15 +3,15 @@ import { Suspense, useState } from 'react';
 import { SwitchCase } from 'react-simplikit';
 
 import { Mixpanel } from '@/bootstrap/mixpanel';
-import SoongptErrorBoundary from '@/components/SoongptErrorBoundary';
-import { CourseTypeContext } from '@/contexts/CourseTypeContext';
-import { useFilterCoursesByCategory } from '@/hooks/useFilterCoursesByCategory';
-import { useTotalPointsByCategory } from '@/hooks/useFilterCreditByCategory';
+import { ActivityLayout } from '@/components/ActivityLayout';
+import { useCoursesTotalPoint } from '@/hooks/course/useCoursesTotalPoint';
+import { useFilteredCoursesByCategory } from '@/hooks/course/useFilteredCoursesByCategory';
 import CourseSelectionFallback from '@/pages/CourseSelectionActivity/components/CourseSelectionFallback';
 import { CourseSelectionResultStep } from '@/pages/CourseSelectionActivity/components/CourseSelectionSteps/CourseSelectionResultStep';
 import { GeneralRequiredSelectionStep } from '@/pages/CourseSelectionActivity/components/CourseSelectionSteps/GeneralRequiredSelectionStep';
 import { MajorElectiveSelectionStep } from '@/pages/CourseSelectionActivity/components/CourseSelectionSteps/MajorElectiveSelectionStep';
 import { MajorRequiredSelectionStep } from '@/pages/CourseSelectionActivity/components/CourseSelectionSteps/MajorRequiredSelectionStep';
+import SoongptErrorBoundary from '@/pages/CourseSelectionActivity/components/SoongptErrorBoundary';
 import { SelectedCoursesContext } from '@/pages/CourseSelectionActivity/context';
 import { SelectedCourseType } from '@/pages/CourseSelectionActivity/type';
 import { useFlow, useStepFlow } from '@/stackflow';
@@ -31,16 +31,16 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
   const { push } = useFlow();
   const { stepPush } = useStepFlow('CourseSelectionActivity');
 
-  const filteredCoursesByCategory = useFilterCoursesByCategory(selectedCourses);
-  const totalPointsByCategory = useTotalPointsByCategory(selectedCourses);
+  const filteredCoursesByCategory = useFilteredCoursesByCategory(selectedCourses);
+  const totalPoints = useCoursesTotalPoint(selectedCourses);
 
   // Todo: 전필은 로딩시 무조건 선택되어야 함
 
   return (
-    <CourseTypeContext.Provider value={type}>
-      <SelectedCoursesContext.Provider
-        value={{ selectedCourses, selectedCredit: totalPointsByCategory.total, setSelectedCourses }}
-      >
+    <SelectedCoursesContext.Provider
+      value={{ selectedCourses, selectedCredit: totalPoints, setSelectedCourses }}
+    >
+      <ActivityLayout>
         <SoongptErrorBoundary
           FallbackComponent={<CourseSelectionFallback type="error" />}
           progress={50}
@@ -109,7 +109,7 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
                         majorRequiredCodes: filteredCoursesByCategory.MAJOR_REQUIRED.map(
                           ({ code }) => code,
                         ),
-                        selectedTotalPoints: totalPointsByCategory.total,
+                        selectedTotalPoints: totalPoints,
                         codes: selectedCourses
                           .filter((course) => !!course.selectedBySearch)
                           .map((course) => course.code),
@@ -125,8 +125,8 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
             />
           </Suspense>
         </SoongptErrorBoundary>
-      </SelectedCoursesContext.Provider>
-    </CourseTypeContext.Provider>
+      </ActivityLayout>
+    </SelectedCoursesContext.Provider>
   );
 };
 

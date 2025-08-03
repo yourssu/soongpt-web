@@ -1,17 +1,18 @@
 import * as Popover from '@radix-ui/react-popover';
 import { ActivityComponentType } from '@stackflow/react';
+import { useMutation } from '@tanstack/react-query';
 import { range } from 'es-toolkit';
 import { Check, ChevronDown } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
 
+import { postTimetable } from '@/api/timetables';
 import { Mixpanel } from '@/bootstrap/mixpanel';
 import { ActivityLayout } from '@/components/ActivityLayout';
 import { ProgressAppBar } from '@/components/AppBar/ProgressAppBar';
-import Hint from '@/components/Hint';
-import { StudentMachineContext } from '@/contexts/StudentMachineContext';
+import { Hint } from '@/components/Hint';
+import { useAssertedStudentInfoContext } from '@/components/Providers/StudentInfoProvider/hook';
 import { useAlertDialog } from '@/hooks/useAlertDialog';
-import { usePostTimetable } from '@/hooks/usePostTimetable';
 import { PointCarryOverCalculator } from '@/pages/DesiredCreditActivity/components/PointCarryOverCalculator';
 import { PreferedGeneralElectivesChipGroup } from '@/pages/DesiredCreditActivity/components/PreferedGeneralElectivesChipGroup';
 import RollingNumber from '@/pages/DesiredCreditActivity/components/RollingNumber';
@@ -28,14 +29,23 @@ type DesiredCreditParams = {
 const MAX_CREDIT = 22 + 3; // 최대 학점 22 + 이월학점 3
 
 const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ params }) => {
-  const context = StudentMachineContext.useSelector((state) => state.context);
-  const chapelPoints = context.chapel ? 0.5 : 0;
+  const { grade, schoolId, department, isChapel } = useAssertedStudentInfoContext();
+
+  const chapelPoints = isChapel ? 0.5 : 0;
   const totalPoints = params.selectedTotalPoints + chapelPoints;
 
   const [generalElective, setGeneralElective] = useState(0); // 교양선택 학점
   const [showGeneralElectiveDropdown, setShowGeneralElectiveDropdown] = useState(false);
   const [preferredGeneralElectives, setPreferredGeneralElectives] = useState<string[]>([]);
-  const postTimetableMutation = usePostTimetable();
+
+  const { mutate: mutateTimetable } = useMutation({
+    mutationKey: ['timetables'],
+    mutationFn: postTimetable,
+    onSuccess: () => {
+      Mixpanel.incrementUserCount();
+      Mixpanel.trackTimetableGenerateComplete();
+    },
+  });
   const openDialog = useAlertDialog();
 
   const availableGeneralElective = range(MAX_CREDIT - totalPoints + 1);
@@ -49,7 +59,7 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
   };
 
   const handleMaxPointInfoClick = () => {
-    const contentType = context.grade === 1 ? '1학년' : '2학년_이상';
+    const contentType = grade === 1 ? '1학년' : '2학년_이상';
 
     openDialog({
       title: maxPointInfoDialogContent[contentType].title,
@@ -62,7 +72,7 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
   };
 
   const handleGeneralElectiveInfoClick = () => {
-    const contentType = context.admissionYear >= 23 ? '23학번_이상' : '22학번_이하';
+    const contentType = schoolId >= 23 ? '23학번_이상' : '22학번_이하';
 
     openDialog({
       title: '교양과목 이수 체계 안내',
@@ -72,27 +82,25 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
     });
   };
 
-  const handleNextClick = () => {
-    // 시간표 추천 API 요청
-    postTimetableMutation.mutate({
-      schoolId: context.admissionYear,
-      department: context.department,
-      grade: context.grade,
-      isChapel: context.chapel,
+  const handleNextClick = async () => {
+    Mixpanel.trackDesiredCreditClick({
+      existCredit: totalPoints,
+      addCredit: generalElective,
+      sumCredit: desiredCredit,
+      fieldSelect: preferredGeneralElectives.length > 0,
+    });
+
+    mutateTimetable({
+      schoolId,
+      department,
+      grade,
+      isChapel,
       codes: params.codes,
       generalRequiredCodes: params.generalRequiredCodes,
       majorElectiveCodes: params.majorElectiveCodes,
       majorRequiredCodes: params.majorRequiredCodes,
       generalElectivePoint: generalElective,
       preferredGeneralElectives,
-    });
-
-    // Mixpanel 이벤트 추적
-    Mixpanel.trackDesiredCreditClick({
-      existCredit: totalPoints,
-      addCredit: generalElective,
-      sumCredit: desiredCredit,
-      fieldSelect: preferredGeneralElectives.length > 0,
     });
 
     push('TimetableSelectionActivity', {});
@@ -109,7 +117,7 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
               희망 학점은{' '}
               <RollingNumber
                 className="text-brandPrimary"
-                decimals={context.chapel ? 1 : 0}
+                decimals={isChapel ? 1 : 0}
                 number={desiredCredit}
               />
               학점이군요!
@@ -204,7 +212,7 @@ const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ par
               onClick={handleGeneralElectiveInfoClick}
             >
               교양과목 이수 체계 안내(
-              {context.admissionYear >= 23 ? '2023학년도 이후' : '2022학년도 이전'} 입학자)
+              {schoolId >= 23 ? '2023학년도 이후' : '2022학년도 이전'} 입학자)
             </button>
           </div>
         </ActivityLayout.Body>

@@ -1,41 +1,28 @@
-import { z } from 'zod';
+import { z } from 'zod/v4';
 
-import { courseSchema, courseTimeSchema } from '@/schemas/courseSchema';
+import { CourseSchema, CourseTimeSchema } from '@/schemas/courseSchema';
+import { ResponseSchema } from '@/schemas/response';
+import { timetableTags } from '@/types/timetable';
 
-const timetableTagSchema = z.enum([
-  '기본 태그',
-  '아침 수업이 없는 시간표',
-  '공강 날이 있는 시간표',
-  '우주 공강이 없는 시간표',
-  '점심시간 보장되는 시간표',
-  '저녁수업이 없는 시간표',
-]);
-
-const timetableCourseSchema = courseSchema.extend({
-  courseTimes: z.array(courseTimeSchema),
+const TimetableCourseSchema = CourseSchema.extend({
+  courseTimes: z.array(CourseTimeSchema),
 });
+export type TimetableCourseType = z.infer<typeof TimetableCourseSchema>;
 
-const timetableSchema = z.object({
+const TimetableSchema = z.object({
   timetableId: z.number(),
-  tag: timetableTagSchema,
+  tag: z.enum(timetableTags),
   score: z.number().nullable(),
   totalPoint: z.number(),
-  courses: z.array(timetableCourseSchema),
+  courses: z.array(TimetableCourseSchema),
 });
+export type TimetableType = z.infer<typeof TimetableSchema>;
 
-export const timetableResponseSchema = z.object({
-  timestamp: z.string(),
-  result: timetableSchema,
-});
+export const TimetableResponseSchema = ResponseSchema(TimetableSchema);
 
-export const timetableArrayResponseSchema = z.object({
-  timestamp: z.string(),
-  result: z.object({
-    timetables: z.array(timetableSchema),
+export const TimetableArrayResponseSchema = ResponseSchema(
+  z.object({
+    timetables: z.array(TimetableSchema),
   }),
-});
-
-export type Timetable = z.infer<typeof timetableSchema>;
-export type TimetableTag = z.infer<typeof timetableTagSchema>;
-export type TimetableArrayResponse = z.infer<typeof timetableArrayResponseSchema>;
-export type TimetableCourse = z.infer<typeof timetableCourseSchema>;
+);
+export type TimetableArrayResponseType = z.infer<typeof TimetableArrayResponseSchema>;

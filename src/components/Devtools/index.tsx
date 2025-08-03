@@ -1,13 +1,14 @@
+import { useMutation } from '@tanstack/react-query';
 import { Code } from 'lucide-react';
 import { useState } from 'react';
 
+import { postTimetable, TimetablePayloadType } from '@/api/timetables';
+import { useStudentInfoContext } from '@/components/Providers/StudentInfoProvider/hook';
 import { STAGE } from '@/config';
-import { StudentMachineContext, StudentMachineContextType } from '@/contexts/StudentMachineContext';
 import { useAlertDialog } from '@/hooks/useAlertDialog';
-import { usePostTimetable } from '@/hooks/usePostTimetable';
 import { useToast } from '@/hooks/useToast';
-import { StudentTimetable } from '@/schemas/studentSchema';
 import { useFlow } from '@/stackflow';
+import { assertNonNullish } from '@/utils/assertion';
 
 interface ToolItemProps {
   description?: string;
@@ -32,15 +33,13 @@ const ToolItem = ({ title, description, onClick }: ToolItemProps) => {
   );
 };
 
-const TimetableInjectionToolItem = ({
-  context,
-  mutation,
-  onMutate,
-}: {
-  context: StudentMachineContextType;
-  mutation: ReturnType<typeof usePostTimetable>;
-  onMutate: () => void;
-}) => {
+const TimetableInjectionToolItem = ({ onMutateSuccess }: { onMutateSuccess: () => void }) => {
+  const { mutateAsync } = useMutation({
+    mutationKey: ['timetables'],
+    mutationFn: postTimetable,
+  });
+  const { studentInfo } = useStudentInfoContext();
+
   const [timetableData, setTimetableData] = useState(
     JSON.stringify(
       {
@@ -65,12 +64,18 @@ const TimetableInjectionToolItem = ({
       <ToolItem
         description="하단의 데이터를 조작해서 바로 시간표를 만들어요."
         onClick={async () => {
-          const data = JSON.parse(timetableData) as StudentTimetable;
-          const schoolId = data.schoolId ?? context.admissionYear;
-          const department = data.department ?? context.department;
-          const grade = data.grade ?? context.grade;
-          const isChapel = data.isChapel ?? context.chapel;
-          await mutation.mutateAsync({
+          const data = JSON.parse(timetableData) as TimetablePayloadType;
+          const schoolId = data.schoolId ?? studentInfo.schoolId;
+          const department = data.department ?? studentInfo.department;
+          const grade = data.grade ?? studentInfo.grade;
+          const isChapel = data.isChapel ?? studentInfo.isChapel;
+
+          assertNonNullish(schoolId);
+          assertNonNullish(department);
+          assertNonNullish(grade);
+          assertNonNullish(isChapel);
+
+          await mutateAsync({
             schoolId,
             department,
             grade,
@@ -82,7 +87,7 @@ const TimetableInjectionToolItem = ({
             generalElectivePoint: data.generalElectivePoint,
             preferredGeneralElectives: data.preferredGeneralElectives,
           });
-          onMutate();
+          onMutateSuccess();
         }}
         title="바로 시간표 만들기"
       />
@@ -100,8 +105,6 @@ const TimetableInjectionToolItem = ({
 export const Devtools = () => {
   const open = useAlertDialog();
   const toast = useToast();
-  const context = StudentMachineContext.useSelector((state) => state.context);
-  const postTimetableMutation = usePostTimetable();
   const { push } = useFlow();
 
   const showDevtools = () => {
@@ -126,9 +129,7 @@ export const Devtools = () => {
               title="처음 화면으로 돌아가기"
             />
             <TimetableInjectionToolItem
-              context={context}
-              mutation={postTimetableMutation}
-              onMutate={() => {
+              onMutateSuccess={() => {
                 push('TimetableSelectionActivity', {});
                 toast.success('시간표 페이지로 이동해요');
                 closeAsTrue();

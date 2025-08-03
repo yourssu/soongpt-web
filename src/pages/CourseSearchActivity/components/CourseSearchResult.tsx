@@ -1,19 +1,19 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 
-import api from '@/api/client';
+import { getSearchedCourses } from '@/api/courses';
 import { Mixpanel } from '@/bootstrap/mixpanel';
 import { SelectableCourseItem } from '@/components/CourseItem/SelectableCourseItem';
+import { useCombinedCourses } from '@/hooks/course/useCombinedCourses';
 import { useAlertDialog } from '@/hooks/useAlertDialog';
-import { useCombinedCourses } from '@/hooks/useCombinedCourses';
 import { useToast } from '@/hooks/useToast';
 import { CourseSelectionChangeActionPayload } from '@/pages/CourseSearchActivity/type';
-import { Course, paginatedCourseResponseSchema } from '@/schemas/courseSchema';
+import { CourseType } from '@/schemas/courseSchema';
 import { isSameCourse } from '@/utils/course';
 
 interface CourseSearchResultProps {
   onCourseSelectionChange: (payload: CourseSelectionChangeActionPayload) => void;
   searchKeyword: string;
-  selectedCourses: Course[];
+  selectedCourses: CourseType[];
 }
 
 const MAX_COURSE_POINT = 25;
@@ -25,19 +25,7 @@ export const CourseSearchResult = ({
 }: CourseSearchResultProps) => {
   const { data: searchedCourses } = useSuspenseQuery({
     queryKey: ['searched-courses', searchKeyword],
-    queryFn: async () => {
-      if (searchKeyword === '') {
-        return [];
-      }
-      const response = await api
-        .get(`courses/search`, {
-          searchParams: {
-            q: searchKeyword,
-          },
-        })
-        .json();
-      return paginatedCourseResponseSchema.parse(response).result.content;
-    },
+    queryFn: () => getSearchedCourses(searchKeyword),
   });
   const combinedCourses = useCombinedCourses(searchedCourses);
   const totalSelectedPoints = selectedCourses.reduce((acc, course) => acc + course.point, 0);
@@ -45,7 +33,7 @@ export const CourseSearchResult = ({
   const open = useAlertDialog();
   const toast = useToast();
 
-  const onClickCourseItem = async (course: Course, isSelected: boolean) => {
+  const onClickCourseItem = async (course: CourseType, isSelected: boolean) => {
     const actionType = isSelected ? '삭제' : '추가';
 
     const titleMap = {

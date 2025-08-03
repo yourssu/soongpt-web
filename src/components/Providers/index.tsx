@@ -1,17 +1,17 @@
 import { OverlayProvider } from 'overlay-kit';
 
+import { StudentInfoProvider } from '@/components/Providers/StudentInfoProvider';
 import { TanstackQueryProvider } from '@/components/Providers/TanstackQueryProvider';
 import { ToastProvider } from '@/components/Providers/ToastProvider';
-import { StudentMachineContext } from '@/contexts/StudentMachineContext';
 
 export const Providers = ({ children }: React.PropsWithChildren<unknown>) => {
   return (
-    <OverlayProvider>
-      <TanstackQueryProvider>
-        <StudentMachineContext.Provider>
-          <ToastProvider duration={3000}>{children}</ToastProvider>
-        </StudentMachineContext.Provider>
-      </TanstackQueryProvider>
-    </OverlayProvider>
+    <TanstackQueryProvider>
+      <StudentInfoProvider>
+        <ToastProvider duration={3000}>
+          <OverlayProvider>{children}</OverlayProvider>
+        </ToastProvider>
+      </StudentInfoProvider>
+    </TanstackQueryProvider>
   );
 };

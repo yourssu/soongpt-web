@@ -4,24 +4,23 @@ import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
 
 import { Mixpanel } from '@/bootstrap/mixpanel';
-import Hint from '@/components/Hint';
+import { Hint } from '@/components/Hint';
 import { useAlertDialog } from '@/hooks/useAlertDialog';
-import { Grade } from '@/schemas/studentSchema';
-import { grades } from '@/types/grades';
+import { StudentGrade } from '@/types/student';
 
 interface GradeInputProps {
-  initialValue: Grade | undefined;
-  onNext: (grade: Grade) => void;
+  initialValue: StudentGrade | undefined;
+  onNext: (grade: StudentGrade) => void;
 }
 
 const GradeInput = ({ onNext, initialValue }: GradeInputProps) => {
   const [grade, setGrade] = useState(initialValue);
-  const [showLabel, setShowLabel] = useState(initialValue !== 0);
+  const [showLabel, setShowLabel] = useState(initialValue !== undefined);
   const [showDropdown, setShowDropdown] = useState(false);
 
   const openScheduleInfoDialog = useAlertDialog();
 
-  const handleGradeSelect = (grade: Grade) => {
+  const handleGradeSelect = (grade: StudentGrade) => {
     setGrade(grade);
     setShowDropdown(false);
 
@@ -34,7 +33,7 @@ const GradeInput = ({ onNext, initialValue }: GradeInputProps) => {
   const handleClickScheduleInfo = async () => {
     Mixpanel.trackRegistrationInformationClick('SCHEDULE');
 
-    if (grade === undefined || grade === 0) {
+    if (grade === undefined) {
       return;
     }
 
@@ -78,10 +77,10 @@ const GradeInput = ({ onNext, initialValue }: GradeInputProps) => {
       <Popover.Root onOpenChange={setShowDropdown} open={showDropdown}>
         <Popover.Trigger asChild>
           <button
-            className={`bg-bg-layerDefault focus-visible:outline-borderRing flex w-full items-center justify-between rounded-xl px-4 py-3 text-lg font-semibold ${grade === 0 ? 'text-neutralPlaceholder' : 'text-brandPrimary'}`}
+            className={`bg-bg-layerDefault focus-visible:outline-borderRing flex w-full items-center justify-between rounded-xl px-4 py-3 text-lg font-semibold ${grade === undefined ? 'text-neutralPlaceholder' : 'text-brandPrimary'}`}
             type="button"
           >
-            {grade === 0 ? '학년' : grade}
+            {grade ?? '학년'}
             <ChevronDown className="text-neutral size-4" />
           </button>
         </Popover.Trigger>
@@ -104,7 +103,7 @@ const GradeInput = ({ onNext, initialValue }: GradeInputProps) => {
                   duration: 0.2,
                 }}
               >
-                {grades.map((gradeOption) => (
+                {StudentGrade.map((gradeOption) => (
                   <li key={gradeOption}>
                     <button
                       className="text-neutralSubtle focus-visible:outline-borderRing flex w-full items-center justify-between rounded-xl px-4 py-2 text-lg font-semibold hover:bg-gray-100 focus-visible:-outline-offset-1"

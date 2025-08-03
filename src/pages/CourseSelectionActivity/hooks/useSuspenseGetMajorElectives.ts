@@ -1,16 +1,15 @@
 import { useSuspenseQueries } from '@tanstack/react-query';
 
-import api from '@/api/client';
-import { StudentMachineContext } from '@/contexts/StudentMachineContext';
-import { courseResponseSchema } from '@/schemas/courseSchema';
-import { Grade } from '@/schemas/studentSchema';
+import { getMajorElectiveCourses } from '@/api/courses';
+import { useAssertedStudentInfoContext } from '@/components/Providers/StudentInfoProvider/hook';
+import { StudentGrade } from '@/types/student';
 
-export const useSuspenseGetMajorElectives = (grades: Grade[]) => {
-  const state = StudentMachineContext.useSelector((state) => state);
+export const useSuspenseGetMajorElectives = (grades: StudentGrade[]) => {
+  const { schoolId, department } = useAssertedStudentInfoContext();
 
-  const getSearchParams = (grade: Grade) => ({
-    schoolId: state.context.admissionYear,
-    department: state.context.department,
+  const getSearchParams = (grade: StudentGrade) => ({
+    schoolId,
+    department,
     grade,
   });
 
@@ -19,12 +18,7 @@ export const useSuspenseGetMajorElectives = (grades: Grade[]) => {
       const searchParams = getSearchParams(grade);
       return {
         queryKey: ['MAJOR_ELECTIVE', searchParams],
-        queryFn: async () => {
-          const response = await api
-            .get(`courses/major/elective`, { searchParams, timeout: false })
-            .json();
-          return courseResponseSchema.parse(response);
-        },
+        queryFn: () => getMajorElectiveCourses(searchParams),
       };
     }),
     combine: (results) => results.map((result) => result.data.result).flat(),

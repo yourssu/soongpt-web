@@ -1,6 +1,6 @@
 import { tv } from 'tailwind-variants';
 
-import { StudentMachineContext } from '@/contexts/StudentMachineContext';
+import { useAssertedStudentInfoContext } from '@/components/Providers/StudentInfoProvider/hook';
 
 interface PreferedGeneralElectivesChipGroupProps {
   onChange: (selectedChips: string[]) => void;
@@ -21,8 +21,8 @@ export const PreferedGeneralElectivesChipGroup = ({
   values,
   onChange,
 }: PreferedGeneralElectivesChipGroupProps) => {
-  const { admissionYear } = StudentMachineContext.useSelector((state) => state.context);
-  const chipValueType = admissionYear >= 23 ? '23학번_이상' : '그외';
+  const { schoolId } = useAssertedStudentInfoContext();
+  const chipValueType = schoolId >= 23 ? '23학번_이상' : '그외';
   const chipValues = chipContentValues[chipValueType];
 
   const parseToUsableChipValue = (chipValue: string) => {

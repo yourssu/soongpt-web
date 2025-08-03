@@ -1,38 +1,86 @@
 import { HTTPError } from 'ky';
-import { ZodError } from 'zod';
+import { ZodError } from 'zod/v4';
 
-import { SoongptError, soongptErrorSchema } from '@/schemas/errorSchema';
+import { getKyHTTPErrorMessage, isKyHTTPError } from '@/utils/ky';
+import { getZodErrorMessage, isZodError } from '@/utils/zod';
 
-export async function transformError(e: unknown): Promise<SoongptError> {
-  if (!(e instanceof HTTPError)) {
+export const isError = (error: unknown): error is Error => {
+  return error instanceof Error;
+};
+
+type ErrorResult<TError = unknown> =
+  | {
+      error: Error;
+      message: string;
+      stack?: string;
+      type: 'Error';
+    }
+  | {
+      error: HTTPError;
+      message: () => Promise<string>;
+      stack?: string;
+      type: 'KyHTTPError';
+    }
+  | {
+      error: TError;
+      message: string;
+      stack?: undefined;
+      type: 'Unknown';
+    }
+  | {
+      error: ZodError;
+      message: string;
+      stack?: string;
+      type: 'ZodError';
+    };
+
+const defaultErrorMessage = '오류가 발생했어요. 잠시 후 다시 시도해 주세요.';
+
+const errorToResult = <TError = unknown>(error: TError): ErrorResult<TError> => {
+  if (isKyHTTPError(error)) {
     return {
-      message: '알 수 없는 에러가 발생했습니다.',
-      status: 500,
-      timestamp: new Date(),
+      type: 'KyHTTPError',
+      error,
+      stack: error.stack,
+      message: async () => {
+        const message = await getKyHTTPErrorMessage(error);
+        return message ?? defaultErrorMessage;
+      },
     };
   }
-  return e.response
-    .json()
-    .then((res) => soongptErrorSchema.parse(res))
-    .catch((err) => {
-      if (err instanceof ZodError) {
-        return {
-          message: 'ZodError',
-          status: 500,
-          timestamp: new Date(),
-        };
-      }
-      if (err instanceof HTTPError) {
-        return {
-          message: 'Failed to parse JSON',
-          status: 500,
-          timestamp: new Date(),
-        };
-      }
-      return {
-        message: '알 수 없는 에러가 발생했습니다.',
-        status: 500,
-        timestamp: new Date(),
-      };
-    });
-}
+  if (isZodError(error)) {
+    return {
+      type: 'ZodError',
+      error,
+      stack: error.stack,
+      message: getZodErrorMessage(error) ?? defaultErrorMessage,
+    };
+  }
+  if (isError(error)) {
+    return {
+      type: 'Error',
+      error,
+      stack: error.stack,
+      message: error.message,
+    };
+  }
+  return {
+    error,
+    message: typeof error === 'string' ? error : defaultErrorMessage,
+    type: 'Unknown',
+  };
+};
+
+export const handleError = <TError = unknown>(error: TError) => {
+  const res = errorToResult(error);
+
+  // if (option?.reportToSentry) {
+  //   captureException(error, {
+  //     tags: {
+  //       errorMessage: res.message,
+  //     },
+  //   });
+  // }
+
+  return res;
+};

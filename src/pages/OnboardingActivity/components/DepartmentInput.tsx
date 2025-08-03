@@ -3,7 +3,7 @@ import { Check } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
 
-import { departments } from '@/types/departments';
+import { departments } from '@/types/student';
 
 interface DepartmentInputProps {
   initialValue: string | undefined;

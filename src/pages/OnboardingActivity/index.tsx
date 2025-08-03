@@ -1,51 +1,51 @@
 import { ActivityComponentType } from '@stackflow/react';
 import { motion } from 'motion/react';
-import { useEffect, useRef } from 'react';
+import { useMemo, useRef } from 'react';
 
 import { Mixpanel } from '@/bootstrap/mixpanel';
 import { ActivityLayout } from '@/components/ActivityLayout';
 import { ProgressAppBar } from '@/components/AppBar/ProgressAppBar';
-import { StudentMachineContext } from '@/contexts/StudentMachineContext';
-import AdmissionYearInput from '@/pages/OnboardingActivity/components/AdmissionYearInput';
+import { useStudentInfoContext } from '@/components/Providers/StudentInfoProvider/hook';
 import ChapelInput from '@/pages/OnboardingActivity/components/ChapelInput';
 import DepartmentInput from '@/pages/OnboardingActivity/components/DepartmentInput';
 import GradeInput from '@/pages/OnboardingActivity/components/GradeInput';
+import SchoolIdInput from '@/pages/OnboardingActivity/components/SchoolIdInput';
 import { useFlow } from '@/stackflow';
+import { assertNonNullish } from '@/utils/assertion';
 
 const OnboardingActivity: ActivityComponentType = () => {
-  const state = StudentMachineContext.useSelector((state) => state);
-  const actorRef = StudentMachineContext.useActorRef();
+  const { studentInfo, setStudentInfo } = useStudentInfoContext();
 
   const { push } = useFlow();
-
   const submitButtonRef = useRef<HTMLButtonElement>(null);
 
-  useEffect(() => {
-    if (state.matches('채플수강여부입력')) {
-      submitButtonRef.current?.scrollIntoView({ behavior: 'smooth' });
+  const step = useMemo(() => {
+    // 학과입력 -> 학번입력 -> 학년입력 -> 완료(채플수강여부입력)
+    if (studentInfo.department === '') {
+      return '학과입력' as const;
     }
-  }, [state]);
+    if (!studentInfo.schoolId) {
+      return '학번입력' as const;
+    }
+    if (!studentInfo.grade) {
+      return '학년입력' as const;
+    }
+    return '완료' as const;
+  }, [studentInfo]);
 
   const handleClickButton = () => {
-    // actorRef.getPersistedSnapshot()을 통해 현재 state를 가져옴
-    const persistedState = actorRef.getPersistedSnapshot();
-    // localStorage에 state를 저장
-    localStorage.setItem('student', JSON.stringify(persistedState));
+    assertNonNullish(studentInfo.grade);
+    assertNonNullish(studentInfo.schoolId);
 
-    const student = {
-      department: state.context.department,
-      schoolId: state.context.admissionYear,
-      grade: state.context.grade,
-      isChapel: state.context.chapel,
+    const assertedStudentInfo = {
+      ...studentInfo,
+      grade: studentInfo.grade,
+      schoolId: studentInfo.schoolId,
     };
 
-    // MixPanel에 사용자 정보 설정
-    Mixpanel.setUser(student);
+    Mixpanel.setUser(assertedStudentInfo);
     Mixpanel.trackUserInformationClick();
-
-    push('CourseSelectionActivity', {
-      type: 'MAJOR_REQUIRED',
-    });
+    push('CourseSelectionActivity', { type: 'MAJOR_REQUIRED' });
   };
 
   return (
@@ -63,55 +63,47 @@ const OnboardingActivity: ActivityComponentType = () => {
 
         <ActivityLayout.Body>
           <div className="flex w-full flex-[1_1_0] flex-col gap-6 py-2">
-            {state.matches('채플수강여부입력') && (
-              <ChapelInput
-                grade={state?.context?.grade}
-                initialValue={state?.context?.chapel}
-                onNext={(chapel) =>
-                  actorRef.send({
-                    type: '채플수강여부입력완료',
-                    payload: { chapel },
-                  })
-                }
-              />
-            )}
+            {step === '완료' &&
+              (() => {
+                assertNonNullish(studentInfo.grade);
+                return (
+                  <ChapelInput
+                    grade={studentInfo.grade}
+                    initialValue={studentInfo.isChapel}
+                    onNext={(chapel) => setStudentInfo({ ...studentInfo, isChapel: chapel })}
+                  />
+                );
+              })()}
 
-            {(state.matches('학년입력') || state.matches('채플수강여부입력')) && (
+            {(step === '학년입력' || step === '완료') && (
               <GradeInput
-                initialValue={state?.context?.grade}
-                onNext={(grade) =>
-                  actorRef.send({
-                    type: '학년입력완료',
-                    payload: { grade },
-                  })
-                }
+                initialValue={studentInfo.grade}
+                onNext={(grade) => {
+                  setStudentInfo({ ...studentInfo, grade });
+                }}
               />
             )}
 
-            {(state.matches('입학년도입력') ||
-              state.matches('학년입력') ||
-              state.matches('채플수강여부입력')) && (
-              <AdmissionYearInput
-                initialValue={state?.context?.admissionYear}
-                onNext={(admissionYear) =>
-                  actorRef.send({
-                    type: '입학년도입력완료',
-                    payload: { admissionYear },
-                  })
-                }
+            {(step === '학번입력' || step === '학년입력' || step === '완료') && (
+              <SchoolIdInput
+                initialValue={studentInfo.schoolId}
+                onNext={(schoolId) => setStudentInfo({ ...studentInfo, schoolId })}
               />
             )}
 
-            <DepartmentInput
-              initialValue={state?.context?.department}
-              onNext={(department) =>
-                actorRef.send({ type: '학과입력완료', payload: { department } })
-              }
-            />
+            {(step === '학과입력' ||
+              step === '학번입력' ||
+              step === '학년입력' ||
+              step === '완료') && (
+              <DepartmentInput
+                initialValue={studentInfo.department}
+                onNext={(department) => setStudentInfo({ ...studentInfo, department })}
+              />
+            )}
           </div>
         </ActivityLayout.Body>
 
-        {state.matches('채플수강여부입력') && (
+        {step === '완료' && (
           <ActivityLayout.Footer>
             <motion.button
               animate={{ opacity: 1, y: 0 }}

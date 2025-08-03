@@ -5,13 +5,13 @@ import { useContext, useMemo, useState } from 'react';
 import { Mixpanel } from '@/bootstrap/mixpanel';
 import { SelectableChip } from '@/components/Chip/SelectableChip';
 import { RemovableCourseListItem } from '@/components/CourseItem/RemovableCourseItem';
+import { useFilteredCoursesByCategory } from '@/hooks/course/useFilteredCoursesByCategory';
 import { useAlertDialog } from '@/hooks/useAlertDialog';
-import { useFilterCoursesByCategory } from '@/hooks/useFilterCoursesByCategory';
 import { CourseSelectionChangeActionPayload } from '@/pages/CourseSearchActivity/type';
 import { CourseSelectionLayout } from '@/pages/CourseSelectionActivity/components/CourseSelectionLayout';
 import { BaseStepProps } from '@/pages/CourseSelectionActivity/components/CourseSelectionSteps/type';
 import { SelectedCoursesContext } from '@/pages/CourseSelectionActivity/context';
-import { Course } from '@/schemas/courseSchema';
+import { CourseType } from '@/schemas/courseSchema';
 import { useFlow } from '@/stackflow';
 import { isSameCourse } from '@/utils/course';
 
@@ -24,7 +24,7 @@ export const CourseSelectionResultStep = ({ onNextClick }: CourseSelectionResult
   const [selectionTab, setSelectionTab] = useState<SelectionTabType>('교양');
   const { selectedCourses, selectedCredit, setSelectedCourses } =
     useContext(SelectedCoursesContext);
-  const filteredCoursesByCategory = useFilterCoursesByCategory(selectedCourses);
+  const filteredCoursesByCategory = useFilteredCoursesByCategory(selectedCourses);
   const filteredCoursesBySelectionTab = useMemo(() => {
     if (selectionTab === '교양') {
       return [
@@ -56,7 +56,7 @@ export const CourseSelectionResultStep = ({ onNextClick }: CourseSelectionResult
     }
   };
 
-  const onRemoveCourse = async (course: Course) => {
+  const onRemoveCourse = async (course: CourseType) => {
     const accepted = await openRemoveAlertDialog({
       title: '선택한 과목을 삭제할까요?',
       closeButton: false,

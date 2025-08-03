@@ -2,15 +2,15 @@ import { motion } from 'motion/react';
 import { useContext } from 'react';
 
 import { SelectableCourseItem } from '@/components/CourseItem/SelectableCourseItem';
-import { useCombinedCourses } from '@/hooks/useCombinedCourses';
+import { useCombinedCourses } from '@/hooks/course/useCombinedCourses';
 import { SelectedCoursesContext } from '@/pages/CourseSelectionActivity/context';
 import { SelectedCourseType } from '@/pages/CourseSelectionActivity/type';
-import { Course } from '@/schemas/courseSchema';
+import { CourseType } from '@/schemas/courseSchema';
 import { isSameCourse } from '@/utils/course';
 
 interface CourseSelectionListProps {
-  courses: Course[];
-  parseSelectedCourseOnPush?: (course: Course) => SelectedCourseType;
+  courses: CourseType[];
+  parseSelectedCourseOnPush?: (course: CourseType) => SelectedCourseType;
 }
 
 export const CourseSelectionList = ({

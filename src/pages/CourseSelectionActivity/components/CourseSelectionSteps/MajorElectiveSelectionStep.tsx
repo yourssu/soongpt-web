@@ -2,8 +2,8 @@ import { Suspense, useContext, useMemo, useState } from 'react';
 import { SwitchCase, useInputState } from 'react-simplikit';
 
 import { IcMonoSearch } from '@/components/Icons/IcMonoSearch';
-import { StudentMachineContext } from '@/contexts/StudentMachineContext';
-import { useCombinedCourses } from '@/hooks/useCombinedCourses';
+import { useAssertedStudentInfoContext } from '@/components/Providers/StudentInfoProvider/hook';
+import { useCombinedCourses } from '@/hooks/course/useCombinedCourses';
 import { useDelayedValue } from '@/hooks/useDelayedValue';
 import { ArrayState, useGetArrayState } from '@/hooks/useGetArrayState';
 import { CourseSelectionLayout } from '@/pages/CourseSelectionActivity/components/CourseSelectionLayout';
@@ -18,13 +18,13 @@ import { SelectedCoursesContext } from '@/pages/CourseSelectionActivity/context'
 import { useSuspenseGetCourses } from '@/pages/CourseSelectionActivity/hooks/useSuspenseGetCourses';
 import { useSuspenseGetMajorElectives } from '@/pages/CourseSelectionActivity/hooks/useSuspenseGetMajorElectives';
 import { SelectedCourseType } from '@/pages/CourseSelectionActivity/type';
-import { Course } from '@/schemas/courseSchema';
-import { Grade } from '@/schemas/studentSchema';
+import { CourseType } from '@/schemas/courseSchema';
+import { StudentGrade } from '@/types/student';
 
 type MajorElectiveSelectionStepProps = BaseStepProps;
 
-const MajorElectiveContent = ({ selectedGrades }: { selectedGrades: Grade[] }) => {
-  const context = StudentMachineContext.useSelector((state) => state.context);
+const MajorElectiveContent = ({ selectedGrades }: { selectedGrades: StudentGrade[] }) => {
+  const { grade } = useAssertedStudentInfoContext();
   const [searchKeyword, setSearchKeyword] = useInputState('');
   const delayedSearchKeyword = useDelayedValue(searchKeyword);
 
@@ -35,7 +35,7 @@ const MajorElectiveContent = ({ selectedGrades }: { selectedGrades: Grade[] }) =
       return combinedCourses;
     }
     const preprocessKeyword = (keyword: string) => keyword.toLowerCase().replace(/\s+/g, '');
-    const matchKeyword = ({ name, professor }: Course) => {
+    const matchKeyword = ({ name, professor }: CourseType) => {
       const nameMatched = preprocessKeyword(name).includes(preprocessKeyword(delayedSearchKeyword));
       const professorMatched = professor.some((p) =>
         preprocessKeyword(p).includes(preprocessKeyword(delayedSearchKeyword)),
@@ -47,8 +47,8 @@ const MajorElectiveContent = ({ selectedGrades }: { selectedGrades: Grade[] }) =
 
   const combinedCoursesState = useGetArrayState(combinedCourses);
 
-  const parseSelectedCourseOnPush = (course: Course): SelectedCourseType => {
-    if (!selectedGrades.includes(context.grade)) {
+  const parseSelectedCourseOnPush = (course: CourseType): SelectedCourseType => {
+    if (!selectedGrades.includes(grade)) {
       return { ...course, fromOtherGrade: true };
     }
     return course;
@@ -87,8 +87,8 @@ const MajorElectiveContent = ({ selectedGrades }: { selectedGrades: Grade[] }) =
 };
 
 export const MajorElectiveSelectionStep = ({ onNextClick }: MajorElectiveSelectionStepProps) => {
-  const context = StudentMachineContext.useSelector((state) => state.context);
-  const [selectedGrades, setSelectedGrades] = useState<Grade[]>([context.grade]);
+  const { grade } = useAssertedStudentInfoContext();
+  const [selectedGrades, setSelectedGrades] = useState<StudentGrade[]>([grade]);
 
   const courses = useSuspenseGetCourses('MAJOR_ELECTIVE');
   const courseState = useGetArrayState(courses);
@@ -144,4 +144,4 @@ const contentMap: Record<ArrayState, StepContentType> = {
   },
 };
 
-const selectableGrades = [[1], [2], [3], [4, 5]] as const satisfies Grade[][];
+const selectableGrades = [[1], [2], [3], [4, 5]] as const satisfies StudentGrade[][];

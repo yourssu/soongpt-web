@@ -1,8 +1,8 @@
 import { SelectableChip } from '@/components/Chip/SelectableChip';
-import { Grade } from '@/schemas/studentSchema';
+import { StudentGrade } from '@/types/student';
 
 interface GradeChipProps {
-  grades: Grade[];
+  grades: StudentGrade[];
   isSelected: boolean;
   onClickGradeChip: () => void;
 }
