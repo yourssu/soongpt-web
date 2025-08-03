@@ -7,6 +7,7 @@ import { ActivityLayout } from '@/components/ActivityLayout';
 import { ProgressAppBar } from '@/components/AppBar/ProgressAppBar';
 import { Timetable } from '@/components/Timetable';
 import { TimetableContent } from '@/pages/TimetableSelectionActivity/components/TimetableContent';
+import { TimetableError } from '@/pages/TimetableSelectionActivity/components/TimetableError';
 import { TimetableList } from '@/pages/TimetableSelectionActivity/components/TimetableList';
 import { useTimetableMutationStatus } from '@/pages/TimetableSelectionActivity/hooks/useTimetableMutationStatus';
 import { TimetableMutationState } from '@/pages/TimetableSelectionActivity/type';
@@ -59,6 +60,8 @@ export const TimetableActivityView = ({ mutationState }: TimetableActivityViewPr
                   </TimetableContent>
                 ),
                 idle: () => <TimetableContent status="idle" />,
+                error400: () => <TimetableError status="error400" />,
+                error500: () => <TimetableError status="error500" />,
               }}
               value={mutationStatus}
             />
