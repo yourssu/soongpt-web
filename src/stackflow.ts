@@ -7,7 +7,7 @@ import { CourseSearchActivity } from '@/pages/CourseSearchActivity';
 import CourseSelectionActivity from '@/pages/CourseSelectionActivity';
 import DesiredCreditActivity from '@/pages/DesiredCreditActivity';
 import OnboardingActivity from '@/pages/OnboardingActivity';
-import TimetableSelectionActivity from '@/pages/TimetableSelectionActivity';
+import { TimetableSelectionActivity } from '@/pages/TimetableSelectionActivity';
 
 export const stackflowTransitionDuration = 350;
 
