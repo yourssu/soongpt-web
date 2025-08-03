@@ -15,7 +15,7 @@ export const StudentInfoProvider = ({ children }: React.PropsWithChildren<unknow
     기본적으로 localStorage를 사용해요. 
     - https://react-simplikit.slash.page/hooks/useStorageState.html#parameters
   */
-  const [studentInfo, setStudentInfo] = useStorageState<UnfilledStudentInfoType>('student', {
+  const [studentInfo, setStudentInfo] = useStorageState<UnfilledStudentInfoType>('student-info', {
     defaultValue: defaultStudentInfo,
   });
 

@@ -116,7 +116,7 @@ export const Devtools = () => {
             <ToolItem
               description="온보딩에서 입력했던 정보를 초기화해요."
               onClick={() => {
-                localStorage.removeItem('student');
+                localStorage.removeItem('student-info');
                 toast.success('사용자 정보가 초기화되었어요.');
               }}
               title="사용자 정보 초기화"
