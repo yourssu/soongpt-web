@@ -1,7 +1,7 @@
 import { ActivityComponentType } from '@stackflow/react';
 import { useFlow } from '@stackflow/react/future';
 
-import { TimetableList } from '@/pages/TimetableSelectionActivity/components/TimetableList';
+import { TimetableActivityView } from '@/pages/TimetableSelectionActivity/components/TimetableActivityView';
 import { useLatestTimetableMutationState } from '@/pages/TimetableSelectionActivity/hooks/useLatestTimetableMutationState';
 
 export const TimetableSelectionActivity: ActivityComponentType = () => {
@@ -14,5 +14,5 @@ export const TimetableSelectionActivity: ActivityComponentType = () => {
     return undefined;
   }
 
-  return <TimetableList mutationState={latestMutation} />;
+  return <TimetableActivityView mutationState={latestMutation} />;
 };

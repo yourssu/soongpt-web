@@ -9,19 +9,7 @@ import { useBreaktimeInjectedCourses } from '@/components/Timetable/hooks/useBre
 import { useTimetableDayRange } from '@/components/Timetable/hooks/useTimetableDayRange';
 import { useTimetableHourRange } from '@/components/Timetable/hooks/useTimetableHourRange';
 import { useCoursesTotalPoint } from '@/hooks/course/useCoursesTotalPoint';
-import { TimetableCourseType, TimetableType } from '@/schemas/timetableSchema';
-export const getTotalCredit = (courses: TimetableCourseType[]): number => {
-  return courses.reduce((acc, course) => acc + course.point, 0);
-};
-
-export const getMajorCredit = (courses: TimetableCourseType[]): number => {
-  return courses.reduce((acc, course) => {
-    if (course.category === 'MAJOR_REQUIRED' || course.category === 'MAJOR_ELECTIVE') {
-      return acc + course.point;
-    }
-    return acc;
-  }, 0);
-};
+import { TimetableType } from '@/schemas/timetableSchema';
 
 interface TimetableProps {
   isSelected?: boolean;

@@ -4,4 +4,8 @@ import { TimetableArrayResponseType } from '@/schemas/timetableSchema';
 
 export type TimetableMutationState = MutationState<TimetableArrayResponseType>;
 
-export type TimetableMutationStatus = 'error400' | 'error500' | Exclude<MutationStatus, 'error'>;
+export type TimetableMutationErrorStatus = 'error400' | 'error500';
+
+export type TimetableMutationBaseStatus = Exclude<MutationStatus, 'error'>;
+
+export type TimetableMutationStatus = TimetableMutationBaseStatus | TimetableMutationErrorStatus;
