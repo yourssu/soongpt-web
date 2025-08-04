@@ -1,4 +1,3 @@
-import { ActivityComponentType } from '@stackflow/react';
 import { Suspense, useState } from 'react';
 import { SwitchCase } from 'react-simplikit';
 
@@ -16,6 +15,7 @@ import { SelectedCoursesContext } from '@/pages/CourseSelectionActivity/context'
 import { SelectedCourseType } from '@/pages/CourseSelectionActivity/type';
 import { useFlow, useStepFlow } from '@/stackflow';
 import { CourseSelectionStepType } from '@/types/course';
+import { ActivityComponentType } from '@/utils/stackflow';
 
 interface CourseSelectionActivityParams {
   type?: CourseSelectionStepType;

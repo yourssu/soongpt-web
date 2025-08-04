@@ -1,5 +1,4 @@
 import * as Popover from '@radix-ui/react-popover';
-import { ActivityComponentType } from '@stackflow/react';
 import { useMutation } from '@tanstack/react-query';
 import { range } from 'es-toolkit';
 import { Check, ChevronDown } from 'lucide-react';
@@ -17,6 +16,7 @@ import { PointCarryOverCalculator } from '@/pages/DesiredCreditActivity/componen
 import { PreferedGeneralElectivesChipGroup } from '@/pages/DesiredCreditActivity/components/PreferedGeneralElectivesChipGroup';
 import RollingNumber from '@/pages/DesiredCreditActivity/components/RollingNumber';
 import { useFlow } from '@/stackflow';
+import { ActivityComponentType } from '@/utils/stackflow';
 
 type DesiredCreditParams = {
   codes: number[];

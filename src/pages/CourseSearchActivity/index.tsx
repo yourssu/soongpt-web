@@ -1,5 +1,4 @@
 import { send } from '@stackflow/compat-await-push';
-import { ActivityComponentType } from '@stackflow/react';
 import { useActivity, useFlow } from '@stackflow/react/future';
 import { Suspense } from 'react';
 import { useInputState } from 'react-simplikit';
@@ -11,10 +10,11 @@ import { useStackflowInputAutoFocusEffect } from '@/hooks/useStackflowInputAutoF
 import { CourseSearchResult } from '@/pages/CourseSearchActivity/components/CourseSearchResult';
 import { CourseSelectionChangeActionPayload } from '@/pages/CourseSearchActivity/type';
 import { CourseType } from '@/schemas/courseSchema';
+import { ActivityComponentType } from '@/utils/stackflow';
 
-interface CourseSearchActivityParams {
+type CourseSearchActivityParams = {
   selectedCourses: CourseType[];
-}
+};
 
 export const CourseSearchActivity: ActivityComponentType<CourseSearchActivityParams> = ({
   params,

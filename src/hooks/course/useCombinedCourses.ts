@@ -1,5 +1,4 @@
 import { uniq, uniqBy } from 'es-toolkit';
-import { useMemo } from 'react';
 
 import { CourseType } from '@/schemas/courseSchema';
 import { extractComparableCourseCode, isSameCourse } from '@/utils/course';
@@ -10,10 +9,7 @@ import { extractComparableCourseCode, isSameCourse } from '@/utils/course';
   - 나머지 값들은 아무거나 골라서 반환해요.
 */
 export const useCombinedCourses = (courses: CourseType[]) => {
-  const uniqueCodeCourses = useMemo(
-    () => uniqBy(courses, (c) => extractComparableCourseCode(c.code)),
-    [courses],
-  );
+  const uniqueCodeCourses = uniqBy(courses, (c) => extractComparableCourseCode(c.code));
 
   const getSameCodeProfessorsOf = (course: CourseType) => {
     const sameCodeCourses = courses.filter((c) => isSameCourse(c, course));

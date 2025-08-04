@@ -61,7 +61,11 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [
       tsconfigPaths(),
-      react(),
+      react({
+        babel: {
+          plugins: [['babel-plugin-react-compiler']],
+        },
+      }),
       tailwindcss(),
       sentryVitePlugin({
         org: 'yourssu-web',

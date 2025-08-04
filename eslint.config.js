@@ -7,7 +7,6 @@ import react from 'eslint-plugin-react';
 import unusedImports from 'eslint-plugin-unused-imports';
 import eslintConfigPrettier from 'eslint-config-prettier/flat';
 import perfectionist from 'eslint-plugin-perfectionist';
-import reactCompiler from 'eslint-plugin-react-compiler';
 
 const config = tseslint.config(
   { ignores: ['dist', 'build', 'node_modules'] },
@@ -15,12 +14,11 @@ const config = tseslint.config(
     extends: [
       js.configs.recommended,
       ...tseslint.configs.recommended,
-      reactCompiler.configs.recommended,
-      reactHooks.configs['recommended-latest'],
+      reactHooks.configs.recommended,
       perfectionist.configs['recommended-natural'],
       eslintConfigPrettier,
     ],
-    files: ['**/*.{ts,mts,tsx}'],
+    files: ['**/*.{ts,tsx}'],
     languageOptions: {
       ecmaVersion: 2020,
       globals: { ...globals.browser },
@@ -103,7 +101,7 @@ const config = tseslint.config(
         },
       ],
       'react-hooks/rules-of-hooks': 'error',
-      'react-compiler/react-compiler': 'warn',
+      'react-hooks/react-compiler': 'warn',
       // perfectionist의 sorting과 겹칠 수 있어서 off해요.
       'sort-imports': 'off',
       'object-shorthand': ['error', 'always'],
