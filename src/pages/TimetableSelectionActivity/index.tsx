@@ -10,7 +10,7 @@ export const TimetableSelectionActivity: ActivityComponentType = () => {
   const latestMutation = useLatestTimetableMutationState();
 
   if (!latestMutation) {
-    replace('OnboardingActivity', {}, { animate: false });
+    replace('onboarding', {}, { animate: false });
     return undefined;
   }
 

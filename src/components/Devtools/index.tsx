@@ -1,3 +1,4 @@
+import { useFlow } from '@stackflow/react/future';
 import { useMutation } from '@tanstack/react-query';
 import { Code } from 'lucide-react';
 import { useState } from 'react';
@@ -7,7 +8,6 @@ import { useStudentInfoContext } from '@/components/Providers/StudentInfoProvide
 import { STAGE } from '@/config';
 import { useAlertDialog } from '@/hooks/useAlertDialog';
 import { useToast } from '@/hooks/useToast';
-import { useFlow } from '@/stackflow/config';
 import { assertNonNullish } from '@/utils/assertion';
 
 interface ToolItemProps {
@@ -130,7 +130,7 @@ export const Devtools = () => {
             />
             <TimetableInjectionToolItem
               onMutateSuccess={() => {
-                push('TimetableSelectionActivity', {});
+                push('timetable_selection', {});
                 toast.success('시간표 페이지로 이동해요');
                 closeAsTrue();
               }}

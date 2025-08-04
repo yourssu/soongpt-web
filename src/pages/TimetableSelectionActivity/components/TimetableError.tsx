@@ -1,6 +1,7 @@
+import { useFlow } from '@stackflow/react/future';
+
 import { TimetableContentLayout } from '@/pages/TimetableSelectionActivity/components/TimetableContentLayout';
 import { TimetableMutationErrorStatus } from '@/pages/TimetableSelectionActivity/type';
-import { useFlow } from '@/stackflow/config';
 
 interface TimetableErrorProps {
   status: TimetableMutationErrorStatus;

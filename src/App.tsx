@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 import { ChannelTalk } from '@/bootstrap/channelTalk';
 import { Mixpanel } from '@/bootstrap/mixpanel';
-import { Stack } from '@/stackflow/config';
+import { Stack } from '@/stackflow/Stack';
 
 const App = () => {
   useEffect(() => {

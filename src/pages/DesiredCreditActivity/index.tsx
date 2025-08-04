@@ -1,4 +1,5 @@
 import * as Popover from '@radix-ui/react-popover';
+import { useFlow } from '@stackflow/react/future';
 import { useMutation } from '@tanstack/react-query';
 import { range } from 'es-toolkit';
 import { Check, ChevronDown } from 'lucide-react';
@@ -15,7 +16,6 @@ import { useAlertDialog } from '@/hooks/useAlertDialog';
 import { PointCarryOverCalculator } from '@/pages/DesiredCreditActivity/components/PointCarryOverCalculator';
 import { PreferedGeneralElectivesChipGroup } from '@/pages/DesiredCreditActivity/components/PreferedGeneralElectivesChipGroup';
 import RollingNumber from '@/pages/DesiredCreditActivity/components/RollingNumber';
-import { useFlow } from '@/stackflow/config';
 import { ActivityComponentType } from '@/utils/stackflow';
 
 type DesiredCreditParams = {
@@ -103,7 +103,7 @@ export const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> =
       preferredGeneralElectives,
     });
 
-    push('TimetableSelectionActivity', {});
+    push('timetable_selection', {});
   };
 
   return (

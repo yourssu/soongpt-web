@@ -1,3 +1,4 @@
+import { useFlow } from '@stackflow/react/future';
 import { motion } from 'motion/react';
 import { useMemo, useRef } from 'react';
 
@@ -9,7 +10,6 @@ import ChapelInput from '@/pages/OnboardingActivity/components/ChapelInput';
 import DepartmentInput from '@/pages/OnboardingActivity/components/DepartmentInput';
 import GradeInput from '@/pages/OnboardingActivity/components/GradeInput';
 import SchoolIdInput from '@/pages/OnboardingActivity/components/SchoolIdInput';
-import { useFlow } from '@/stackflow/config';
 import { assertNonNullish } from '@/utils/assertion';
 import { ActivityComponentType } from '@/utils/stackflow';
 
@@ -45,7 +45,7 @@ export const OnboardingActivity: ActivityComponentType = () => {
 
     Mixpanel.setUser(assertedStudentInfo);
     Mixpanel.trackUserInformationClick();
-    push('CourseSelectionActivity', { type: 'MAJOR_REQUIRED' });
+    push('course_selection', { type: 'MAJOR_REQUIRED' });
   };
 
   return (

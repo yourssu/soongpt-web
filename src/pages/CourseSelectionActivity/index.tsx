@@ -1,3 +1,4 @@
+import { useFlow, useStepFlow } from '@stackflow/react/future';
 import { Suspense, useState } from 'react';
 import { SwitchCase } from 'react-simplikit';
 
@@ -13,7 +14,6 @@ import { MajorRequiredSelectionStep } from '@/pages/CourseSelectionActivity/comp
 import SoongptErrorBoundary from '@/pages/CourseSelectionActivity/components/SoongptErrorBoundary';
 import { SelectedCoursesContext } from '@/pages/CourseSelectionActivity/context';
 import { SelectedCourseType } from '@/pages/CourseSelectionActivity/type';
-import { useFlow, useStepFlow } from '@/stackflow/config';
 import { CourseSelectionStepType } from '@/types/course';
 import { ActivityComponentType } from '@/utils/stackflow';
 
@@ -29,7 +29,7 @@ export const CourseSelectionActivity: ActivityComponentType<CourseSelectionActiv
   const [selectedCourses, setSelectedCourses] = useState<SelectedCourseType[]>([]);
 
   const { push } = useFlow();
-  const { stepPush } = useStepFlow('CourseSelectionActivity');
+  const { pushStep } = useStepFlow('course_selection');
 
   const filteredCoursesByCategory = useFilteredCoursesByCategory(selectedCourses);
   const totalPoints = useCoursesTotalPoint(selectedCourses);
@@ -51,7 +51,7 @@ export const CourseSelectionActivity: ActivityComponentType<CourseSelectionActiv
                 MAJOR_REQUIRED: () => (
                   <MajorRequiredSelectionStep
                     onNextClick={() => {
-                      stepPush({
+                      pushStep({
                         type: 'GENERAL_REQUIRED',
                       });
                       Mixpanel.trackRequiredCourseSelectionClick({
@@ -66,7 +66,7 @@ export const CourseSelectionActivity: ActivityComponentType<CourseSelectionActiv
                 GENERAL_REQUIRED: () => (
                   <GeneralRequiredSelectionStep
                     onNextClick={() => {
-                      stepPush({
+                      pushStep({
                         type: 'MAJOR_ELECTIVE',
                       });
                       Mixpanel.trackRequiredCourseSelectionClick({
@@ -81,7 +81,7 @@ export const CourseSelectionActivity: ActivityComponentType<CourseSelectionActiv
                 MAJOR_ELECTIVE: () => (
                   <MajorElectiveSelectionStep
                     onNextClick={() => {
-                      stepPush({
+                      pushStep({
                         type: 'COURSE_SELECTION_RESULT',
                       });
                       Mixpanel.trackMajorElectiveCourseSelectionClick({
@@ -99,7 +99,7 @@ export const CourseSelectionActivity: ActivityComponentType<CourseSelectionActiv
                 COURSE_SELECTION_RESULT: () => (
                   <CourseSelectionResultStep
                     onNextClick={() => {
-                      push('DesiredCreditActivity', {
+                      push('desired_credit', {
                         generalRequiredCodes: filteredCoursesByCategory.GENERAL_REQUIRED.map(
                           ({ code }) => code,
                         ),
