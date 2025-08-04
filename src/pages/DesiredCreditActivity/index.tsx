@@ -16,19 +16,13 @@ import { useAlertDialog } from '@/hooks/useAlertDialog';
 import { PointCarryOverCalculator } from '@/pages/DesiredCreditActivity/components/PointCarryOverCalculator';
 import { PreferedGeneralElectivesChipGroup } from '@/pages/DesiredCreditActivity/components/PreferedGeneralElectivesChipGroup';
 import RollingNumber from '@/pages/DesiredCreditActivity/components/RollingNumber';
-import { ActivityComponentType } from '@/utils/stackflow';
-
-type DesiredCreditParams = {
-  codes: number[];
-  generalRequiredCodes: number[];
-  majorElectiveCodes: number[];
-  majorRequiredCodes: number[];
-  selectedTotalPoints: number;
-};
+import { useSafeActivityParams } from '@/utils/stackflow';
 
 const MAX_CREDIT = 22 + 3; // 최대 학점 22 + 이월학점 3
 
-export const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ params }) => {
+export const DesiredCreditActivity = () => {
+  const params = useSafeActivityParams('desired_credit');
+
   const { grade, schoolId, department, isChapel } = useAssertedStudentInfoContext();
 
   const chapelPoints = isChapel ? 0.5 : 0;

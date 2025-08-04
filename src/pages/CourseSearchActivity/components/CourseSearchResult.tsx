@@ -8,27 +8,28 @@ import { useAlertDialog } from '@/hooks/useAlertDialog';
 import { useToast } from '@/hooks/useToast';
 import { CourseSelectionChangeActionPayload } from '@/pages/CourseSearchActivity/type';
 import { CourseType } from '@/schemas/courseSchema';
-import { isSameCourse } from '@/utils/course';
+import { isSameCourseCode } from '@/utils/course';
+import { useSafeActivityParams } from '@/utils/stackflow';
 
 interface CourseSearchResultProps {
   onCourseSelectionChange: (payload: CourseSelectionChangeActionPayload) => void;
   searchKeyword: string;
-  selectedCourses: CourseType[];
 }
 
 const MAX_COURSE_POINT = 25;
 
 export const CourseSearchResult = ({
   searchKeyword,
-  selectedCourses,
+
   onCourseSelectionChange,
 }: CourseSearchResultProps) => {
+  const { selectedCourseCodes, totalSelectedPoints } = useSafeActivityParams('course_search');
+
   const { data: searchedCourses } = useSuspenseQuery({
     queryKey: ['searched-courses', searchKeyword],
     queryFn: () => getSearchedCourses(searchKeyword),
   });
   const combinedCourses = useCombinedCourses(searchedCourses);
-  const totalSelectedPoints = selectedCourses.reduce((acc, course) => acc + course.point, 0);
 
   const open = useAlertDialog();
   const toast = useToast();
@@ -71,7 +72,7 @@ export const CourseSearchResult = ({
   return (
     <div className="flex w-full flex-col gap-2">
       {combinedCourses.map((course) => {
-        const isSelected = selectedCourses.some((c) => isSameCourse(c, course));
+        const isSelected = selectedCourseCodes.some((c) => isSameCourseCode(c, course.code));
         return (
           <SelectableCourseItem
             course={course}

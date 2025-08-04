@@ -11,9 +11,8 @@ import DepartmentInput from '@/pages/OnboardingActivity/components/DepartmentInp
 import GradeInput from '@/pages/OnboardingActivity/components/GradeInput';
 import SchoolIdInput from '@/pages/OnboardingActivity/components/SchoolIdInput';
 import { assertNonNullish } from '@/utils/assertion';
-import { ActivityComponentType } from '@/utils/stackflow';
 
-export const OnboardingActivity: ActivityComponentType = () => {
+export const OnboardingActivity = () => {
   const { studentInfo, setStudentInfo } = useStudentInfoContext();
 
   const { push } = useFlow();

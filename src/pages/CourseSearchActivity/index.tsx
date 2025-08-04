@@ -9,19 +9,10 @@ import { useDelayedValue } from '@/hooks/useDelayedValue';
 import { useStackflowInputAutoFocusEffect } from '@/hooks/useStackflowInputAutoFocusEffect';
 import { CourseSearchResult } from '@/pages/CourseSearchActivity/components/CourseSearchResult';
 import { CourseSelectionChangeActionPayload } from '@/pages/CourseSearchActivity/type';
-import { CourseType } from '@/schemas/courseSchema';
-import { ActivityComponentType } from '@/utils/stackflow';
 
-type CourseSearchActivityParams = {
-  selectedCourses: CourseType[];
-};
-
-export const CourseSearchActivity: ActivityComponentType<CourseSearchActivityParams> = ({
-  params,
-}) => {
+export const CourseSearchActivity = () => {
   const { pop } = useFlow();
   const { id } = useActivity();
-  const { selectedCourses } = params;
 
   const [searchKeyword, setSearchKeyword] = useInputState('');
   const debouncedSearchKeyword = useDelayedValue(searchKeyword);
@@ -61,7 +52,6 @@ export const CourseSearchActivity: ActivityComponentType<CourseSearchActivityPar
             <CourseSearchResult
               onCourseSelectionChange={onCourseSelectionChange}
               searchKeyword={debouncedSearchKeyword}
-              selectedCourses={selectedCourses}
             />
           </Suspense>
         </ActivityLayout.Body>

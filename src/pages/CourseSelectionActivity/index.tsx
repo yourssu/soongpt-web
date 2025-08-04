@@ -14,17 +14,10 @@ import { MajorRequiredSelectionStep } from '@/pages/CourseSelectionActivity/comp
 import SoongptErrorBoundary from '@/pages/CourseSelectionActivity/components/SoongptErrorBoundary';
 import { SelectedCoursesContext } from '@/pages/CourseSelectionActivity/context';
 import { SelectedCourseType } from '@/pages/CourseSelectionActivity/type';
-import { CourseSelectionStepType } from '@/types/course';
-import { ActivityComponentType } from '@/utils/stackflow';
+import { useSafeActivityParams } from '@/utils/stackflow';
 
-interface CourseSelectionActivityParams {
-  type?: CourseSelectionStepType;
-}
-
-export const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityParams> = ({
-  params,
-}) => {
-  const type = params.type ?? 'MAJOR_REQUIRED';
+export const CourseSelectionActivity = () => {
+  const { type } = useSafeActivityParams('course_selection');
 
   const [selectedCourses, setSelectedCourses] = useState<SelectedCourseType[]>([]);
 
