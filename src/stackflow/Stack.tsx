@@ -4,7 +4,7 @@ import { basicRendererPlugin } from '@stackflow/plugin-renderer-basic';
 import { stackflow } from '@stackflow/react/future';
 
 import { routes } from '@/pages/routes';
-import { stackflowConfig } from '@/stackflow/stackflow.config';
+import { stackflowConfig } from '@/stackflow/config';
 
 export const { Stack } = stackflow({
   config: stackflowConfig,

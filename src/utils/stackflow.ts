@@ -1,6 +1,6 @@
 import { useActivity, useActivityParams } from '@stackflow/react/future';
 
-import { activityDescription, ActivityName } from '@/stackflow/Activity';
+import { activityDescription, ActivityName } from '@/stackflow/metadata';
 import { objectKeys } from '@/utils/object';
 import { EmptyObjectType } from '@/utils/type';
 

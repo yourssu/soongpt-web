@@ -1,6 +1,6 @@
 import { lazy } from '@stackflow/react/future';
 
-import { ActivityName } from '@/stackflow/Activity';
+import { ActivityName } from '@/stackflow/metadata';
 import { ActivityComponentType } from '@/utils/stackflow';
 
 export const routes: Record<ActivityName, ActivityComponentType<any>> = {

@@ -1,7 +1,7 @@
 import { defineConfig } from '@stackflow/config';
 import { z } from 'zod/v4';
 
-import { activityDescription } from '@/stackflow/Activity';
+import { activityDescription } from '@/stackflow/metadata';
 import { objectEntries } from '@/utils/object';
 
 export const stackflowTransitionDuration = 350;

@@ -1,6 +1,6 @@
 import { z } from 'zod/v4';
 
-import { zDecoder } from '@/stackflow/zDecoder';
+import { zDecoder } from '@/stackflow/utils/zDecoder';
 import { CourseSelectionStepType } from '@/types/course';
 import { Prettify } from '@/utils/type';
 
