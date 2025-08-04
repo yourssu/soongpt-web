@@ -1,6 +1,6 @@
 import { z } from 'zod/v4';
 
-import { CourseSchema } from '@/schemas/courseSchema';
+import { zDecoder } from '@/stackflow/zDecoder';
 import { CourseSelectionStepType } from '@/types/course';
 import { Prettify } from '@/utils/type';
 
@@ -15,23 +15,24 @@ type ActivityDescriptionItem = {
 export const activityDescription = {
   course_search: {
     schema: z.object({
-      selectedCourses: z.array(CourseSchema),
+      selectedCourseCodes: zDecoder.numArray(),
+      totalSelectedPoints: zDecoder.num(),
     }),
     url: '/course-search',
   },
   course_selection: {
     schema: z.object({
-      type: z.enum(CourseSelectionStepType).optional(),
+      type: zDecoder.enum(CourseSelectionStepType).optional(),
     }),
     url: '/course-selection',
   },
   desired_credit: {
     schema: z.object({
-      codes: z.array(z.number()),
-      generalRequiredCodes: z.array(z.number()),
-      majorElectiveCodes: z.array(z.number()),
-      majorRequiredCodes: z.array(z.number()),
-      selectedTotalPoints: z.number(),
+      codes: zDecoder.numArray(),
+      generalRequiredCodes: zDecoder.numArray(),
+      majorElectiveCodes: zDecoder.numArray(),
+      majorRequiredCodes: zDecoder.numArray(),
+      selectedTotalPoints: zDecoder.num(),
     }),
     url: '/desired-credit',
   },
