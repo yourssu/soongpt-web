@@ -31,7 +31,7 @@ const Footer = ({ children }: React.PropsWithChildren<unknown>) => {
 */
 const ScrollArea = ({ children, className }: React.PropsWithChildren<{ className?: string }>) => {
   return (
-    <div className="size-full overflow-y-hidden">
+    <div className="h-dvh w-full overflow-y-hidden" data-activity-scroll-area>
       <div
         className={clsx(
           'flex h-[calc(100dvh+1px)] w-full flex-col items-center overflow-y-scroll overscroll-none',
