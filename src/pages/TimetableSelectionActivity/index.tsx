@@ -1,8 +1,8 @@
-import { ActivityComponentType } from '@stackflow/react';
 import { useFlow } from '@stackflow/react/future';
 
 import { TimetableActivityView } from '@/pages/TimetableSelectionActivity/components/TimetableActivityView';
 import { useLatestTimetableMutationState } from '@/pages/TimetableSelectionActivity/hooks/useLatestTimetableMutationState';
+import { ActivityComponentType } from '@/utils/stackflow';
 
 export const TimetableSelectionActivity: ActivityComponentType = () => {
   const { replace } = useFlow();

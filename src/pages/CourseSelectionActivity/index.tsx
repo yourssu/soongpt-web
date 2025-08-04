@@ -21,7 +21,7 @@ interface CourseSelectionActivityParams {
   type?: CourseSelectionStepType;
 }
 
-const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityParams> = ({
+export const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityParams> = ({
   params,
 }) => {
   const type = params.type ?? 'MAJOR_REQUIRED';
@@ -129,5 +129,3 @@ const CourseSelectionActivity: ActivityComponentType<CourseSelectionActivityPara
     </SelectedCoursesContext.Provider>
   );
 };
-
-export default CourseSelectionActivity;

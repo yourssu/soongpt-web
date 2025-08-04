@@ -1,4 +1,3 @@
-import { ActivityComponentType } from '@stackflow/react';
 import { motion } from 'motion/react';
 import { useMemo, useRef } from 'react';
 
@@ -12,8 +11,9 @@ import GradeInput from '@/pages/OnboardingActivity/components/GradeInput';
 import SchoolIdInput from '@/pages/OnboardingActivity/components/SchoolIdInput';
 import { useFlow } from '@/stackflow';
 import { assertNonNullish } from '@/utils/assertion';
+import { ActivityComponentType } from '@/utils/stackflow';
 
-const OnboardingActivity: ActivityComponentType = () => {
+export const OnboardingActivity: ActivityComponentType = () => {
   const { studentInfo, setStudentInfo } = useStudentInfoContext();
 
   const { push } = useFlow();
@@ -128,5 +128,3 @@ const OnboardingActivity: ActivityComponentType = () => {
     </ActivityLayout>
   );
 };
-
-export default OnboardingActivity;

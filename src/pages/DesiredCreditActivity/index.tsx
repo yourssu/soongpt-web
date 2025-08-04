@@ -28,7 +28,7 @@ type DesiredCreditParams = {
 
 const MAX_CREDIT = 22 + 3; // 최대 학점 22 + 이월학점 3
 
-const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ params }) => {
+export const DesiredCreditActivity: ActivityComponentType<DesiredCreditParams> = ({ params }) => {
   const { grade, schoolId, department, isChapel } = useAssertedStudentInfoContext();
 
   const chapelPoints = isChapel ? 0.5 : 0;
@@ -386,5 +386,3 @@ const maxPointInfoDialogContent = {
     ),
   },
 };
-
-export default DesiredCreditActivity;

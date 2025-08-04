@@ -2,12 +2,7 @@ import { basicUIPlugin } from '@stackflow/plugin-basic-ui';
 import { historySyncPlugin } from '@stackflow/plugin-history-sync';
 import { basicRendererPlugin } from '@stackflow/plugin-renderer-basic';
 import { stackflow } from '@stackflow/react';
-
-import { CourseSearchActivity } from '@/pages/CourseSearchActivity';
-import CourseSelectionActivity from '@/pages/CourseSelectionActivity';
-import DesiredCreditActivity from '@/pages/DesiredCreditActivity';
-import OnboardingActivity from '@/pages/OnboardingActivity';
-import { TimetableSelectionActivity } from '@/pages/TimetableSelectionActivity';
+import { lazy } from '@stackflow/react/future';
 
 export const stackflowTransitionDuration = 350;
 
@@ -30,11 +25,31 @@ export const { Stack, useFlow, useStepFlow, activities } = stackflow({
     }),
   ],
   activities: {
-    OnboardingActivity,
-    CourseSelectionActivity,
-    DesiredCreditActivity,
-    TimetableSelectionActivity,
-    CourseSearchActivity,
+    OnboardingActivity: lazy(() =>
+      import('@/pages/OnboardingActivity').then((module) => ({
+        default: module.OnboardingActivity,
+      })),
+    ),
+    CourseSelectionActivity: lazy(() =>
+      import('@/pages/CourseSelectionActivity').then((module) => ({
+        default: module.CourseSelectionActivity,
+      })),
+    ),
+    DesiredCreditActivity: lazy(() =>
+      import('@/pages/DesiredCreditActivity').then((module) => ({
+        default: module.DesiredCreditActivity,
+      })),
+    ),
+    TimetableSelectionActivity: lazy(() =>
+      import('@/pages/TimetableSelectionActivity').then((module) => ({
+        default: module.TimetableSelectionActivity,
+      })),
+    ),
+    CourseSearchActivity: lazy(() =>
+      import('@/pages/CourseSearchActivity').then((module) => ({
+        default: module.CourseSearchActivity,
+      })),
+    ),
   },
 });
 
