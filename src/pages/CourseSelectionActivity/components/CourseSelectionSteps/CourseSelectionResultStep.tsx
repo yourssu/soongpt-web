@@ -12,7 +12,7 @@ import { CourseSelectionLayout } from '@/pages/CourseSelectionActivity/component
 import { BaseStepProps } from '@/pages/CourseSelectionActivity/components/CourseSelectionSteps/type';
 import { SelectedCoursesContext } from '@/pages/CourseSelectionActivity/context';
 import { CourseType } from '@/schemas/courseSchema';
-import { useFlow } from '@/stackflow';
+import { useFlow } from '@/stackflow/config';
 import { isSameCourse } from '@/utils/course';
 
 type SelectionTabType = '교양' | '기타' | '전공';

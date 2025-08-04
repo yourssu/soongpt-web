@@ -2,7 +2,7 @@ import { useActivity, useStep } from '@stackflow/react';
 import clsx from 'clsx';
 import { ChevronLeft } from 'lucide-react';
 
-import { activities, useFlow, useStepFlow } from '@/stackflow';
+import { activities, useFlow, useStepFlow } from '@/stackflow/config';
 
 interface BaseAppBarProps {
   className?: string;

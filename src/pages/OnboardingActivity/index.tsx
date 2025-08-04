@@ -9,7 +9,7 @@ import ChapelInput from '@/pages/OnboardingActivity/components/ChapelInput';
 import DepartmentInput from '@/pages/OnboardingActivity/components/DepartmentInput';
 import GradeInput from '@/pages/OnboardingActivity/components/GradeInput';
 import SchoolIdInput from '@/pages/OnboardingActivity/components/SchoolIdInput';
-import { useFlow } from '@/stackflow';
+import { useFlow } from '@/stackflow/config';
 import { assertNonNullish } from '@/utils/assertion';
 import { ActivityComponentType } from '@/utils/stackflow';
 

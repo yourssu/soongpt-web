@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-import { stackflowTransitionDuration } from '@/stackflow';
+import { stackflowTransitionDuration } from '@/stackflow/config';
 
 /* 
   스택플로우에서 트랜지션 도중에 input 포커싱(autofocus)이 발생하면 트랜지션이 뭉게지는 이슈가 있어요.

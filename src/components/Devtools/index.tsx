@@ -7,7 +7,7 @@ import { useStudentInfoContext } from '@/components/Providers/StudentInfoProvide
 import { STAGE } from '@/config';
 import { useAlertDialog } from '@/hooks/useAlertDialog';
 import { useToast } from '@/hooks/useToast';
-import { useFlow } from '@/stackflow';
+import { useFlow } from '@/stackflow/config';
 import { assertNonNullish } from '@/utils/assertion';
 
 interface ToolItemProps {

@@ -15,7 +15,7 @@ import { useAlertDialog } from '@/hooks/useAlertDialog';
 import { PointCarryOverCalculator } from '@/pages/DesiredCreditActivity/components/PointCarryOverCalculator';
 import { PreferedGeneralElectivesChipGroup } from '@/pages/DesiredCreditActivity/components/PreferedGeneralElectivesChipGroup';
 import RollingNumber from '@/pages/DesiredCreditActivity/components/RollingNumber';
-import { useFlow } from '@/stackflow';
+import { useFlow } from '@/stackflow/config';
 import { ActivityComponentType } from '@/utils/stackflow';
 
 type DesiredCreditParams = {

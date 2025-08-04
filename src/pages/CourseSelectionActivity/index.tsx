@@ -13,7 +13,7 @@ import { MajorRequiredSelectionStep } from '@/pages/CourseSelectionActivity/comp
 import SoongptErrorBoundary from '@/pages/CourseSelectionActivity/components/SoongptErrorBoundary';
 import { SelectedCoursesContext } from '@/pages/CourseSelectionActivity/context';
 import { SelectedCourseType } from '@/pages/CourseSelectionActivity/type';
-import { useFlow, useStepFlow } from '@/stackflow';
+import { useFlow, useStepFlow } from '@/stackflow/config';
 import { CourseSelectionStepType } from '@/types/course';
 import { ActivityComponentType } from '@/utils/stackflow';
 
