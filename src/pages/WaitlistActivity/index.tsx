@@ -7,7 +7,6 @@ import { tv } from 'tailwind-variants';
 import { postContact } from '@/api/contacts';
 import { ActivityLayout } from '@/components/ActivityLayout';
 import { useToast } from '@/hooks/useToast';
-import { ActivityComponentType } from '@/utils/stackflow';
 import { toPhoneNumber } from '@/utils/string';
 
 const button = tv({
@@ -20,7 +19,7 @@ const button = tv({
   },
 });
 
-export const WaitlistActivity: ActivityComponentType = () => {
+export const WaitlistActivity = () => {
   const [formType, setFormType] = useState<'email' | 'phone'>('phone');
   const [emailOrPhone, setEmailOrPhone] = useState('');
   const [isTermsAgreed, setIsTermsAgreed] = useState(false);

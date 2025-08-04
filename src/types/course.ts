@@ -1,22 +1,17 @@
-import { ArrayState } from '@/hooks/useGetArrayState';
-
-export const CourseType = ['MAJOR_REQUIRED', 'MAJOR_ELECTIVE', 'GENERAL_REQUIRED'] as const;
-export type CourseType = (typeof CourseType)[number];
-
-export const CourseClassification = [...CourseType, 'CHAPEL', 'GENERAL_ELECTIVE', 'OTHER'] as const;
+export const CourseClassification = [
+  'MAJOR_REQUIRED',
+  'MAJOR_ELECTIVE',
+  'GENERAL_REQUIRED',
+  'GENERAL_ELECTIVE',
+  'CHAPEL',
+  'OTHER',
+] as const;
 export type CourseClassification = (typeof CourseClassification)[number];
 
-export type CourseSelectionStepType = 'COURSE_SELECTION_RESULT' | CourseType;
-
-interface StateInfo {
-  description?: string;
-  image?: string;
-  okText: string;
-  title: string;
-}
-
-export interface CourseSelectionInfo {
-  next: CourseType | null;
-  progress: number;
-  text: Record<ArrayState, StateInfo>;
-}
+export const CourseSelectionStepType = [
+  'COURSE_SELECTION_RESULT',
+  'GENERAL_REQUIRED',
+  'MAJOR_ELECTIVE',
+  'MAJOR_REQUIRED',
+] as const;
+export type CourseSelectionStepType = (typeof CourseSelectionStepType)[number];

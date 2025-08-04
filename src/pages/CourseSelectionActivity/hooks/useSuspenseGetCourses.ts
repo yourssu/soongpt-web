@@ -6,9 +6,11 @@ import {
   getMajorRequiredCourses,
 } from '@/api/courses';
 import { useAssertedStudentInfoContext } from '@/components/Providers/StudentInfoProvider/hook';
-import { CourseType } from '@/types/course';
+import { CourseSelectionStepType } from '@/types/course';
 
-export const useSuspenseGetCourses = (type: CourseType) => {
+type FetchableCourseType = Exclude<CourseSelectionStepType, 'COURSE_SELECTION_RESULT'>;
+
+export const useSuspenseGetCourses = (type: FetchableCourseType) => {
   const { schoolId, grade, department } = useAssertedStudentInfoContext();
 
   const searchParams = {

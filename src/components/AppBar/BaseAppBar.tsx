@@ -1,24 +1,26 @@
-import { useActivity, useStep } from '@stackflow/react';
+import { useStep } from '@stackflow/react';
+import { useActivity, useFlow, useStepFlow } from '@stackflow/react/future';
 import clsx from 'clsx';
 import { ChevronLeft } from 'lucide-react';
 
-import { activities, useFlow, useStepFlow } from '@/stackflow';
+import { ActivityName } from '@/stackflow/Activity';
 
 interface BaseAppBarProps {
   className?: string;
 }
 
 export const BaseAppBar = ({ children, className }: React.PropsWithChildren<BaseAppBarProps>) => {
-  const activity = useActivity();
-  const step = useStep();
+  const { isRoot, name: activityName } = useActivity();
   const { pop } = useFlow();
-  const { stepPop } = useStepFlow(activity.name as keyof typeof activities);
+  const step = useStep();
+  const { popStep } = useStepFlow(activityName as ActivityName);
 
-  const hideBackButton = activity.isRoot && !step;
+  const isAnyStepPushed = !!step;
+  const hideBackButton = isRoot && !isAnyStepPushed;
 
   const handleClickBackButton = () => {
-    if (step) {
-      stepPop();
+    if (isAnyStepPushed) {
+      popStep();
       return;
     }
     pop();

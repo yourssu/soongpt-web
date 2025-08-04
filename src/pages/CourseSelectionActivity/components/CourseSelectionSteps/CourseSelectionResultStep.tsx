@@ -1,4 +1,5 @@
 import { receive } from '@stackflow/compat-await-push';
+import { useFlow } from '@stackflow/react/future';
 import { motion } from 'motion/react';
 import { useContext, useMemo, useState } from 'react';
 
@@ -12,7 +13,6 @@ import { CourseSelectionLayout } from '@/pages/CourseSelectionActivity/component
 import { BaseStepProps } from '@/pages/CourseSelectionActivity/components/CourseSelectionSteps/type';
 import { SelectedCoursesContext } from '@/pages/CourseSelectionActivity/context';
 import { CourseType } from '@/schemas/courseSchema';
-import { useFlow } from '@/stackflow';
 import { isSameCourse } from '@/utils/course';
 
 type SelectionTabType = '교양' | '기타' | '전공';
@@ -43,8 +43,9 @@ export const CourseSelectionResultStep = ({ onNextClick }: CourseSelectionResult
     // Todo: useReceive로 리팩토링: type-safe receive, send
     Mixpanel.trackCourseSearchClick();
     const { course, type } = await receive<CourseSelectionChangeActionPayload>(
-      push('CourseSearchActivity', {
-        selectedCourses,
+      push('course_search', {
+        selectedCourseCodes: selectedCourses.map((course) => course.code),
+        totalSelectedPoints: selectedCredit,
       }),
     );
     if (type === '추가') {

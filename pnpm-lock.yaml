@@ -32,6 +32,9 @@ importers:
       '@stackflow/compat-await-push':
         specifier: ^1.1.13
         version: 1.1.13(@stackflow/core@1.2.0)(@stackflow/react@1.5.3(@stackflow/config@1.2.1)(@stackflow/core@1.2.0)(@types/react@19.1.9)(react@19.1.1))(@types/react@19.1.9)(react@19.1.1)
+      '@stackflow/config':
+        specifier: ^1.2.1
+        version: 1.2.1
       '@stackflow/core':
         specifier: ^1.2.0
         version: 1.2.0
