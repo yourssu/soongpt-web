@@ -1,5 +1,3 @@
-import { receive } from '@stackflow/compat-await-push';
-import { useFlow } from '@stackflow/react/future';
 import { motion } from 'motion/react';
 import { useContext, useMemo, useState } from 'react';
 
@@ -7,8 +5,8 @@ import { Mixpanel } from '@/bootstrap/mixpanel';
 import { SelectableChip } from '@/components/Chip/SelectableChip';
 import { RemovableCourseListItem } from '@/components/CourseItem/RemovableCourseItem';
 import { useFilteredCoursesByCategory } from '@/hooks/course/useFilteredCoursesByCategory';
+import { useReceive } from '@/hooks/stackflow/compat-await-push-hooks';
 import { useAlertDialog } from '@/hooks/useAlertDialog';
-import { CourseSelectionChangeActionPayload } from '@/pages/CourseSearchActivity/type';
 import { CourseSelectionLayout } from '@/pages/CourseSelectionActivity/components/CourseSelectionLayout';
 import { BaseStepProps } from '@/pages/CourseSelectionActivity/components/CourseSelectionSteps/type';
 import { SelectedCoursesContext } from '@/pages/CourseSelectionActivity/context';
@@ -19,7 +17,7 @@ type SelectionTabType = '교양' | '기타' | '전공';
 type CourseSelectionResultStepProps = BaseStepProps;
 
 export const CourseSelectionResultStep = ({ onNextClick }: CourseSelectionResultStepProps) => {
-  const { push } = useFlow();
+  const { pushAndReceive } = useReceive();
   const openRemoveAlertDialog = useAlertDialog();
   const [selectionTab, setSelectionTab] = useState<SelectionTabType>('교양');
   const { selectedCourses, selectedCredit, setSelectedCourses } =
@@ -40,20 +38,22 @@ export const CourseSelectionResultStep = ({ onNextClick }: CourseSelectionResult
   }, [filteredCoursesByCategory, selectionTab]);
 
   const onSearchButtonClick = async () => {
-    // Todo: useReceive로 리팩토링: type-safe receive, send
     Mixpanel.trackCourseSearchClick();
-    const { course, type } = await receive<CourseSelectionChangeActionPayload>(
-      push('course_search', {
-        selectedCourseCodes: selectedCourses.map((course) => course.code),
-        totalSelectedPoints: selectedCredit,
-      }),
-    );
-    if (type === '추가') {
-      const newCourse = { ...course, selectedBySearch: true };
-      setSelectedCourses((prev) => [...prev, newCourse]);
-      Mixpanel.trackSearchCourseAddConfirmClick(course.name);
-    } else {
-      setSelectedCourses((prev) => prev.filter((c) => !isSameCourse(c, course)));
+
+    const result = await pushAndReceive('course_search', {
+      selectedCourseCodes: selectedCourses.map((course) => course.code),
+      totalSelectedPoints: selectedCredit,
+    });
+
+    if (result.success) {
+      const { course, actionType } = result.data;
+      if (actionType === '추가') {
+        const newCourse = { ...course, selectedBySearch: true };
+        setSelectedCourses((prev) => [...prev, newCourse]);
+        Mixpanel.trackSearchCourseAddConfirmClick(course.name);
+      } else {
+        setSelectedCourses((prev) => prev.filter((c) => !isSameCourse(c, course)));
+      }
     }
   };
 

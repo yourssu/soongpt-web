@@ -6,6 +6,7 @@ import { Mixpanel } from '@/bootstrap/mixpanel';
 import { ActivityLayout } from '@/components/ActivityLayout';
 import { useCoursesTotalPoint } from '@/hooks/course/useCoursesTotalPoint';
 import { useFilteredCoursesByCategory } from '@/hooks/course/useFilteredCoursesByCategory';
+import { useSafeActivityParams } from '@/hooks/stackflow/useSafeActivityParams';
 import CourseSelectionFallback from '@/pages/CourseSelectionActivity/components/CourseSelectionFallback';
 import { CourseSelectionResultStep } from '@/pages/CourseSelectionActivity/components/CourseSelectionSteps/CourseSelectionResultStep';
 import { GeneralRequiredSelectionStep } from '@/pages/CourseSelectionActivity/components/CourseSelectionSteps/GeneralRequiredSelectionStep';
@@ -14,7 +15,6 @@ import { MajorRequiredSelectionStep } from '@/pages/CourseSelectionActivity/comp
 import SoongptErrorBoundary from '@/pages/CourseSelectionActivity/components/SoongptErrorBoundary';
 import { SelectedCoursesContext } from '@/pages/CourseSelectionActivity/context';
 import { SelectedCourseType } from '@/pages/CourseSelectionActivity/type';
-import { useSafeActivityParams } from '@/utils/stackflow';
 
 export const CourseSelectionActivity = () => {
   const { type } = useSafeActivityParams('course_selection');
