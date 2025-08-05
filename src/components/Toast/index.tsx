@@ -1,4 +1,5 @@
-import { DotLottieReact } from '@lottiefiles/dotlottie-react';
+import { Lottie } from '@toss/lottie';
+import { ComponentProps } from 'react';
 import { tv } from 'tailwind-variants';
 
 import { ToastLottieAssetMap, ToastType } from '@/components/Providers/ToastProvider/type';
@@ -14,13 +15,25 @@ const lottie = tv({
   },
 });
 
+type LottieProps = Omit<ComponentProps<typeof Lottie>, 'json' | 'src'>;
+const lottieProps: Record<ToastType, LottieProps> = {
+  success: {
+    speed: 1.5,
+  },
+  error: {
+    speed: 1,
+  },
+  default: {},
+};
+
 export const Toast = ({ children, type }: React.PropsWithChildren<{ type: ToastType }>) => {
   const src = ToastLottieAssetMap[type];
+  const options = lottieProps[type];
 
   return (
     <div className="flex w-fit items-center rounded-xl bg-gray-800 py-2 pr-5.5 pl-3 text-[15px] font-medium text-white">
       <div className={lottie({ type })}>
-        {!!src && <DotLottieReact autoplay loop={false} speed={1.5} src={src} />}
+        {!!src && <Lottie {...options} autoPlay loop={false} src={src} />}
       </div>
       {children}
     </div>

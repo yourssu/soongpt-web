@@ -8,6 +8,6 @@ export type ToastItem = {
 
 export const ToastLottieAssetMap = {
   default: undefined,
-  error: '/lotties/error.lottie',
-  success: '/lotties/success.lottie',
+  error: '/lotties/error.lottie.json',
+  success: '/lotties/success.lottie.json',
 } as const satisfies Record<ToastType, string | undefined>;

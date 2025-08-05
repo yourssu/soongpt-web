@@ -11,9 +11,6 @@ importers:
       '@channel.io/channel-web-sdk-loader':
         specifier: ^2.0.0
         version: 2.0.0
-      '@lottiefiles/dotlottie-react':
-        specifier: ^0.14.3
-        version: 0.14.3(react@19.1.1)
       '@radix-ui/react-dialog':
         specifier: ^1.1.14
         version: 1.1.14(@types/react-dom@19.1.7(@types/react@19.1.9))(@types/react@19.1.9)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
@@ -56,6 +53,9 @@ importers:
       '@tanstack/react-query':
         specifier: ^5.84.1
         version: 5.84.1(react@19.1.1)
+      '@toss/lottie':
+        specifier: ^1.3.2
+        version: 1.3.2(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -637,14 +637,6 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.29':
     resolution: {integrity: sha512-uw6guiW/gcAGPDhLmd77/6lW8QLeiV5RUTsAX46Db6oLhGaVj4lhnPwb184s1bkc8kdVg/+h988dro8GRDpmYQ==}
-
-  '@lottiefiles/dotlottie-react@0.14.3':
-    resolution: {integrity: sha512-O917vzFmacyC/F1NM2CLBsHqCMUBPiyI9Vw0o3ZohbZzRJYbgHPhdOpL83wE3zWs9VNr0JSbmJrkkUwaQizTWQ==}
-    peerDependencies:
-      react: ^17 || ^18 || ^19
-
-  '@lottiefiles/dotlottie-web@0.48.0':
-    resolution: {integrity: sha512-gcS6/3NYcpD2VUi2413wrZmdNLPbtwPaXqoFBqioLW/GsI/oTpTqmunsliRb4BL1ECLAUu0YOzHyK73UXMHrRg==}
 
   '@nodelib/fs.scandir@2.1.5':
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
@@ -1394,6 +1386,32 @@ packages:
     peerDependencies:
       react: ^18 || ^19
 
+  '@toss/impression-area@1.4.2':
+    resolution: {integrity: sha512-lgHaqf0n1dGDDhWw0rwpW2haI8yJMp7ByZ3QdzzpOm7aamtJruBTpr21Vpi9WxVhWKHphiX2Dr6FZTDkeOwUmA==}
+    peerDependencies:
+      react: '*'
+
+  '@toss/lottie@1.3.2':
+    resolution: {integrity: sha512-T/BznVO5eOV/x7pGeb/zCFAtf5b173fng240EiQ3He1hIhs/EtXmRDHg0b9C2k+lPOy6A6Xm+obZstdfX3vNLA==}
+    peerDependencies:
+      react: ^16.0.0 || ^17.0.0 || ^18
+      react-dom: ^16.0.0 || ^17.0.0 || ^18
+
+  '@toss/react@1.8.1':
+    resolution: {integrity: sha512-jH3oo/7yctexuutj/YgQrddaK1bU2s5659dkJIXOe23bEjkY+lbhvEz2FLEhRjSo6k6ktPagpxO4AcdhCi5k5A==}
+    peerDependencies:
+      react: ^16.0.0 || ^17.0.0 || ^18
+
+  '@toss/storage@1.4.1':
+    resolution: {integrity: sha512-jvnBXAQ/Fqqdt+gqYKeHYk7SzR2LX/FC50JIoVI0RldG1mDh1tebOqD7XkrZ89q77t/RwTuh60+8fjZDgend/g==}
+
+  '@toss/utility-types@1.2.1':
+    resolution: {integrity: sha512-1y8s1bvmuhuMX/d6qR9mmvcgFZIKYIQqJbAIshlGArXkjk/ec67gXc5uByEV1Y7in9ZhrGNRmjD8DTH0988vpQ==}
+
+  '@toss/utils@1.6.1':
+    resolution: {integrity: sha512-x6m8jLKWtAmCbxTLXbgTzJ5wZyRSUQPLpR/oLJP1ZK9ytXcRf03oA46W/+78kErUkEw/yQz2L+t2xFDHSeZ6IQ==}
+    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
+
   '@types/babel__core@7.20.5':
     resolution: {integrity: sha512-qoQprZvz5wQFJwMDqeseRXWv3rqMvhgpbXFfVyWhbx9X47POIA6i/+dXefEmZKoAgOaTdaIgNSMqMIU61yRyzA==}
 
@@ -1427,10 +1445,16 @@ packages:
   '@types/node@24.0.15':
     resolution: {integrity: sha512-oaeTSbCef7U/z7rDeJA138xpG3NuKc64/rZ2qmUFkFJmnMsAPaluIifqyWd8hSSMxyP9oie3dLAqYPblag9KgA==}
 
+  '@types/prop-types@15.7.15':
+    resolution: {integrity: sha512-F6bEyamV9jKGAFBEmlQnesRPGOQqS2+Uwi0Em15xenOxHaf2hv6L8YCVn3rPdPJOiJfPiCnLIRyvwVaqMY3MIw==}
+
   '@types/react-dom@19.1.7':
     resolution: {integrity: sha512-i5ZzwYpqjmrKenzkoLM2Ibzt6mAsM7pxB6BCIouEVVmgiqaMj1TjaK7hnA36hbW5aZv20kx7Lw6hWzPWg0Rurw==}
     peerDependencies:
       '@types/react': ^19.0.0
+
+  '@types/react@18.3.23':
+    resolution: {integrity: sha512-/LDXMQh55EzZQ0uVAZmKKhfENivEvWz6E+EYzh+/MCjMhNsotd+ZHhBGIjFDTi6+fz0OhQQQLbTgdQIxxCsC0w==}
 
   '@types/react@19.1.9':
     resolution: {integrity: sha512-WmdoynAX8Stew/36uTSVMcLJJ1KRh6L3IZRx1PZ7qJtBqT3dYTgyDTx8H1qoRghErydW7xw9mSJ3wS//tCRpFA==}
@@ -1686,6 +1710,9 @@ packages:
     resolution: {integrity: sha512-+IxzY9BZOQd/XuYPRmrvEVjF/nqj5kgT4kEq7VofrDoM1MxoRjEWkrCC3EtLi59TVawxTAn+orJwFQcrqEN1+g==}
     engines: {node: '>=18'}
 
+  classnames@2.5.1:
+    resolution: {integrity: sha512-saHYOzhIQs6wy2sVxTM6bUDsQO4F50V9RQ22qBpEdCW+I+/Wmke2HOl6lS6dTpdxVhb88/I6+Hs+438c3lfUow==}
+
   clean-css@5.3.3:
     resolution: {integrity: sha512-D5J+kHaVb/wKSFcyyV75uCn8fiY4sV38XJoe4CUyGQ+mOU/fMVYUdH1hJC+CJQ5uY3EnW27SbJYS4X8BiLrAFg==}
     engines: {node: '>= 10.0'}
@@ -1770,6 +1797,10 @@ packages:
   data-view-byte-offset@1.0.1:
     resolution: {integrity: sha512-BS8PfmtDGnrgYdOonGZQdLZslWIeCGFP9tpan0hi1Co2Zr2NKADsvGYA8XxuG/4UWgJ6Cjtv+YJnB6MM69QGlQ==}
     engines: {node: '>= 0.4'}
+
+  date-fns@2.30.0:
+    resolution: {integrity: sha512-fnULvOpxnC5/Vg3NCiWelDsLiUc9bRwAPs/+LfTLNvetFCtCTN+yQz15C/fs4AwX1R9K5GLtLfn8QW+dWisaAw==}
+    engines: {node: '>=0.11'}
 
   date-fns@4.1.0:
     resolution: {integrity: sha512-Ukq0owbQXxa/U3EGtsdVBkR1w7KOQ5gIBqdH2hkvknzZPYvBxb/aa6E8L7tmjFtkwZBu3UXBbjIgPo/Ez4xaNg==}
@@ -2512,8 +2543,14 @@ packages:
     resolution: {integrity: sha512-iPZK6eYjbxRu3uB4/WZ3EsEIMJFMqAoopl3R+zuq0UjcAm/MO6KCweDgPfP3elTztoKP3KtnVHxTn2NHBSDVUw==}
     engines: {node: '>=10'}
 
+  lodash.debounce@4.0.8:
+    resolution: {integrity: sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==}
+
   lodash.merge@4.6.2:
     resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}
+
+  lodash.throttle@4.1.1:
+    resolution: {integrity: sha512-wIkUCfVKpVsWo3JSZlc+8MB5it+2AN5W8J7YVMST30UrvcQNZ1Okbj+rbVniijTWE6FGYy4XJq/rHkas8qJMLQ==}
 
   log-update@6.1.0:
     resolution: {integrity: sha512-9ie8ItPR6tjY5uYJh8K/Zrv/RMZ5VOlOWvtZdEHYSTFKZfIBPQa9tOAEeAWhd+AnIneLJ22w5fjOYtoutpWq5w==}
@@ -2522,6 +2559,9 @@ packages:
   loose-envify@1.4.0:
     resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==}
     hasBin: true
+
+  lottie-web@5.13.0:
+    resolution: {integrity: sha512-+gfBXl6sxXMPe8tKQm7qzLnUy5DUPJPKIyRHwtpCpyUEYjHYRJC/5gjUvdkuO2c3JllrPtHXH5UJJK8LRYl5yQ==}
 
   lower-case@2.0.2:
     resolution: {integrity: sha512-7fm3l3NAF9WfN6W3JOmf5drwpVqX78JtoGJ3A6W0a6ZnldM41w2fV5D490psKFTpMds8TJse/eHLFFsNHHjHgg==}
@@ -3111,6 +3151,11 @@ packages:
   supports-preserve-symlinks-flag@1.0.0:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
+
+  suspend-react@0.1.3:
+    resolution: {integrity: sha512-aqldKgX9aZqpoDp3e8/BZ8Dm7x1pJl+qI3ZKxDN0i/IQTWUwBx/ManmlVJ3wowqbno6c2bmiIfs+Um6LbsjJyQ==}
+    peerDependencies:
+      react: '>=17.0'
 
   tailwind-merge@3.0.1:
     resolution: {integrity: sha512-AvzE8FmSoXC7nC+oU5GlQJbip2UO7tmOhOfQyOmPhrStOGXHU08j8mZEHZ4BmCqY5dWTCo4ClWkNyRNx1wpT0g==}
@@ -3842,13 +3887,6 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.4
 
-  '@lottiefiles/dotlottie-react@0.14.3(react@19.1.1)':
-    dependencies:
-      '@lottiefiles/dotlottie-web': 0.48.0
-      react: 19.1.1
-
-  '@lottiefiles/dotlottie-web@0.48.0': {}
-
   '@nodelib/fs.scandir@2.1.5':
     dependencies:
       '@nodelib/fs.stat': 2.0.5
@@ -4493,6 +4531,47 @@ snapshots:
       '@tanstack/query-core': 5.83.1
       react: 19.1.1
 
+  '@toss/impression-area@1.4.2(react@19.1.1)':
+    dependencies:
+      '@toss/react': 1.8.1(react@19.1.1)
+      '@toss/utils': 1.6.1
+      '@types/react': 18.3.23
+      lodash.debounce: 4.0.8
+      react: 19.1.1
+
+  '@toss/lottie@1.3.2(react-dom@19.1.1(react@19.1.1))(react@19.1.1)':
+    dependencies:
+      '@toss/impression-area': 1.4.2(react@19.1.1)
+      '@toss/react': 1.8.1(react@19.1.1)
+      '@toss/utils': 1.6.1
+      lodash.debounce: 4.0.8
+      lottie-web: 5.13.0
+      react: 19.1.1
+      react-dom: 19.1.1(react@19.1.1)
+      suspend-react: 0.1.3(react@19.1.1)
+
+  '@toss/react@1.8.1(react@19.1.1)':
+    dependencies:
+      '@babel/runtime': 7.28.2
+      '@toss/storage': 1.4.1
+      '@toss/utils': 1.6.1
+      classnames: 2.5.1
+      lodash.debounce: 4.0.8
+      lodash.throttle: 4.1.1
+      react: 19.1.1
+
+  '@toss/storage@1.4.1':
+    dependencies:
+      '@babel/runtime': 7.28.2
+
+  '@toss/utility-types@1.2.1': {}
+
+  '@toss/utils@1.6.1':
+    dependencies:
+      '@babel/runtime': 7.28.2
+      '@toss/utility-types': 1.2.1
+      date-fns: 2.30.0
+
   '@types/babel__core@7.20.5':
     dependencies:
       '@babel/parser': 7.26.5
@@ -4530,9 +4609,16 @@ snapshots:
     dependencies:
       undici-types: 7.8.0
 
+  '@types/prop-types@15.7.15': {}
+
   '@types/react-dom@19.1.7(@types/react@19.1.9)':
     dependencies:
       '@types/react': 19.1.9
+
+  '@types/react@18.3.23':
+    dependencies:
+      '@types/prop-types': 15.7.15
+      csstype: 3.1.3
 
   '@types/react@19.1.9':
     dependencies:
@@ -4869,6 +4955,8 @@ snapshots:
 
   chownr@3.0.0: {}
 
+  classnames@2.5.1: {}
+
   clean-css@5.3.3:
     dependencies:
       source-map: 0.6.1
@@ -4945,6 +5033,10 @@ snapshots:
       call-bound: 1.0.4
       es-errors: 1.3.0
       is-data-view: 1.0.2
+
+  date-fns@2.30.0:
+    dependencies:
+      '@babel/runtime': 7.28.2
 
   date-fns@4.1.0: {}
 
@@ -5793,7 +5885,11 @@ snapshots:
     dependencies:
       p-locate: 5.0.0
 
+  lodash.debounce@4.0.8: {}
+
   lodash.merge@4.6.2: {}
+
+  lodash.throttle@4.1.1: {}
 
   log-update@6.1.0:
     dependencies:
@@ -5806,6 +5902,8 @@ snapshots:
   loose-envify@1.4.0:
     dependencies:
       js-tokens: 4.0.0
+
+  lottie-web@5.13.0: {}
 
   lower-case@2.0.2:
     dependencies:
@@ -6374,6 +6472,10 @@ snapshots:
       has-flag: 4.0.0
 
   supports-preserve-symlinks-flag@1.0.0: {}
+
+  suspend-react@0.1.3(react@19.1.1):
+    dependencies:
+      react: 19.1.1
 
   tailwind-merge@3.0.1: {}
 
