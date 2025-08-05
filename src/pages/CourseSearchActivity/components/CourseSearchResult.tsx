@@ -4,24 +4,23 @@ import { getSearchedCourses } from '@/api/courses';
 import { Mixpanel } from '@/bootstrap/mixpanel';
 import { SelectableCourseItem } from '@/components/CourseItem/SelectableCourseItem';
 import { useCombinedCourses } from '@/hooks/course/useCombinedCourses';
+import { useSend } from '@/hooks/stackflow/compat-await-push-hooks';
 import { useSafeActivityParams } from '@/hooks/stackflow/useSafeActivityParams';
 import { useAlertDialog } from '@/hooks/useAlertDialog';
 import { useToast } from '@/hooks/useToast';
 import { CourseType } from '@/schemas/courseSchema';
-import { ActivityNameWithPayload } from '@/stackflow/payload';
 import { isSameCourseCode } from '@/utils/course';
 
 interface CourseSearchResultProps {
-  onCourseSelectionChange: (payload: ActivityNameWithPayload['course_search']) => void;
   searchKeyword: string;
 }
 
 const MAX_COURSE_POINT = 25;
 
-export const CourseSearchResult = ({
-  searchKeyword,
-  onCourseSelectionChange,
-}: CourseSearchResultProps) => {
+export const CourseSearchResult = ({ searchKeyword }: CourseSearchResultProps) => {
+  const toast = useToast();
+  const open = useAlertDialog();
+  const { popAndSend } = useSend<'course_search'>();
   const { selectedCourseCodes, totalSelectedPoints } = useSafeActivityParams('course_search');
 
   const { data: searchedCourses } = useSuspenseQuery({
@@ -29,9 +28,6 @@ export const CourseSearchResult = ({
     queryFn: () => getSearchedCourses(searchKeyword),
   });
   const combinedCourses = useCombinedCourses(searchedCourses);
-
-  const open = useAlertDialog();
-  const toast = useToast();
 
   const onClickCourseItem = async (course: CourseType, isSelected: boolean) => {
     const actionType = isSelected ? '삭제' : '추가';
@@ -64,7 +60,7 @@ export const CourseSearchResult = ({
       }
 
       Mixpanel.trackSearchCourseAddClick(course.name);
-      onCourseSelectionChange({ course, actionType });
+      popAndSend({ course, actionType });
     }
   };
 

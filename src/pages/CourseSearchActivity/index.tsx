@@ -1,5 +1,3 @@
-import { send } from '@stackflow/compat-await-push';
-import { useActivity, useFlow } from '@stackflow/react/future';
 import { Suspense } from 'react';
 import { useInputState } from 'react-simplikit';
 
@@ -8,30 +6,12 @@ import { BaseAppBar } from '@/components/AppBar/BaseAppBar';
 import { useDelayedValue } from '@/hooks/useDelayedValue';
 import { useStackflowInputAutoFocusEffect } from '@/hooks/useStackflowInputAutoFocusEffect';
 import { CourseSearchResult } from '@/pages/CourseSearchActivity/components/CourseSearchResult';
-import { ActivityNameWithPayload } from '@/stackflow/payload';
 
 export const CourseSearchActivity = () => {
-  const { pop } = useFlow();
-  const { id } = useActivity();
-
   const [searchKeyword, setSearchKeyword] = useInputState('');
   const debouncedSearchKeyword = useDelayedValue(searchKeyword);
 
   const autoFocusRef = useStackflowInputAutoFocusEffect();
-
-  const onCourseSelectionChange = ({
-    course,
-    actionType,
-  }: ActivityNameWithPayload['course_search']) => {
-    pop();
-    send({
-      activityId: id,
-      data: {
-        actionType,
-        course,
-      },
-    });
-  };
 
   return (
     <ActivityLayout>
@@ -52,10 +32,7 @@ export const CourseSearchActivity = () => {
 
         <ActivityLayout.Body className="!py-2">
           <Suspense>
-            <CourseSearchResult
-              onCourseSelectionChange={onCourseSelectionChange}
-              searchKeyword={debouncedSearchKeyword}
-            />
+            <CourseSearchResult searchKeyword={debouncedSearchKeyword} />
           </Suspense>
         </ActivityLayout.Body>
       </ActivityLayout.ScrollArea>
