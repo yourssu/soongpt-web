@@ -4,6 +4,7 @@ import clsx from 'clsx';
 import { ChevronLeft } from 'lucide-react';
 
 import { ActivityName } from '@/stackflow/metadata';
+import { cn } from '@/utils/dom';
 
 interface BaseAppBarProps {
   className?: string;
@@ -27,7 +28,7 @@ export const BaseAppBar = ({ children, className }: React.PropsWithChildren<Base
   };
 
   return (
-    <div className={clsx('grid w-full grid-cols-[24px_1fr_24px] items-center gap-4', className)}>
+    <div className={cn('grid w-full grid-cols-[24px_1fr_24px] items-center gap-4', className)}>
       <button className={clsx(hideBackButton ? 'invisible' : '')} onClick={handleClickBackButton}>
         <ChevronLeft />
       </button>

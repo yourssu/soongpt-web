@@ -1,11 +1,11 @@
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
-import clsx from 'clsx';
 import { AnimatePresence, motion } from 'motion/react';
 import { useEffect, useRef } from 'react';
 import { tv } from 'tailwind-variants';
 
 import { IcMonoClose } from '@/components/Icons/IcMonoClose';
+import { cn } from '@/utils/dom';
 
 interface DialogProps {
   closeableWithOutside?: boolean;
@@ -40,7 +40,7 @@ const Title = ({ children }: React.PropsWithChildren<unknown>) => {
 };
 
 const Content = ({ children, className }: React.PropsWithChildren<{ className?: string }>) => {
-  return <div className={clsx('flex flex-col px-5 py-3 text-sm', className)}>{children}</div>;
+  return <div className={cn('flex flex-col px-5 py-3 text-sm', className)}>{children}</div>;
 };
 
 const ButtonGroup = ({ children }: React.PropsWithChildren<unknown>) => {
@@ -64,7 +64,7 @@ const Button = ({
   ...props
 }: React.ButtonHTMLAttributes<HTMLButtonElement> & { variant: 'primary' | 'secondary' }) => {
   return (
-    <button className={clsx(buttonVariant({ variant }), className)} {...props}>
+    <button className={cn(buttonVariant({ variant }), className)} {...props}>
       {children}
     </button>
   );

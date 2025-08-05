@@ -1,6 +1,5 @@
 import { range } from 'es-toolkit';
 import { HTMLAttributes } from 'react';
-import { twMerge } from 'tailwind-merge';
 
 import { timetableBaseDays } from '@/components/Timetable/hooks/useTimetableDayRange';
 import { SLOT_HEIGHT } from '@/components/Timetable/type';
@@ -8,6 +7,7 @@ import {
   getGridTemplateCols,
   getGridTemplateRows,
 } from '@/components/Timetable/utils/getTimetableGridStyle';
+import { cn } from '@/utils/dom';
 
 const DefaultSkeltonHeader = () => {
   return (
@@ -27,9 +27,9 @@ export const TimetableSkeleton = ({ className, ...props }: HTMLAttributes<HTMLDi
     .join(' ');
 
   return (
-    <div className={`transform-gpu animate-pulse ${twMerge(className)}`} {...props}>
+    <div className={cn('transform-gpu animate-pulse', className)} {...props}>
       <div
-        className={`border-neutralPlaceholder overflow-hidden rounded-xl border-2 ${twMerge(borderClass)}`}
+        className={cn('border-neutralPlaceholder overflow-hidden rounded-xl border-2', borderClass)}
       >
         {/* Header */}
         <DefaultSkeltonHeader />

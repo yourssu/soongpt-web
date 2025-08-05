@@ -1,4 +1,5 @@
-import { clamp } from '@/utils/number';
+import { clamp } from 'es-toolkit';
+
 import { Merge } from '@/utils/type';
 
 type NumberInputProps = Merge<

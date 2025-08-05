@@ -1,5 +1,6 @@
-import clsx from 'clsx';
 import { tv } from 'tailwind-variants';
+
+import { cn } from '@/utils/dom';
 
 interface ChipProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
@@ -31,7 +32,7 @@ export const SelectableChip = ({
   };
 
   return (
-    <div className={clsx(chip({ selected }), className)} onClick={handleClick} {...props}>
+    <div className={cn(chip({ selected }), className)} onClick={handleClick} {...props}>
       {children}
     </div>
   );

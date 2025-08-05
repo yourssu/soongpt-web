@@ -1,8 +1,8 @@
-import clsx from 'clsx';
 import { motion, Variants } from 'motion/react';
 
 import { ActivityLayout } from '@/components/ActivityLayout';
 import { ProgressAppBar } from '@/components/AppBar/ProgressAppBar';
+import { cn } from '@/utils/dom';
 
 interface CourseSelectionHeaderProps {
   description?: string;
@@ -66,7 +66,7 @@ export const CourseSelectionBody = ({
 }: React.PropsWithChildren<{ className?: string }>) => {
   return (
     <ActivityLayout.Body>
-      <div className={clsx('flex w-full flex-[1_1_0] flex-col gap-3', className)}>{children}</div>
+      <div className={cn('flex w-full flex-[1_1_0] flex-col gap-3', className)}>{children}</div>
     </ActivityLayout.Body>
   );
 };
