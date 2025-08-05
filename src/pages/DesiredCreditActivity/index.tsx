@@ -12,11 +12,11 @@ import { ActivityLayout } from '@/components/ActivityLayout';
 import { ProgressAppBar } from '@/components/AppBar/ProgressAppBar';
 import { Hint } from '@/components/Hint';
 import { useAssertedStudentInfoContext } from '@/components/Providers/StudentInfoProvider/hook';
+import { useSafeActivityParams } from '@/hooks/stackflow/useSafeActivityParams';
 import { useAlertDialog } from '@/hooks/useAlertDialog';
 import { PointCarryOverCalculator } from '@/pages/DesiredCreditActivity/components/PointCarryOverCalculator';
 import { PreferedGeneralElectivesChipGroup } from '@/pages/DesiredCreditActivity/components/PreferedGeneralElectivesChipGroup';
 import RollingNumber from '@/pages/DesiredCreditActivity/components/RollingNumber';
-import { useSafeActivityParams } from '@/utils/stackflow';
 
 const MAX_CREDIT = 22 + 3; // 최대 학점 22 + 이월학점 3
 

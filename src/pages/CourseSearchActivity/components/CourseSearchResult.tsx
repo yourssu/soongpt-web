@@ -4,12 +4,12 @@ import { getSearchedCourses } from '@/api/courses';
 import { Mixpanel } from '@/bootstrap/mixpanel';
 import { SelectableCourseItem } from '@/components/CourseItem/SelectableCourseItem';
 import { useCombinedCourses } from '@/hooks/course/useCombinedCourses';
+import { useSafeActivityParams } from '@/hooks/stackflow/useSafeActivityParams';
 import { useAlertDialog } from '@/hooks/useAlertDialog';
 import { useToast } from '@/hooks/useToast';
 import { CourseSelectionChangeActionPayload } from '@/pages/CourseSearchActivity/type';
 import { CourseType } from '@/schemas/courseSchema';
 import { isSameCourseCode } from '@/utils/course';
-import { useSafeActivityParams } from '@/utils/stackflow';
 
 interface CourseSearchResultProps {
   onCourseSelectionChange: (payload: CourseSelectionChangeActionPayload) => void;
