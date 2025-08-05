@@ -8,7 +8,7 @@ import { BaseAppBar } from '@/components/AppBar/BaseAppBar';
 import { useDelayedValue } from '@/hooks/useDelayedValue';
 import { useStackflowInputAutoFocusEffect } from '@/hooks/useStackflowInputAutoFocusEffect';
 import { CourseSearchResult } from '@/pages/CourseSearchActivity/components/CourseSearchResult';
-import { CourseSelectionChangeActionPayload } from '@/pages/CourseSearchActivity/type';
+import { ActivityNameWithPayload } from '@/stackflow/payload';
 
 export const CourseSearchActivity = () => {
   const { pop } = useFlow();
@@ -19,12 +19,15 @@ export const CourseSearchActivity = () => {
 
   const autoFocusRef = useStackflowInputAutoFocusEffect();
 
-  const onCourseSelectionChange = ({ course, type }: CourseSelectionChangeActionPayload) => {
+  const onCourseSelectionChange = ({
+    course,
+    actionType,
+  }: ActivityNameWithPayload['course_search']) => {
     pop();
     send({
       activityId: id,
       data: {
-        type,
+        actionType,
         course,
       },
     });

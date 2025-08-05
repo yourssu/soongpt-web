@@ -8,11 +8,11 @@ import { SelectableChip } from '@/components/Chip/SelectableChip';
 import { RemovableCourseListItem } from '@/components/CourseItem/RemovableCourseItem';
 import { useFilteredCoursesByCategory } from '@/hooks/course/useFilteredCoursesByCategory';
 import { useAlertDialog } from '@/hooks/useAlertDialog';
-import { CourseSelectionChangeActionPayload } from '@/pages/CourseSearchActivity/type';
 import { CourseSelectionLayout } from '@/pages/CourseSelectionActivity/components/CourseSelectionLayout';
 import { BaseStepProps } from '@/pages/CourseSelectionActivity/components/CourseSelectionSteps/type';
 import { SelectedCoursesContext } from '@/pages/CourseSelectionActivity/context';
 import { CourseType } from '@/schemas/courseSchema';
+import { ActivityNameWithPayload } from '@/stackflow/payload';
 import { isSameCourse } from '@/utils/course';
 
 type SelectionTabType = '교양' | '기타' | '전공';
@@ -42,13 +42,13 @@ export const CourseSelectionResultStep = ({ onNextClick }: CourseSelectionResult
   const onSearchButtonClick = async () => {
     // Todo: useReceive로 리팩토링: type-safe receive, send
     Mixpanel.trackCourseSearchClick();
-    const { course, type } = await receive<CourseSelectionChangeActionPayload>(
+    const { course, actionType } = await receive<ActivityNameWithPayload['course_search']>(
       push('course_search', {
         selectedCourseCodes: selectedCourses.map((course) => course.code),
         totalSelectedPoints: selectedCredit,
       }),
     );
-    if (type === '추가') {
+    if (actionType === '추가') {
       const newCourse = { ...course, selectedBySearch: true };
       setSelectedCourses((prev) => [...prev, newCourse]);
       Mixpanel.trackSearchCourseAddConfirmClick(course.name);

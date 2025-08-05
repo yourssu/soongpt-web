@@ -7,12 +7,12 @@ import { useCombinedCourses } from '@/hooks/course/useCombinedCourses';
 import { useSafeActivityParams } from '@/hooks/stackflow/useSafeActivityParams';
 import { useAlertDialog } from '@/hooks/useAlertDialog';
 import { useToast } from '@/hooks/useToast';
-import { CourseSelectionChangeActionPayload } from '@/pages/CourseSearchActivity/type';
 import { CourseType } from '@/schemas/courseSchema';
+import { ActivityNameWithPayload } from '@/stackflow/payload';
 import { isSameCourseCode } from '@/utils/course';
 
 interface CourseSearchResultProps {
-  onCourseSelectionChange: (payload: CourseSelectionChangeActionPayload) => void;
+  onCourseSelectionChange: (payload: ActivityNameWithPayload['course_search']) => void;
   searchKeyword: string;
 }
 
@@ -20,7 +20,6 @@ const MAX_COURSE_POINT = 25;
 
 export const CourseSearchResult = ({
   searchKeyword,
-
   onCourseSelectionChange,
 }: CourseSearchResultProps) => {
   const { selectedCourseCodes, totalSelectedPoints } = useSafeActivityParams('course_search');
@@ -65,7 +64,7 @@ export const CourseSearchResult = ({
       }
 
       Mixpanel.trackSearchCourseAddClick(course.name);
-      onCourseSelectionChange({ course, type: actionType });
+      onCourseSelectionChange({ course, actionType });
     }
   };
 
