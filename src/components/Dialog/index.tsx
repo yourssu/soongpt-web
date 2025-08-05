@@ -116,13 +116,13 @@ export const Dialog = ({
             </DialogPrimitive.Overlay>
             <DialogPrimitive.Content
               {...contentProps}
-              className="absolute top-1/2 left-1/2 z-50 w-full max-w-[343px] -translate-1/2"
+              className="absolute top-1/2 left-1/2 z-50 flex size-full -translate-1/2 items-center justify-center overflow-y-auto p-4"
               onInteractOutside={onCloseWithOutside}
               onPointerDownOutside={onCloseWithOutside}
             >
               <motion.div
                 animate="animate"
-                className="shadow-dialog rounded-3xl bg-white pb-2 will-change-transform"
+                className="shadow-dialog max-h-full w-full max-w-[343px] overflow-y-auto rounded-3xl bg-white pb-2 will-change-transform"
                 exit="initial"
                 initial="initial"
                 transition={{
