@@ -135,6 +135,24 @@ export const Devtools = () => {
                 closeAsTrue();
               }}
             />
+            <ToolItem
+              onClick={() => {
+                toast.success('성공했어요');
+              }}
+              title="토스트 실행 > 성공"
+            />
+            <ToolItem
+              onClick={() => {
+                toast.error('실패했어요');
+              }}
+              title="토스트 실행 > 실패"
+            />
+            <ToolItem
+              onClick={() => {
+                toast.default('보냈어요');
+              }}
+              title="토스트 실행 > 기본"
+            />
           </div>
         </>
       ),
