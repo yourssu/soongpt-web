@@ -17,7 +17,7 @@ export const CourseSearchActivity = () => {
     <ActivityLayout>
       <ActivityLayout.ScrollArea>
         <ActivityLayout.Header>
-          <BaseAppBar className="!gap-0.5">
+          <BaseAppBar className="gap-0.5">
             <div className="bg-bg-layerDefault flex w-full items-center rounded-full px-5 py-2">
               <input
                 className="flex flex-1 pr-2 outline-none"
@@ -30,7 +30,7 @@ export const CourseSearchActivity = () => {
           </BaseAppBar>
         </ActivityLayout.Header>
 
-        <ActivityLayout.Body className="!py-2">
+        <ActivityLayout.Body className="py-2">
           <Suspense>
             <CourseSearchResult searchKeyword={debouncedSearchKeyword} />
           </Suspense>

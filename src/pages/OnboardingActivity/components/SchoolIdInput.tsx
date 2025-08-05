@@ -1,5 +1,6 @@
 import * as Popover from '@radix-ui/react-popover';
 import { ErrorBoundaryProps } from '@sentry/react';
+import clsx from 'clsx';
 import { Check, ChevronDown } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
@@ -44,7 +45,10 @@ const SchoolIdInput = ({ onNext, initialValue }: SchoolIdInputProps) => {
       <Popover.Root onOpenChange={setShowDropdown} open={showDropdown}>
         <Popover.Trigger asChild>
           <button
-            className={`bg-bg-layerDefault focus-visible:outline-borderRing flex w-full items-center justify-between rounded-xl px-4 py-3 text-lg font-semibold ${!schoolId ? 'text-neutralPlaceholder' : 'text-brandPrimary'}`}
+            className={clsx(
+              'bg-bg-layerDefault focus-visible:outline-borderRing flex w-full items-center justify-between rounded-xl px-4 py-3 text-lg font-semibold',
+              !schoolId ? 'text-neutralPlaceholder' : 'text-brandPrimary',
+            )}
             type="button"
           >
             {schoolId ?? '입학년도(학번)'}
