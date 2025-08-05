@@ -1,3 +1,4 @@
+import { isNotNil, uniq } from 'es-toolkit';
 import { useEffect, useRef, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -26,12 +27,8 @@ export const ToastProvider = ({
     - 첫 토스트 렌더링 시점에 로띠를 불러오면 경험이 좋지 않기 때문에 미리 캐시해둬요.
   */
   useEffectOnce(() => {
-    Object.values(ToastLottieAssetMap).forEach((src) => {
-      if (!src) {
-        return;
-      }
-      fetch(src, { cache: 'force-cache' });
-    });
+    const assetSources = uniq(Object.values(ToastLottieAssetMap).filter(isNotNil));
+    assetSources.forEach((src) => fetch(src, { cache: 'force-cache' }));
   });
 
   useEffect(() => {
