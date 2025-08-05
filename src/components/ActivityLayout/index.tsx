@@ -1,7 +1,7 @@
 import { AppScreen } from '@stackflow/plugin-basic-ui';
-import clsx from 'clsx';
 
 import { Devtools } from '@/components/Devtools';
+import { cn } from '@/utils/dom';
 
 const Header = ({ children }: React.PropsWithChildren<unknown>) => {
   return (
@@ -12,7 +12,7 @@ const Header = ({ children }: React.PropsWithChildren<unknown>) => {
 const Body = ({ children, className }: React.PropsWithChildren<{ className?: string }>) => {
   return (
     <div
-      className={clsx('flex w-full flex-[1_1_0] flex-col items-center px-[37.5px] py-6', className)}
+      className={cn('flex w-full flex-[1_1_0] flex-col items-center px-[37.5px] py-6', className)}
     >
       {children}
     </div>
@@ -33,7 +33,7 @@ const ScrollArea = ({ children, className }: React.PropsWithChildren<{ className
   return (
     <div className="h-dvh w-full overflow-y-hidden" data-activity-scroll-area>
       <div
-        className={clsx(
+        className={cn(
           'flex h-[calc(100dvh+1px)] w-full flex-col items-center overflow-y-scroll overscroll-none',
           className,
         )}
