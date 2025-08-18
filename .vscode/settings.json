@@ -3,6 +3,7 @@
   "javascript.preferences.importModuleSpecifier": "non-relative",
   "typescript.preferences.importModuleSpecifier": "non-relative",
   "eslint.workingDirectories": [{ "mode": "auto" }],
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
