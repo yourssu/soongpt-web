@@ -1,10 +1,11 @@
-import { z } from 'zod/v4';
+import { z, ZodError } from 'zod/v4';
 
 import { zDecoder } from '@/stackflow/utils/zDecoder';
 import { CourseSelectionStepType } from '@/types/course';
-import { Prettify } from '@/utils/type';
+import { EmptyObjectType, Prettify } from '@/utils/type';
 
-type ActivityDescriptionItem = {
+export type ActivityDescriptionItem = {
+  onParseError?: (error: ZodError) => EmptyObjectType | void;
   schema: z.ZodObject;
   url: string;
 };
@@ -41,7 +42,17 @@ export const activityDescription = {
     url: '/',
   },
   timetable_selection: {
-    schema: z.object({}),
+    schema: z.object({
+      codes: zDecoder.numArray(),
+      generalRequiredCodes: zDecoder.numArray(),
+      majorElectiveCodes: zDecoder.numArray(),
+      majorRequiredCodes: zDecoder.numArray(),
+      generalElectivePoint: zDecoder.num(),
+      preferredGeneralElectives: zDecoder.strArray(),
+    }),
+    onParseError: () => {
+      window.location.href = '/';
+    },
     url: '/time-table-selection',
   },
 } as const satisfies Record<string, ActivityDescriptionItem>;
