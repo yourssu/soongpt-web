@@ -1,13 +1,15 @@
 import { useFlow } from '@stackflow/react/future';
-import { useMutation } from '@tanstack/react-query';
 import { Code } from 'lucide-react';
 import { useState } from 'react';
+import { usePrevious } from 'react-simplikit';
 
-import { postTimetable, TimetablePayloadType } from '@/api/timetables';
+import { TimetablePayloadType } from '@/api/timetables';
 import { useStudentInfoContext } from '@/components/Providers/StudentInfoProvider/hook';
+import { UnfilledStudentInfoType } from '@/components/Providers/StudentInfoProvider/type';
 import { STAGE } from '@/config';
 import { useAlertDialog } from '@/hooks/useAlertDialog';
 import { useToast } from '@/hooks/useToast';
+import { ActivityParams } from '@/stackflow/metadata';
 import { assertNonNullish } from '@/utils/assertion';
 
 interface ToolItemProps {
@@ -33,12 +35,13 @@ const ToolItem = ({ title, description, onClick }: ToolItemProps) => {
   );
 };
 
-const TimetableInjectionToolItem = ({ onMutateSuccess }: { onMutateSuccess: () => void }) => {
-  const { mutateAsync } = useMutation({
-    mutationKey: ['timetables'],
-    mutationFn: postTimetable,
-  });
-  const { studentInfo } = useStudentInfoContext();
+const TimetableInjectionToolItem = ({
+  onClick,
+}: {
+  onClick: (params: ActivityParams<'timetable_selection'>) => void;
+}) => {
+  const { studentInfo, setStudentInfo } = useStudentInfoContext();
+  const originStudentInfo = usePrevious(studentInfo);
 
   const [timetableData, setTimetableData] = useState(
     JSON.stringify(
@@ -59,6 +62,13 @@ const TimetableInjectionToolItem = ({ onMutateSuccess }: { onMutateSuccess: () =
     ),
   );
 
+  const injectStudentInfoForAMoment = (info: UnfilledStudentInfoType) => {
+    setStudentInfo(info);
+    setTimeout(() => {
+      localStorage.setItem('student-info', JSON.stringify(originStudentInfo));
+    }, 1000);
+  };
+
   return (
     <div>
       <ToolItem
@@ -75,19 +85,21 @@ const TimetableInjectionToolItem = ({ onMutateSuccess }: { onMutateSuccess: () =
           assertNonNullish(grade);
           assertNonNullish(isChapel);
 
-          await mutateAsync({
+          injectStudentInfoForAMoment({
             schoolId,
             department,
             grade,
             isChapel,
+          });
+
+          onClick({
             codes: data.codes,
+            generalElectivePoint: data.generalElectivePoint,
             generalRequiredCodes: data.generalRequiredCodes,
             majorElectiveCodes: data.majorElectiveCodes,
             majorRequiredCodes: data.majorRequiredCodes,
-            generalElectivePoint: data.generalElectivePoint,
             preferredGeneralElectives: data.preferredGeneralElectives,
           });
-          onMutateSuccess();
         }}
         title="바로 시간표 만들기"
       />
@@ -105,7 +117,7 @@ const TimetableInjectionToolItem = ({ onMutateSuccess }: { onMutateSuccess: () =
 export const DevtoolsPrimitive = () => {
   const open = useAlertDialog();
   const toast = useToast();
-  const { push } = useFlow();
+  const { replace } = useFlow();
 
   const showDevtools = () => {
     open({
@@ -129,8 +141,8 @@ export const DevtoolsPrimitive = () => {
               title="처음 화면으로 돌아가기"
             />
             <TimetableInjectionToolItem
-              onMutateSuccess={() => {
-                push('timetable_selection', {});
+              onClick={(params) => {
+                replace('timetable_selection', params, { animate: false });
                 toast.success('시간표 페이지로 이동해요');
                 closeAsTrue();
               }}
