@@ -64,7 +64,7 @@ export const WaitlistActivity = () => {
           <div className="flex flex-col items-center gap-2">
             <div className="text-brandPrimary font-medium">클릭 몇 번으로 최적의 시간표 완성</div>
             <div className="text-[28px] font-semibold">숭피티가 준비 중이에요!</div>
-            <div className="font-light">서비스가 시작되면 가장 먼저 안내드릴게요.</div>
+            <div className="font-light">추첨을 통해 5분께 기프티콘을 드려요.</div>
           </div>
 
           <div className="flex w-full flex-col items-center gap-2">
