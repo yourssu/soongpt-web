@@ -1,17 +1,30 @@
 import { defineConfig } from '@stackflow/config';
 import { z } from 'zod/v4';
 
-import { activityDescription } from '@/stackflow/metadata';
+import { activityDescription, ActivityDescriptionItem, ActivityName } from '@/stackflow/metadata';
+import { handleError } from '@/utils/error';
 import { objectEntries } from '@/utils/object';
 
 export const stackflowTransitionDuration = 350;
 
 export const stackflowConfig = defineConfig({
-  activities: objectEntries(activityDescription).map(([name, { schema, url }]) => ({
+  activities: objectEntries(
+    activityDescription as Record<ActivityName, ActivityDescriptionItem>,
+  ).map(([name, { schema, url, onParseError }]) => ({
     name,
     route: {
       path: url,
-      decode: schema.parse,
+      decode: (params) => {
+        try {
+          return schema.parse(params);
+        } catch (e) {
+          const { type, error } = handleError(e);
+          if (type === 'ZodError' && onParseError) {
+            return onParseError(error) ?? {};
+          }
+          throw e;
+        }
+      },
     },
     // loader:
   })),
