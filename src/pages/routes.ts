@@ -29,4 +29,9 @@ export const routes: Record<ActivityName, ActivityComponentType<any>> = {
       default: module.CourseSearchActivity,
     })),
   ),
+  waitlist: lazy(() =>
+    import('@/pages/WaitlistActivity').then((module) => ({
+      default: module.WaitlistActivity,
+    })),
+  ),
 };
