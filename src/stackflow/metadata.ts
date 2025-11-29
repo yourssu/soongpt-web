@@ -38,11 +38,15 @@ export const activityDescription = {
   },
   onboarding: {
     schema: z.object({}),
-    url: '/',
+    url: '/onboarding',
   },
   timetable_selection: {
     schema: z.object({}),
     url: '/time-table-selection',
+  },
+  waitlist: {
+    schema: z.object({}),
+    url: '/',
   },
 } as const satisfies Record<string, ActivityDescriptionItem>;
 
