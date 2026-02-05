@@ -58,7 +58,7 @@ const MOCK_RETAKE_COURSES: RetakeCourseType[] = [
   },
 ];
 
-export const CourseRetakeActivity = () => {
+export const CourseMajorElectiveActivity = () => {
   const [selectedCodes, setSelectedCodes] = useState<Set<number>>(new Set());
 
   const totalCredits = MOCK_RETAKE_COURSES.filter((course) =>

@@ -40,6 +40,14 @@ export const activityDescription = {
     schema: z.object({}),
     url: '/course-retake',
   },
+  course_major_required: {
+    schema: z.object({}),
+    url: '/course-major-required',
+  },
+  course_major_elective: {
+    schema: z.object({}),
+    url: '/course-major-elective',
+  },
   onboarding: {
     schema: z.object({
       grade: zDecoder.num(),
