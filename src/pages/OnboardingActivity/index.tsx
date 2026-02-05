@@ -27,22 +27,8 @@ export const OnboardingActivity = () => {
   const [subDeptDropdown, setSubDeptDropdown] = useState<string[]>([]);
 
   useEffect(() => {
-    if (
-      studentInfo.grade !== undefined ||
-      studentInfo.schoolId !== undefined ||
-      studentInfo.semester !== undefined
-    ) {
-      return;
-    }
-
     setStudentInfo(activityParams as StudentType);
-  }, [
-    activityParams,
-    setStudentInfo,
-    studentInfo.grade,
-    studentInfo.schoolId,
-    studentInfo.semester,
-  ]);
+  }, [activityParams, setStudentInfo]);
 
   const handleClickButton = () => {
     assertNonNullish(studentInfo.grade);
