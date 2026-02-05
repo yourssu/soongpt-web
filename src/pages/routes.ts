@@ -9,6 +9,11 @@ export const routes: Record<ActivityName, ActivityComponentType<any>> = {
       default: module.OnboardingActivity,
     })),
   ),
+  landing: lazy(() =>
+    import('@/pages/LandingActivity').then((module) => ({
+      default: module.LandingActivity,
+    })),
+  ),
   course_selection: lazy(() =>
     import('@/pages/CourseSelectionActivity').then((module) => ({
       default: module.CourseSelectionActivity,

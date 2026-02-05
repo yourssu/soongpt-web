@@ -40,6 +40,10 @@ export const activityDescription = {
     schema: z.object({}),
     url: '/onboarding',
   },
+  landing: {
+    schema: z.object({}),
+    url: '/landing',
+  },
   timetable_selection: {
     schema: z.object({}),
     url: '/time-table-selection',
