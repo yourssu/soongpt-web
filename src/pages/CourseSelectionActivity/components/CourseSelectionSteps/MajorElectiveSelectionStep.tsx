@@ -115,63 +115,59 @@ export const MajorElectiveSelectionStep = ({ onNextClick }: MajorElectiveSelecti
   const creditProgress = useSuspenseGetCreditProgress('MAJOR_ELECTIVE');
 
   const { selectedCredit } = useContext(SelectedCoursesContext);
-  const { description, image, primaryButtonText, title } = contentMap[courseState];
+  const { description, primaryButtonText, title } = contentMap[courseState];
 
   return (
     <CourseSelectionLayout>
       <CourseSelectionLayout.Header description={description} progress={44} title={title} />
 
-      {image ? (
-        <CourseSelectionLayout.ImageBody image={image} />
-      ) : (
-        <CourseSelectionLayout.Body>
-          <div className="flex flex-col gap-1.5">
-            <div className="flex items-center gap-1.5">
-              <span className="bg-brandPrimary inline-block size-2.5 rounded-full" />
-              <span className="text-xl font-semibold">전공선택 과목</span>
-            </div>
-            <div className="text-sm font-light">
-              * 전공선택{' '}
-              <span className="font-semibold">
-                {creditProgress.totalCredits}학점 중 {creditProgress.completedCredits}학점
-              </span>{' '}
-              이수했어요.
-            </div>
+      <CourseSelectionLayout.Body>
+        <div className="flex flex-col gap-1.5">
+          <div className="flex items-center gap-1.5">
+            <span className="bg-brandPrimary inline-block size-2.5 rounded-full" />
+            <span className="text-xl font-semibold">전공선택 과목</span>
           </div>
-          <div className="relative">
-            {/* Right fade gradient */}
-            <div className="from-background pointer-events-none absolute top-0 right-0 z-10 h-full w-4 bg-gradient-to-l to-transparent" />
-            <div className="flex flex-nowrap gap-1.5 overflow-x-auto px-1 pb-3">
-              {selectableGrades.map((grades) => (
-                <GradeChip
-                  grades={grades}
-                  isSelected={
-                    !isOtherMajorSelected && grades.some((grade) => selectedGrades.includes(grade))
-                  }
-                  key={grades.join(', ')}
-                  onClickGradeChip={() => {
-                    setSelectedGrades(grades);
-                    setIsOtherMajorSelected(false);
-                  }}
-                />
-              ))}
-              <SelectableChip
-                onSelectChange={() => setIsOtherMajorSelected(true)}
-                selected={isOtherMajorSelected}
-              >
-                타전공
-              </SelectableChip>
-            </div>
+          <div className="text-sm font-light">
+            * 전공선택{' '}
+            <span className="font-semibold">
+              {creditProgress.totalCredits}학점 중 {creditProgress.completedCredits}학점
+            </span>{' '}
+            이수했어요.
           </div>
-          <Suspense fallback={null}>
-            {isOtherMajorSelected ? (
-              <OtherMajorElectiveContent />
-            ) : (
-              <MajorElectiveContent selectedGrades={selectedGrades} />
-            )}
-          </Suspense>
-        </CourseSelectionLayout.Body>
-      )}
+        </div>
+        <div className="relative">
+          {/* Right fade gradient */}
+          <div className="from-background pointer-events-none absolute top-0 right-0 z-10 h-full w-4 bg-gradient-to-l to-transparent" />
+          <div className="flex flex-nowrap gap-1.5 overflow-x-auto px-1 pb-3">
+            {selectableGrades.map((grades) => (
+              <GradeChip
+                grades={grades}
+                isSelected={
+                  !isOtherMajorSelected && grades.some((grade) => selectedGrades.includes(grade))
+                }
+                key={grades.join(', ')}
+                onClickGradeChip={() => {
+                  setSelectedGrades(grades);
+                  setIsOtherMajorSelected(false);
+                }}
+              />
+            ))}
+            <SelectableChip
+              onSelectChange={() => setIsOtherMajorSelected(true)}
+              selected={isOtherMajorSelected}
+            >
+              타전공
+            </SelectableChip>
+          </div>
+        </div>
+        <Suspense fallback={null}>
+          {isOtherMajorSelected ? (
+            <OtherMajorElectiveContent />
+          ) : (
+            <MajorElectiveContent selectedGrades={selectedGrades} />
+          )}
+        </Suspense>
+      </CourseSelectionLayout.Body>
 
       <CourseSelectionLayout.Footer
         primaryButtonProps={{
@@ -192,7 +188,6 @@ const contentMap: Record<ArrayState, StepContentType> = {
   },
   EMPTY: {
     title: '이번 학기에 이수할\n전공선택과목이 없어요.',
-    image: '/images/like.webp',
     primaryButtonText: '다전공, 교직이수 과목 담으러 가기',
   },
 };

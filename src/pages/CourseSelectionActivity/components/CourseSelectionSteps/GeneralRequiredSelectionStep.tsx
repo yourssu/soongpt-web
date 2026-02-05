@@ -6,6 +6,7 @@ import { useCombinedCourses } from '@/hooks/course/useCombinedCourses';
 import { useGroupedCoursesByField } from '@/hooks/course/useGroupedCoursesByField';
 import { ArrayState, useGetArrayState } from '@/hooks/useGetArrayState';
 import { CourseSelectionLayout } from '@/pages/CourseSelectionActivity/components/CourseSelectionLayout';
+import { CourseBySelectedGradesEmpty } from '@/pages/CourseSelectionActivity/components/CourseSelectionSteps/CourseBySelectedGradesEmpty';
 import {
   BaseStepProps,
   StepContentType,
@@ -113,52 +114,52 @@ export const GeneralRequiredSelectionStep = ({
   const { selectedCredit } = useContext(SelectedCoursesContext);
   const creditProgress = useSuspenseGetCreditProgress('GENERAL_REQUIRED');
 
-  const { description, image, primaryButtonText, title } = contentMap[courseState];
+  const { description, primaryButtonText, title } = contentMap[courseState];
 
   return (
     <CourseSelectionLayout>
       <CourseSelectionLayout.Header description={description} progress={89} title={title} />
 
-      {image ? (
-        <CourseSelectionLayout.ImageBody image={image} />
-      ) : (
-        <CourseSelectionLayout.Body>
-          <div className="flex flex-col gap-1.5">
-            <div className="flex items-center gap-1.5">
-              <span className="bg-brandPrimary inline-block size-2.5 rounded-full" />
-              <span className="text-xl font-semibold">교양필수 과목</span>
-            </div>
-            <p className="flex flex-col gap-0.5 text-sm leading-tight font-light">
-              <span>
-                * CORE 창의력{' '}
-                <span className="font-semibold">
-                  {creditProgress.creativity.totalCredits}학점 중{' '}
-                  {creditProgress.creativity.completedCredits}학점
-                </span>{' '}
-                이수했어요.
-              </span>
-              <span>
-                * CORE 품격{' '}
-                <span className="font-semibold">
-                  {creditProgress.dignity.totalCredits}학점 중{' '}
-                  {creditProgress.dignity.completedCredits}학점
-                </span>{' '}
-                이수했어요.
-              </span>
-              <span>
-                * CORE 디지털테크놀로지{' '}
-                <span className="font-semibold">
-                  {creditProgress.digitalTech.totalCredits}학점 중{' '}
-                  {creditProgress.digitalTech.completedCredits}학점
-                </span>{' '}
-                이수했어요.
-              </span>
-            </p>
+      <CourseSelectionLayout.Body>
+        <div className="flex flex-col gap-1.5">
+          <div className="flex items-center gap-1.5">
+            <span className="bg-brandPrimary inline-block size-2.5 rounded-full" />
+            <span className="text-xl font-semibold">교양필수 과목</span>
           </div>
+          <p className="flex flex-col gap-0.5 text-sm leading-tight font-light">
+            <span>
+              * CORE 창의력{' '}
+              <span className="font-semibold">
+                {creditProgress.creativity.totalCredits}학점 중{' '}
+                {creditProgress.creativity.completedCredits}학점
+              </span>{' '}
+              이수했어요.
+            </span>
+            <span>
+              * CORE 품격{' '}
+              <span className="font-semibold">
+                {creditProgress.dignity.totalCredits}학점 중{' '}
+                {creditProgress.dignity.completedCredits}학점
+              </span>{' '}
+              이수했어요.
+            </span>
+            <span>
+              * CORE 디지털테크놀로지{' '}
+              <span className="font-semibold">
+                {creditProgress.digitalTech.totalCredits}학점 중{' '}
+                {creditProgress.digitalTech.completedCredits}학점
+              </span>{' '}
+              이수했어요.
+            </span>
+          </p>
+        </div>
 
+        {courseState === 'EMPTY' ? (
+          <CourseBySelectedGradesEmpty />
+        ) : (
           <GeneralRequiredCoursesList courses={courses} />
-        </CourseSelectionLayout.Body>
-      )}
+        )}
+      </CourseSelectionLayout.Body>
 
       <CourseSelectionLayout.Footer
         primaryButtonProps={{ children: primaryButtonText, onClick: onNextClick }}
@@ -175,7 +176,6 @@ const contentMap: Record<ArrayState, StepContentType> = {
   },
   EMPTY: {
     title: '이번 학기에 이수할\n교양필수 과목이 없어요.',
-    image: '/images/like.webp',
     primaryButtonText: '담은 과목 확인하러 가기',
   },
 };

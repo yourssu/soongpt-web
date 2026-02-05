@@ -4,6 +4,7 @@ import { SelectableChip } from '@/components/Chip/SelectableChip';
 import { ArrayState, useGetArrayState } from '@/hooks/useGetArrayState';
 import { CourseSelectionLayout } from '@/pages/CourseSelectionActivity/components/CourseSelectionLayout';
 import { CourseSelectionList } from '@/pages/CourseSelectionActivity/components/CourseSelectionList';
+import { CourseBySelectedGradesEmpty } from '@/pages/CourseSelectionActivity/components/CourseSelectionSteps/CourseBySelectedGradesEmpty';
 import {
   BaseStepProps,
   StepContentType,
@@ -17,63 +18,63 @@ type MinorTab = (typeof MINOR_TABS)[number];
 
 export const MinorSelectionStep = ({ onNextClick }: BaseStepProps) => {
   const courses = useSuspenseGetCourses('MINOR');
-  const courseState = useGetArrayState(courses);
   const { selectedCredit } = useContext(SelectedCoursesContext);
   const [activeTab, setActiveTab] = useState<MinorTab>('필수');
   const creditProgress = useSuspenseGetCreditProgress('MINOR');
 
   const filteredCourses = courses.filter((course) => course.subCategory === activeTab);
+  const courseState = useGetArrayState(filteredCourses);
 
-  const { image, primaryButtonText, title } = contentMap[courseState];
+  const { primaryButtonText, title } = contentMap[courseState];
 
   return (
     <CourseSelectionLayout>
       <CourseSelectionLayout.Header progress={67} title={title} />
 
-      {image ? (
-        <CourseSelectionLayout.ImageBody image={image} />
-      ) : (
-        <CourseSelectionLayout.Body>
-          <div className="flex flex-col gap-1.5">
-            <div className="flex items-center gap-1.5">
-              <span className="bg-brandPrimary inline-block size-2.5 rounded-full" />
-              <span className="text-xl font-semibold">부전공 과목</span>
-            </div>
-            <p className="flex flex-col gap-0.5 text-sm leading-tight font-light">
-              <span>
-                * 부전공필수{' '}
-                <span className="font-semibold">
-                  {creditProgress.required.totalCredits}학점 중{' '}
-                  {creditProgress.required.completedCredits}학점
-                </span>{' '}
-                이수했어요.
-              </span>
-              <span>
-                * 부전공선택{' '}
-                <span className="font-semibold">
-                  {creditProgress.elective.totalCredits}학점 중{' '}
-                  {creditProgress.elective.completedCredits}학점
-                </span>{' '}
-                이수했어요.
-              </span>
-            </p>
+      <CourseSelectionLayout.Body>
+        <div className="flex flex-col gap-1.5">
+          <div className="flex items-center gap-1.5">
+            <span className="bg-brandPrimary inline-block size-2.5 rounded-full" />
+            <span className="text-xl font-semibold">부전공 과목</span>
           </div>
+          <p className="flex flex-col gap-0.5 text-sm leading-tight font-light">
+            <span>
+              * 부전공필수{' '}
+              <span className="font-semibold">
+                {creditProgress.required.totalCredits}학점 중{' '}
+                {creditProgress.required.completedCredits}학점
+              </span>{' '}
+              이수했어요.
+            </span>
+            <span>
+              * 부전공선택{' '}
+              <span className="font-semibold">
+                {creditProgress.elective.totalCredits}학점 중{' '}
+                {creditProgress.elective.completedCredits}학점
+              </span>{' '}
+              이수했어요.
+            </span>
+          </p>
+        </div>
 
-          <div className="flex gap-1.5">
-            {MINOR_TABS.map((tab) => (
-              <SelectableChip
-                key={tab}
-                onSelectChange={() => setActiveTab(tab)}
-                selected={activeTab === tab}
-              >
-                {tab}
-              </SelectableChip>
-            ))}
-          </div>
+        <div className="flex gap-1.5">
+          {MINOR_TABS.map((tab) => (
+            <SelectableChip
+              key={tab}
+              onSelectChange={() => setActiveTab(tab)}
+              selected={activeTab === tab}
+            >
+              {tab}
+            </SelectableChip>
+          ))}
+        </div>
 
+        {courseState === 'EMPTY' ? (
+          <CourseBySelectedGradesEmpty />
+        ) : (
           <CourseSelectionList courses={filteredCourses} />
-        </CourseSelectionLayout.Body>
-      )}
+        )}
+      </CourseSelectionLayout.Body>
 
       <CourseSelectionLayout.Footer
         primaryButtonProps={{ children: primaryButtonText, onClick: onNextClick }}
@@ -90,7 +91,6 @@ const contentMap: Record<ArrayState, StepContentType> = {
   },
   EMPTY: {
     title: '이번 학기에 이수할\n부전공 과목이 없어요.',
-    image: '/images/like.webp',
     primaryButtonText: '교양필수 과목 담으러 가기',
   },
 };
