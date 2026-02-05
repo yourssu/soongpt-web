@@ -39,32 +39,35 @@ export const TeachingCertificateSelectionStep = ({ onNextClick }: BaseStepProps)
               <span className="bg-brandPrimary inline-block size-2.5 rounded-full" />
               <span className="text-xl font-semibold">교직과정 과목</span>
             </div>
-            <div className="flex flex-col gap-0.5 text-sm font-light">
-              <div>
+            <p className="flex flex-col gap-0.5 text-sm font-light">
+              <span>
                 * 전공영역-교과교육영역{' '}
                 <span className="font-semibold">
                   {creditProgress.majorArea.totalCredits}학점 중{' '}
                   {creditProgress.majorArea.completedCredits}학점
-                </span>
-              </div>
-              <div className="text-xs text-neutral-500">
+                </span>{' '}
+                이수했어요.
+              </span>
+              <span className="text-xs text-neutral-500">
                 (교과교육론 2학점 이상, 교과교육 관련 교과목 6학점 이상 포함)
-              </div>
-              <div>
+              </span>
+              <span>
                 * 교직영역{' '}
                 <span className="font-semibold">
                   {creditProgress.teachingArea.totalCredits}학점 중{' '}
                   {creditProgress.teachingArea.completedCredits}학점
-                </span>
-              </div>
-              <div>
+                </span>{' '}
+                이수했어요.
+              </span>
+              <span>
                 * 특성화{' '}
                 <span className="font-semibold">
                   {creditProgress.specialization.totalCredits}학점 중{' '}
                   {creditProgress.specialization.completedCredits}학점
-                </span>
-              </div>
-            </div>
+                </span>{' '}
+                이수했어요.
+              </span>
+            </p>
           </div>
 
           <div className="flex gap-1.5">

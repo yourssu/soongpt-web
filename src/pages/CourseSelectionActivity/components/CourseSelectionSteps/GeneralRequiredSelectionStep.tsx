@@ -128,32 +128,32 @@ export const GeneralRequiredSelectionStep = ({
               <span className="bg-brandPrimary inline-block size-2.5 rounded-full" />
               <span className="text-xl font-semibold">교양필수 과목</span>
             </div>
-            <div className="flex flex-col gap-0.5 text-sm font-light">
-              <div>
+            <p className="flex flex-col gap-0.5 text-sm leading-tight font-light">
+              <span>
                 * CORE 창의력{' '}
                 <span className="font-semibold">
                   {creditProgress.creativity.totalCredits}학점 중{' '}
                   {creditProgress.creativity.completedCredits}학점
                 </span>{' '}
                 이수했어요.
-              </div>
-              <div>
+              </span>
+              <span>
                 * CORE 품격{' '}
                 <span className="font-semibold">
                   {creditProgress.dignity.totalCredits}학점 중{' '}
                   {creditProgress.dignity.completedCredits}학점
                 </span>{' '}
                 이수했어요.
-              </div>
-              <div>
+              </span>
+              <span>
                 * CORE 디지털테크놀로지{' '}
                 <span className="font-semibold">
                   {creditProgress.digitalTech.totalCredits}학점 중{' '}
                   {creditProgress.digitalTech.completedCredits}학점
                 </span>{' '}
                 이수했어요.
-              </div>
-            </div>
+              </span>
+            </p>
           </div>
 
           <GeneralRequiredCoursesList courses={courses} />

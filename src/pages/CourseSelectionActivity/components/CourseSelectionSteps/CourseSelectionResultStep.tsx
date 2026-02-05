@@ -86,7 +86,7 @@ export const CourseSelectionResultStep = ({ onNextClick }: CourseSelectionResult
     <CourseSelectionLayout>
       <CourseSelectionLayout.Header
         description={
-          '시간표는 이 과목들을 기준으로 추천돼요.\n복수/부전공 등 필요한 과목을 모두 추가해주세요!'
+          '* 선택된 과목들로 시간표 추천이 이루어질 예정이에요.\n필수로 수강하고 싶은 과목이 있으면 지금 추가해주세요!'
         }
         progress={100}
         title={'지금까지 선택한\n교양/전공 과목들이에요.'}
@@ -138,9 +138,9 @@ export const CourseSelectionResultStep = ({ onNextClick }: CourseSelectionResult
       </CourseSelectionLayout.Body>
 
       <CourseSelectionLayout.Footer
-        primaryButtonProps={{ children: '다 선택했어요', onClick: onNextClick }}
+        primaryButtonProps={{ children: '시간표 만들기', onClick: onNextClick }}
         secondaryButtonProps={{
-          children: '과목 추가 할래요',
+          children: '과목 추가',
           onClick: onSearchButtonClick,
         }}
         selectedCredit={selectedCredit}

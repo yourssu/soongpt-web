@@ -9,7 +9,7 @@ interface ChipProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const chip = tv({
-  base: 'text-md flex shrink-0 cursor-pointer place-items-center rounded-full px-4 py-2 transition-colors',
+  base: 'text-md flex shrink-0 cursor-pointer place-items-center rounded-full px-3.5 py-1.5 transition-colors',
   variants: {
     selected: {
       true: 'text-brandPrimary bg-bg-chipSelected font-medium',

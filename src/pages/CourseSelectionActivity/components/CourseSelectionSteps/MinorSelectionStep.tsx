@@ -39,22 +39,24 @@ export const MinorSelectionStep = ({ onNextClick }: BaseStepProps) => {
               <span className="bg-brandPrimary inline-block size-2.5 rounded-full" />
               <span className="text-xl font-semibold">부전공 과목</span>
             </div>
-            <div className="flex flex-col gap-0.5 text-sm font-light">
-              <div>
+            <p className="flex flex-col gap-0.5 text-sm leading-tight font-light">
+              <span>
                 * 부전공필수{' '}
                 <span className="font-semibold">
                   {creditProgress.required.totalCredits}학점 중{' '}
                   {creditProgress.required.completedCredits}학점
-                </span>
-              </div>
-              <div>
+                </span>{' '}
+                이수했어요.
+              </span>
+              <span>
                 * 부전공선택{' '}
                 <span className="font-semibold">
                   {creditProgress.elective.totalCredits}학점 중{' '}
                   {creditProgress.elective.completedCredits}학점
-                </span>
-              </div>
-            </div>
+                </span>{' '}
+                이수했어요.
+              </span>
+            </p>
           </div>
 
           <div className="flex gap-1.5">

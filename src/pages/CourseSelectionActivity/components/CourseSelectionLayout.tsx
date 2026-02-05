@@ -48,7 +48,7 @@ export const CourseSelectionHeader = ({
       <div className="mt-6 flex w-full flex-col">
         <h2 className="text-[28px]/[normal] font-semibold whitespace-pre-wrap">{title}</h2>
         {description && (
-          <div className="items mt-1 font-light whitespace-pre-wrap">{description}</div>
+          <div className="mt-2 text-sm font-light whitespace-pre-wrap">{description}</div>
         )}
       </div>
     </ActivityLayout.Header>
