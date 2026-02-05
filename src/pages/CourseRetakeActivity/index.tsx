@@ -1,85 +1,72 @@
-import clsx from 'clsx';
 import { useState } from 'react';
 
 import { ActivityLayout } from '@/components/ActivityLayout';
 import { ProgressAppBar } from '@/components/AppBar/ProgressAppBar';
+import { SelectableCourseItem } from '@/components/CourseItem/SelectableCourseItem';
+import { CourseType } from '@/schemas/courseSchema';
 
-interface CourseRetakeCardProps {
-  active: boolean;
-  credits: number;
-  grade: string;
-  name: string;
-  onClick?: () => void;
-  professor: string;
-  recommendedYear: number;
-}
-
-const CourseRetakeCard = ({
-  name,
-  professor,
-  active,
-  grade,
-  credits,
-  onClick,
-}: CourseRetakeCardProps) => {
-  return (
-    <button
-      className={clsx(
-        'flex w-full items-center gap-[7px] rounded-[20px] bg-white p-4 text-left',
-        active ? 'border-brandPrimary border' : 'border border-transparent',
-      )}
-      onClick={onClick}
-      type="button"
-    >
-      <div
-        className={clsx(
-          'flex min-w-0 flex-1 flex-col leading-6',
-          active ? 'text-brandPrimary' : 'text-neutral',
-        )}
-      >
-        <span className="text-[20px] font-medium tracking-[-0.4px]">{name}</span>
-        <span className="text-[12px] tracking-[-0.24px]">{professor} 교수님</span>
-      </div>
-      <div className="flex shrink-0 items-center gap-0.5">
-        <span className="text-neutral flex h-6 items-center rounded-lg bg-[#eaeaea] px-2 text-[12px]">
-          {grade}
-        </span>
-        <span className="bg-bg-brandLayerLight text-brandSecondary flex h-6 items-center rounded-lg px-2 text-[12px] font-medium">
-          {credits}학점
-        </span>
-      </div>
-    </button>
-  );
-};
-
-const MOCK_RETAKE_COURSES = [
+const MOCK_RETAKE_COURSES: CourseType[] = [
   {
-    id: 1,
+    category: 'MAJOR_REQUIRED',
+    subCategory: null,
+    field: null,
+    code: 10001,
     name: '선형대수',
-    professor: '나현숙, 박중석',
-    grade: 'C+ 이하',
-    credits: 2,
-    recommendedYear: 2,
+    professor: ['나현숙', '박중석'],
+    department: '컴퓨터공학부',
+    division: null,
+    time: 2,
+    point: 2,
+    personeel: 30,
+    scheduleRoom: '공학관 101',
+    target: '전체 학년',
   },
-  { id: 2, name: '컴퓨터구조', professor: '김철홍', grade: 'F', credits: 2, recommendedYear: 3 },
-  { id: 3, name: '컴퓨터구조', professor: '김철홍', grade: 'F', credits: 2, recommendedYear: 3 },
+  {
+    category: 'MAJOR_REQUIRED',
+    subCategory: null,
+    field: null,
+    code: 10002,
+    name: '컴퓨터구조',
+    professor: ['김철홍'],
+    department: '컴퓨터공학부',
+    division: null,
+    time: 3,
+    point: 2,
+    personeel: 25,
+    scheduleRoom: '공학관 202',
+    target: '3학년',
+  },
+  {
+    category: 'MAJOR_ELECTIVE',
+    subCategory: null,
+    field: null,
+    code: 10003,
+    name: '운영체제',
+    professor: ['김철홍'],
+    department: '컴퓨터공학부',
+    division: null,
+    time: 3,
+    point: 3,
+    personeel: 20,
+    scheduleRoom: '공학관 303',
+    target: '3학년',
+  },
 ];
 
 export const CourseRetakeActivity = () => {
-  const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
+  const [selectedCodes, setSelectedCodes] = useState<Set<number>>(new Set());
 
-  const totalCredits = MOCK_RETAKE_COURSES.filter((course) => selectedIds.has(course.id)).reduce(
-    (sum, course) => sum + course.credits,
-    0,
-  );
+  const totalCredits = MOCK_RETAKE_COURSES.filter((course) =>
+    selectedCodes.has(course.code),
+  ).reduce((sum, course) => sum + course.point, 0);
 
-  const handleToggle = (id: number) => {
-    setSelectedIds((prev) => {
+  const handleToggle = (course: CourseType) => {
+    setSelectedCodes((prev) => {
       const next = new Set(prev);
-      if (next.has(id)) {
-        next.delete(id);
+      if (next.has(course.code)) {
+        next.delete(course.code);
       } else {
-        next.add(id);
+        next.add(course.code);
       }
       return next;
     });
@@ -111,18 +98,13 @@ export const CourseRetakeActivity = () => {
                 <p className="mt-2 leading-6">* 재수강 가능 횟수는 8번이에요.</p>
               </div>
             </div>
-
             <div className="flex flex-col gap-2">
               {MOCK_RETAKE_COURSES.map((course) => (
-                <CourseRetakeCard
-                  active={selectedIds.has(course.id)}
-                  credits={course.credits}
-                  grade={course.grade}
-                  key={course.id}
-                  name={course.name}
-                  onClick={() => handleToggle(course.id)}
-                  professor={course.professor}
-                  recommendedYear={course.recommendedYear}
+                <SelectableCourseItem
+                  course={course}
+                  isSelected={selectedCodes.has(course.code)}
+                  key={course.code}
+                  onClickCourseItem={handleToggle}
                 />
               ))}
             </div>
