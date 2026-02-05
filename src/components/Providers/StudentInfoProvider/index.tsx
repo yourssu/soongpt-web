@@ -6,8 +6,10 @@ import { UnfilledStudentInfoType } from '@/components/Providers/StudentInfoProvi
 const defaultStudentInfo: UnfilledStudentInfoType = {
   department: '',
   grade: undefined,
-  isChapel: true,
   schoolId: undefined,
+  semester: undefined,
+  subDepartment: '',
+  teachTrainingCourse: false,
 };
 
 export const StudentInfoProvider = ({ children }: React.PropsWithChildren<unknown>) => {

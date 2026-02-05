@@ -37,7 +37,14 @@ export const activityDescription = {
     url: '/desired-credit',
   },
   onboarding: {
-    schema: z.object({}),
+    schema: z.object({
+      grade: zDecoder.num(),
+      semester: zDecoder.num(),
+      schoolId: zDecoder.num(),
+      department: zDecoder.str(),
+      subDepartment: zDecoder.str().optional(),
+      teachTrainingCourse: zDecoder.bool().default(false),
+    }),
     url: '/onboarding',
   },
   landing: {

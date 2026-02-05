@@ -1,14 +1,19 @@
 export type StudentType = {
   department: string;
   grade: StudentGrade;
-  isChapel: boolean;
   schoolId: number;
+  semester: Semester;
+  subDepartment: string | undefined;
+  teachTrainingCourse: boolean;
 };
 
 export const StudentGrade = [1, 2, 3, 4, 5] as const;
 export type StudentGrade = (typeof StudentGrade)[number];
 
-export const schoolIds = [25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15] as const;
+export const semesters = [1, 2] as const;
+export type Semester = (typeof semesters)[number];
+
+export const schoolIds = [26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15] as const;
 
 export const departments = [
   '차세대반도체학과',

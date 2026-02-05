@@ -11,8 +11,10 @@ export const StudentInfoContext = createContext<StudentInfoContextProps>({
   studentInfo: {
     department: '',
     grade: undefined,
-    isChapel: true,
     schoolId: undefined,
+    semester: undefined,
+    subDepartment: '',
+    teachTrainingCourse: false,
   },
   setStudentInfo: () => {},
 });

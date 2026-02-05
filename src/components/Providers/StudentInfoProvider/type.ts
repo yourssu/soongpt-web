@@ -1,10 +1,3 @@
-import { StudentGrade, StudentType } from '@/types/student';
-import { Merge } from '@/utils/type';
+import { StudentType } from '@/types/student';
 
-export type UnfilledStudentInfoType = Merge<
-  StudentType,
-  {
-    grade: StudentGrade | undefined;
-    schoolId: number | undefined;
-  }
->;
+export type UnfilledStudentInfoType = Partial<StudentType>;

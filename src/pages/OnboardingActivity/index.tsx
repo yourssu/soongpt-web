@@ -1,46 +1,65 @@
 import { useFlow } from '@stackflow/react/future';
-import { motion } from 'motion/react';
-import { useMemo, useRef } from 'react';
+import { ChevronDown } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 import { Mixpanel } from '@/bootstrap/mixpanel';
 import { ActivityLayout } from '@/components/ActivityLayout';
 import { ProgressAppBar } from '@/components/AppBar/ProgressAppBar';
 import { useStudentInfoContext } from '@/components/Providers/StudentInfoProvider/hook';
-import ChapelInput from '@/pages/OnboardingActivity/components/ChapelInput';
-import DepartmentInput from '@/pages/OnboardingActivity/components/DepartmentInput';
-import GradeInput from '@/pages/OnboardingActivity/components/GradeInput';
-import SchoolIdInput from '@/pages/OnboardingActivity/components/SchoolIdInput';
+import { useSafeActivityParams } from '@/hooks/stackflow/useSafeActivityParams';
+import {
+  departments,
+  schoolIds,
+  Semester,
+  semesters,
+  StudentGrade,
+  type StudentType,
+} from '@/types/student';
 import { assertNonNullish } from '@/utils/assertion';
 
 export const OnboardingActivity = () => {
   const { studentInfo, setStudentInfo } = useStudentInfoContext();
-
   const { push } = useFlow();
-  const submitButtonRef = useRef<HTMLButtonElement>(null);
 
-  const step = useMemo(() => {
-    // 학과입력 -> 학번입력 -> 학년입력 -> 완료(채플수강여부입력)
-    if (studentInfo.department === '') {
-      return '학과입력' as const;
+  const activityParams = useSafeActivityParams('onboarding');
+
+  const [mainDeptDropdown, setMainDeptDropdown] = useState<string[]>([]);
+  const [subDeptDropdown, setSubDeptDropdown] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (
+      studentInfo.grade !== undefined ||
+      studentInfo.schoolId !== undefined ||
+      studentInfo.semester !== undefined
+    ) {
+      return;
     }
-    if (!studentInfo.schoolId) {
-      return '학번입력' as const;
-    }
-    if (!studentInfo.grade) {
-      return '학년입력' as const;
-    }
-    return '완료' as const;
-  }, [studentInfo]);
+
+    setStudentInfo(activityParams as StudentType);
+  }, [
+    activityParams,
+    setStudentInfo,
+    studentInfo.grade,
+    studentInfo.schoolId,
+    studentInfo.semester,
+  ]);
 
   const handleClickButton = () => {
     assertNonNullish(studentInfo.grade);
     assertNonNullish(studentInfo.schoolId);
+    assertNonNullish(studentInfo.semester);
+    assertNonNullish(studentInfo.department);
+    assertNonNullish(studentInfo.teachTrainingCourse);
 
     const assertedStudentInfo = {
       ...studentInfo,
       grade: studentInfo.grade,
       schoolId: studentInfo.schoolId,
-    };
+      semester: studentInfo.semester,
+      department: studentInfo.department,
+      subDepartment: studentInfo.subDepartment,
+      teachTrainingCourse: studentInfo.teachTrainingCourse,
+    } satisfies StudentType;
 
     Mixpanel.setUser(assertedStudentInfo);
     Mixpanel.trackUserInformationClick();
@@ -54,75 +73,200 @@ export const OnboardingActivity = () => {
           <ProgressAppBar progress={25} />
           <div className="mt-6 flex w-full flex-col items-center">
             <div className="text-center text-[28px]/[normal] font-semibold break-keep">
-              사용자님에 대해 알려주세요!
+              사용자 학적 정보
             </div>
-            <span className="mt-1 font-light">시간표를 만들기 위한 최소한의 정보가 필요해요.</span>
           </div>
         </ActivityLayout.Header>
 
         <ActivityLayout.Body>
-          <div className="flex w-full flex-[1_1_0] flex-col gap-6 py-2">
-            {step === '완료' &&
-              (() => {
-                assertNonNullish(studentInfo.grade);
-                return (
-                  <ChapelInput
-                    grade={studentInfo.grade}
-                    initialValue={studentInfo.isChapel}
-                    onNext={(chapel) => setStudentInfo({ ...studentInfo, isChapel: chapel })}
-                  />
-                );
-              })()}
+          <div className="flex w-full flex-col gap-4 px-5">
+            {/* 학년 */}
+            <div>
+              <label className="mb-1.5 block text-sm">학년</label>
+              <div className="relative">
+                <select
+                  className={`bg-bg-layerDefault w-full appearance-none rounded-xl px-4 py-3 text-lg font-semibold ${studentInfo.grade !== undefined ? 'text-brandPrimary' : 'text-neutralPlaceholder'}`}
+                  onChange={(e) => {
+                    setStudentInfo((prev) => ({
+                      ...prev,
+                      grade: Number(e.target.value) as StudentGrade,
+                    }));
+                  }}
+                  value={studentInfo.grade ?? ''}
+                >
+                  <option disabled value="">
+                    학년
+                  </option>
+                  {StudentGrade.map((g) => (
+                    <option key={g} value={g}>
+                      {g}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown className="text-neutral pointer-events-none absolute top-1/2 right-4 size-4 -translate-y-1/2" />
+              </div>
+            </div>
 
-            {(step === '학년입력' || step === '완료') && (
-              <GradeInput
-                initialValue={studentInfo.grade}
-                onNext={(grade) => {
-                  setStudentInfo({ ...studentInfo, grade });
+            {/* 학기 */}
+            <div>
+              <label className="mb-1.5 block text-sm">학기</label>
+              <div className="relative">
+                <select
+                  className={`bg-bg-layerDefault w-full appearance-none rounded-xl px-4 py-3 text-lg font-semibold ${studentInfo.semester !== undefined ? 'text-brandPrimary' : 'text-neutralPlaceholder'}`}
+                  onChange={(e) => {
+                    setStudentInfo((prev) => ({
+                      ...prev,
+                      semester: Number(e.target.value) as Semester,
+                    }));
+                  }}
+                  value={studentInfo.semester ?? ''}
+                >
+                  <option disabled value="">
+                    학기
+                  </option>
+                  {semesters.map((s) => (
+                    <option key={s} value={s}>
+                      {s}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown className="text-neutral pointer-events-none absolute top-1/2 right-4 size-4 -translate-y-1/2" />
+              </div>
+            </div>
+
+            {/* 입학년도 */}
+            <div>
+              <label className="mb-1.5 block text-sm">입학년도</label>
+              <div className="relative">
+                <select
+                  className={`bg-bg-layerDefault w-full appearance-none rounded-xl px-4 py-3 text-lg font-semibold ${studentInfo.schoolId !== undefined ? 'text-brandPrimary' : 'text-neutralPlaceholder'}`}
+                  onChange={(e) => {
+                    setStudentInfo((prev) => ({
+                      ...prev,
+                      schoolId: Number(e.target.value),
+                    }));
+                  }}
+                  value={studentInfo.schoolId ?? ''}
+                >
+                  <option disabled value="">
+                    입학년도
+                  </option>
+                  {schoolIds.map((y) => (
+                    <option key={y} value={y}>
+                      20{y}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown className="text-neutral pointer-events-none absolute top-1/2 right-4 size-4 -translate-y-1/2" />
+              </div>
+            </div>
+
+            {/* 학과(주전공) */}
+            <div className="relative">
+              <label className="mb-1.5 block text-sm">학과(주전공)</label>
+              <input
+                className={`bg-bg-layerDefault focus-visible:outline-borderRing w-full rounded-xl px-4 py-3 text-lg font-semibold ${studentInfo.department ? 'text-brandPrimary' : 'text-neutralPlaceholder'}`}
+                onBlur={() => setMainDeptDropdown([])}
+                onChange={(e) => {
+                  const val = e.target.value.trim();
+                  setStudentInfo((prev) => ({ ...prev, department: val }));
+                  setMainDeptDropdown(
+                    val !== ''
+                      ? departments.filter((d) => d.toLowerCase().includes(val.toLowerCase()))
+                      : [],
+                  );
                 }}
+                placeholder="학과(주전공)"
+                type="text"
+                value={studentInfo.department}
               />
-            )}
+              {mainDeptDropdown.length > 0 && (
+                <ul className="bg-bg-layerDefault absolute z-10 mt-1 max-h-44 w-full overflow-y-auto rounded-xl border border-gray-200 shadow-sm">
+                  {mainDeptDropdown.map((dept) => (
+                    <li key={dept}>
+                      <button
+                        className="text-neutralSubtle flex w-full items-center rounded-xl px-4 py-2 text-lg font-semibold hover:bg-gray-100"
+                        onMouseDown={() => {
+                          setStudentInfo((prev) => ({ ...prev, department: dept }));
+                          setMainDeptDropdown([]);
+                        }}
+                        type="button"
+                      >
+                        {dept}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
 
-            {(step === '학번입력' || step === '학년입력' || step === '완료') && (
-              <SchoolIdInput
-                initialValue={studentInfo.schoolId}
-                onNext={(schoolId) => setStudentInfo({ ...studentInfo, schoolId })}
+            {/* 복수(부)전공 */}
+            <div className="relative">
+              <label className="mb-1.5 block text-sm">복수(부)전공</label>
+              <input
+                className={`bg-bg-layerDefault focus-visible:outline-borderRing w-full rounded-xl px-4 py-3 text-lg font-semibold ${studentInfo.subDepartment ? 'text-brandPrimary' : 'text-neutralPlaceholder'}`}
+                onBlur={() => setSubDeptDropdown([])}
+                onChange={(e) => {
+                  const val = e.target.value.trim();
+                  setStudentInfo((prev) => ({ ...prev, subDepartment: val }));
+                  setSubDeptDropdown(
+                    val !== ''
+                      ? departments.filter((d) => d.toLowerCase().includes(val.toLowerCase()))
+                      : [],
+                  );
+                }}
+                placeholder="복수(부)전공"
+                type="text"
+                value={studentInfo.subDepartment}
               />
-            )}
+              {subDeptDropdown.length > 0 && (
+                <ul className="bg-bg-layerDefault absolute z-10 mt-1 max-h-44 w-full overflow-y-auto rounded-xl border border-gray-200 shadow-sm">
+                  {subDeptDropdown.map((dept) => (
+                    <li key={dept}>
+                      <button
+                        className="text-neutralSubtle flex w-full items-center rounded-xl px-4 py-2 text-lg font-semibold hover:bg-gray-100"
+                        onMouseDown={() => {
+                          setStudentInfo((prev) => ({ ...prev, subDepartment: dept }));
+                          setSubDeptDropdown([]);
+                        }}
+                        type="button"
+                      >
+                        {dept}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
 
-            {(step === '학과입력' ||
-              step === '학번입력' ||
-              step === '학년입력' ||
-              step === '완료') && (
-              <DepartmentInput
-                initialValue={studentInfo.department}
-                onNext={(department) => setStudentInfo({ ...studentInfo, department })}
-              />
-            )}
+            {/* 교직 이수 여부 */}
+            <div>
+              <label className="mb-1.5 block text-sm">교직 이수 여부</label>
+              <button
+                className="bg-bg-layerDefault text-brandPrimary w-full rounded-xl px-4 py-3 text-left text-lg font-semibold"
+                onClick={() =>
+                  setStudentInfo((prev) => ({
+                    ...prev,
+                    teachTrainingCourse: !prev.teachTrainingCourse,
+                  }))
+                }
+                type="button"
+              >
+                {studentInfo.teachTrainingCourse ? 'O' : 'X'}
+              </button>
+            </div>
           </div>
         </ActivityLayout.Body>
 
-        {step === '완료' && (
-          <ActivityLayout.Footer>
-            <motion.button
-              animate={{ opacity: 1, y: 0 }}
-              className="bg-brandPrimary w-full rounded-2xl py-3.5 font-semibold text-white"
-              initial={{
-                opacity: 0,
-                y: 20,
-              }}
-              onClick={handleClickButton}
-              ref={submitButtonRef}
-              transition={{
-                duration: 0.3,
-                ease: 'easeOut',
-              }}
-              type="button"
-            >
-              입력 완료
-            </motion.button>
-          </ActivityLayout.Footer>
-        )}
+        <ActivityLayout.Footer>
+          <button
+            className="bg-brandPrimary w-full rounded-2xl py-3.5 font-semibold text-white"
+            onClick={handleClickButton}
+            type="button"
+          >
+            저장하기
+          </button>
+        </ActivityLayout.Footer>
       </ActivityLayout.ScrollArea>
     </ActivityLayout>
   );
