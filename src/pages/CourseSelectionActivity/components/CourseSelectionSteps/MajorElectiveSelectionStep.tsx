@@ -58,7 +58,7 @@ const MajorElectiveContent = ({ selectedGrades }: { selectedGrades: StudentGrade
 
   return (
     <>
-      <div className="sticky top-[183px] flex flex-col gap-3 bg-white pb-3">
+      <div className="bg-background sticky top-[183px] flex flex-col gap-3 pb-3">
         <div className="bg-bg-layerDefault sticky top-0 flex w-full items-center rounded-xl">
           <div className="py-2 pl-3">
             <IcMonoSearch className="text-brandPrimary" size={18} />

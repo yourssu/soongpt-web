@@ -122,7 +122,7 @@ export const Dialog = ({
             >
               <motion.div
                 animate="animate"
-                className="shadow-dialog max-h-full w-full max-w-[343px] overflow-y-auto rounded-3xl bg-white pb-2 will-change-transform"
+                className="shadow-dialog bg-background max-h-full w-full max-w-[343px] overflow-y-auto rounded-3xl pb-2 will-change-transform"
                 exit="initial"
                 initial="initial"
                 transition={{
