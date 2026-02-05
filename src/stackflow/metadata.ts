@@ -36,6 +36,10 @@ export const activityDescription = {
     }),
     url: '/desired-credit',
   },
+  course_retake: {
+    schema: z.object({}),
+    url: '/course-retake',
+  },
   onboarding: {
     schema: z.object({
       grade: zDecoder.num(),

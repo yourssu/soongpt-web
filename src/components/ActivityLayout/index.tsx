@@ -5,14 +5,19 @@ import { cn } from '@/utils/dom';
 
 const Header = ({ children }: React.PropsWithChildren<unknown>) => {
   return (
-    <div className="sticky top-0 z-[100] w-full bg-white px-[37.5px] pt-6 pb-4">{children}</div>
+    <div className="bg-background sticky top-0 z-[100] w-full px-[37.5px] pt-6 pb-4">
+      {children}
+    </div>
   );
 };
 
 const Body = ({ children, className }: React.PropsWithChildren<{ className?: string }>) => {
   return (
     <div
-      className={cn('flex w-full flex-[1_1_0] flex-col items-center px-[37.5px] py-6', className)}
+      className={cn(
+        'bg-background flex w-full flex-[1_1_0] flex-col items-center px-[37.5px] py-6',
+        className,
+      )}
     >
       {children}
     </div>
@@ -21,7 +26,9 @@ const Body = ({ children, className }: React.PropsWithChildren<{ className?: str
 
 const Footer = ({ children }: React.PropsWithChildren<unknown>) => {
   return (
-    <div className="sticky bottom-0 z-[100] w-full bg-white px-[37.5px] pt-4 pb-6">{children}</div>
+    <div className="bg-background sticky bottom-0 z-[100] w-full px-[37.5px] pt-4 pb-6">
+      {children}
+    </div>
   );
 };
 
