@@ -40,12 +40,10 @@ export const CourseSelectionHeader = ({ title, description }: CourseSelectionHea
   return (
     <ActivityLayout.Header>
       <ProgressAppBar progress={50} />
-      <div className="mt-6 flex w-full flex-col items-center">
-        <h2 className="text-center text-[28px]/[normal] font-semibold whitespace-pre-wrap">
-          {title}
-        </h2>
+      <div className="mt-6 flex w-full flex-col">
+        <h2 className="text-[28px]/[normal] font-semibold whitespace-pre-wrap">{title}</h2>
         {description && (
-          <div className="items mt-1 text-center font-light whitespace-pre-wrap">{description}</div>
+          <div className="items mt-1 font-light whitespace-pre-wrap">{description}</div>
         )}
       </div>
     </ActivityLayout.Header>
@@ -65,7 +63,7 @@ export const CourseSelectionBody = ({
   className,
 }: React.PropsWithChildren<{ className?: string }>) => {
   return (
-    <ActivityLayout.Body>
+    <ActivityLayout.Body className={'py-2'}>
       <div className={cn('flex w-full flex-[1_1_0] flex-col gap-3', className)}>{children}</div>
     </ActivityLayout.Body>
   );
