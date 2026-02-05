@@ -68,18 +68,21 @@ const TimetableInjectionToolItem = ({ onMutateSuccess }: { onMutateSuccess: () =
           const schoolId = data.schoolId ?? studentInfo.schoolId;
           const department = data.department ?? studentInfo.department;
           const grade = data.grade ?? studentInfo.grade;
-          const isChapel = data.isChapel ?? studentInfo.isChapel;
+          const semester = data.semester ?? studentInfo.semester;
+          const subDepartment = data.subDepartment ?? studentInfo.subDepartment;
+          const teachTrainingCourse = data.teachTrainingCourse ?? studentInfo.teachTrainingCourse;
 
           assertNonNullish(schoolId);
           assertNonNullish(department);
           assertNonNullish(grade);
-          assertNonNullish(isChapel);
 
           await mutateAsync({
+            semester,
+            subDepartment,
+            teachTrainingCourse,
             schoolId,
             department,
             grade,
-            isChapel,
             codes: data.codes,
             generalRequiredCodes: data.generalRequiredCodes,
             majorElectiveCodes: data.majorElectiveCodes,
