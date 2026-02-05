@@ -10,6 +10,8 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 
+const USAINT_LOGIN_URL = 'https://smartid.ssu.ac.kr/Symtra_sso/smln.asp?apiReturnUrl=example.com';
+
 const carouselContents = [
   {
     image: '/images/landing/1.png',
@@ -47,15 +49,15 @@ export const LandingActivity = () => {
     <ActivityLayout>
       <ActivityLayout.ScrollArea>
         <ActivityLayout.Body className={'justify-center'}>
-          <div className="text-brandPrimary mb-12 text-[50px] font-semibold">숭피티</div>
+          <div className="text-brandPrimary mb-10 text-[50px] font-semibold">숭피티</div>
 
           <Carousel setApi={setApi}>
-            <CarouselContent className={'h-[340px] w-[300px] *:rounded-md'}>
+            <CarouselContent className={'h-full w-[340px] *:rounded-md'}>
               {carouselContents.map((content, index) => (
                 <CarouselItem className="flex flex-col items-center gap-4" key={index}>
                   <img
                     alt={`landing-carousel-${index}`}
-                    className="h-[300px] w-[340px] bg-gray-100 object-cover"
+                    className="h-[300px] w-[340px] bg-gray-200 object-cover"
                     src={content.image}
                   />
                   <div
@@ -69,11 +71,11 @@ export const LandingActivity = () => {
             <CarouselNext />
           </Carousel>
 
-          <div className="mt-12 flex items-center justify-center gap-2 py-2">
+          <div className="mt-10 flex justify-center gap-2 py-2">
             {Array.from({ length: count }).map((_, index) => (
               <div
-                className={`rounded-full transition-colors ${
-                  index + 1 === current ? 'bg-brandPrimary size-4' : 'size-2.5 bg-gray-300'
+                className={`h-2 w-2 rounded-full transition-colors ${
+                  index + 1 === current ? 'bg-brandPrimary' : 'bg-gray-300'
                 }`}
                 key={index}
               />
@@ -83,6 +85,9 @@ export const LandingActivity = () => {
         <ActivityLayout.Footer>
           <button
             className="bg-brandPrimary w-full rounded-2xl py-3.5 font-semibold text-white"
+            onClick={() => {
+              window.location.href = USAINT_LOGIN_URL;
+            }}
             type="button"
           >
             유세인트 로그인 하기
