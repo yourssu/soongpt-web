@@ -10,6 +10,7 @@ interface SelectableCourseItemProps {
   course: CourseType;
   extraBadge?: ReactNode;
   isSelected: boolean;
+  note?: string;
   onClickCourseItem: (course: CourseType) => void;
 }
 
@@ -18,6 +19,7 @@ export const SelectableCourseItem = ({
   course,
   extraBadge,
   isSelected,
+  note,
 }: SelectableCourseItemProps) => {
   const professorArrayState = useGetArrayState(course.professor);
 
@@ -46,6 +48,7 @@ export const SelectableCourseItem = ({
         {professorArrayState === 'FILLED' && (
           <div className="text-xs font-light">{course.professor.join(', ')} 교수님</div>
         )}
+        {note && <div className="text-xs font-light text-amber-600">{note}</div>}
       </div>
       <div className="flex shrink-0 items-center gap-0.5">
         {extraBadge}

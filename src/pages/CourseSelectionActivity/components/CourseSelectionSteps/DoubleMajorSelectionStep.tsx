@@ -10,6 +10,7 @@ import {
 } from '@/pages/CourseSelectionActivity/components/CourseSelectionSteps/type';
 import { SelectedCoursesContext } from '@/pages/CourseSelectionActivity/context';
 import { useSuspenseGetCourses } from '@/pages/CourseSelectionActivity/hooks/useSuspenseGetCourses';
+import { useSuspenseGetCreditProgress } from '@/pages/CourseSelectionActivity/hooks/useSuspenseGetCreditProgress';
 
 const DOUBLE_MAJOR_TABS = ['필수', '선택'] as const;
 type DoubleMajorTab = (typeof DOUBLE_MAJOR_TABS)[number];
@@ -19,6 +20,7 @@ export const DoubleMajorSelectionStep = ({ onNextClick }: BaseStepProps) => {
   const courseState = useGetArrayState(courses);
   const { selectedCredit } = useContext(SelectedCoursesContext);
   const [activeTab, setActiveTab] = useState<DoubleMajorTab>('필수');
+  const creditProgress = useSuspenseGetCreditProgress('DOUBLE_MAJOR');
 
   const filteredCourses = courses.filter((course) => course.subCategory === activeTab);
 
@@ -37,7 +39,22 @@ export const DoubleMajorSelectionStep = ({ onNextClick }: BaseStepProps) => {
               <span className="bg-brandPrimary inline-block size-2.5 rounded-full" />
               <span className="font-semibold">복수전공 과목</span>
             </div>
-            {/* TODO: 학점 정보 API 연동 후 동적으로 표시 */}
+            <div className="flex flex-col gap-0.5 text-sm font-light">
+              <div>
+                * 복수전공필수{' '}
+                <span className="font-semibold">
+                  {creditProgress.required.totalCredits}학점 중{' '}
+                  {creditProgress.required.completedCredits}학점
+                </span>
+              </div>
+              <div>
+                * 복수전공선택{' '}
+                <span className="font-semibold">
+                  {creditProgress.elective.totalCredits}학점 중{' '}
+                  {creditProgress.elective.completedCredits}학점
+                </span>
+              </div>
+            </div>
           </div>
 
           <div className="flex gap-1.5">

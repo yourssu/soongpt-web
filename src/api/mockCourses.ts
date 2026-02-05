@@ -127,6 +127,7 @@ export const MOCK_MAJOR_REQUIRED = {
         '월 14:00-14:50 (정보과학관 21508 (디지털미디어스튜디오)-이강희)\n월 15:00-15:50 (정보과학관 21508 (디지털미디어스튜디오)-이강희)\n수 14:00-14:50 (정보과학관 21508 (디지털미디어스튜디오)-이강희)\n수 15:00-15:50 (정보과학관 21508 (디지털미디어스튜디오)-이강희)',
       target: '1학년 글로벌미디어',
       currentGrade: undefined,
+      recommendedGrade: 2,
     },
     {
       category: 'MAJOR_REQUIRED' as const,
@@ -144,6 +145,7 @@ export const MOCK_MAJOR_REQUIRED = {
         '월 10:00-10:50 (정보과학관 21503 (실습실)-)\n월 11:00-11:50 (정보과학관 21503 (실습실)-)\n목 12:00-12:50 (정보과학관 21502 (실습실)-)\n목 13:00-13:50 (정보과학관 21502 (실습실)-)',
       target: '1학년 글로벌미디어',
       currentGrade: undefined,
+      recommendedGrade: 2,
     },
     {
       category: 'MAJOR_REQUIRED' as const,
@@ -161,6 +163,7 @@ export const MOCK_MAJOR_REQUIRED = {
         '화 15:30-16:20 (정보과학관 21502 (실습실)-오경수)\n화 16:30-17:20 (정보과학관 21502 (실습실)-오경수)\n금 15:30-16:20 (정보과학관 21502 (실습실)-오경수)\n금 16:30-17:20 (정보과학관 21502 (실습실)-오경수)',
       target: '1학년 글로벌미디어',
       currentGrade: undefined,
+      recommendedGrade: 2,
     },
   ],
 };

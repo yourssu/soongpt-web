@@ -11,11 +11,13 @@ import { isSameCourse } from '@/utils/course';
 interface CourseSelectionListProps {
   courses: CourseType[];
   parseSelectedCourseOnPush?: (course: CourseType) => SelectedCourseType;
+  renderNote?: (course: CourseType) => string | undefined;
 }
 
 export const CourseSelectionList = ({
   courses,
   parseSelectedCourseOnPush,
+  renderNote,
 }: CourseSelectionListProps) => {
   const { selectedCourses, setSelectedCourses } = useContext(SelectedCoursesContext);
   const uniqueCourses = useCombinedCourses(courses);
@@ -46,6 +48,7 @@ export const CourseSelectionList = ({
               course={course}
               isSelected={isSelected}
               key={course.code}
+              note={renderNote?.(course)}
               onClickCourseItem={handleClickCourseItem}
             />
           );

@@ -17,6 +17,7 @@ import {
 import GradeChip from '@/pages/CourseSelectionActivity/components/GradeChip';
 import { SelectedCoursesContext } from '@/pages/CourseSelectionActivity/context';
 import { useSuspenseGetCourses } from '@/pages/CourseSelectionActivity/hooks/useSuspenseGetCourses';
+import { useSuspenseGetCreditProgress } from '@/pages/CourseSelectionActivity/hooks/useSuspenseGetCreditProgress';
 import { useSuspenseGetMajorElectives } from '@/pages/CourseSelectionActivity/hooks/useSuspenseGetMajorElectives';
 import { useSuspenseGetOtherMajorElectives } from '@/pages/CourseSelectionActivity/hooks/useSuspenseGetOtherMajorElectives';
 import { SelectedCourseType } from '@/pages/CourseSelectionActivity/type';
@@ -111,6 +112,7 @@ export const MajorElectiveSelectionStep = ({ onNextClick }: MajorElectiveSelecti
 
   const courses = useSuspenseGetCourses('MAJOR_ELECTIVE');
   const courseState = useGetArrayState(courses);
+  const creditProgress = useSuspenseGetCreditProgress('MAJOR_ELECTIVE');
 
   const { selectedCredit } = useContext(SelectedCoursesContext);
   const { description, image, primaryButtonText, title } = contentMap[courseState];
@@ -128,7 +130,13 @@ export const MajorElectiveSelectionStep = ({ onNextClick }: MajorElectiveSelecti
               <span className="bg-brandPrimary inline-block size-2.5 rounded-full" />
               <span className="font-semibold">전공선택 과목</span>
             </div>
-            {/* TODO: 학점 정보 API 연동 후 동적으로 표시 */}
+            <div className="text-sm font-light">
+              * 전공선택{' '}
+              <span className="font-semibold">
+                {creditProgress.totalCredits}학점 중 {creditProgress.completedCredits}학점
+              </span>{' '}
+              이수
+            </div>
           </div>
           <div className="flex gap-1.5 pb-3">
             {selectableGrades.map((grades) => (

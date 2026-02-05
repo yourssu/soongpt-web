@@ -1,5 +1,6 @@
-import { useContext } from 'react';
+import { useContext, useMemo } from 'react';
 
+import { useAssertedStudentInfoContext } from '@/components/Providers/StudentInfoProvider/hook';
 import { ArrayState, useGetArrayState } from '@/hooks/useGetArrayState';
 import { CourseSelectionLayout } from '@/pages/CourseSelectionActivity/components/CourseSelectionLayout';
 import { CourseSelectionList } from '@/pages/CourseSelectionActivity/components/CourseSelectionList';
@@ -9,6 +10,8 @@ import {
 } from '@/pages/CourseSelectionActivity/components/CourseSelectionSteps/type';
 import { SelectedCoursesContext } from '@/pages/CourseSelectionActivity/context';
 import { useSuspenseGetCourses } from '@/pages/CourseSelectionActivity/hooks/useSuspenseGetCourses';
+import { useSuspenseGetCreditProgress } from '@/pages/CourseSelectionActivity/hooks/useSuspenseGetCreditProgress';
+import { CourseType } from '@/schemas/courseSchema';
 
 type MajorRequiredSelectionStepProps = BaseStepProps;
 
@@ -16,6 +19,22 @@ export const MajorRequiredSelectionStep = ({ onNextClick }: MajorRequiredSelecti
   const courses = useSuspenseGetCourses('MAJOR_REQUIRED');
   const courseState = useGetArrayState(courses);
   const { selectedCredit } = useContext(SelectedCoursesContext);
+  const { grade } = useAssertedStudentInfoContext();
+  const creditProgress = useSuspenseGetCreditProgress('MAJOR_REQUIRED');
+
+  // 권장 이수 학년이 지난 과목 개수 계산
+  const overdueRecommendedCount = useMemo(() => {
+    return courses.filter(
+      (course) => course.recommendedGrade !== undefined && course.recommendedGrade < grade,
+    ).length;
+  }, [courses, grade]);
+
+  const renderNote = (course: CourseType) => {
+    if (course.recommendedGrade !== undefined) {
+      return `권장 이수 학년 : ${course.recommendedGrade}학년`;
+    }
+    return undefined;
+  };
 
   const { description, image, primaryButtonText, title } = contentMap[courseState];
 
@@ -32,10 +51,21 @@ export const MajorRequiredSelectionStep = ({ onNextClick }: MajorRequiredSelecti
               <span className="bg-brandPrimary inline-block size-2.5 rounded-full" />
               <span className="font-semibold">전공필수 과목</span>
             </div>
-            {/* TODO: 학점 정보 API 연동 후 동적으로 표시 */}
+            <div className="text-sm font-light">
+              * 전공필수{' '}
+              <span className="font-semibold">
+                {creditProgress.totalCredits}학점 중 {creditProgress.completedCredits}학점
+              </span>{' '}
+              이수
+            </div>
+            {overdueRecommendedCount > 0 && (
+              <div className="text-sm font-light text-amber-600">
+                * 권장 이수 학년이 지난 과목 {overdueRecommendedCount}개
+              </div>
+            )}
           </div>
 
-          <CourseSelectionList courses={courses} />
+          <CourseSelectionList courses={courses} renderNote={renderNote} />
         </CourseSelectionLayout.Body>
       )}
 

@@ -10,6 +10,7 @@ import {
 } from '@/pages/CourseSelectionActivity/components/CourseSelectionSteps/type';
 import { SelectedCoursesContext } from '@/pages/CourseSelectionActivity/context';
 import { useSuspenseGetCourses } from '@/pages/CourseSelectionActivity/hooks/useSuspenseGetCourses';
+import { useSuspenseGetCreditProgress } from '@/pages/CourseSelectionActivity/hooks/useSuspenseGetCreditProgress';
 
 const TEACHING_CERTIFICATE_TABS = ['전공영역', '교직영역', '특성화'] as const;
 type TeachingCertificateTab = (typeof TEACHING_CERTIFICATE_TABS)[number];
@@ -19,6 +20,7 @@ export const TeachingCertificateSelectionStep = ({ onNextClick }: BaseStepProps)
   const courseState = useGetArrayState(courses);
   const { selectedCredit } = useContext(SelectedCoursesContext);
   const [activeTab, setActiveTab] = useState<TeachingCertificateTab>('전공영역');
+  const creditProgress = useSuspenseGetCreditProgress('TEACHING_CERTIFICATE');
 
   const filteredCourses = courses.filter((course) => course.subCategory === activeTab);
 
@@ -37,7 +39,32 @@ export const TeachingCertificateSelectionStep = ({ onNextClick }: BaseStepProps)
               <span className="bg-brandPrimary inline-block size-2.5 rounded-full" />
               <span className="font-semibold">교직과정 과목</span>
             </div>
-            {/* TODO: 학점 정보 API 연동 후 동적으로 표시 */}
+            <div className="flex flex-col gap-0.5 text-sm font-light">
+              <div>
+                * 전공영역-교과교육영역{' '}
+                <span className="font-semibold">
+                  {creditProgress.majorArea.totalCredits}학점 중{' '}
+                  {creditProgress.majorArea.completedCredits}학점
+                </span>
+              </div>
+              <div className="text-xs text-neutral-500">
+                (교과교육론 2학점 이상, 교과교육 관련 교과목 6학점 이상 포함)
+              </div>
+              <div>
+                * 교직영역{' '}
+                <span className="font-semibold">
+                  {creditProgress.teachingArea.totalCredits}학점 중{' '}
+                  {creditProgress.teachingArea.completedCredits}학점
+                </span>
+              </div>
+              <div>
+                * 특성화{' '}
+                <span className="font-semibold">
+                  {creditProgress.specialization.totalCredits}학점 중{' '}
+                  {creditProgress.specialization.completedCredits}학점
+                </span>
+              </div>
+            </div>
           </div>
 
           <div className="flex gap-1.5">

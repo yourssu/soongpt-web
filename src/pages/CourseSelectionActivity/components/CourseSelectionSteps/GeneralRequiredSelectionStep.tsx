@@ -12,6 +12,7 @@ import {
 } from '@/pages/CourseSelectionActivity/components/CourseSelectionSteps/type';
 import { SelectedCoursesContext } from '@/pages/CourseSelectionActivity/context';
 import { useSuspenseGetCourses } from '@/pages/CourseSelectionActivity/hooks/useSuspenseGetCourses';
+import { useSuspenseGetCreditProgress } from '@/pages/CourseSelectionActivity/hooks/useSuspenseGetCreditProgress';
 import { CourseType } from '@/schemas/courseSchema';
 import { isSameCourse } from '@/utils/course';
 
@@ -110,6 +111,7 @@ export const GeneralRequiredSelectionStep = ({
   const courses = useSuspenseGetCourses('GENERAL_REQUIRED');
   const courseState = useGetArrayState(courses);
   const { selectedCredit } = useContext(SelectedCoursesContext);
+  const creditProgress = useSuspenseGetCreditProgress('GENERAL_REQUIRED');
 
   const { description, image, primaryButtonText, title } = contentMap[courseState];
 
@@ -126,22 +128,30 @@ export const GeneralRequiredSelectionStep = ({
               <span className="bg-brandPrimary inline-block size-2.5 rounded-full" />
               <span className="text-[20px] font-semibold">교양필수 과목</span>
             </div>
-            {/* TODO: CORE 학점 정보를 API에서 가져와서 아래 숫자를 동적으로 표시 */}
             <div className="flex flex-col gap-0.5 text-sm font-light">
               <div>
-                {'* CORE 창의력 '}
-                <span className="font-semibold">0학점 중 0학점</span>
-                {' 이수했어요.'}
+                * CORE 창의력{' '}
+                <span className="font-semibold">
+                  {creditProgress.creativity.totalCredits}학점 중{' '}
+                  {creditProgress.creativity.completedCredits}학점
+                </span>{' '}
+                이수했어요.
               </div>
               <div>
-                {'* CORE 품격 '}
-                <span className="font-semibold">0학점 중 0학점</span>
-                {' 이수했어요.'}
+                * CORE 품격{' '}
+                <span className="font-semibold">
+                  {creditProgress.dignity.totalCredits}학점 중{' '}
+                  {creditProgress.dignity.completedCredits}학점
+                </span>{' '}
+                이수했어요.
               </div>
               <div>
-                {'* CORE 디지털테크놀로지 '}
-                <span className="font-semibold">0학점 중 0학점</span>
-                {' 이수했어요.'}
+                * CORE 디지털테크놀로지{' '}
+                <span className="font-semibold">
+                  {creditProgress.digitalTech.totalCredits}학점 중{' '}
+                  {creditProgress.digitalTech.completedCredits}학점
+                </span>{' '}
+                이수했어요.
               </div>
             </div>
           </div>
