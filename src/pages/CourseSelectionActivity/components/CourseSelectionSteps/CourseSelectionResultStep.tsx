@@ -1,8 +1,7 @@
 import { motion } from 'motion/react';
-import { useContext, useMemo, useState } from 'react';
+import { useContext, useMemo } from 'react';
 
 import { Mixpanel } from '@/bootstrap/mixpanel';
-import { SelectableChip } from '@/components/Chip/SelectableChip';
 import { RemovableCourseListItem } from '@/components/CourseItem/RemovableCourseItem';
 import { useFilteredCoursesByCategory } from '@/hooks/course/useFilteredCoursesByCategory';
 import { useReceive } from '@/hooks/stackflow/compat-await-push-hooks';
@@ -13,21 +12,17 @@ import { SelectedCoursesContext } from '@/pages/CourseSelectionActivity/context'
 import { CourseType } from '@/schemas/courseSchema';
 import { isSameCourse } from '@/utils/course';
 
-type SelectionTabType = '교양' | '기타' | '전공';
 type CourseSelectionResultStepProps = BaseStepProps;
 
 export const CourseSelectionResultStep = ({ onNextClick }: CourseSelectionResultStepProps) => {
   const { pushAndReceive } = useReceive();
   const openRemoveAlertDialog = useAlertDialog();
-  const [selectionTab, setSelectionTab] = useState<SelectionTabType>('교양');
   const { selectedCourses, selectedCredit, setSelectedCourses } =
     useContext(SelectedCoursesContext);
   const filteredCoursesByCategory = useFilteredCoursesByCategory(selectedCourses);
-  const filteredCoursesBySelectionTab = useMemo(() => {
-    if (selectionTab === '교양') {
-      return [...filteredCoursesByCategory.GENERAL_REQUIRED];
-    }
-    return [
+
+  const majorCourses = useMemo(
+    () => [
       ...filteredCoursesByCategory.RETAKE,
       ...filteredCoursesByCategory.MAJOR_PREREQUISITE,
       ...filteredCoursesByCategory.MAJOR_REQUIRED,
@@ -36,8 +31,14 @@ export const CourseSelectionResultStep = ({ onNextClick }: CourseSelectionResult
       ...filteredCoursesByCategory.MINOR,
       ...filteredCoursesByCategory.TEACHING_CERTIFICATE,
       ...filteredCoursesByCategory.OTHER,
-    ];
-  }, [filteredCoursesByCategory, selectionTab]);
+    ],
+    [filteredCoursesByCategory],
+  );
+
+  const generalCourses = useMemo(
+    () => [...filteredCoursesByCategory.GENERAL_REQUIRED],
+    [filteredCoursesByCategory],
+  );
 
   const onSearchButtonClick = async () => {
     Mixpanel.trackCourseSearchClick();
@@ -89,45 +90,61 @@ export const CourseSelectionResultStep = ({ onNextClick }: CourseSelectionResult
           '* 선택된 과목들로 시간표 추천이 이루어질 예정이에요.\n필수로 수강하고 싶은 과목이 있으면 지금 추가해주세요!'
         }
         progress={100}
-        title={'지금까지 선택한\n교양/전공 과목들이에요.'}
+        title={'지금까지 선택한\n전공/교양 과목들이에요.'}
       />
 
       <CourseSelectionLayout.Body>
-        <div className="flex items-center gap-1">
-          <SelectableChip
-            onSelectChange={() => setSelectionTab('교양')}
-            selected={selectionTab === '교양'}
-          >
-            교양
-          </SelectableChip>
-          <SelectableChip
-            onSelectChange={() => setSelectionTab('전공')}
-            selected={selectionTab === '전공'}
-          >
-            전공
-          </SelectableChip>
-        </div>
-
         <motion.div
           animate={{ y: 0, opacity: 1 }}
           className="flex-[1_1_0]"
           initial={{ y: 20, opacity: 0 }}
           transition={{ duration: 0.4, ease: 'easeOut' }}
         >
-          <div className="flex size-full flex-col gap-3.5">
-            {filteredCoursesBySelectionTab.length ? (
-              filteredCoursesBySelectionTab.map((course) => (
-                <RemovableCourseListItem
-                  course={course}
-                  key={course.code}
-                  onClickRemove={() => {
-                    Mixpanel.trackCourseDeleteClick(course.name);
-                    onRemoveCourse(course);
-                  }}
-                />
-              ))
-            ) : (
-              <div className="bg-bg-layerDefault flex size-full items-center justify-center rounded-xl">
+          <div className="flex size-full flex-col gap-8 pb-10">
+            {majorCourses.length > 0 && (
+              <div className="flex flex-col gap-4">
+                <div className="flex items-center gap-1.5">
+                  <span className="bg-brandPrimary inline-block size-2.5 rounded-full" />
+                  <span className="text-xl font-semibold">전공 과목</span>
+                </div>
+                <div className="flex flex-col gap-2">
+                  {majorCourses.map((course) => (
+                    <RemovableCourseListItem
+                      course={course}
+                      key={course.code}
+                      onClickRemove={() => {
+                        Mixpanel.trackCourseDeleteClick(course.name);
+                        onRemoveCourse(course);
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {generalCourses.length > 0 && (
+              <div className="flex flex-col gap-4">
+                <div className="flex items-center gap-1.5">
+                  <span className="bg-brandPrimary inline-block size-2.5 rounded-full" />
+                  <span className="text-xl font-semibold">교양 과목</span>
+                </div>
+                <div className="flex flex-col gap-2">
+                  {generalCourses.map((course) => (
+                    <RemovableCourseListItem
+                      course={course}
+                      key={course.code}
+                      onClickRemove={() => {
+                        Mixpanel.trackCourseDeleteClick(course.name);
+                        onRemoveCourse(course);
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {majorCourses.length === 0 && generalCourses.length === 0 && (
+              <div className="bg-bg-layerDefault flex h-60 w-full items-center justify-center rounded-xl">
                 <span className="text-neutralHint text-2xl font-semibold">
                   선택된 과목이 없어요
                 </span>

@@ -2,6 +2,7 @@ import { api } from '@/api/client';
 import {
   MOCK_DOUBLE_MAJOR,
   MOCK_MAJOR_ELECTIVE,
+  MOCK_MAJOR_PREREQUISITE,
   MOCK_MINOR,
   MOCK_RETAKE,
   MOCK_TEACHING_CERTIFICATE,
@@ -44,6 +45,10 @@ export const getRetakeCourses = async (searchParams: GetCoursesSearchParams) => 
 };
 
 export const getMajorPrerequisiteCourses = async (searchParams: GetCoursesSearchParams) => {
+  if (USE_MOCK) {
+    return courseResponseSchema.parse(MOCK_MAJOR_PREREQUISITE);
+  }
+
   const response = await api
     .get('courses/major/prerequisite', { timeout: false, searchParams })
     .json();
