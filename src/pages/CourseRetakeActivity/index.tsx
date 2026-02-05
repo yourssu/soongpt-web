@@ -5,7 +5,9 @@ import { ProgressAppBar } from '@/components/AppBar/ProgressAppBar';
 import { SelectableCourseItem } from '@/components/CourseItem/SelectableCourseItem';
 import { CourseType } from '@/schemas/courseSchema';
 
-const MOCK_RETAKE_COURSES: CourseType[] = [
+type RetakeCourseType = CourseType & { currentGrade: string };
+
+const MOCK_RETAKE_COURSES: RetakeCourseType[] = [
   {
     category: 'MAJOR_REQUIRED',
     subCategory: null,
@@ -20,6 +22,7 @@ const MOCK_RETAKE_COURSES: CourseType[] = [
     personeel: 30,
     scheduleRoom: '공학관 101',
     target: '전체 학년',
+    currentGrade: 'C+ 이하',
   },
   {
     category: 'MAJOR_REQUIRED',
@@ -35,6 +38,7 @@ const MOCK_RETAKE_COURSES: CourseType[] = [
     personeel: 25,
     scheduleRoom: '공학관 202',
     target: '3학년',
+    currentGrade: 'F',
   },
   {
     category: 'MAJOR_ELECTIVE',
@@ -50,6 +54,7 @@ const MOCK_RETAKE_COURSES: CourseType[] = [
     personeel: 20,
     scheduleRoom: '공학관 303',
     target: '3학년',
+    currentGrade: 'D+',
   },
 ];
 
@@ -102,6 +107,11 @@ export const CourseRetakeActivity = () => {
               {MOCK_RETAKE_COURSES.map((course) => (
                 <SelectableCourseItem
                   course={course}
+                  extraBadge={
+                    <span className="text-neutral flex h-6 items-center rounded-lg bg-[#eaeaea] px-2 text-[12px]">
+                      {course.currentGrade}
+                    </span>
+                  }
                   isSelected={selectedCodes.has(course.code)}
                   key={course.code}
                   onClickCourseItem={handleToggle}
@@ -112,9 +122,9 @@ export const CourseRetakeActivity = () => {
         </ActivityLayout.Body>
 
         <ActivityLayout.Footer>
-          <div className="flex flex-col items-center gap-1.5">
+          <div className="flex flex-col items-center gap-2">
             <p className="text-[16px] leading-6 text-[#acacac]">
-              현재 {totalCredits} 학점 선택했어요.
+              현재 {totalCredits}학점 선택했어요.
             </p>
             <button
               className="bg-brandPrimary h-14 w-full rounded-2xl font-semibold text-white"

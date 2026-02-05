@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import { motion } from 'motion/react';
+import { ReactNode } from 'react';
 
 import { useCourseItemAnimationVariants } from '@/components/CourseItem/hook';
 import { useGetArrayState } from '@/hooks/useGetArrayState';
@@ -7,6 +8,7 @@ import { CourseType } from '@/schemas/courseSchema';
 
 interface SelectableCourseItemProps {
   course: CourseType;
+  extraBadge?: ReactNode;
   isSelected: boolean;
   onClickCourseItem: (course: CourseType) => void;
 }
@@ -14,6 +16,7 @@ interface SelectableCourseItemProps {
 export const SelectableCourseItem = ({
   onClickCourseItem,
   course,
+  extraBadge,
   isSelected,
 }: SelectableCourseItemProps) => {
   const professorArrayState = useGetArrayState(course.professor);
@@ -44,11 +47,14 @@ export const SelectableCourseItem = ({
           <div className="text-xs font-light">{course.professor.join(', ')} 교수님</div>
         )}
       </div>
-      {course.point > 0 && (
-        <div className="text-brandSecondary bg-bg-brandLayerLight flex h-6 items-center rounded-lg px-1.5 text-[12px]/[18px] font-semibold text-nowrap">
-          {course.point}학점
-        </div>
-      )}
+      <div className="flex shrink-0 items-center gap-0.5">
+        {extraBadge}
+        {course.point > 0 && (
+          <div className="text-brandSecondary bg-bg-brandLayerLight flex h-6 items-center rounded-lg px-1.5 text-[12px]/[18px] font-semibold text-nowrap">
+            {course.point}학점
+          </div>
+        )}
+      </div>
     </motion.div>
   );
 };
