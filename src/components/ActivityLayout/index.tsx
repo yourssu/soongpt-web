@@ -41,7 +41,7 @@ const ScrollArea = ({ children, className }: React.PropsWithChildren<{ className
     <div className="h-dvh w-full overflow-y-hidden" data-activity-scroll-area>
       <div
         className={cn(
-          'flex h-[calc(100dvh+1px)] w-full flex-col items-center overflow-y-scroll overscroll-none',
+          'bg-background flex h-[calc(100dvh+1px)] w-full flex-col items-center overflow-y-scroll overscroll-none',
           className,
         )}
       >
