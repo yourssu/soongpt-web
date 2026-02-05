@@ -47,7 +47,7 @@ export const LandingActivity = () => {
     <ActivityLayout>
       <ActivityLayout.ScrollArea>
         <ActivityLayout.Body className={'justify-center'}>
-          <div className="text-brandPrimary text-[50px] font-semibold">숭피티</div>
+          <div className="text-brandPrimary mb-12 text-[50px] font-semibold">숭피티</div>
 
           <Carousel setApi={setApi}>
             <CarouselContent className={'h-[340px] w-[300px] *:rounded-md'}>
@@ -55,7 +55,7 @@ export const LandingActivity = () => {
                 <CarouselItem className="flex flex-col items-center gap-4" key={index}>
                   <img
                     alt={`landing-carousel-${index}`}
-                    className="h-[300px] w-[340px] bg-gray-200 object-cover"
+                    className="h-[300px] w-[340px] bg-gray-100 object-cover"
                     src={content.image}
                   />
                   <div
@@ -69,11 +69,11 @@ export const LandingActivity = () => {
             <CarouselNext />
           </Carousel>
 
-          <div className="flex justify-center gap-2 py-2">
+          <div className="mt-12 flex items-center justify-center gap-2 py-2">
             {Array.from({ length: count }).map((_, index) => (
               <div
-                className={`h-2 w-2 rounded-full transition-colors ${
-                  index + 1 === current ? 'bg-brandPrimary' : 'bg-gray-300'
+                className={`rounded-full transition-colors ${
+                  index + 1 === current ? 'bg-brandPrimary size-4' : 'size-2.5 bg-gray-300'
                 }`}
                 key={index}
               />
