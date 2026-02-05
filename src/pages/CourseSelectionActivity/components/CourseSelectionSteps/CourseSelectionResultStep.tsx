@@ -140,7 +140,7 @@ export const CourseSelectionResultStep = ({ onNextClick }: CourseSelectionResult
       <CourseSelectionLayout.Footer
         primaryButtonProps={{ children: '시간표 만들기', onClick: onNextClick }}
         secondaryButtonProps={{
-          children: '과목 추가',
+          children: '과목 추가하기',
           onClick: onSearchButtonClick,
         }}
         selectedCredit={selectedCredit}

@@ -1,10 +1,7 @@
 import { api } from '@/api/client';
 import {
   MOCK_DOUBLE_MAJOR,
-  MOCK_GENERAL_REQUIRED,
   MOCK_MAJOR_ELECTIVE,
-  MOCK_MAJOR_PREREQUISITE,
-  MOCK_MAJOR_REQUIRED,
   MOCK_MINOR,
   MOCK_RETAKE,
   MOCK_TEACHING_CERTIFICATE,
@@ -21,19 +18,11 @@ type GetCoursesSearchParams = {
 };
 
 export const getMajorRequiredCourses = async (searchParams: GetCoursesSearchParams) => {
-  if (USE_MOCK) {
-    return courseResponseSchema.parse(MOCK_MAJOR_REQUIRED);
-  }
-
   const response = await api.get('courses/major/required', { timeout: false, searchParams }).json();
   return courseResponseSchema.parse(response);
 };
 
 export const getGeneralRequiredCourses = async (searchParams: GetCoursesSearchParams) => {
-  if (USE_MOCK) {
-    return courseResponseSchema.parse(MOCK_GENERAL_REQUIRED);
-  }
-
   const response = await api
     .get('courses/general/required', { timeout: false, searchParams })
     .json();
@@ -41,10 +30,6 @@ export const getGeneralRequiredCourses = async (searchParams: GetCoursesSearchPa
 };
 
 export const getMajorElectiveCourses = async (searchParams: GetCoursesSearchParams) => {
-  if (USE_MOCK) {
-    return courseResponseSchema.parse(MOCK_MAJOR_ELECTIVE);
-  }
-
   const response = await api.get('courses/major/elective', { timeout: false, searchParams }).json();
   return courseResponseSchema.parse(response);
 };
@@ -59,10 +44,6 @@ export const getRetakeCourses = async (searchParams: GetCoursesSearchParams) => 
 };
 
 export const getMajorPrerequisiteCourses = async (searchParams: GetCoursesSearchParams) => {
-  if (USE_MOCK) {
-    return courseResponseSchema.parse(MOCK_MAJOR_PREREQUISITE);
-  }
-
   const response = await api
     .get('courses/major/prerequisite', { timeout: false, searchParams })
     .json();
@@ -112,11 +93,6 @@ export const getOtherMajorElectiveCourses = async (searchParams: GetCoursesSearc
 export const getSearchedCourses = async (searchKeyword: string) => {
   if (searchKeyword === '') {
     return [];
-  }
-
-  if (USE_MOCK) {
-    const parsed = courseResponseSchema.parse(MOCK_MAJOR_ELECTIVE);
-    return parsed.result.filter((course) => course.name.includes(searchKeyword));
   }
 
   const response = await api.get('courses/search', { searchParams: { q: searchKeyword } }).json();

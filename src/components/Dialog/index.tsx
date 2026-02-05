@@ -48,7 +48,7 @@ const ButtonGroup = ({ children }: React.PropsWithChildren<unknown>) => {
 };
 
 const buttonVariant = tv({
-  base: 'h-[24px] w-[66px] rounded-lg text-xs font-medium',
+  base: 'h-[40px] w-[100px] cursor-pointer rounded-lg font-medium',
   variants: {
     variant: {
       primary: 'bg-brandPrimary text-white',

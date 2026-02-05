@@ -11,7 +11,7 @@ export const IcMonoCircleMinus = ({ size, ...props }: BaseIconProps) => {
       {...props}
     >
       <circle cx="8.5" cy="8" fill="currentColor" r="8" />
-      <line stroke="white" strokeWidth="2" x1="4.5" x2="12.5" y1="8" y2="8" />
+      <line stroke="#686868" strokeWidth="2" x1="4.5" x2="12.5" y1="8" y2="8" />
     </svg>
   );
 };
