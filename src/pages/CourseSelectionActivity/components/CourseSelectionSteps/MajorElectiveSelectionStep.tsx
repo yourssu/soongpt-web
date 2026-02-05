@@ -1,6 +1,7 @@
 import { Suspense, useContext, useMemo, useState } from 'react';
 import { SwitchCase, useInputState } from 'react-simplikit';
 
+import { SelectableChip } from '@/components/Chip/SelectableChip';
 import { IcMonoSearch } from '@/components/Icons/IcMonoSearch';
 import { useAssertedStudentInfoContext } from '@/components/Providers/StudentInfoProvider/hook';
 import { useCombinedCourses } from '@/hooks/course/useCombinedCourses';
@@ -17,6 +18,7 @@ import GradeChip from '@/pages/CourseSelectionActivity/components/GradeChip';
 import { SelectedCoursesContext } from '@/pages/CourseSelectionActivity/context';
 import { useSuspenseGetCourses } from '@/pages/CourseSelectionActivity/hooks/useSuspenseGetCourses';
 import { useSuspenseGetMajorElectives } from '@/pages/CourseSelectionActivity/hooks/useSuspenseGetMajorElectives';
+import { useSuspenseGetOtherMajorElectives } from '@/pages/CourseSelectionActivity/hooks/useSuspenseGetOtherMajorElectives';
 import { SelectedCourseType } from '@/pages/CourseSelectionActivity/type';
 import { CourseType } from '@/schemas/courseSchema';
 import { StudentGrade } from '@/types/student';
@@ -86,9 +88,26 @@ const MajorElectiveContent = ({ selectedGrades }: { selectedGrades: StudentGrade
   );
 };
 
+const OtherMajorElectiveContent = () => {
+  const courses = useSuspenseGetOtherMajorElectives();
+  const combinedCourses = useCombinedCourses(courses);
+  const combinedCoursesState = useGetArrayState(combinedCourses);
+
+  return (
+    <SwitchCase
+      caseBy={{
+        FILLED: () => <CourseSelectionList courses={combinedCourses} />,
+        EMPTY: () => <CourseBySelectedGradesEmpty />,
+      }}
+      value={combinedCoursesState}
+    />
+  );
+};
+
 export const MajorElectiveSelectionStep = ({ onNextClick }: MajorElectiveSelectionStepProps) => {
   const { grade } = useAssertedStudentInfoContext();
   const [selectedGrades, setSelectedGrades] = useState<StudentGrade[]>([grade]);
+  const [isOtherMajorSelected, setIsOtherMajorSelected] = useState(false);
 
   const courses = useSuspenseGetCourses('MAJOR_ELECTIVE');
   const courseState = useGetArrayState(courses);
@@ -104,18 +123,40 @@ export const MajorElectiveSelectionStep = ({ onNextClick }: MajorElectiveSelecti
         <CourseSelectionLayout.ImageBody image={image} />
       ) : (
         <CourseSelectionLayout.Body className="!gap-0">
+          <div className="flex flex-col gap-1.5 pb-3">
+            <div className="flex items-center gap-1.5">
+              <span className="bg-brandPrimary inline-block size-2.5 rounded-full" />
+              <span className="font-semibold">전공선택 과목</span>
+            </div>
+            {/* TODO: 학점 정보 API 연동 후 동적으로 표시 */}
+          </div>
           <div className="flex gap-1.5 pb-3">
             {selectableGrades.map((grades) => (
               <GradeChip
                 grades={grades}
-                isSelected={grades.some((grade) => selectedGrades.includes(grade))}
+                isSelected={
+                  !isOtherMajorSelected && grades.some((grade) => selectedGrades.includes(grade))
+                }
                 key={grades.join(', ')}
-                onClickGradeChip={() => setSelectedGrades(grades)}
+                onClickGradeChip={() => {
+                  setSelectedGrades(grades);
+                  setIsOtherMajorSelected(false);
+                }}
               />
             ))}
+            <SelectableChip
+              onSelectChange={() => setIsOtherMajorSelected(true)}
+              selected={isOtherMajorSelected}
+            >
+              타전공
+            </SelectableChip>
           </div>
           <Suspense fallback={null}>
-            <MajorElectiveContent selectedGrades={selectedGrades} />
+            {isOtherMajorSelected ? (
+              <OtherMajorElectiveContent />
+            ) : (
+              <MajorElectiveContent selectedGrades={selectedGrades} />
+            )}
           </Suspense>
         </CourseSelectionLayout.Body>
       )}
@@ -135,12 +176,12 @@ const contentMap: Record<ArrayState, StepContentType> = {
   FILLED: {
     title: '이번 학기에 이수할\n전공선택과목을 알려주세요!',
     description: '타학년 전공선택과목도 선택할 수 있어요.',
-    primaryButtonText: '확인했어요',
+    primaryButtonText: '다전공, 교직이수 과목 담으러 가기',
   },
   EMPTY: {
     title: '이번 학기에 이수할\n전공선택과목이 없어요.',
     image: '/images/like.webp',
-    primaryButtonText: '확인했어요',
+    primaryButtonText: '다전공, 교직이수 과목 담으러 가기',
   },
 };
 

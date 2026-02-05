@@ -49,7 +49,7 @@ export const OnboardingActivity = () => {
 
     Mixpanel.setUser(assertedStudentInfo);
     Mixpanel.trackUserInformationClick();
-    push('course_selection', { type: 'MAJOR_REQUIRED' });
+    push('course_selection', { type: 'RETAKE' });
   };
 
   return (

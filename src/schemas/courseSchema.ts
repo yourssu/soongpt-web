@@ -28,6 +28,7 @@ export const CourseSchema = z.object({
   personeel: z.number(),
   scheduleRoom: z.string(),
   target: z.string(),
+  currentGrade: z.string().optional(),
 });
 export type CourseType = z.infer<typeof CourseSchema>;
 

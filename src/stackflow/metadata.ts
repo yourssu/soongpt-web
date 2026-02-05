@@ -32,21 +32,14 @@ export const activityDescription = {
       generalRequiredCodes: zDecoder.numArray(),
       majorElectiveCodes: zDecoder.numArray(),
       majorRequiredCodes: zDecoder.numArray(),
+      majorPrerequisiteCodes: zDecoder.numArray(),
+      retakeCodes: zDecoder.numArray(),
+      doubleMajorCodes: zDecoder.numArray(),
+      minorCodes: zDecoder.numArray(),
+      teachingCertificateCodes: zDecoder.numArray(),
       selectedTotalPoints: zDecoder.num(),
     }),
     url: '/desired-credit',
-  },
-  course_retake: {
-    schema: z.object({}),
-    url: '/course-retake',
-  },
-  course_major_required: {
-    schema: z.object({}),
-    url: '/course-major-required',
-  },
-  course_major_elective: {
-    schema: z.object({}),
-    url: '/course-major-elective',
   },
   onboarding: {
     schema: z.object({

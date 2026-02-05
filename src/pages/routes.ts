@@ -14,21 +14,6 @@ export const routes: Record<ActivityName, ActivityComponentType<any>> = {
       default: module.LandingActivity,
     })),
   ),
-  course_retake: lazy(() =>
-    import('@/pages/CourseRetakeActivity').then((module) => ({
-      default: module.CourseRetakeActivity,
-    })),
-  ),
-  course_major_required: lazy(() =>
-    import('@/pages/CourseMajorRequiredActivity').then((module) => ({
-      default: module.CourseMajorRequiredActivity,
-    })),
-  ),
-  course_major_elective: lazy(() =>
-    import('@/pages/CourseMajorElectiveActivity').then((module) => ({
-      default: module.CourseMajorElectiveActivity,
-    })),
-  ),
   course_selection: lazy(() =>
     import('@/pages/CourseSelectionActivity').then((module) => ({
       default: module.CourseSelectionActivity,

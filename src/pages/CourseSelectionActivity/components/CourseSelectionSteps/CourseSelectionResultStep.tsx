@@ -25,14 +25,16 @@ export const CourseSelectionResultStep = ({ onNextClick }: CourseSelectionResult
   const filteredCoursesByCategory = useFilteredCoursesByCategory(selectedCourses);
   const filteredCoursesBySelectionTab = useMemo(() => {
     if (selectionTab === '교양') {
-      return [
-        ...filteredCoursesByCategory.GENERAL_REQUIRED,
-        ...filteredCoursesByCategory.GENERAL_ELECTIVE,
-      ];
+      return [...filteredCoursesByCategory.GENERAL_REQUIRED];
     }
     return [
+      ...filteredCoursesByCategory.RETAKE,
+      ...filteredCoursesByCategory.MAJOR_PREREQUISITE,
       ...filteredCoursesByCategory.MAJOR_REQUIRED,
       ...filteredCoursesByCategory.MAJOR_ELECTIVE,
+      ...filteredCoursesByCategory.DOUBLE_MAJOR,
+      ...filteredCoursesByCategory.MINOR,
+      ...filteredCoursesByCategory.TEACHING_CERTIFICATE,
       ...filteredCoursesByCategory.OTHER,
     ];
   }, [filteredCoursesByCategory, selectionTab]);

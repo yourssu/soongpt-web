@@ -9,9 +9,14 @@ import { useFilteredCoursesByCategory } from '@/hooks/course/useFilteredCoursesB
 import { useSafeActivityParams } from '@/hooks/stackflow/useSafeActivityParams';
 import CourseSelectionFallback from '@/pages/CourseSelectionActivity/components/CourseSelectionFallback';
 import { CourseSelectionResultStep } from '@/pages/CourseSelectionActivity/components/CourseSelectionSteps/CourseSelectionResultStep';
+import { DoubleMajorSelectionStep } from '@/pages/CourseSelectionActivity/components/CourseSelectionSteps/DoubleMajorSelectionStep';
 import { GeneralRequiredSelectionStep } from '@/pages/CourseSelectionActivity/components/CourseSelectionSteps/GeneralRequiredSelectionStep';
 import { MajorElectiveSelectionStep } from '@/pages/CourseSelectionActivity/components/CourseSelectionSteps/MajorElectiveSelectionStep';
+import { MajorPrerequisiteSelectionStep } from '@/pages/CourseSelectionActivity/components/CourseSelectionSteps/MajorPrerequisiteSelectionStep';
 import { MajorRequiredSelectionStep } from '@/pages/CourseSelectionActivity/components/CourseSelectionSteps/MajorRequiredSelectionStep';
+import { MinorSelectionStep } from '@/pages/CourseSelectionActivity/components/CourseSelectionSteps/MinorSelectionStep';
+import { RetakeSelectionStep } from '@/pages/CourseSelectionActivity/components/CourseSelectionSteps/RetakeSelectionStep';
+import { TeachingCertificateSelectionStep } from '@/pages/CourseSelectionActivity/components/CourseSelectionSteps/TeachingCertificateSelectionStep';
 import SoongptErrorBoundary from '@/pages/CourseSelectionActivity/components/SoongptErrorBoundary';
 import { SelectedCoursesContext } from '@/pages/CourseSelectionActivity/context';
 import { SelectedCourseType } from '@/pages/CourseSelectionActivity/type';
@@ -41,11 +46,29 @@ export const CourseSelectionActivity = () => {
           <Suspense fallback={<CourseSelectionFallback type="pending" />}>
             <SwitchCase
               caseBy={{
+                RETAKE: () => (
+                  <RetakeSelectionStep
+                    onNextClick={() => {
+                      pushStep({
+                        type: 'MAJOR_PREREQUISITE',
+                      });
+                    }}
+                  />
+                ),
+                MAJOR_PREREQUISITE: () => (
+                  <MajorPrerequisiteSelectionStep
+                    onNextClick={() => {
+                      pushStep({
+                        type: 'MAJOR_REQUIRED',
+                      });
+                    }}
+                  />
+                ),
                 MAJOR_REQUIRED: () => (
                   <MajorRequiredSelectionStep
                     onNextClick={() => {
                       pushStep({
-                        type: 'GENERAL_REQUIRED',
+                        type: 'MAJOR_ELECTIVE',
                       });
                       Mixpanel.trackRequiredCourseSelectionClick({
                         type: 'MAJOR_REQUIRED',
@@ -56,26 +79,11 @@ export const CourseSelectionActivity = () => {
                     }}
                   />
                 ),
-                GENERAL_REQUIRED: () => (
-                  <GeneralRequiredSelectionStep
-                    onNextClick={() => {
-                      pushStep({
-                        type: 'MAJOR_ELECTIVE',
-                      });
-                      Mixpanel.trackRequiredCourseSelectionClick({
-                        type: 'GENERAL_REQUIRED',
-                        courses: filteredCoursesByCategory.GENERAL_REQUIRED.map(
-                          (course) => course.name,
-                        ),
-                      });
-                    }}
-                  />
-                ),
                 MAJOR_ELECTIVE: () => (
                   <MajorElectiveSelectionStep
                     onNextClick={() => {
                       pushStep({
-                        type: 'COURSE_SELECTION_RESULT',
+                        type: 'DOUBLE_MAJOR',
                       });
                       Mixpanel.trackMajorElectiveCourseSelectionClick({
                         courses: filteredCoursesByCategory.MAJOR_ELECTIVE.map(
@@ -83,6 +91,48 @@ export const CourseSelectionActivity = () => {
                         ),
                         otherGradeCourse: filteredCoursesByCategory.MAJOR_ELECTIVE.some(
                           (course) => course.fromOtherGrade,
+                        ),
+                      });
+                    }}
+                  />
+                ),
+                DOUBLE_MAJOR: () => (
+                  <DoubleMajorSelectionStep
+                    onNextClick={() => {
+                      pushStep({
+                        type: 'MINOR',
+                      });
+                    }}
+                  />
+                ),
+                MINOR: () => (
+                  <MinorSelectionStep
+                    onNextClick={() => {
+                      pushStep({
+                        type: 'TEACHING_CERTIFICATE',
+                      });
+                    }}
+                  />
+                ),
+                TEACHING_CERTIFICATE: () => (
+                  <TeachingCertificateSelectionStep
+                    onNextClick={() => {
+                      pushStep({
+                        type: 'GENERAL_REQUIRED',
+                      });
+                    }}
+                  />
+                ),
+                GENERAL_REQUIRED: () => (
+                  <GeneralRequiredSelectionStep
+                    onNextClick={() => {
+                      pushStep({
+                        type: 'COURSE_SELECTION_RESULT',
+                      });
+                      Mixpanel.trackRequiredCourseSelectionClick({
+                        type: 'GENERAL_REQUIRED',
+                        courses: filteredCoursesByCategory.GENERAL_REQUIRED.map(
+                          (course) => course.name,
                         ),
                       });
                     }}
@@ -102,6 +152,16 @@ export const CourseSelectionActivity = () => {
                         majorRequiredCodes: filteredCoursesByCategory.MAJOR_REQUIRED.map(
                           ({ code }) => code,
                         ),
+                        majorPrerequisiteCodes: filteredCoursesByCategory.MAJOR_PREREQUISITE.map(
+                          ({ code }) => code,
+                        ),
+                        retakeCodes: filteredCoursesByCategory.RETAKE.map(({ code }) => code),
+                        doubleMajorCodes: filteredCoursesByCategory.DOUBLE_MAJOR.map(
+                          ({ code }) => code,
+                        ),
+                        minorCodes: filteredCoursesByCategory.MINOR.map(({ code }) => code),
+                        teachingCertificateCodes:
+                          filteredCoursesByCategory.TEACHING_CERTIFICATE.map(({ code }) => code),
                         selectedTotalPoints: totalPoints,
                         codes: selectedCourses
                           .filter((course) => !!course.selectedBySearch)
