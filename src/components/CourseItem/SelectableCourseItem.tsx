@@ -36,7 +36,7 @@ export const SelectableCourseItem = ({
     <motion.div
       animate="animate"
       className={clsx(
-        'bg-bg-layerDefault flex min-h-[72px] w-full items-center justify-between gap-3 rounded-xl border-2 px-5',
+        'flex min-h-[80px] w-full items-center justify-between gap-3 rounded-xl border-2 bg-white px-5',
         isSelected && 'text-brandPrimary',
       )}
       initial="initial"
@@ -44,16 +44,16 @@ export const SelectableCourseItem = ({
       variants={variants}
     >
       <div className="my-2">
-        <div className="font-semibold">{course.name}</div>
+        <div className="text-lg font-semibold">{course.name}</div>
         {professorArrayState === 'FILLED' && (
-          <div className="text-xs font-light">{course.professor.join(', ')} 교수님</div>
+          <div className="text-xs">{course.professor.join(', ')} 교수님</div>
         )}
-        {note && <div className="text-xs font-light text-amber-600">{note}</div>}
+        {note && <div className="text-xs font-light text-[#FF474A]">{note}</div>}
       </div>
       <div className="flex shrink-0 items-center gap-0.5">
         {extraBadge}
         {course.point > 0 && (
-          <div className="text-brandSecondary bg-bg-brandLayerLight flex h-6 items-center rounded-lg px-1.5 text-[12px]/[18px] font-semibold text-nowrap">
+          <div className="text-brandSecondary bg-bg-brandLayerLight flex h-6 items-center rounded-lg px-2 text-[12px]/[18px] text-nowrap">
             {course.point}학점
           </div>
         )}

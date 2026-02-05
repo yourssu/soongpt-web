@@ -123,10 +123,10 @@ export const GeneralRequiredSelectionStep = ({
         <CourseSelectionLayout.ImageBody image={image} />
       ) : (
         <CourseSelectionLayout.Body>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-1.5">
             <div className="flex items-center gap-1.5">
               <span className="bg-brandPrimary inline-block size-2.5 rounded-full" />
-              <span className="text-[20px] font-semibold">교양필수 과목</span>
+              <span className="text-xl font-semibold">교양필수 과목</span>
             </div>
             <div className="flex flex-col gap-0.5 text-sm font-light">
               <div>

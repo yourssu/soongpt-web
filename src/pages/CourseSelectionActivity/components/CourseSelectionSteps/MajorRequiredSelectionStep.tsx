@@ -49,20 +49,20 @@ export const MajorRequiredSelectionStep = ({ onNextClick }: MajorRequiredSelecti
           <div className="flex flex-col gap-1.5">
             <div className="flex items-center gap-1.5">
               <span className="bg-brandPrimary inline-block size-2.5 rounded-full" />
-              <span className="font-semibold">전공필수 과목</span>
+              <span className="text-xl font-semibold">전공필수 과목</span>
             </div>
             <div className="text-sm font-light">
               * 전공필수{' '}
               <span className="font-semibold">
                 {creditProgress.totalCredits}학점 중 {creditProgress.completedCredits}학점
               </span>{' '}
-              이수
+              이수했어요.
+              {overdueRecommendedCount > 0 && (
+                <span className="text-sm font-light text-[#FF474A]">
+                  <br /> * 권장 이수 학년이 지난 과목이 {overdueRecommendedCount}개 있어요.
+                </span>
+              )}
             </div>
-            {overdueRecommendedCount > 0 && (
-              <div className="text-sm font-light text-amber-600">
-                * 권장 이수 학년이 지난 과목 {overdueRecommendedCount}개
-              </div>
-            )}
           </div>
 
           <CourseSelectionList courses={courses} renderNote={renderNote} />

@@ -9,10 +9,10 @@ interface ChipProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const chip = tv({
-  base: 'flex cursor-pointer place-items-center rounded-full px-3 py-0.5 text-sm transition-colors',
+  base: 'text-md flex shrink-0 cursor-pointer place-items-center rounded-full px-4 py-2 transition-colors',
   variants: {
     selected: {
-      true: 'text-brandPrimary bg-bg-chipSelected font-semibold',
+      true: 'text-brandPrimary bg-bg-chipSelected font-medium',
       false: 'text-neutralMuted bg-bg-chipUnselected font-normal',
     },
   },

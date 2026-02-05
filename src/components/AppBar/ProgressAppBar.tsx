@@ -7,7 +7,7 @@ interface ProgressAppBarProps {
 export const ProgressAppBar = ({ progress }: ProgressAppBarProps) => {
   return (
     <BaseAppBar>
-      <div className="h-1 w-full rounded-full bg-black">
+      <div className="h-2 w-full rounded-full bg-[#E8E8E8]">
         <div
           className="bg-brandPrimary h-full rounded-full transition-all duration-500"
           style={{ width: `${progress}%` }}

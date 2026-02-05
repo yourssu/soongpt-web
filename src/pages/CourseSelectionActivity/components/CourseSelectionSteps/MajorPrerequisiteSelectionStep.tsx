@@ -34,14 +34,14 @@ export const MajorPrerequisiteSelectionStep = ({
           <div className="flex flex-col gap-1.5">
             <div className="flex items-center gap-1.5">
               <span className="bg-brandPrimary inline-block size-2.5 rounded-full" />
-              <span className="font-semibold">전공기초 과목</span>
+              <span className="text-xl font-semibold">전공기초 과목</span>
             </div>
             <div className="text-sm font-light">
               * 전공기초{' '}
               <span className="font-semibold">
                 {creditProgress.totalCredits}학점 중 {creditProgress.completedCredits}학점
               </span>{' '}
-              이수
+              이수했어요.
             </div>
           </div>
 

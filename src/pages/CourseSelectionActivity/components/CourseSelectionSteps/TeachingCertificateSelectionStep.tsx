@@ -37,7 +37,7 @@ export const TeachingCertificateSelectionStep = ({ onNextClick }: BaseStepProps)
           <div className="flex flex-col gap-1.5">
             <div className="flex items-center gap-1.5">
               <span className="bg-brandPrimary inline-block size-2.5 rounded-full" />
-              <span className="font-semibold">교직과정 과목</span>
+              <span className="text-xl font-semibold">교직과정 과목</span>
             </div>
             <div className="flex flex-col gap-0.5 text-sm font-light">
               <div>
