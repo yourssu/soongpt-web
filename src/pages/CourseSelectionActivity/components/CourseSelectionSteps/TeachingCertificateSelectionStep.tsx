@@ -26,7 +26,7 @@ export const TeachingCertificateSelectionStep = ({ onNextClick }: BaseStepProps)
 
   return (
     <CourseSelectionLayout>
-      <CourseSelectionLayout.Header title={title} />
+      <CourseSelectionLayout.Header progress={78} title={title} />
 
       {image ? (
         <CourseSelectionLayout.ImageBody image={image} />

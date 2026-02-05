@@ -23,7 +23,7 @@ export const MajorPrerequisiteSelectionStep = ({
 
   return (
     <CourseSelectionLayout>
-      <CourseSelectionLayout.Header title={title} />
+      <CourseSelectionLayout.Header progress={22} title={title} />
 
       {image ? (
         <CourseSelectionLayout.ImageBody image={image} />

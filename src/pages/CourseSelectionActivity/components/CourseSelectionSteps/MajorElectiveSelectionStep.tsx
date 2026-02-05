@@ -117,7 +117,7 @@ export const MajorElectiveSelectionStep = ({ onNextClick }: MajorElectiveSelecti
 
   return (
     <CourseSelectionLayout>
-      <CourseSelectionLayout.Header description={description} title={title} />
+      <CourseSelectionLayout.Header description={description} progress={44} title={title} />
 
       {image ? (
         <CourseSelectionLayout.ImageBody image={image} />

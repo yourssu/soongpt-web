@@ -25,7 +25,7 @@ export const RetakeSelectionStep = ({ onNextClick }: RetakeSelectionStepProps) =
 
   return (
     <CourseSelectionLayout>
-      <CourseSelectionLayout.Header title={title} />
+      <CourseSelectionLayout.Header progress={11} title={title} />
 
       {image ? (
         <CourseSelectionLayout.ImageBody image={image} />

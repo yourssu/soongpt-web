@@ -6,6 +6,7 @@ import { cn } from '@/utils/dom';
 
 interface CourseSelectionHeaderProps {
   description?: string;
+  progress?: number;
   title: string;
 }
 
@@ -36,10 +37,14 @@ const fadeInVariants: Variants = {
   },
 };
 
-export const CourseSelectionHeader = ({ title, description }: CourseSelectionHeaderProps) => {
+export const CourseSelectionHeader = ({
+  title,
+  description,
+  progress = 0,
+}: CourseSelectionHeaderProps) => {
   return (
     <ActivityLayout.Header>
-      <ProgressAppBar progress={50} />
+      <ProgressAppBar progress={progress} />
       <div className="mt-6 flex w-full flex-col">
         <h2 className="text-[28px]/[normal] font-semibold whitespace-pre-wrap">{title}</h2>
         {description && (

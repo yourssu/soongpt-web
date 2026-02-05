@@ -26,7 +26,7 @@ export const DoubleMajorSelectionStep = ({ onNextClick }: BaseStepProps) => {
 
   return (
     <CourseSelectionLayout>
-      <CourseSelectionLayout.Header title={title} />
+      <CourseSelectionLayout.Header progress={56} title={title} />
 
       {image ? (
         <CourseSelectionLayout.ImageBody image={image} />

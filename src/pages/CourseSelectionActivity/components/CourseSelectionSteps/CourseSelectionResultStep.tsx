@@ -88,6 +88,7 @@ export const CourseSelectionResultStep = ({ onNextClick }: CourseSelectionResult
         description={
           '시간표는 이 과목들을 기준으로 추천돼요.\n복수/부전공 등 필요한 과목을 모두 추가해주세요!'
         }
+        progress={100}
         title={'지금까지 선택한\n교양/전공 과목들이에요.'}
       />
 

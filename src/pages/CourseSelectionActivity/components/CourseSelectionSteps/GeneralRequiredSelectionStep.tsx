@@ -115,7 +115,7 @@ export const GeneralRequiredSelectionStep = ({
 
   return (
     <CourseSelectionLayout>
-      <CourseSelectionLayout.Header description={description} title={title} />
+      <CourseSelectionLayout.Header description={description} progress={89} title={title} />
 
       {image ? (
         <CourseSelectionLayout.ImageBody image={image} />
