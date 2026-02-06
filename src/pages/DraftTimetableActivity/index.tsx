@@ -13,8 +13,8 @@ import {
   CarouselContent,
   CarouselItem,
 } from '@/components/ui/carousel';
+import { useLatestTimetableMutationState } from '@/hooks/timetable/useLatestTimetableMutationState';
 import { TimetableError } from '@/pages/DraftTimetableActivity/components/TimetableError';
-import { useLatestTimetableMutationState } from '@/pages/DraftTimetableActivity/hooks/useLatestTimetableMutationState';
 import { getTimetableMutationStatus } from '@/pages/DraftTimetableActivity/hooks/useTimetableMutationStatus';
 
 export const DraftTimetableActivity = () => {

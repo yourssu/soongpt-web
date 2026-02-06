@@ -1,6 +1,6 @@
 import { useMutationState } from '@tanstack/react-query';
 
-import { TimetableMutationState } from '../type';
+import { TimetableMutationState } from '@/types/timetableMutation';
 
 export const useLatestTimetableMutationState = (): TimetableMutationState | undefined => {
   const timetableMutation = useMutationState<TimetableMutationState>({

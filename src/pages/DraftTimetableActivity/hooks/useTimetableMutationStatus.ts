@@ -1,6 +1,6 @@
 import { MutationStatus } from '@tanstack/react-query';
 
-import { TimetableMutationState } from '@/pages/DraftTimetableActivity/type';
+import { TimetableMutationState } from '@/types/timetableMutation';
 import { handleError } from '@/utils/error';
 import { getKyHTTPErrorRange } from '@/utils/ky';
 

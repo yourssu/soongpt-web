@@ -1,50 +1,16 @@
 import { useFlow } from '@stackflow/react/future';
 
 import { ActivityLayout } from '@/components/ActivityLayout';
-import { BaseAppBar } from '@/components/AppBar/BaseAppBar';
+import { ProgressAppBar } from '@/components/AppBar/ProgressAppBar';
 import { useSelectedTimetableContext } from '@/components/Providers/SelectedTimetableProvider/hook';
 import { Timetable } from '@/components/Timetable';
 import { STAGE } from '@/config';
 import { useSafeActivityParams } from '@/hooks/stackflow/useSafeActivityParams';
-import { useLatestTimetableMutationState } from '@/pages/DraftTimetableActivity/hooks/useLatestTimetableMutationState';
+import { useLatestTimetableMutationState } from '@/hooks/timetable/useLatestTimetableMutationState';
 import { TimetableType } from '@/schemas/timetableSchema';
 import { mergeTimetableCourses } from '@/utils/timetableSelection';
 
 const MOCK_TIMETABLE_STORAGE_KEY = 'timetable-result-mock';
-
-const imgLine10 = 'http://localhost:3845/assets/54ddd31efb840ae8d0dd1a7ee301344d951c135a.svg';
-const imgLine11 = 'http://localhost:3845/assets/f0e2e853e343426a9af10f6c91613d00d74b6d08.svg';
-const imgVector1 = 'http://localhost:3845/assets/f5cb4600286ee912fd643bd9b7b2d8baee116d24.svg';
-
-const ProgressBarTrack = ({ className }: { className?: string }) => {
-  return (
-    <div className={className ?? 'h-0 w-[260px]'}>
-      <div className="absolute top-0 right-0 bottom-full left-0">
-        <div className="absolute inset-[-8px_0_0_0]">
-          <img alt="" className="block size-full max-w-none" src={imgLine10} />
-        </div>
-      </div>
-      <div className="absolute top-0 right-[65.67%] bottom-full left-0">
-        <div className="absolute inset-[-8px_0_0_0]">
-          <img alt="" className="block size-full max-w-none" src={imgLine11} />
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const ProgressBar = ({ className }: { className?: string }) => {
-  return (
-    <div className={className ?? 'h-[13px] w-[293px]'}>
-      <ProgressBarTrack className="absolute inset-[84.62%_0_15.38%_11.26%]" />
-      <div className="absolute inset-[0_97.78%_0_0]">
-        <div className="absolute inset-[-7.69%_-15.38%_-7.69%_-21.76%]">
-          <img alt="" className="block size-full max-w-none" src={imgVector1} />
-        </div>
-      </div>
-    </div>
-  );
-};
 
 export const TimetableResultActivity = () => {
   const { timetableId } = useSafeActivityParams('timetable_result');
@@ -88,9 +54,7 @@ export const TimetableResultActivity = () => {
     <ActivityLayout>
       <ActivityLayout.ScrollArea>
         <ActivityLayout.Header>
-          <BaseAppBar className="relative items-center">
-            <ProgressBar className="relative h-[13px] w-[293px]" />
-          </BaseAppBar>
+          <ProgressAppBar progress={34} />
         </ActivityLayout.Header>
         <ActivityLayout.Body className="gap-7">
           <div className="flex w-full max-w-[300px] flex-col gap-4">

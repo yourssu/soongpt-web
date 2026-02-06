@@ -10,7 +10,7 @@ import { TimetableContent } from '@/pages/DraftTimetableActivity/components/Time
 import { TimetableError } from '@/pages/DraftTimetableActivity/components/TimetableError';
 import { TimetableList } from '@/pages/DraftTimetableActivity/components/TimetableList';
 import { getTimetableMutationStatus } from '@/pages/DraftTimetableActivity/hooks/useTimetableMutationStatus';
-import { TimetableMutationState } from '@/pages/DraftTimetableActivity/type';
+import { TimetableMutationState } from '@/types/timetableMutation';
 
 interface TimetableActivityViewProps {
   mutationState: TimetableMutationState;
