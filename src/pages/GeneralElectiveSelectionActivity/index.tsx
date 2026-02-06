@@ -13,126 +13,13 @@ import { GeneralElectiveProgressText } from '@/pages/GeneralElectiveSelectionAct
 import { useSuspenseGetGeneralElectiveCourses } from '@/pages/GeneralElectiveSelectionActivity/hooks/useSuspenseGetGeneralElectiveCourses';
 import { useSuspenseGetGeneralElectiveProgress } from '@/pages/GeneralElectiveSelectionActivity/hooks/useSuspenseGetGeneralElectiveProgress';
 import { CourseType } from '@/schemas/courseSchema';
-import { TimetableType } from '@/schemas/timetableSchema';
 import { FLOW_PROGRESS } from '@/stackflow/progress';
+import {
+  GENERAL_ELECTIVE_FIELDS_AFTER_23,
+  GENERAL_ELECTIVE_FIELDS_BEFORE_22,
+} from '@/types/general';
 import { isSameCourseCode } from '@/utils/course';
 import { mergeTimetableCourses, toTimetableCourse } from '@/utils/timetableSelection';
-
-const chipValuesAfter23 = [
-  '인간・언어',
-  '문화・예술',
-  '사회・정치・경제',
-  '과학・기술',
-  'Bridge 교과',
-  '자기개발・진로탐색',
-];
-
-const chipValuesBefore22 = [
-  '인성과 리더십',
-  '자기계발과 진로탐색',
-  '한국어의사소통',
-  '국제어문',
-  '자연과학・공학・기술',
-  '역사・철학・종교',
-  '정치・경제・경영',
-  '사회・문화・심리',
-  '문학・예술',
-];
-
-const previewTimetable: TimetableType = {
-  timetableId: 1,
-  tag: '기본 태그',
-  score: null,
-  totalPoint: 21,
-  courses: [
-    {
-      category: 'GENERAL_ELECTIVE',
-      subCategory: null,
-      field: null,
-      code: 9000000001,
-      name: '컴퓨터학개론',
-      professor: [],
-      department: '교양교육운영팀',
-      division: null,
-      time: 0,
-      point: 3,
-      personeel: 0,
-      scheduleRoom: '',
-      target: '',
-      courseTimes: [
-        { week: '화', start: '11:00', end: '12:15', classroom: '' },
-        { week: '목', start: '11:00', end: '12:15', classroom: '' },
-      ],
-    },
-    {
-      category: 'GENERAL_ELECTIVE',
-      subCategory: null,
-      field: null,
-      code: 9000000002,
-      name: '건축학개론',
-      professor: [],
-      department: '교양교육운영팀',
-      division: null,
-      time: 0,
-      point: 2,
-      personeel: 0,
-      scheduleRoom: '',
-      target: '',
-      courseTimes: [
-        { week: '월', start: '11:00', end: '12:15', classroom: '' },
-        { week: '금', start: '11:00', end: '12:15', classroom: '' },
-      ],
-    },
-    {
-      category: 'GENERAL_ELECTIVE',
-      subCategory: null,
-      field: null,
-      code: 9000000003,
-      name: '섬김의리더십',
-      professor: [],
-      department: '교양교육운영팀',
-      division: null,
-      time: 0,
-      point: 2,
-      personeel: 0,
-      scheduleRoom: '',
-      target: '',
-      courseTimes: [{ week: '수', start: '10:00', end: '11:15', classroom: '' }],
-    },
-    {
-      category: 'GENERAL_ELECTIVE',
-      subCategory: null,
-      field: null,
-      code: 9000000004,
-      name: '데이터과학입문',
-      professor: [],
-      department: '교양교육운영팀',
-      division: null,
-      time: 0,
-      point: 2,
-      personeel: 0,
-      scheduleRoom: '',
-      target: '',
-      courseTimes: [{ week: '화', start: '14:00', end: '15:00', classroom: '' }],
-    },
-    {
-      category: 'GENERAL_ELECTIVE',
-      subCategory: null,
-      field: null,
-      code: 9000000005,
-      name: '글로벌경제',
-      professor: [],
-      department: '교양교육운영팀',
-      division: null,
-      time: 0,
-      point: 2,
-      personeel: 0,
-      scheduleRoom: '',
-      target: '',
-      courseTimes: [{ week: '목', start: '14:00', end: '15:00', classroom: '' }],
-    },
-  ],
-};
 
 const getCourseField = (course: CourseType) => course.field ?? '';
 
@@ -161,7 +48,9 @@ export const GeneralElectiveSelectionActivity = () => {
   const courses = useSuspenseGetGeneralElectiveCourses();
   const progress = useSuspenseGetGeneralElectiveProgress();
 
-  const chipValues = isAfter23 ? chipValuesAfter23 : chipValuesBefore22;
+  const chipValues = isAfter23
+    ? GENERAL_ELECTIVE_FIELDS_AFTER_23
+    : GENERAL_ELECTIVE_FIELDS_BEFORE_22;
 
   const [selectedFields, setSelectedFields] = useState<string[]>([]);
   const [sheetState, setSheetState] = useState<BottomSheetState>('peek');
@@ -194,7 +83,7 @@ export const GeneralElectiveSelectionActivity = () => {
 
   const previewTimetableData = useMemo(() => {
     if (!selectedTimetable) {
-      return previewTimetable;
+      return null;
     }
     return mergeTimetableCourses(selectedTimetable, selectedGeneralElectives);
   }, [selectedGeneralElectives, selectedTimetable]);
@@ -227,17 +116,23 @@ export const GeneralElectiveSelectionActivity = () => {
         <ActivityLayout.Body className="gap-6 pt-6 pb-[140px]">
           <div className="flex w-full justify-center">
             <div className="w-[303px]">
-              <Timetable
-                tagPointOverride={21}
-                tagTitleOverride="시간표 이름"
-                timetable={previewTimetableData}
-              />
+              {previewTimetableData ? (
+                <Timetable
+                  tagPointOverride={21}
+                  tagTitleOverride="시간표 이름"
+                  timetable={previewTimetableData}
+                />
+              ) : null}
             </div>
           </div>
         </ActivityLayout.Body>
       </ActivityLayout.ScrollArea>
 
-      <BottomSheet className="bg-[#f9f9f9]" onStateChange={setSheetState} state={sheetState}>
+      <BottomSheet
+        className="max-h-[60dvh] bg-[#f9f9f9]"
+        onStateChange={setSheetState}
+        state={sheetState}
+      >
         <BottomSheet.Header className="gap-2">
           <div className="flex items-center gap-2">
             <span className="bg-brandPrimary inline-block size-3 rounded-full" />

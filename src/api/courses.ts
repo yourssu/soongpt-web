@@ -8,7 +8,7 @@ import {
   MOCK_MINOR,
   MOCK_RETAKE,
   MOCK_TEACHING_CERTIFICATE,
-} from '@/api/mockCourses';
+} from '@/mocks/api/courses';
 import { courseResponseSchema, paginatedCourseResponseSchema } from '@/schemas/courseSchema';
 import { StudentGrade } from '@/types/student';
 

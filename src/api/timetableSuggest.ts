@@ -1,5 +1,5 @@
 import { api } from '@/api/client';
-import { MOCK_TIMETABLE_SUGGEST } from '@/api/mockTimetableSuggest';
+import { MOCK_TIMETABLE_SUGGEST } from '@/mocks/api/timetableSuggest';
 import { TimetableSuggestResponseSchema } from '@/schemas/timetableSuggestSchema';
 
 export const USE_MOCK = true;
