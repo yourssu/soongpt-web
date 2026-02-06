@@ -54,4 +54,14 @@ export const routes: Record<ActivityName, ActivityComponentType<any>> = {
       default: module.WaitlistActivity,
     })),
   ),
+  error: lazy(() =>
+    import('@/pages/ErrorActivity').then((module) => ({
+      default: module.ErrorActivity,
+    })),
+  ),
+  retry_login: lazy(() =>
+    import('@/pages/RetryLoginActivity').then((module) => ({
+      default: module.RetryLoginActivity,
+    })),
+  ),
 };

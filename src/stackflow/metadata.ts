@@ -71,6 +71,16 @@ export const activityDescription = {
     schema: z.object({}),
     url: '/',
   },
+  error: {
+    schema: z.object({
+      message: zDecoder.str().default('오류가 발생했어요.'),
+    }),
+    url: '/error',
+  },
+  retry_login: {
+    schema: z.object({}),
+    url: '/retry-login',
+  },
 } as const satisfies Record<string, ActivityDescriptionItem>;
 
 export type ActivityName = keyof typeof activityDescription;
