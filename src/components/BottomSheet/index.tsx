@@ -68,12 +68,14 @@ const defaultHandleWrapperClassName = 'w-full pt-4 pb-2';
 const DragHandleContext = createContext<((event: PointerEvent<HTMLDivElement>) => void) | null>(
   null,
 );
+const DragHandleActiveContext = createContext(false);
 
 const Header = ({ children, className }: PropsWithChildren<{ className?: string }>) => {
   const onPointerDown = useContext(DragHandleContext);
+  const isDragHandleActive = useContext(DragHandleActiveContext);
   return (
     <div
-      className={cn('flex flex-col gap-4', className)}
+      className={cn('flex flex-col gap-4', isDragHandleActive && 'touch-none', className)}
       onPointerDown={onPointerDown ?? undefined}
     >
       {children}
@@ -193,21 +195,24 @@ export const BottomSheet = ({
         ref={sheetRef}
         style={{ y }}
       >
-        <DragHandleContext.Provider value={dragHandleOnly ? handlePointerDown : null}>
-          <div
-            className={cn(
-              'flex items-center justify-center',
-              defaultHandleWrapperClassName,
-              handleWrapperClassName,
-            )}
-            onClick={onHandleClick}
-            onPointerDown={handlePointerDown}
-            role="button"
-          >
-            {resolvedHandle}
-          </div>
-          {children}
-        </DragHandleContext.Provider>
+        <DragHandleActiveContext.Provider value={dragHandleOnly}>
+          <DragHandleContext.Provider value={dragHandleOnly ? handlePointerDown : null}>
+            <div
+              className={cn(
+                'flex items-center justify-center',
+                dragHandleOnly && 'touch-none',
+                defaultHandleWrapperClassName,
+                handleWrapperClassName,
+              )}
+              onClick={onHandleClick}
+              onPointerDown={handlePointerDown}
+              role="button"
+            >
+              {resolvedHandle}
+            </div>
+            {children}
+          </DragHandleContext.Provider>
+        </DragHandleActiveContext.Provider>
       </motion.div>
     </div>
   );
