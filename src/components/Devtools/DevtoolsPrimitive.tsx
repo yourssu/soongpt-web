@@ -4,6 +4,7 @@ import { Code } from 'lucide-react';
 import { useState } from 'react';
 
 import { postTimetable, TimetablePayloadType } from '@/api/timetables';
+import { useSelectedTimetableContext } from '@/components/Providers/SelectedTimetableProvider/hook';
 import { useStudentInfoContext } from '@/components/Providers/StudentInfoProvider/hook';
 import { STAGE } from '@/config';
 import { useAlertDialog } from '@/hooks/useAlertDialog';
@@ -17,7 +18,6 @@ interface ToolItemProps {
   title: string;
 }
 
-const MOCK_TIMETABLE_STORAGE_KEY = 'timetable-result-mock';
 const MOCK_TIMETABLE_ID = 9999;
 
 const MOCK_TIMETABLE: TimetableType = {
@@ -334,6 +334,8 @@ export const DevtoolsPrimitive = () => {
   const toast = useToast();
   const { push } = useFlow();
   const { studentInfo, setStudentInfo } = useStudentInfoContext();
+  const { setSelectedTimetable, setSelectedGeneralElectives, setSelectedChapelCourse } =
+    useSelectedTimetableContext();
   const { mutateAsync: mutateTimetable } = useMutation({
     mutationKey: ['timetables'],
     mutationFn: postTimetable,
@@ -406,7 +408,9 @@ export const DevtoolsPrimitive = () => {
             <ToolItem
               description="목 데이터로 최종 결과 화면을 열어요."
               onClick={() => {
-                localStorage.setItem(MOCK_TIMETABLE_STORAGE_KEY, JSON.stringify(MOCK_TIMETABLE));
+                setSelectedTimetable(MOCK_TIMETABLE);
+                setSelectedGeneralElectives([]);
+                setSelectedChapelCourse(null);
                 push('timetable_result', { timetableId: MOCK_TIMETABLE_ID });
                 toast.success('최종 결과 화면으로 이동해요');
                 closeAsTrue();
