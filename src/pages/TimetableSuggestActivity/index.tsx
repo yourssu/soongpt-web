@@ -7,7 +7,6 @@ import { ActivityLayout } from '@/components/ActivityLayout';
 import { ProgressAppBar } from '@/components/AppBar/ProgressAppBar';
 import { BottomSheet, BottomSheetState } from '@/components/BottomSheet';
 import { Timetable } from '@/components/Timetable';
-import { useSafeActivityParams } from '@/hooks/stackflow/useSafeActivityParams';
 import { useToast } from '@/hooks/useToast';
 import { SectionTitle } from '@/pages/TimetableSuggestActivity/components/SectionTitle';
 import { SuggestionCard } from '@/pages/TimetableSuggestActivity/components/SuggestionCard';
@@ -19,14 +18,12 @@ const getSelectedCount = (selectedActions: Record<string, string[]>) => {
 };
 
 export const TimetableSuggestActivity = () => {
-  const params = useSafeActivityParams('timetable_suggest');
   const { push } = useFlow();
   const toast = useToast();
-  const source = params.source ?? 'api';
 
   const { data, isLoading } = useQuery({
-    queryKey: ['timetable_suggest', source],
-    queryFn: () => getTimetableSuggest(source),
+    queryKey: ['timetable_suggest'],
+    queryFn: () => getTimetableSuggest(),
   });
 
   const [selectedActions, setSelectedActions] = useState<Record<string, string[]>>({});
