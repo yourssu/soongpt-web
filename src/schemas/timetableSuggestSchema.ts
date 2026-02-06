@@ -43,3 +43,4 @@ export type TimetableSuggestType = z.infer<typeof TimetableSuggestSchema>;
 
 export const TimetableSuggestResponseSchema = ResponseSchema(TimetableSuggestSchema);
 export type TimetableSuggestResponseType = z.infer<typeof TimetableSuggestResponseSchema>;
+export type TimetableSuggestResponseInputType = z.input<typeof TimetableSuggestResponseSchema>;
