@@ -72,7 +72,7 @@ export const OnboardingActivity = () => {
               <label className="mb-1.5 block text-sm">학년</label>
               <div className="relative">
                 <select
-                  className={`bg-bg-layerDefault w-full appearance-none rounded-xl px-4 py-3 text-lg font-semibold ${studentInfo.grade !== undefined ? 'text-brandPrimary' : 'text-neutralPlaceholder'}`}
+                  className={`w-full appearance-none rounded-xl bg-white px-4 py-3 text-lg font-semibold ${studentInfo.grade !== undefined ? 'text-brandPrimary' : 'text-neutralPlaceholder'}`}
                   onChange={(e) => {
                     setStudentInfo((prev) => ({
                       ...prev,
@@ -99,7 +99,7 @@ export const OnboardingActivity = () => {
               <label className="mb-1.5 block text-sm">학기</label>
               <div className="relative">
                 <select
-                  className={`bg-bg-layerDefault w-full appearance-none rounded-xl px-4 py-3 text-lg font-semibold ${studentInfo.semester !== undefined ? 'text-brandPrimary' : 'text-neutralPlaceholder'}`}
+                  className={`w-full appearance-none rounded-xl bg-white px-4 py-3 text-lg font-semibold ${studentInfo.semester !== undefined ? 'text-brandPrimary' : 'text-neutralPlaceholder'}`}
                   onChange={(e) => {
                     setStudentInfo((prev) => ({
                       ...prev,
@@ -126,7 +126,7 @@ export const OnboardingActivity = () => {
               <label className="mb-1.5 block text-sm">입학년도</label>
               <div className="relative">
                 <select
-                  className={`bg-bg-layerDefault w-full appearance-none rounded-xl px-4 py-3 text-lg font-semibold ${studentInfo.schoolId !== undefined ? 'text-brandPrimary' : 'text-neutralPlaceholder'}`}
+                  className={`w-full appearance-none rounded-xl bg-white px-4 py-3 text-lg font-semibold ${studentInfo.schoolId !== undefined ? 'text-brandPrimary' : 'text-neutralPlaceholder'}`}
                   onChange={(e) => {
                     setStudentInfo((prev) => ({
                       ...prev,
@@ -152,7 +152,7 @@ export const OnboardingActivity = () => {
             <div className="relative">
               <label className="mb-1.5 block text-sm">학과(주전공)</label>
               <input
-                className={`bg-bg-layerDefault focus-visible:outline-borderRing w-full rounded-xl px-4 py-3 text-lg font-semibold ${studentInfo.department ? 'text-brandPrimary' : 'text-neutralPlaceholder'}`}
+                className={`focus-visible:outline-borderRing w-full rounded-xl bg-white px-4 py-3 text-lg font-semibold ${studentInfo.department ? 'text-brandPrimary' : 'text-neutralPlaceholder'}`}
                 onBlur={() => setMainDeptDropdown([])}
                 onChange={(e) => {
                   const val = e.target.value.trim();
@@ -168,7 +168,7 @@ export const OnboardingActivity = () => {
                 value={studentInfo.department}
               />
               {mainDeptDropdown.length > 0 && (
-                <ul className="bg-bg-layerDefault absolute z-10 mt-1 max-h-44 w-full overflow-y-auto rounded-xl border border-gray-200 shadow-sm">
+                <ul className="absolute z-10 mt-1 max-h-44 w-full overflow-y-auto rounded-xl border border-gray-200 bg-white shadow-sm">
                   {mainDeptDropdown.map((dept) => (
                     <li key={dept}>
                       <button
@@ -191,7 +191,7 @@ export const OnboardingActivity = () => {
             <div className="relative">
               <label className="mb-1.5 block text-sm">복수(부)전공</label>
               <input
-                className={`bg-bg-layerDefault focus-visible:outline-borderRing w-full rounded-xl px-4 py-3 text-lg font-semibold ${studentInfo.subDepartment ? 'text-brandPrimary' : 'text-neutralPlaceholder'}`}
+                className={`focus-visible:outline-borderRing w-full rounded-xl bg-white px-4 py-3 text-lg font-semibold ${studentInfo.subDepartment ? 'text-brandPrimary' : 'text-neutralPlaceholder'}`}
                 onBlur={() => setSubDeptDropdown([])}
                 onChange={(e) => {
                   const val = e.target.value.trim();
@@ -207,7 +207,7 @@ export const OnboardingActivity = () => {
                 value={studentInfo.subDepartment}
               />
               {subDeptDropdown.length > 0 && (
-                <ul className="bg-bg-layerDefault absolute z-10 mt-1 max-h-44 w-full overflow-y-auto rounded-xl border border-gray-200 shadow-sm">
+                <ul className="absolute z-10 mt-1 max-h-44 w-full overflow-y-auto rounded-xl border border-gray-200 bg-white shadow-sm">
                   {subDeptDropdown.map((dept) => (
                     <li key={dept}>
                       <button
@@ -230,7 +230,7 @@ export const OnboardingActivity = () => {
             <div>
               <label className="mb-1.5 block text-sm">교직 이수 여부</label>
               <button
-                className="bg-bg-layerDefault text-brandPrimary w-full rounded-xl px-4 py-3 text-left text-lg font-semibold"
+                className="text-brandPrimary w-full rounded-xl bg-white px-4 py-3 text-left text-lg font-semibold"
                 onClick={() =>
                   setStudentInfo((prev) => ({
                     ...prev,
