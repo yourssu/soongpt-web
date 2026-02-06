@@ -1,6 +1,6 @@
 import { useFlow } from '@stackflow/react/future';
 import { useQuery } from '@tanstack/react-query';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { getTimetableSuggest } from '@/api/timetableSuggest';
 import { ActivityLayout } from '@/components/ActivityLayout';
@@ -79,28 +79,16 @@ export const TimetableSuggestActivity = () => {
     push('draft_timetable', {});
   };
 
-  useEffect(() => {
-    const scrollContainer = document.querySelector(
-      '[data-activity-scroll-area] > div',
-    ) as HTMLElement | null;
-
-    if (!scrollContainer) {
-      return undefined;
-    }
-
-    const handleScroll = () => {
-      if (sheetState === 'peek' && scrollContainer.scrollTop > 12) {
-        setSheetState('open');
-      }
-    };
-
-    scrollContainer.addEventListener('scroll', handleScroll, { passive: true });
-    return () => scrollContainer.removeEventListener('scroll', handleScroll);
-  }, [sheetState]);
-
   return (
     <ActivityLayout>
-      <ActivityLayout.ScrollArea>
+      <ActivityLayout.ScrollArea
+        onScroll={(event) => {
+          const target = event.currentTarget;
+          if (sheetState === 'peek' && target.scrollTop > 24) {
+            setSheetState('open');
+          }
+        }}
+      >
         <ActivityLayout.Header>
           <ProgressAppBar progress={FLOW_PROGRESS.timetable_suggest} />
           <div className="mt-6 flex flex-1 flex-col items-start">
@@ -127,15 +115,8 @@ export const TimetableSuggestActivity = () => {
       </ActivityLayout.ScrollArea>
 
       {data && (
-        <BottomSheet
-          className="bg-background w-full rounded-t-[24px] px-[37.5px] pt-3 pb-8 shadow-[inset_0px_1px_2px_0px_rgba(0,0,0,0.08)]"
-          containerClassName="fixed bottom-0 left-1/2 z-[200] w-full max-w-[420px] -translate-x-1/2"
-          onStateChange={setSheetState}
-          openOnClick
-          peekHeight={120}
-          state={sheetState}
-        >
-          <div className="flex flex-col gap-6">
+        <BottomSheet onStateChange={setSheetState} peekHeight={200} state={sheetState}>
+          <BottomSheet.Body>
             <div className="flex flex-col gap-4">
               <SectionTitle dotClassName="bg-red-500" title="시간표 생성 불가 안내" />
               <div className="flex flex-col gap-3">
@@ -163,7 +144,9 @@ export const TimetableSuggestActivity = () => {
                 ))}
               </div>
             </div>
+          </BottomSheet.Body>
 
+          <BottomSheet.Footer className="pt-4">
             <button
               className={
                 isNoticeSelectionComplete
@@ -180,7 +163,7 @@ export const TimetableSuggestActivity = () => {
                   ? '선택사항 반영하고 시간표 만들기'
                   : '반영하지 않고 시간표 만들기'}
             </button>
-          </div>
+          </BottomSheet.Footer>
         </BottomSheet>
       )}
     </ActivityLayout>

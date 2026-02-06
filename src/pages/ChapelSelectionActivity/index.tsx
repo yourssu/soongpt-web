@@ -71,7 +71,14 @@ export const ChapelSelectionActivity = () => {
 
   return (
     <ActivityLayout>
-      <ActivityLayout.ScrollArea>
+      <ActivityLayout.ScrollArea
+        onScroll={(event) => {
+          const target = event.currentTarget;
+          if (target.scrollTop > 24 && !isExpanded) {
+            setSheetState('open');
+          }
+        }}
+      >
         <ActivityLayout.Header>
           <ProgressAppBar progress={FLOW_PROGRESS.chapel_selection} />
         </ActivityLayout.Header>
@@ -98,34 +105,15 @@ export const ChapelSelectionActivity = () => {
             </div>
           </div>
 
-          <BottomSheet
-            className={cn(
-              'bg-background flex h-[520px] w-full max-w-[391px] flex-col items-center rounded-t-[24px] px-6 pb-10 shadow-[inset_0px_1px_2px_0px_rgba(0,0,0,0.08)]',
-              !isExpanded && 'overflow-hidden',
-            )}
-            containerClassName="fixed inset-x-0 bottom-0 z-[90] flex justify-center"
-            dragElastic={0.2}
-            getNextState={({ info }) => {
-              const shouldCollapse = info.offset.y > 60 || info.velocity.y > 700;
-              return shouldCollapse ? 'peek' : 'open';
-            }}
-            handleWrapperClassName="w-full flex-col pb-2 pt-4"
-            onHandleClick={() => setSheetState((prev) => (prev === 'open' ? 'peek' : 'open'))}
-            onStateChange={setSheetState}
-            onWheel={(event) => {
-              if (!isExpanded && event.deltaY < 0) {
-                setSheetState('open');
-              }
-            }}
-            peekHeight={180}
-            state={sheetState}
-          >
-            <div className="flex w-full flex-col gap-6">
+          <BottomSheet onStateChange={setSheetState} state={sheetState}>
+            <BottomSheet.Header>
               <div className="flex items-center gap-2 text-[20px]/[24px] font-semibold">
                 <span className="bg-brandPrimary inline-flex size-4 rounded-full" />
                 채플 과목
               </div>
+            </BottomSheet.Header>
 
+            <BottomSheet.Body>
               <Suspense fallback={<ChapelCourseListFallback />}>
                 <ChapelCourseList
                   isExpanded={isExpanded}
@@ -133,7 +121,9 @@ export const ChapelSelectionActivity = () => {
                   selectedCode={selectedChapelCourse?.code}
                 />
               </Suspense>
+            </BottomSheet.Body>
 
+            <BottomSheet.Footer className="pt-4">
               <button
                 className={cn(
                   'h-14 w-full rounded-2xl text-base font-semibold text-white transition-colors',
@@ -145,7 +135,7 @@ export const ChapelSelectionActivity = () => {
               >
                 {ctaLabel}
               </button>
-            </div>
+            </BottomSheet.Footer>
           </BottomSheet>
         </ActivityLayout.Body>
       </ActivityLayout.ScrollArea>

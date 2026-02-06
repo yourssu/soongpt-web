@@ -237,43 +237,35 @@ export const GeneralElectiveSelectionActivity = () => {
         </ActivityLayout.Body>
       </ActivityLayout.ScrollArea>
 
-      <BottomSheet
-        className="w-full rounded-t-[24px] bg-[#f9f9f9] px-6 pt-4 pb-10 shadow-[inset_0px_1px_2px_0px_rgba(0,0,0,0.08)]"
-        containerClassName="fixed bottom-0 left-1/2 w-full max-w-[500px] -translate-x-1/2"
-        getNextState={({ maxOffset, currentY, info }) => {
-          const shouldClose = info.velocity.y > 600 || currentY > maxOffset * 0.5;
-          return shouldClose ? 'peek' : 'open';
-        }}
-        onStateChange={setSheetState}
-        renderHandle={() => <div className="h-1 w-8 rounded-full bg-[#b5b9c4]" />}
-        state={sheetState}
-      >
-        <div className="flex items-center gap-2">
-          <span className="bg-brandPrimary inline-block size-3 rounded-full" />
-          <span className="text-xl font-semibold">교양선택 과목</span>
-        </div>
+      <BottomSheet className="bg-[#f9f9f9]" onStateChange={setSheetState} state={sheetState}>
+        <BottomSheet.Header className="gap-2">
+          <div className="flex items-center gap-2">
+            <span className="bg-brandPrimary inline-block size-3 rounded-full" />
+            <span className="text-xl font-semibold">교양선택 과목</span>
+          </div>
+        </BottomSheet.Header>
 
-        <div className="mt-4 flex flex-wrap justify-center gap-1.5">
-          {chipValues.map((value) => {
-            const selected = selectedFields.includes(value);
-            return (
-              <SelectableChip
-                className={
-                  selected
-                    ? 'border-brandPrimary text-brandPrimary border bg-white px-[14px] py-[10px] text-[12px]'
-                    : 'border-neutralPlaceholder text-neutralPlaceholder border bg-white px-[14px] py-[10px] text-[12px]'
-                }
-                key={value}
-                onSelectChange={(nextSelected) => handleChipClick(value, nextSelected)}
-                selected={selected}
-              >
-                {value}
-              </SelectableChip>
-            );
-          })}
-        </div>
+        <BottomSheet.Body>
+          <div className="flex flex-wrap justify-center gap-1.5">
+            {chipValues.map((value) => {
+              const selected = selectedFields.includes(value);
+              return (
+                <SelectableChip
+                  className={
+                    selected
+                      ? 'border-brandPrimary text-brandPrimary border bg-white px-[14px] py-[10px] text-[12px]'
+                      : 'border-neutralPlaceholder text-neutralPlaceholder border bg-white px-[14px] py-[10px] text-[12px]'
+                  }
+                  key={value}
+                  onSelectChange={(nextSelected) => handleChipClick(value, nextSelected)}
+                  selected={selected}
+                >
+                  {value}
+                </SelectableChip>
+              );
+            })}
+          </div>
 
-        <div className="mt-4">
           <CourseList
             courses={filteredCourses}
             isSelected={(course) =>
@@ -297,15 +289,19 @@ export const GeneralElectiveSelectionActivity = () => {
               );
             }}
           />
-        </div>
+        </BottomSheet.Body>
 
-        <button
-          className="bg-brandPrimary mt-6 w-full rounded-2xl py-3.5 font-semibold text-white"
-          onClick={() => push('chapel_selection', { timetableId: selectedTimetable?.timetableId })}
-          type="button"
-        >
-          채플 담으러 가기
-        </button>
+        <BottomSheet.Footer className="pt-4">
+          <button
+            className="bg-brandPrimary w-full rounded-2xl py-3.5 font-semibold text-white"
+            onClick={() =>
+              push('chapel_selection', { timetableId: selectedTimetable?.timetableId })
+            }
+            type="button"
+          >
+            채플 담으러 가기
+          </button>
+        </BottomSheet.Footer>
       </BottomSheet>
     </ActivityLayout>
   );

@@ -51,19 +51,32 @@ const defaultTransition = {
   damping: 40,
 } satisfies BottomSheetTransition;
 
-const defaultNextState = ({ maxOffset, currentY, info }: BottomSheetNextStateParams) => {
-  const isClosingIntent = info.velocity.y > 220;
-  const isOpeningIntent = info.velocity.y < -220;
-
-  if (isOpeningIntent) {
-    return 'open';
+const defaultNextState = ({ maxOffset, currentY, state }: BottomSheetNextStateParams) => {
+  if (state === 'open') {
+    return currentY > maxOffset * 0.1 ? 'peek' : 'open';
   }
+  return currentY < maxOffset * 0.9 ? 'open' : 'peek';
+};
 
-  if (isClosingIntent) {
-    return 'peek';
-  }
+const defaultContainerClassName = 'fixed inset-x-0 bottom-0 z-[200] flex justify-center';
+const defaultSheetClassName =
+  'bg-background w-full max-w-[500px] rounded-t-[24px] shadow-[inset_0px_1px_2px_0px_rgba(0,0,0,0.08)] flex max-h-[calc(100dvh-24px)] flex-col overflow-hidden px-6 pt-4 pb-6';
+const defaultHandleWrapperClassName = 'w-full pt-4 pb-2';
 
-  return currentY > maxOffset / 2 ? 'peek' : 'open';
+const Header = ({ children, className }: PropsWithChildren<{ className?: string }>) => {
+  return <div className={cn('flex flex-col gap-4', className)}>{children}</div>;
+};
+
+const Body = ({ children, className }: PropsWithChildren<{ className?: string }>) => {
+  return (
+    <div className={cn('flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto', className)}>
+      {children}
+    </div>
+  );
+};
+
+const Footer = ({ children, className }: PropsWithChildren<{ className?: string }>) => {
+  return <div className={cn('mt-auto', className)}>{children}</div>;
 };
 
 export const BottomSheet = ({
@@ -77,7 +90,7 @@ export const BottomSheet = ({
   onHandleClick,
   onStateChange,
   onWheel,
-  openOnClick = false,
+  openOnClick = true,
   peekHeight = 120,
   renderHandle,
   state,
@@ -151,14 +164,15 @@ export const BottomSheet = ({
   );
 
   return (
-    <div className={containerClassName}>
+    <div className={cn(defaultContainerClassName, containerClassName)}>
       <motion.div
-        className={className}
+        className={cn(defaultSheetClassName, className)}
         drag="y"
         dragConstraints={{ top: 0, bottom: maxOffset }}
         dragControls={dragControls}
         dragElastic={dragElastic}
         dragListener={!dragHandleOnly}
+        dragMomentum={false}
         onClick={handleClick}
         onDragEnd={(_, info) => handleDragEnd(info)}
         onWheel={onWheel}
@@ -166,7 +180,11 @@ export const BottomSheet = ({
         style={{ y }}
       >
         <div
-          className={cn('flex items-center justify-center pb-4', handleWrapperClassName)}
+          className={cn(
+            'flex items-center justify-center',
+            defaultHandleWrapperClassName,
+            handleWrapperClassName,
+          )}
           onClick={onHandleClick}
           onPointerDown={handlePointerDown}
           role="button"
@@ -178,3 +196,7 @@ export const BottomSheet = ({
     </div>
   );
 };
+
+BottomSheet.Header = Header;
+BottomSheet.Body = Body;
+BottomSheet.Footer = Footer;
