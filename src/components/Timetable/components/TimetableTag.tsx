@@ -4,7 +4,7 @@ import { useTimetableContext } from '@/components/Timetable/context';
 import { timetableTagName } from '@/components/Timetable/type';
 
 const tag = tv({
-  base: 'flex items-center justify-between px-[12px] py-[10px]',
+  base: 'flex items-center justify-between px-[12px] py-[10px] transition-colors duration-300',
   variants: {
     isSelected: {
       true: 'bg-brandPrimary text-white',

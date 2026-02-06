@@ -37,22 +37,51 @@ export const DraftTimetableActivity = () => {
     [latestMutation?.data?.result.timetables],
   );
 
+  const hasPeek = timetables.length > 1;
+  const carouselIndexOffset = hasPeek ? 1 : 0;
+  const lastTimetableIndex = timetables.length - 1;
+
+  const clampTimetableIndex = (index: number) => Math.max(0, Math.min(index, lastTimetableIndex));
+  const toSnapIndex = (index: number) => index + carouselIndexOffset;
+  const toTimetableIndex = (snapIndex: number) => snapIndex - carouselIndexOffset;
+
   useEffect(() => {
     if (!api) {
       return;
     }
 
     const handleSelect = () => {
-      setSelectedIndex(api.selectedScrollSnap());
+      const snapIndex = api.selectedScrollSnap();
+
+      if (hasPeek) {
+        const lastSnapIndex = api.scrollSnapList().length - 1;
+
+        if (snapIndex === 0) {
+          api.scrollTo(1);
+          return;
+        }
+
+        if (snapIndex === lastSnapIndex) {
+          api.scrollTo(lastSnapIndex - 1);
+          return;
+        }
+      }
+
+      setSelectedIndex(clampTimetableIndex(toTimetableIndex(snapIndex)));
     };
 
-    setSelectedIndex(api.selectedScrollSnap());
+    if (hasPeek) {
+      api.scrollTo(toSnapIndex(0), true);
+      setSelectedIndex(0);
+    } else {
+      setSelectedIndex(clampTimetableIndex(api.selectedScrollSnap()));
+    }
     api.on('select', handleSelect);
 
     return () => {
       api.off('select', handleSelect);
     };
-  }, [api]);
+  }, [api, carouselIndexOffset, hasPeek, lastTimetableIndex, timetables.length]);
 
   useEffect(() => {
     if (timetables.length === 0) {
@@ -60,10 +89,10 @@ export const DraftTimetableActivity = () => {
       return;
     }
 
-    const safeIndex = Math.min(selectedIndex, timetables.length - 1);
+    const safeIndex = clampTimetableIndex(selectedIndex);
     if (safeIndex !== selectedIndex) {
       setSelectedIndex(safeIndex);
-      api?.scrollTo(safeIndex);
+      api?.scrollTo(toSnapIndex(safeIndex));
     }
 
     const nextTimetable = timetables[safeIndex];
@@ -77,6 +106,7 @@ export const DraftTimetableActivity = () => {
     }
   }, [
     api,
+    carouselIndexOffset,
     selectedIndex,
     setSelectedChapelCourse,
     setSelectedGeneralElectives,
@@ -119,49 +149,58 @@ export const DraftTimetableActivity = () => {
             </p>
           </div>
 
-          <div className="mt-8 w-full">
+          <div className="relative left-1/2 mt-8 w-screen -translate-x-1/2">
             <SwitchCase
               caseBy={{
                 pending: () => (
-                  <div className="w-[303px]">
+                  <div className="mx-auto w-[303px]">
                     <Timetable.Skeleton />
                   </div>
                 ),
                 success: () => (
-                  <Carousel setApi={setApi}>
-                    <CarouselContent className="w-[303px]">
+                  <Carousel opts={{ align: 'center', containScroll: 'keepSnaps' }} setApi={setApi}>
+                    <CarouselContent className="ml-0 w-full gap-4">
+                      {hasPeek && (
+                        <CarouselItem aria-hidden className="pointer-events-none basis-[303px]" />
+                      )}
                       {timetables.map((timetable, index) => (
-                        <CarouselItem key={timetable.timetableId}>
+                        <CarouselItem
+                          className="basis-[303px] justify-center pr-0 pl-0"
+                          key={timetable.timetableId}
+                        >
                           <Timetable isSelected={index === selectedIndex} timetable={timetable} />
                         </CarouselItem>
                       ))}
+                      {hasPeek && (
+                        <CarouselItem aria-hidden className="pointer-events-none basis-[303px]" />
+                      )}
                     </CarouselContent>
                   </Carousel>
                 ),
                 idle: () => (
-                  <div className="w-[303px]">
+                  <div className="mx-auto w-[303px]">
                     <Timetable.Skeleton />
                   </div>
                 ),
               }}
               value={mutationStatus}
             />
-            {mutationStatus === 'success' && timetables.length > 1 && (
-              <div className="mt-4 flex w-full justify-center gap-2">
-                {timetables.map((timetable, index) => (
-                  <div
-                    className={`h-2 w-2 rounded-full transition-colors ${
-                      index === selectedIndex ? 'bg-brandPrimary' : 'bg-neutralDisabled'
-                    }`}
-                    key={`draft-timetable-indicator-${timetable.timetableId}`}
-                  />
-                ))}
-              </div>
-            )}
           </div>
         </ActivityLayout.Body>
 
         <ActivityLayout.Footer>
+          {mutationStatus === 'success' && timetables.length > 1 && (
+            <div className="mb-3 flex w-full justify-center gap-2">
+              {timetables.map((timetable, index) => (
+                <div
+                  className={`h-2 w-2 rounded-full transition-colors ${
+                    index === selectedIndex ? 'bg-brandPrimary' : 'bg-neutralDisabled'
+                  }`}
+                  key={`draft-timetable-indicator-${timetable.timetableId}`}
+                />
+              ))}
+            </div>
+          )}
           <button
             className="bg-brandPrimary disabled:bg-neutralDisabled disabled:text-text-buttonDisabled w-full rounded-2xl py-3.5 font-semibold text-white"
             disabled={mutationStatus !== 'success' || !selectedTimetable}
