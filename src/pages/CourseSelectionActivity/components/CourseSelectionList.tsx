@@ -1,8 +1,6 @@
-import { motion } from 'motion/react';
 import { useContext } from 'react';
 
-import { SelectableCourseItem } from '@/components/CourseItem/SelectableCourseItem';
-import { useCombinedCourses } from '@/hooks/course/useCombinedCourses';
+import { CourseList } from '@/components/CourseItem/CourseList';
 import { SelectedCoursesContext } from '@/pages/CourseSelectionActivity/context';
 import { SelectedCourseType } from '@/pages/CourseSelectionActivity/type';
 import { CourseType } from '@/schemas/courseSchema';
@@ -20,40 +18,27 @@ export const CourseSelectionList = ({
   renderNote,
 }: CourseSelectionListProps) => {
   const { selectedCourses, setSelectedCourses } = useContext(SelectedCoursesContext);
-  const uniqueCourses = useCombinedCourses(courses);
+
+  const isSelected = (course: CourseType) =>
+    selectedCourses.some((selectedCourse) => isSameCourse(course, selectedCourse));
+
+  const handleToggle = (course: CourseType) => {
+    const selected = isSelected(course);
+    const parsedCourse = parseSelectedCourseOnPush?.(course) ?? course;
+    setSelectedCourses((prev) =>
+      selected
+        ? prev.filter((selectedCourse) => !isSameCourse(course, selectedCourse))
+        : [...prev, parsedCourse],
+    );
+  };
 
   return (
-    <motion.div
-      animate={{ y: 0, opacity: 1 }}
-      initial={{ y: 20, opacity: 0 }}
-      transition={{ duration: 0.4, ease: 'easeOut' }}
-    >
-      <div className="flex flex-1 flex-col gap-3.5">
-        {uniqueCourses.map((course) => {
-          const isSelected = selectedCourses.some((selectedCourse) =>
-            isSameCourse(course, selectedCourse),
-          );
-
-          const handleClickCourseItem = () => {
-            const parsedCourse = parseSelectedCourseOnPush?.(course) ?? course;
-            setSelectedCourses((prev) =>
-              isSelected
-                ? prev.filter((selectedCourse) => !isSameCourse(course, selectedCourse))
-                : [...prev, parsedCourse],
-            );
-          };
-
-          return (
-            <SelectableCourseItem
-              course={course}
-              isSelected={isSelected}
-              key={course.code}
-              note={renderNote?.(course)}
-              onClickCourseItem={handleClickCourseItem}
-            />
-          );
-        })}
-      </div>
-    </motion.div>
+    <CourseList
+      combineCourses
+      courses={courses}
+      isSelected={isSelected}
+      onToggle={handleToggle}
+      renderNote={renderNote}
+    />
   );
 };

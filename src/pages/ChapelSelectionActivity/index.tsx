@@ -8,100 +8,11 @@ import { useSelectedTimetableContext } from '@/components/Providers/SelectedTime
 import { Timetable } from '@/components/Timetable';
 import { useSafeActivityParams } from '@/hooks/stackflow/useSafeActivityParams';
 import { useLatestTimetableMutationState } from '@/hooks/timetable/useLatestTimetableMutationState';
-import { useSuspenseGetChapelCourses } from '@/pages/ChapelSelectionActivity/hooks/useSuspenseGetChapelCourses';
-import { CourseType } from '@/schemas/courseSchema';
+import { ChapelCourseList } from '@/pages/ChapelSelectionActivity/components/ChapelCourseList';
+import { ChapelCourseListFallback } from '@/pages/ChapelSelectionActivity/components/ChapelCourseListFallback';
 import { FLOW_PROGRESS } from '@/stackflow/progress';
-import { formatCourseTimeSummary, parseCourseScheduleRoom } from '@/utils/courseTime';
 import { cn } from '@/utils/dom';
 import { mergeTimetableCourses, toTimetableCourse } from '@/utils/timetableSelection';
-
-const ChapelCourseCard = ({
-  course,
-  isSelected,
-  onSelect,
-}: {
-  course: CourseType;
-  isSelected: boolean;
-  onSelect: (course: CourseType) => void;
-}) => {
-  const courseTimes = parseCourseScheduleRoom(course.scheduleRoom);
-  const courseTimeSummary = formatCourseTimeSummary(courseTimes);
-  const tagLabel = course.field ?? course.subCategory ?? '채플';
-  const professorLabel =
-    course.professor.length > 0 ? `${course.professor.join(', ')} 교수님` : '담당 교수님 미정';
-
-  return (
-    <button
-      className={cn(
-        'flex w-full items-center justify-between gap-3 rounded-[20px] border-2 border-transparent bg-white p-4 text-left transition-colors',
-        isSelected && 'border-brandPrimary',
-      )}
-      onClick={() => onSelect(course)}
-      type="button"
-    >
-      <div className="flex flex-1 flex-col gap-0.5">
-        <div className={cn('text-[20px]/[24px] font-semibold', isSelected && 'text-brandPrimary')}>
-          {course.name}
-        </div>
-        <div className={cn('text-xs', isSelected && 'text-brandPrimary')}>{professorLabel}</div>
-        <div className="text-xs text-black">{courseTimeSummary}</div>
-      </div>
-      <div className="text-brandSecondary bg-bg-brandLayerLight flex h-6 items-center rounded-lg px-2 text-xs">
-        {tagLabel}
-      </div>
-    </button>
-  );
-};
-
-const ChapelCourseList = ({
-  isExpanded,
-  selectedCode,
-  onSelect,
-}: {
-  isExpanded: boolean;
-  onSelect: (course: CourseType) => void;
-  selectedCode?: number;
-}) => {
-  const courses = useSuspenseGetChapelCourses();
-
-  if (courses.length === 0) {
-    return (
-      <div className="text-neutralSubtle flex w-full items-center justify-center py-6 text-sm">
-        채플 과목이 없어요.
-      </div>
-    );
-  }
-
-  const visibleCourses = isExpanded ? courses : courses.slice(0, 2);
-
-  return (
-    <div
-      className={cn(
-        'flex w-full flex-col gap-2',
-        isExpanded ? 'scrollbar-hide max-h-[320px] overflow-y-auto pr-1' : 'overflow-hidden',
-      )}
-    >
-      {visibleCourses.map((course) => (
-        <ChapelCourseCard
-          course={course}
-          isSelected={selectedCode === course.code}
-          key={course.code}
-          onSelect={onSelect}
-        />
-      ))}
-    </div>
-  );
-};
-
-const ChapelCourseListFallback = () => {
-  return (
-    <div className="flex w-full flex-col gap-2">
-      {Array.from({ length: 2 }).map((_, index) => (
-        <div className="bg-bg-layerDefault h-[96px] w-full rounded-[20px]" key={index} />
-      ))}
-    </div>
-  );
-};
 
 export const ChapelSelectionActivity = () => {
   const { push } = useFlow();

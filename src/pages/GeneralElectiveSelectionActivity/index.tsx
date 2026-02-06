@@ -5,10 +5,11 @@ import { ActivityLayout } from '@/components/ActivityLayout';
 import { ProgressAppBar } from '@/components/AppBar/ProgressAppBar';
 import { BottomSheet, BottomSheetState } from '@/components/BottomSheet';
 import { SelectableChip } from '@/components/Chip/SelectableChip';
+import { CourseList } from '@/components/CourseItem/CourseList';
 import { useSelectedTimetableContext } from '@/components/Providers/SelectedTimetableProvider/hook';
 import { useAssertedStudentInfoContext } from '@/components/Providers/StudentInfoProvider/hook';
 import { Timetable } from '@/components/Timetable';
-import { GeneralElectiveCourseItem } from '@/pages/GeneralElectiveSelectionActivity/components/GeneralElectiveCourseItem';
+import { GeneralElectiveProgressText } from '@/pages/GeneralElectiveSelectionActivity/components/GeneralElectiveProgressText';
 import { useSuspenseGetGeneralElectiveCourses } from '@/pages/GeneralElectiveSelectionActivity/hooks/useSuspenseGetGeneralElectiveCourses';
 import { useSuspenseGetGeneralElectiveProgress } from '@/pages/GeneralElectiveSelectionActivity/hooks/useSuspenseGetGeneralElectiveProgress';
 import { CourseType } from '@/schemas/courseSchema';
@@ -133,66 +134,22 @@ const previewTimetable: TimetableType = {
   ],
 };
 
-const renderProgressText = (progress: ReturnType<typeof useSuspenseGetGeneralElectiveProgress>) => {
-  if (progress.scheme === '23+') {
-    const [human, culture, society, science, bridge, self] = progress.fieldCredits;
+const getCourseField = (course: CourseType) => course.field ?? '';
 
-    return (
-      <div className="text-sm leading-tight font-light">
-        <p>
-          * 교양필수{' '}
-          <span className="font-semibold">
-            {progress.requiredCredits}학점 중 {progress.completedCredits}학점
-          </span>{' '}
-          이수했어요.
-        </p>
-        <p>
-          * 인간 {human?.completedCredits ?? 0}학점 / 문화{' '}
-          <span className="font-semibold">{culture?.completedCredits ?? 0}학점</span> / 사회{' '}
-          <span className="font-semibold">{society?.completedCredits ?? 0}학점</span> / 과학{' '}
-          {science?.completedCredits ?? 0}학점
-        </p>
-        <p>
-          / Bridge 교과 {bridge?.completedCredits ?? 0}학점 / 자기개발 {self?.completedCredits ?? 0}
-          학점
-        </p>
-        <p>* 1~5영역에서 {progress.minFieldsRequired}개 영역 이상 이수해야해요.</p>
-      </div>
-    );
+const getScheduleText = (scheduleRoom: string) => {
+  if (!scheduleRoom) {
+    return '';
   }
 
-  const coreSummary = progress.coreAreas
-    .map((area) => `${area.label} ${area.completedCount}과목`)
-    .join(' / ');
-  const balance = progress.balanceAreas.find((area) => area.completedCount > 0);
+  const first = scheduleRoom.split('\n')[0];
+  const match = first.match(/(월|화|수|목|금|토)\s*(\d{1,2}:\d{2})-(\d{1,2}:\d{2})/);
 
-  return (
-    <div className="text-sm leading-tight font-light">
-      <p>
-        * 교양필수{' '}
-        <span className="font-semibold">
-          {progress.requiredCourseCount}과목 중 {progress.completedCourseCount}과목
-        </span>{' '}
-        이수했어요.
-      </p>
-      <p>* {coreSummary} /</p>
-      <p>
-        * 균형교양교과{' '}
-        <span className="font-semibold">
-          {balance?.completedCount ?? 0}과목({balance?.label ?? '문학・예술'})
-        </span>
-      </p>
-      <p>
-        * 숭실품성교과, 기초역량교과에서 각 1과목씩 총 2과목,
-        <br />
-        균형교양교과에서 {progress.requiredBalanceAreaCount}개 영역을 선택하여 각 1과목씩
-        <br />총 2과목 이수해야해요.
-      </p>
-    </div>
-  );
+  if (match) {
+    return `${match[1]} ${match[2]} ~ ${match[3]}`;
+  }
+
+  return first.replace('-', ' ~ ');
 };
-
-const getCourseField = (course: CourseType) => course.field ?? '';
 
 export const GeneralElectiveSelectionActivity = () => {
   const { push } = useFlow();
@@ -263,7 +220,7 @@ export const GeneralElectiveSelectionActivity = () => {
               <br />
               교양선택 과목을 담아주세요!
             </h2>
-            {renderProgressText(progress)}
+            <GeneralElectiveProgressText progress={progress} />
           </div>
         </ActivityLayout.Header>
 
@@ -283,14 +240,11 @@ export const GeneralElectiveSelectionActivity = () => {
       <BottomSheet
         className="w-full rounded-t-[24px] bg-[#f9f9f9] px-6 pt-4 pb-10 shadow-[inset_0px_1px_2px_0px_rgba(0,0,0,0.08)]"
         containerClassName="fixed bottom-0 left-1/2 w-full max-w-[500px] -translate-x-1/2"
-        dragElastic={0.2}
-        dragHandleOnly
         getNextState={({ maxOffset, currentY, info }) => {
           const shouldClose = info.velocity.y > 600 || currentY > maxOffset * 0.5;
           return shouldClose ? 'peek' : 'open';
         }}
         onStateChange={setSheetState}
-        peekHeight={84}
         renderHandle={() => <div className="h-1 w-8 rounded-full bg-[#b5b9c4]" />}
         state={sheetState}
       >
@@ -319,20 +273,30 @@ export const GeneralElectiveSelectionActivity = () => {
           })}
         </div>
 
-        <div className="mt-4 flex flex-col gap-3">
-          {filteredCourses.map((course) => {
-            const isSelected = selectedGeneralElectives.some((item) =>
-              isSameCourseCode(item.code, course.code),
-            );
-            return (
-              <GeneralElectiveCourseItem
-                course={course}
-                isSelected={isSelected}
-                key={course.code}
-                onClick={() => handleCourseSelect(course)}
-              />
-            );
-          })}
+        <div className="mt-4">
+          <CourseList
+            courses={filteredCourses}
+            isSelected={(course) =>
+              selectedGeneralElectives.some((item) => isSameCourseCode(item.code, course.code))
+            }
+            itemClassName="rounded-[20px] border-2 bg-white px-4 py-4"
+            listClassName="gap-3"
+            onToggle={handleCourseSelect}
+            renderDescription={(course) => (
+              <span className="text-black">{getScheduleText(course.scheduleRoom)}</span>
+            )}
+            renderExtraBadge={(course) => {
+              const fieldBadge = course.subCategory ?? course.field ?? '';
+              if (!fieldBadge) {
+                return null;
+              }
+              return (
+                <div className="text-neutral flex h-6 items-center rounded-lg bg-[#eaeaea] px-2 text-[12px]/[18px]">
+                  {fieldBadge}
+                </div>
+              );
+            }}
+          />
         </div>
 
         <button
