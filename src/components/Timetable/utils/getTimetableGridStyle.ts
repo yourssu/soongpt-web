@@ -1,7 +1,7 @@
-import { SLOT_HEIGHT } from '@/components/Timetable/type';
+import { SLOT_HEIGHT, TIME_COL_WIDTH } from '@/components/Timetable/type';
 
 export const getGridTemplateCols = (length: number): string => {
-  return `1fr repeat(${length}, 3fr)`;
+  return `${TIME_COL_WIDTH}px repeat(${length}, 1fr)`;
 };
 
 export const getGridTemplateRows = (length: number): string => {

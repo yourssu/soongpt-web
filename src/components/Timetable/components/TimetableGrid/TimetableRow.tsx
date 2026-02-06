@@ -24,14 +24,14 @@ export const TimetableRow = ({ hour }: { hour: number }) => {
 
   return (
     <div className="border-neutralPlaceholder col-span-full grid grid-cols-subgrid border-b-1 last:border-b-0">
-      <div className="border-neutralPlaceholder flex items-center justify-center border-r-1 p-0.5 text-center text-xs font-light">
+      <div className="border-neutralPlaceholder flex items-center justify-center border-r-1 bg-white px-[2px] py-[8px] text-center text-[12px] leading-[12px] font-medium tracking-[-0.24px]">
         {hour}
       </div>
 
       {dayRange.map((day) => {
         return (
           <div
-            className="border-neutralPlaceholder relative border-r-1 last:border-r-0"
+            className="border-neutralPlaceholder relative border-r-1 bg-white last:border-r-0"
             key={`${timetable.timetableId}-${hour}-${day}`}
           >
             {courses.map(({ name, courseTimes }) => {

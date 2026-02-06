@@ -11,7 +11,7 @@ export const TimetableExtraCourses = ({ extraCourses }: TimetableExtraCoursesPro
 
   return (
     <div
-      className="border-neutralPlaceholder grid w-full border-t-1 py-2 text-xs font-semibold"
+      className="border-neutralPlaceholder grid w-full border-t px-[12px] py-[10px] text-[12px] font-medium tracking-[-0.24px]"
       style={{
         gridTemplateColumns: getGridTemplateCols(dayRange.length),
       }}

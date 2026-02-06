@@ -19,7 +19,7 @@ interface TimetableProps {
 }
 
 const container = tv({
-  base: 'w-full overflow-hidden rounded-xl border-2 transition-colors duration-300',
+  base: 'w-full max-w-[303px] overflow-hidden rounded-[12px] border transition-colors duration-300',
   variants: {
     isSelected: {
       true: 'border-brandPrimary',

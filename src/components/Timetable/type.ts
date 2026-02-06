@@ -3,7 +3,9 @@ import { TimetableCourseType } from '@/schemas/timetableSchema';
 import { TimetableTagType } from '@/types/timetable';
 import { Merge } from '@/utils/type';
 
-export const SLOT_HEIGHT = 3.5;
+export const SLOT_HEIGHT = 56 / 12;
+export const TIME_COL_WIDTH = 28;
+export const GRID_MAX_WIDTH = 303;
 
 export const timetableTagName = {
   '기본 태그': '🤔 뭔가 좋아보이는 시간표',

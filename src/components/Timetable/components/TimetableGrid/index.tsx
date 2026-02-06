@@ -11,7 +11,7 @@ export const TimetableGrid = () => {
 
   return (
     <div
-      className="divide-neutralPlaceholder grid"
+      className="divide-neutralPlaceholder grid bg-white"
       style={{
         gridTemplateColumns: getGridTemplateCols(dayRange.length),
         gridTemplateRows: getGridTemplateRows(hourRange.length),
