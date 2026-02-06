@@ -43,7 +43,7 @@ export const RetakeSelectionStep = ({ onNextClick }: RetakeSelectionStepProps) =
         </div>
 
         {courseState === 'EMPTY' ? (
-          <CourseBySelectedGradesEmpty />
+          <CourseBySelectedGradesEmpty text={'재수강 가능한 과목이 없어요.'} />
         ) : (
           <div className="flex flex-col gap-3.5">
             {uniqueCourses.map((course) => {
