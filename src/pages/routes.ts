@@ -19,19 +19,34 @@ export const routes: Record<ActivityName, ActivityComponentType<any>> = {
       default: module.CourseSelectionActivity,
     })),
   ),
-  desired_credit: lazy(() =>
-    import('@/pages/DesiredCreditActivity').then((module) => ({
-      default: module.DesiredCreditActivity,
+  general_elective_selection: lazy(() =>
+    import('@/pages/GeneralElectiveSelectionActivity').then((module) => ({
+      default: module.GeneralElectiveSelectionActivity,
     })),
   ),
-  timetable_selection: lazy(() =>
-    import('@/pages/TimetableSelectionActivity').then((module) => ({
-      default: module.TimetableSelectionActivity,
+  timetable_suggest: lazy(() =>
+    import('@/pages/TimetableSuggestActivity').then((module) => ({
+      default: module.TimetableSuggestActivity,
+    })),
+  ),
+  draft_timetable: lazy(() =>
+    import('@/pages/DraftTimetableActivity').then((module) => ({
+      default: module.DraftTimetableActivity,
+    })),
+  ),
+  timetable_result: lazy(() =>
+    import('@/pages/TimetableResultActivity').then((module) => ({
+      default: module.TimetableResultActivity,
     })),
   ),
   course_search: lazy(() =>
     import('@/pages/CourseSearchActivity').then((module) => ({
       default: module.CourseSearchActivity,
+    })),
+  ),
+  chapel_selection: lazy(() =>
+    import('@/pages/ChapelSelectionActivity').then((module) => ({
+      default: module.ChapelSelectionActivity,
     })),
   ),
   waitlist: lazy(() =>

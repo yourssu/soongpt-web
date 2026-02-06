@@ -13,17 +13,24 @@ const tag = tv({
   },
 });
 
-export const TimetableTag = () => {
+interface TimetableTagProps {
+  pointOverride?: number;
+  titleOverride?: string;
+}
+
+export const TimetableTag = ({ pointOverride, titleOverride }: TimetableTagProps) => {
   const { timetable, totalPoint, isSelected } = useTimetableContext();
+  const title = titleOverride ?? timetableTagName[timetable.tag];
+  const point = pointOverride ?? totalPoint;
 
   return (
     <div className={tag({ isSelected })}>
-      <h3 className="text-sm font-semibold">{timetableTagName[timetable.tag]}</h3>
+      <h3 className="text-sm font-semibold">{title}</h3>
       <button
         className="text-brandPrimary bg-bg-brandLayerLight rounded-lg px-2 py-1 text-xs font-semibold"
         disabled
       >
-        {totalPoint}학점
+        {point}학점
       </button>
     </div>
   );

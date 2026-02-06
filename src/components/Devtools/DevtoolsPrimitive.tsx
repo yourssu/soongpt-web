@@ -8,6 +8,7 @@ import { useStudentInfoContext } from '@/components/Providers/StudentInfoProvide
 import { STAGE } from '@/config';
 import { useAlertDialog } from '@/hooks/useAlertDialog';
 import { useToast } from '@/hooks/useToast';
+import { TimetableArrayResponseType, TimetableType } from '@/schemas/timetableSchema';
 import { assertNonNullish } from '@/utils/assertion';
 
 interface ToolItemProps {
@@ -15,6 +16,229 @@ interface ToolItemProps {
   onClick: () => void;
   title: string;
 }
+
+const MOCK_TIMETABLE_STORAGE_KEY = 'timetable-result-mock';
+const MOCK_TIMETABLE_ID = 9999;
+
+const MOCK_TIMETABLE: TimetableType = {
+  timetableId: MOCK_TIMETABLE_ID,
+  tag: '기본 태그',
+  score: null,
+  totalPoint: 21,
+  courses: [
+    {
+      category: 'MAJOR_REQUIRED',
+      subCategory: null,
+      field: null,
+      code: 2150545501,
+      name: '컴퓨터학개론',
+      professor: ['홍길동'],
+      department: '컴퓨터학부',
+      division: null,
+      time: 0,
+      point: 3,
+      personeel: 50,
+      scheduleRoom: '정보과학관 101',
+      target: '전체',
+      courseTimes: [
+        { week: '월', start: '11:00', end: '12:00', classroom: '정보과학관 101' },
+        { week: '목', start: '11:00', end: '12:00', classroom: '정보과학관 101' },
+      ],
+    },
+    {
+      category: 'MAJOR_ELECTIVE',
+      subCategory: null,
+      field: null,
+      code: 2150225101,
+      name: '자료구조',
+      professor: ['김철수'],
+      department: '컴퓨터학부',
+      division: null,
+      time: 0,
+      point: 3,
+      personeel: 60,
+      scheduleRoom: '정보과학관 202',
+      target: '전체',
+      courseTimes: [{ week: '화', start: '11:00', end: '12:30', classroom: '정보과학관 202' }],
+    },
+    {
+      category: 'GENERAL_ELECTIVE',
+      subCategory: null,
+      field: null,
+      code: 2150145301,
+      name: '교양철학',
+      professor: ['이영희'],
+      department: '인문대학',
+      division: null,
+      time: 0,
+      point: 3,
+      personeel: 80,
+      scheduleRoom: '문화관 301',
+      target: '전체',
+      courseTimes: [{ week: '화', start: '14:00', end: '15:00', classroom: '문화관 301' }],
+    },
+    {
+      category: 'GENERAL_ELECTIVE',
+      subCategory: null,
+      field: null,
+      code: 2150143401,
+      name: '심리학개론',
+      professor: ['박민수'],
+      department: '인문대학',
+      division: null,
+      time: 0,
+      point: 3,
+      personeel: 70,
+      scheduleRoom: '문화관 205',
+      target: '전체',
+      courseTimes: [{ week: '목', start: '14:00', end: '15:00', classroom: '문화관 205' }],
+    },
+    {
+      category: 'GENERAL_REQUIRED',
+      subCategory: null,
+      field: null,
+      code: 2150102701,
+      name: '기초통계',
+      professor: ['최지훈'],
+      department: '자연대학',
+      division: null,
+      time: 0,
+      point: 3,
+      personeel: 65,
+      scheduleRoom: '자연관 112',
+      target: '전체',
+      courseTimes: [{ week: '금', start: '11:00', end: '12:00', classroom: '자연관 112' }],
+    },
+  ],
+};
+
+const MOCK_DRAFT_TIMETABLES: TimetableType[] = [
+  MOCK_TIMETABLE,
+  {
+    ...MOCK_TIMETABLE,
+    timetableId: 10001,
+    tag: '공강 날이 있는 시간표',
+    totalPoint: 19,
+    courses: [
+      {
+        category: 'MAJOR_REQUIRED',
+        subCategory: null,
+        field: null,
+        code: 2150451602,
+        name: '컴퓨터시스템개론',
+        professor: ['이민재'],
+        department: '컴퓨터학부',
+        division: null,
+        time: 0,
+        point: 3,
+        personeel: 40,
+        scheduleRoom: '정보과학관 102',
+        target: '전체',
+        courseTimes: [
+          { week: '월', start: '09:00', end: '10:15', classroom: '정보과학관 102' },
+          { week: '수', start: '09:00', end: '10:15', classroom: '정보과학관 102' },
+        ],
+      },
+      {
+        category: 'MAJOR_ELECTIVE',
+        subCategory: null,
+        field: null,
+        code: 2150145301,
+        name: '운영체제',
+        professor: ['최유진'],
+        department: '컴퓨터학부',
+        division: null,
+        time: 0,
+        point: 3,
+        personeel: 45,
+        scheduleRoom: '정보과학관 301',
+        target: '전체',
+        courseTimes: [
+          { week: '화', start: '13:00', end: '14:15', classroom: '정보과학관 301' },
+          { week: '목', start: '13:00', end: '14:15', classroom: '정보과학관 301' },
+        ],
+      },
+      {
+        category: 'GENERAL_REQUIRED',
+        subCategory: null,
+        field: null,
+        code: 2150102801,
+        name: '글쓰기',
+        professor: ['한예림'],
+        department: '교양학부',
+        division: null,
+        time: 0,
+        point: 2,
+        personeel: 70,
+        scheduleRoom: '인문관 210',
+        target: '전체',
+        courseTimes: [{ week: '금', start: '10:00', end: '11:50', classroom: '인문관 210' }],
+      },
+    ],
+  },
+  {
+    ...MOCK_TIMETABLE,
+    timetableId: 10002,
+    tag: '점심시간 보장되는 시간표',
+    totalPoint: 20,
+    courses: [
+      {
+        category: 'MAJOR_REQUIRED',
+        subCategory: null,
+        field: null,
+        code: 2150451603,
+        name: '데이터베이스',
+        professor: ['정다은'],
+        department: '컴퓨터학부',
+        division: null,
+        time: 0,
+        point: 3,
+        personeel: 40,
+        scheduleRoom: '정보과학관 201',
+        target: '전체',
+        courseTimes: [
+          { week: '월', start: '14:00', end: '15:15', classroom: '정보과학관 201' },
+          { week: '수', start: '14:00', end: '15:15', classroom: '정보과학관 201' },
+        ],
+      },
+      {
+        category: 'MAJOR_ELECTIVE',
+        subCategory: null,
+        field: null,
+        code: 2150225101,
+        name: '네트워크',
+        professor: ['서지훈'],
+        department: '컴퓨터학부',
+        division: null,
+        time: 0,
+        point: 3,
+        personeel: 45,
+        scheduleRoom: '정보과학관 202',
+        target: '전체',
+        courseTimes: [
+          { week: '화', start: '16:00', end: '17:15', classroom: '정보과학관 202' },
+          { week: '목', start: '16:00', end: '17:15', classroom: '정보과학관 202' },
+        ],
+      },
+      {
+        category: 'GENERAL_ELECTIVE',
+        subCategory: null,
+        field: null,
+        code: 2150102901,
+        name: '경제학개론',
+        professor: ['윤세진'],
+        department: '교양학부',
+        division: null,
+        time: 0,
+        point: 2,
+        personeel: 65,
+        scheduleRoom: '인문관 120',
+        target: '전체',
+        courseTimes: [{ week: '금', start: '09:00', end: '10:15', classroom: '인문관 120' }],
+      },
+    ],
+  },
+];
 
 const ToolItem = ({ title, description, onClick }: ToolItemProps) => {
   return (
@@ -109,6 +333,35 @@ export const DevtoolsPrimitive = () => {
   const open = useAlertDialog();
   const toast = useToast();
   const { push } = useFlow();
+  const { studentInfo, setStudentInfo } = useStudentInfoContext();
+  const { mutateAsync: mutateTimetable } = useMutation({
+    mutationKey: ['timetables'],
+    mutationFn: postTimetable,
+  });
+  const { mutateAsync: mutateDraftTimetable } = useMutation({
+    mutationKey: ['timetables'],
+    mutationFn: async (): Promise<TimetableArrayResponseType> => ({
+      timestamp: '2026-02-06 10:00:00',
+      result: {
+        timetables: MOCK_DRAFT_TIMETABLES,
+      },
+    }),
+  });
+
+  const chapelMockPayload: TimetablePayloadType = {
+    schoolId: studentInfo.schoolId ?? 22,
+    department: studentInfo.department ?? '법학과',
+    grade: studentInfo.grade ?? 2,
+    semester: studentInfo.semester ?? 1,
+    subDepartment: studentInfo.subDepartment,
+    teachTrainingCourse: studentInfo.teachTrainingCourse ?? false,
+    majorRequiredCodes: [2150545501],
+    majorElectiveCodes: [2150143401, 2150225101],
+    generalRequiredCodes: [2150102701],
+    codes: [2150145301],
+    generalElectivePoint: 6,
+    preferredGeneralElectives: ['문화·예술'],
+  };
 
   const showDevtools = () => {
     open({
@@ -133,10 +386,103 @@ export const DevtoolsPrimitive = () => {
             />
             <TimetableInjectionToolItem
               onMutateSuccess={() => {
-                push('timetable_selection', {});
+                push('timetable_result', {
+                  timetableId: 0,
+                });
                 toast.success('시간표 페이지로 이동해요');
                 closeAsTrue();
               }}
+            />
+            <ToolItem
+              description="목 데이터로 1차 결과 화면을 열어요."
+              onClick={async () => {
+                await mutateDraftTimetable();
+                push('draft_timetable', {});
+                toast.success('1차 결과 화면으로 이동해요');
+                closeAsTrue();
+              }}
+              title="1차 결과 화면 보기"
+            />
+            <ToolItem
+              description="목 데이터로 최종 결과 화면을 열어요."
+              onClick={() => {
+                localStorage.setItem(MOCK_TIMETABLE_STORAGE_KEY, JSON.stringify(MOCK_TIMETABLE));
+                push('timetable_result', { timetableId: MOCK_TIMETABLE_ID });
+                toast.success('최종 결과 화면으로 이동해요');
+                closeAsTrue();
+              }}
+              title="최종 결과 화면 보기"
+            />
+            <ToolItem
+              description="목 데이터로 시간표 제안 화면을 열어요."
+              onClick={() => {
+                push('timetable_suggest', { source: 'mock' });
+                toast.success('시간표 제안 화면으로 이동해요');
+                closeAsTrue();
+              }}
+              title="시간표 제안 화면 보기"
+            />
+            <ToolItem
+              description="목 데이터로 채플 선택 화면을 열어요."
+              onClick={async () => {
+                assertNonNullish(chapelMockPayload.schoolId);
+                assertNonNullish(chapelMockPayload.department);
+                assertNonNullish(chapelMockPayload.grade);
+
+                await mutateTimetable({
+                  semester: chapelMockPayload.semester,
+                  subDepartment: chapelMockPayload.subDepartment,
+                  teachTrainingCourse: chapelMockPayload.teachTrainingCourse,
+                  schoolId: chapelMockPayload.schoolId,
+                  department: chapelMockPayload.department,
+                  grade: chapelMockPayload.grade,
+                  codes: chapelMockPayload.codes,
+                  generalRequiredCodes: chapelMockPayload.generalRequiredCodes,
+                  majorElectiveCodes: chapelMockPayload.majorElectiveCodes,
+                  majorRequiredCodes: chapelMockPayload.majorRequiredCodes,
+                  generalElectivePoint: chapelMockPayload.generalElectivePoint,
+                  preferredGeneralElectives: chapelMockPayload.preferredGeneralElectives,
+                });
+
+                push('chapel_selection', {});
+                toast.success('채플 선택 화면으로 이동해요');
+                closeAsTrue();
+              }}
+              title="채플 선택 화면 보기"
+            />
+            <ToolItem
+              description="목 데이터로 교양선택 화면(23학번 이상)을 열어요."
+              onClick={() => {
+                setStudentInfo({
+                  schoolId: 23,
+                  department: '법학과',
+                  grade: 2,
+                  semester: 1,
+                  subDepartment: '',
+                  teachTrainingCourse: false,
+                });
+                push('general_elective_selection', {});
+                toast.success('교양선택 화면으로 이동해요');
+                closeAsTrue();
+              }}
+              title="교양선택 화면 보기 (23+)"
+            />
+            <ToolItem
+              description="목 데이터로 교양선택 화면(22학번 이하)을 열어요."
+              onClick={() => {
+                setStudentInfo({
+                  schoolId: 22,
+                  department: '법학과',
+                  grade: 2,
+                  semester: 1,
+                  subDepartment: '',
+                  teachTrainingCourse: false,
+                });
+                push('general_elective_selection', {});
+                toast.success('교양선택 화면으로 이동해요');
+                closeAsTrue();
+              }}
+              title="교양선택 화면 보기 (22-)"
             />
             <ToolItem
               onClick={() => {

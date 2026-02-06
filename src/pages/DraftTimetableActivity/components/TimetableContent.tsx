@@ -1,5 +1,5 @@
-import { TimetableContentLayout } from '@/pages/TimetableSelectionActivity/components/TimetableContentLayout';
-import { TimetableMutationBaseStatus } from '@/pages/TimetableSelectionActivity/type';
+import { TimetableContentLayout } from '@/pages/DraftTimetableActivity/components/TimetableContentLayout';
+import { TimetableMutationBaseStatus } from '@/pages/DraftTimetableActivity/type';
 
 interface TimetableContentProps {
   status: TimetableMutationBaseStatus;

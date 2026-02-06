@@ -6,18 +6,18 @@ import { Mixpanel } from '@/bootstrap/mixpanel';
 import { ActivityLayout } from '@/components/ActivityLayout';
 import { ProgressAppBar } from '@/components/AppBar/ProgressAppBar';
 import { Timetable } from '@/components/Timetable';
-import { TimetableContent } from '@/pages/TimetableSelectionActivity/components/TimetableContent';
-import { TimetableError } from '@/pages/TimetableSelectionActivity/components/TimetableError';
-import { TimetableList } from '@/pages/TimetableSelectionActivity/components/TimetableList';
-import { useTimetableMutationStatus } from '@/pages/TimetableSelectionActivity/hooks/useTimetableMutationStatus';
-import { TimetableMutationState } from '@/pages/TimetableSelectionActivity/type';
+import { TimetableContent } from '@/pages/DraftTimetableActivity/components/TimetableContent';
+import { TimetableError } from '@/pages/DraftTimetableActivity/components/TimetableError';
+import { TimetableList } from '@/pages/DraftTimetableActivity/components/TimetableList';
+import { getTimetableMutationStatus } from '@/pages/DraftTimetableActivity/hooks/useTimetableMutationStatus';
+import { TimetableMutationState } from '@/pages/DraftTimetableActivity/type';
 
 interface TimetableActivityViewProps {
   mutationState: TimetableMutationState;
 }
 
 export const TimetableActivityView = ({ mutationState }: TimetableActivityViewProps) => {
-  const { status: mutationStatus, handledError } = useTimetableMutationStatus(mutationState);
+  const { status: mutationStatus, handledError } = getTimetableMutationStatus(mutationState);
 
   // Mixpanel 이벤트 추적
   useEffect(() => {

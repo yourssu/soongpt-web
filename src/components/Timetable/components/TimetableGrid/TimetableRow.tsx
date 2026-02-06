@@ -24,7 +24,7 @@ export const TimetableRow = ({ hour }: { hour: number }) => {
 
   return (
     <div className="border-neutralPlaceholder col-span-full grid grid-cols-subgrid border-b-1 last:border-b-0">
-      <div className="border-neutralPlaceholder flex justify-end border-r-1 p-0.5 text-xs font-light">
+      <div className="border-neutralPlaceholder flex items-center justify-center border-r-1 p-0.5 text-center text-xs font-light">
         {hour}
       </div>
 

@@ -9,7 +9,7 @@ const TimetableCourseSchema = CourseSchema.extend({
 });
 export type TimetableCourseType = z.infer<typeof TimetableCourseSchema>;
 
-const TimetableSchema = z.object({
+export const TimetableSchema = z.object({
   timetableId: z.number(),
   tag: z.enum(timetableTags),
   score: z.number().nullable(),

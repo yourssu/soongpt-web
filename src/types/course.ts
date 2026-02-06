@@ -3,6 +3,7 @@ export const CourseClassification = [
   'MAJOR_ELECTIVE',
   'MAJOR_PREREQUISITE',
   'GENERAL_REQUIRED',
+  'GENERAL_ELECTIVE',
   'DOUBLE_MAJOR',
   'MINOR',
   'TEACHING_CERTIFICATE',

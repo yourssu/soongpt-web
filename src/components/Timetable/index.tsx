@@ -13,6 +13,8 @@ import { TimetableType } from '@/schemas/timetableSchema';
 
 interface TimetableProps {
   isSelected?: boolean;
+  tagPointOverride?: number;
+  tagTitleOverride?: string;
   timetable: TimetableType;
 }
 
@@ -26,7 +28,12 @@ const container = tv({
   },
 });
 
-export const Timetable = ({ timetable, isSelected }: TimetableProps) => {
+export const Timetable = ({
+  timetable,
+  isSelected,
+  tagPointOverride,
+  tagTitleOverride,
+}: TimetableProps) => {
   const courses = useBreaktimeInjectedCourses(timetable.courses);
   const emptyCourseTimeCourses = courses.filter((course) => course.courseTimes.length === 0);
 
@@ -46,7 +53,7 @@ export const Timetable = ({ timetable, isSelected }: TimetableProps) => {
       }}
     >
       <div className={container({ isSelected })}>
-        <TimetableTag />
+        <TimetableTag pointOverride={tagPointOverride} titleOverride={tagTitleOverride} />
 
         <TimetableGrid />
 

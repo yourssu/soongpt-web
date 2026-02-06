@@ -1,6 +1,8 @@
 import { api } from '@/api/client';
 import {
+  MOCK_CHAPEL,
   MOCK_DOUBLE_MAJOR,
+  MOCK_GENERAL_ELECTIVE,
   MOCK_MAJOR_ELECTIVE,
   MOCK_MAJOR_PREREQUISITE,
   MOCK_MINOR,
@@ -27,6 +29,26 @@ export const getGeneralRequiredCourses = async (searchParams: GetCoursesSearchPa
   const response = await api
     .get('courses/general/required', { timeout: false, searchParams })
     .json();
+  return courseResponseSchema.parse(response);
+};
+
+export const getGeneralElectiveCourses = async (searchParams: GetCoursesSearchParams) => {
+  if (USE_MOCK) {
+    return courseResponseSchema.parse(MOCK_GENERAL_ELECTIVE);
+  }
+
+  const response = await api
+    .get('courses/general/elective', { timeout: false, searchParams })
+    .json();
+  return courseResponseSchema.parse(response);
+};
+
+export const getChapelCourses = async (searchParams: GetCoursesSearchParams) => {
+  if (USE_MOCK) {
+    return courseResponseSchema.parse(MOCK_CHAPEL);
+  }
+
+  const response = await api.get('courses/chapel', { timeout: false, searchParams }).json();
   return courseResponseSchema.parse(response);
 };
 

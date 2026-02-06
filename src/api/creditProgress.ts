@@ -33,6 +33,32 @@ export type GeneralRequiredCreditProgress = {
   dignity: CreditInfo;
 };
 
+export type GeneralElectiveCreditProgress =
+  | {
+      balanceAreas: Array<{
+        completedCount: number;
+        label: string;
+      }>;
+      completedCourseCount: number;
+      coreAreas: Array<{
+        completedCount: number;
+        label: string;
+      }>;
+      requiredBalanceAreaCount: number;
+      requiredCourseCount: number;
+      scheme: '22-';
+    }
+  | {
+      completedCredits: number;
+      fieldCredits: Array<{
+        completedCredits: number;
+        label: string;
+      }>;
+      minFieldsRequired: number;
+      requiredCredits: number;
+      scheme: '23+';
+    };
+
 // ---------------------------------------------------------------------------
 // Mock 데이터
 // ---------------------------------------------------------------------------
@@ -71,6 +97,39 @@ const MOCK_GENERAL_REQUIRED_PROGRESS: GeneralRequiredCreditProgress = {
   creativity: { totalCredits: 6, completedCredits: 3 },
   dignity: { totalCredits: 8, completedCredits: 7 },
   digitalTech: { totalCredits: 5, completedCredits: 3 },
+};
+
+const MOCK_GENERAL_ELECTIVE_PROGRESS_AFTER_23: GeneralElectiveCreditProgress = {
+  scheme: '23+',
+  requiredCredits: 9,
+  completedCredits: 6,
+  fieldCredits: [
+    { label: '인간', completedCredits: 0 },
+    { label: '문화', completedCredits: 3 },
+    { label: '사회', completedCredits: 3 },
+    { label: '과학', completedCredits: 0 },
+    { label: 'Bridge 교과', completedCredits: 0 },
+    { label: '자기개발', completedCredits: 0 },
+  ],
+  minFieldsRequired: 3,
+};
+
+const MOCK_GENERAL_ELECTIVE_PROGRESS_BEFORE_22: GeneralElectiveCreditProgress = {
+  scheme: '22-',
+  requiredCourseCount: 4,
+  completedCourseCount: 1,
+  coreAreas: [
+    { label: '숭실품성교과', completedCount: 0 },
+    { label: '기초역량교과', completedCount: 0 },
+  ],
+  balanceAreas: [
+    { label: '문학・예술', completedCount: 1 },
+    { label: '역사・철학・종교', completedCount: 0 },
+    { label: '정치・경제・경영', completedCount: 0 },
+    { label: '사회・문화・심리', completedCount: 0 },
+    { label: '자연과학・공학・기술', completedCount: 0 },
+  ],
+  requiredBalanceAreaCount: 2,
 };
 
 // ---------------------------------------------------------------------------
@@ -163,4 +222,19 @@ export const getGeneralRequiredCreditProgress = async (
     .get('courses/general/required/credit-progress', { searchParams })
     .json();
   return response as GeneralRequiredCreditProgress;
+};
+
+export const getGeneralElectiveCreditProgress = async (
+  searchParams: GetCoursesSearchParams,
+): Promise<GeneralElectiveCreditProgress> => {
+  if (USE_MOCK) {
+    return searchParams.schoolId >= 23
+      ? MOCK_GENERAL_ELECTIVE_PROGRESS_AFTER_23
+      : MOCK_GENERAL_ELECTIVE_PROGRESS_BEFORE_22;
+  }
+
+  const response = await api
+    .get('courses/general/elective/credit-progress', { searchParams })
+    .json();
+  return response as GeneralElectiveCreditProgress;
 };

@@ -1,10 +1,10 @@
 import { MutationStatus } from '@tanstack/react-query';
 
-import { TimetableMutationState } from '@/pages/TimetableSelectionActivity/type';
+import { TimetableMutationState } from '@/pages/DraftTimetableActivity/type';
 import { handleError } from '@/utils/error';
 import { getKyHTTPErrorRange } from '@/utils/ky';
 
-export const useTimetableMutationStatus = (mutationState: TimetableMutationState) => {
+export const getTimetableMutationStatus = (mutationState: TimetableMutationState) => {
   const { status, error: unknownError } = mutationState;
   if (!unknownError) {
     return {

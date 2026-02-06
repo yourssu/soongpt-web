@@ -1,9 +1,12 @@
 import { useFlow, useStepFlow } from '@stackflow/react/future';
+import { useMutation } from '@tanstack/react-query';
 import { Suspense, useState } from 'react';
 import { SwitchCase } from 'react-simplikit';
 
+import { postTimetable } from '@/api/timetables';
 import { Mixpanel } from '@/bootstrap/mixpanel';
 import { ActivityLayout } from '@/components/ActivityLayout';
+import { useAssertedStudentInfoContext } from '@/components/Providers/StudentInfoProvider/hook';
 import { useCoursesTotalPoint } from '@/hooks/course/useCoursesTotalPoint';
 import { useFilteredCoursesByCategory } from '@/hooks/course/useFilteredCoursesByCategory';
 import { useSafeActivityParams } from '@/hooks/stackflow/useSafeActivityParams';
@@ -23,6 +26,8 @@ import { SelectedCourseType } from '@/pages/CourseSelectionActivity/type';
 
 export const CourseSelectionActivity = () => {
   const { type } = useSafeActivityParams('course_selection');
+  const { grade, schoolId, department, subDepartment, teachTrainingCourse, semester } =
+    useAssertedStudentInfoContext();
 
   const [selectedCourses, setSelectedCourses] = useState<SelectedCourseType[]>([]);
 
@@ -31,6 +36,10 @@ export const CourseSelectionActivity = () => {
 
   const filteredCoursesByCategory = useFilteredCoursesByCategory(selectedCourses);
   const totalPoints = useCoursesTotalPoint(selectedCourses);
+  const { mutate: mutateTimetable } = useMutation({
+    mutationKey: ['timetables'],
+    mutationFn: postTimetable,
+  });
 
   // Todo: 전필은 로딩시 무조건 선택되어야 함
 
@@ -142,7 +151,16 @@ export const CourseSelectionActivity = () => {
                 COURSE_SELECTION_RESULT: () => (
                   <CourseSelectionResultStep
                     onNextClick={() => {
-                      push('desired_credit', {
+                      mutateTimetable({
+                        schoolId,
+                        department,
+                        grade,
+                        subDepartment,
+                        teachTrainingCourse,
+                        semester,
+                        codes: selectedCourses
+                          .filter((course) => !!course.selectedBySearch)
+                          .map((course) => course.code),
                         generalRequiredCodes: filteredCoursesByCategory.GENERAL_REQUIRED.map(
                           ({ code }) => code,
                         ),
@@ -152,21 +170,10 @@ export const CourseSelectionActivity = () => {
                         majorRequiredCodes: filteredCoursesByCategory.MAJOR_REQUIRED.map(
                           ({ code }) => code,
                         ),
-                        majorPrerequisiteCodes: filteredCoursesByCategory.MAJOR_PREREQUISITE.map(
-                          ({ code }) => code,
-                        ),
-                        retakeCodes: filteredCoursesByCategory.RETAKE.map(({ code }) => code),
-                        doubleMajorCodes: filteredCoursesByCategory.DOUBLE_MAJOR.map(
-                          ({ code }) => code,
-                        ),
-                        minorCodes: filteredCoursesByCategory.MINOR.map(({ code }) => code),
-                        teachingCertificateCodes:
-                          filteredCoursesByCategory.TEACHING_CERTIFICATE.map(({ code }) => code),
-                        selectedTotalPoints: totalPoints,
-                        codes: selectedCourses
-                          .filter((course) => !!course.selectedBySearch)
-                          .map((course) => course.code),
+                        generalElectivePoint: 0,
+                        preferredGeneralElectives: [],
                       });
+                      push('timetable_suggest', {});
                       Mixpanel.trackCourseSelectionFinishClick(
                         selectedCourses.map((course) => course.name),
                       );

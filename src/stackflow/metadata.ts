@@ -26,20 +26,9 @@ export const activityDescription = {
     }),
     url: '/course-selection',
   },
-  desired_credit: {
-    schema: z.object({
-      codes: zDecoder.numArray(),
-      generalRequiredCodes: zDecoder.numArray(),
-      majorElectiveCodes: zDecoder.numArray(),
-      majorRequiredCodes: zDecoder.numArray(),
-      majorPrerequisiteCodes: zDecoder.numArray(),
-      retakeCodes: zDecoder.numArray(),
-      doubleMajorCodes: zDecoder.numArray(),
-      minorCodes: zDecoder.numArray(),
-      teachingCertificateCodes: zDecoder.numArray(),
-      selectedTotalPoints: zDecoder.num(),
-    }),
-    url: '/desired-credit',
+  general_elective_selection: {
+    schema: z.object({}),
+    url: '/general-elective-selection',
   },
   onboarding: {
     schema: z.object({
@@ -56,9 +45,27 @@ export const activityDescription = {
     schema: z.object({}),
     url: '/landing',
   },
-  timetable_selection: {
+  timetable_suggest: {
+    schema: z.object({
+      source: zDecoder.enum(['mock', 'api']).optional(),
+    }),
+    url: '/timetable-suggest',
+  },
+  draft_timetable: {
     schema: z.object({}),
-    url: '/time-table-selection',
+    url: '/draft-timetable',
+  },
+  timetable_result: {
+    schema: z.object({
+      timetableId: zDecoder.num(),
+    }),
+    url: '/timetable-result',
+  },
+  chapel_selection: {
+    schema: z.object({
+      timetableId: zDecoder.num().optional(),
+    }),
+    url: '/chapel-selection',
   },
   waitlist: {
     schema: z.object({}),

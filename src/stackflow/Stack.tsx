@@ -5,7 +5,7 @@ import { stackflow } from '@stackflow/react/future';
 
 import { routes } from '@/pages/routes';
 import { stackflowConfig } from '@/stackflow/config';
-import { utmPreservePlugin } from '@/stackflow/plugins/utmPreservePlugin.ts';
+import { utmPreservePlugin } from '@/stackflow/plugins/utmPreservePlugin';
 
 export const { Stack } = stackflow({
   config: stackflowConfig,
