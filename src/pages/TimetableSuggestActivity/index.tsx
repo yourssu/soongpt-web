@@ -110,7 +110,7 @@ export const TimetableSuggestActivity = () => {
               만들어본 임시 시간표예요!
             </h2>
             <span className="text-neutralSubtle mt-2 text-sm font-light">
-              * 더 나은 시간표를 위한 안내와 제안이 있어요.
+              * 최종 시간표를 위한 안내와 제안이 있어요.
             </span>
           </div>
         </ActivityLayout.Header>
@@ -137,7 +137,7 @@ export const TimetableSuggestActivity = () => {
         >
           <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-4">
-              <SectionTitle title="안내" />
+              <SectionTitle title="🔴 시간표 생성 불가 안내" />
               <div className="flex flex-col gap-3">
                 {data.result.notices.map((item) => (
                   <SuggestionCard
@@ -151,7 +151,7 @@ export const TimetableSuggestActivity = () => {
             </div>
 
             <div className="flex flex-col gap-4">
-              <SectionTitle title="제안" />
+              <SectionTitle title="🟣 더 나은 시간표를 위한 제안" />
               <div className="flex flex-col gap-3">
                 {data.result.suggestions.map((item) => (
                   <SuggestionCard
