@@ -1,8 +1,14 @@
-import { TimetableSchema, TimetableType } from '@/schemas/timetableSchema';
+import {
+  TimetableArrayResponseInputType,
+  type TimetableInputType,
+  TimetableResponseInputType,
+  TimetableSchema,
+  TimetableType,
+} from '@/schemas/timetableSchema';
 
 export const MOCK_TIMETABLE_ID = 9999;
 
-export const MOCK_TIMETABLE_INPUT = {
+export const MOCK_TIMETABLE_INPUT: TimetableInputType = {
   timetableId: MOCK_TIMETABLE_ID,
   tag: '기본 태그',
   score: null,
@@ -96,7 +102,7 @@ export const MOCK_TIMETABLE_INPUT = {
 
 export const MOCK_TIMETABLE: TimetableType = TimetableSchema.parse(MOCK_TIMETABLE_INPUT);
 
-export const MOCK_DRAFT_TIMETABLES_INPUT = [
+export const MOCK_DRAFT_TIMETABLES_INPUT: TimetableInputType[] = [
   MOCK_TIMETABLE_INPUT,
   {
     ...MOCK_TIMETABLE_INPUT,
@@ -227,3 +233,15 @@ export const MOCK_DRAFT_TIMETABLES_INPUT = [
 export const MOCK_DRAFT_TIMETABLES: TimetableType[] = MOCK_DRAFT_TIMETABLES_INPUT.map((timetable) =>
   TimetableSchema.parse(timetable),
 );
+
+export const MOCK_TIMETABLE_RESPONSE: TimetableResponseInputType = {
+  timestamp: '2026-02-06 12:00:00',
+  result: MOCK_TIMETABLE_INPUT,
+};
+
+export const MOCK_DRAFT_TIMETABLES_RESPONSE: TimetableArrayResponseInputType = {
+  timestamp: '2026-02-06 12:00:00',
+  result: {
+    timetables: MOCK_DRAFT_TIMETABLES_INPUT,
+  },
+};

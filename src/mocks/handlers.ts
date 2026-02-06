@@ -25,7 +25,10 @@ import {
   MOCK_TEACHING_CERTIFICATE_PROGRESS,
 } from '@/mocks/api/creditProgressData';
 import { MOCK_TIMETABLE_SUGGEST } from '@/mocks/api/timetableSuggest';
-import { MOCK_DRAFT_TIMETABLES_INPUT, MOCK_TIMETABLE_INPUT } from '@/mocks/devtools/timetables';
+import {
+  MOCK_DRAFT_TIMETABLES_RESPONSE,
+  MOCK_TIMETABLE_RESPONSE,
+} from '@/mocks/devtools/timetables';
 
 const buildSearchResult = (query: null | string) => {
   const pool = [
@@ -128,20 +131,13 @@ export const handlers = [
       return new HttpResponse(null, { status: 404 });
     }
     return HttpResponse.json({
-      timestamp: '2026-02-06 12:00:00',
+      ...MOCK_TIMETABLE_RESPONSE,
       result: {
-        ...MOCK_TIMETABLE_INPUT,
+        ...MOCK_TIMETABLE_RESPONSE.result,
         timetableId,
       },
     });
   }),
-  http.post(`${BASE_URL}/timetables`, () =>
-    HttpResponse.json({
-      timestamp: '2026-02-06 12:00:00',
-      result: {
-        timetables: MOCK_DRAFT_TIMETABLES_INPUT,
-      },
-    }),
-  ),
+  http.post(`${BASE_URL}/timetables`, () => HttpResponse.json(MOCK_DRAFT_TIMETABLES_RESPONSE)),
   http.post(`${BASE_URL}/contacts`, () => new HttpResponse(null, { status: 204 })),
 ];

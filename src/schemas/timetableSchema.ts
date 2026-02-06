@@ -17,8 +17,11 @@ export const TimetableSchema = z.object({
   courses: z.array(TimetableCourseSchema),
 });
 export type TimetableType = z.infer<typeof TimetableSchema>;
+export type TimetableInputType = z.input<typeof TimetableSchema>;
 
 export const TimetableResponseSchema = ResponseSchema(TimetableSchema);
+export type TimetableResponseType = z.infer<typeof TimetableResponseSchema>;
+export type TimetableResponseInputType = z.input<typeof TimetableResponseSchema>;
 
 export const TimetableArrayResponseSchema = ResponseSchema(
   z.object({
@@ -26,3 +29,4 @@ export const TimetableArrayResponseSchema = ResponseSchema(
   }),
 );
 export type TimetableArrayResponseType = z.infer<typeof TimetableArrayResponseSchema>;
+export type TimetableArrayResponseInputType = z.input<typeof TimetableArrayResponseSchema>;
