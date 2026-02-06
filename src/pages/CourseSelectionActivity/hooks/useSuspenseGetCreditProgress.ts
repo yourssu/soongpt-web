@@ -1,9 +1,14 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 
+import type {
+  CreditInfo,
+  DoubleMajorCreditProgress,
+  GeneralRequiredCreditProgress,
+  MinorCreditProgress,
+  TeachingCertificateCreditProgress,
+} from '@/types/creditProgress';
+
 import {
-  type CreditInfo,
-  type DoubleMajorCreditProgress,
-  type GeneralRequiredCreditProgress,
   getDoubleMajorCreditProgress,
   getGeneralRequiredCreditProgress,
   getMajorElectiveCreditProgress,
@@ -11,8 +16,6 @@ import {
   getMajorRequiredCreditProgress,
   getMinorCreditProgress,
   getTeachingCertificateCreditProgress,
-  type MinorCreditProgress,
-  type TeachingCertificateCreditProgress,
 } from '@/api/creditProgress';
 import { useAssertedStudentInfoContext } from '@/components/Providers/StudentInfoProvider/hook';
 
