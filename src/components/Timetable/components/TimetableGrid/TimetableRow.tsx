@@ -1,6 +1,7 @@
 import { TimetableCourse } from '@/components/Timetable/components/TimetableGrid/TimetableCourse';
 import { useTimetableContext } from '@/components/Timetable/context';
 import { InjectedTimetableCourseTime } from '@/components/Timetable/type';
+import { getGridTemplateCols } from '@/components/Timetable/utils/getTimetableGridStyle';
 import { parseCourseTime } from '@/components/Timetable/utils/parseCourseTime';
 
 export const TimetableRow = ({ hour }: { hour: number }) => {
@@ -23,7 +24,10 @@ export const TimetableRow = ({ hour }: { hour: number }) => {
   };
 
   return (
-    <div className="border-neutralPlaceholder col-span-full grid grid-cols-subgrid border-b-1 last:border-b-0">
+    <div
+      className="border-neutralPlaceholder col-span-full grid border-b-1 last:border-b-0"
+      style={{ gridTemplateColumns: getGridTemplateCols(dayRange.length) }}
+    >
       <div className="border-neutralPlaceholder flex items-center justify-center border-r-1 bg-white px-[2px] py-[8px] text-center text-[12px] leading-[12px] font-medium tracking-[-0.24px]">
         {hour}
       </div>

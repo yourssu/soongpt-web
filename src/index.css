@@ -139,6 +139,7 @@
 
 :root {
   --radius: 0.625rem;
+  --timetable-max-width: 343px;
   --background: oklch(0.982 0 89.876);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);

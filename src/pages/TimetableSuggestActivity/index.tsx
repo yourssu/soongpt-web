@@ -106,7 +106,7 @@ export const TimetableSuggestActivity = () => {
         <ActivityLayout.Body>
           <div className="w-full pb-[260px]">
             {isLoading || !data ? (
-              <Timetable.Skeleton className="pt-4" />
+              <Timetable.Skeleton className="pt-4" isSelected />
             ) : (
               <Timetable isSelected timetable={data.result.timetable} />
             )}
