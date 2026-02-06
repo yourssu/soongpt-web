@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:local": "VITE_API_MOCKING=true vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "fix:lint": "eslint . --fix",

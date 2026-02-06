@@ -1,6 +1,6 @@
-import { type TimetableSuggestResponseInputType } from '@/schemas/timetableSuggestSchema';
+import { type TimetableSuggestResponseType } from '@/schemas/timetableSuggestSchema';
 
-export const MOCK_TIMETABLE_SUGGEST: TimetableSuggestResponseInputType = {
+export const MOCK_TIMETABLE_SUGGEST: TimetableSuggestResponseType = {
   timestamp: '2026-02-06 12:00:00',
   result: {
     timetable: {

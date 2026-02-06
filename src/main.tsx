@@ -9,12 +9,15 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 
 import App from '@/App';
+import { enableMocking } from '@/bootstrap/enableMocking';
 import { Providers } from '@/components/Providers';
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <Providers>
-      <App />
-    </Providers>
-  </StrictMode>,
+enableMocking().then(() =>
+  createRoot(document.getElementById('root')!).render(
+    <StrictMode>
+      <Providers>
+        <App />
+      </Providers>
+    </StrictMode>,
+  ),
 );

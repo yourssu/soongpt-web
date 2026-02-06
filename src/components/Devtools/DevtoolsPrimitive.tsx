@@ -203,7 +203,7 @@ export const DevtoolsPrimitive = () => {
             <ToolItem
               description="목 데이터로 시간표 제안 화면을 열어요."
               onClick={() => {
-                push('timetable_suggest', { source: 'mock' });
+                push('timetable_suggest', {});
                 toast.success('시간표 제안 화면으로 이동해요');
                 closeAsTrue();
               }}
