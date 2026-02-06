@@ -68,7 +68,7 @@ const MajorElectiveContent = ({ selectedGrades }: { selectedGrades: StudentGrade
           <input
             className="grow px-3 py-2 outline-0"
             onChange={setSearchKeyword}
-            placeholder={`${selectedGrades[0] >= 4 ? '4학년 이상' : `${selectedGrades.join(',')}학년`} 전공선택과목`}
+            placeholder={`과목명을 입력해주세요.`}
             type="text"
             value={searchKeyword}
           />
