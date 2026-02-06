@@ -1,7 +1,12 @@
-export const SectionTitle = ({ title }: { title: string }) => {
+type SectionTitleProps = {
+  dotClassName?: string;
+  title: string;
+};
+
+export const SectionTitle = ({ title, dotClassName = 'bg-brandPrimary' }: SectionTitleProps) => {
   return (
     <div className="flex items-center gap-2 text-[20px] font-semibold">
-      <span className="bg-brandPrimary size-4 rounded-full" />
+      <span className={`size-4 rounded-full ${dotClassName}`} />
       <span>{title}</span>
     </div>
   );

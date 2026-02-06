@@ -137,7 +137,7 @@ export const TimetableSuggestActivity = () => {
         >
           <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-4">
-              <SectionTitle title="🔴 시간표 생성 불가 안내" />
+              <SectionTitle dotClassName="bg-red-500" title="시간표 생성 불가 안내" />
               <div className="flex flex-col gap-3">
                 {data.result.notices.map((item) => (
                   <SuggestionCard
@@ -151,7 +151,7 @@ export const TimetableSuggestActivity = () => {
             </div>
 
             <div className="flex flex-col gap-4">
-              <SectionTitle title="🟣 더 나은 시간표를 위한 제안" />
+              <SectionTitle dotClassName="bg-purple-500" title="더 나은 시간표를 위한 제안" />
               <div className="flex flex-col gap-3">
                 {data.result.suggestions.map((item) => (
                   <SuggestionCard
