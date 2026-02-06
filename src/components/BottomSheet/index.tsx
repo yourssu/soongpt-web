@@ -75,7 +75,7 @@ const Header = ({ children, className }: PropsWithChildren<{ className?: string 
   const isDragHandleActive = useContext(DragHandleActiveContext);
   return (
     <div
-      className={cn('flex flex-col gap-4', isDragHandleActive && 'touch-none', className)}
+      className={cn('mb-2 flex flex-col gap-4', isDragHandleActive && 'touch-none', className)}
       onPointerDown={onPointerDown ?? undefined}
     >
       {children}
