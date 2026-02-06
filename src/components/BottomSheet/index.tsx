@@ -1,8 +1,10 @@
 import { animate, motion, type PanInfo, useDragControls, useMotionValue } from 'motion/react';
 import {
+  createContext,
   type PointerEvent,
   type PropsWithChildren,
   type ReactNode,
+  useContext,
   useEffect,
   useLayoutEffect,
   useRef,
@@ -63,8 +65,20 @@ const defaultSheetClassName =
   'bg-background w-full max-w-[500px] rounded-t-[24px] shadow-[inset_0px_1px_2px_0px_rgba(0,0,0,0.08)] flex max-h-[calc(100dvh-24px)] flex-col overflow-hidden px-6 pt-4 pb-6';
 const defaultHandleWrapperClassName = 'w-full pt-4 pb-2';
 
+const DragHandleContext = createContext<((event: PointerEvent<HTMLDivElement>) => void) | null>(
+  null,
+);
+
 const Header = ({ children, className }: PropsWithChildren<{ className?: string }>) => {
-  return <div className={cn('flex flex-col gap-4', className)}>{children}</div>;
+  const onPointerDown = useContext(DragHandleContext);
+  return (
+    <div
+      className={cn('flex flex-col gap-4', className)}
+      onPointerDown={onPointerDown ?? undefined}
+    >
+      {children}
+    </div>
+  );
 };
 
 const Body = ({ children, className }: PropsWithChildren<{ className?: string }>) => {
@@ -84,7 +98,7 @@ export const BottomSheet = ({
   className,
   containerClassName,
   dragElastic = 0.08,
-  dragHandleOnly = false,
+  dragHandleOnly = true,
   getNextState = defaultNextState,
   handleWrapperClassName,
   onHandleClick,
@@ -179,19 +193,21 @@ export const BottomSheet = ({
         ref={sheetRef}
         style={{ y }}
       >
-        <div
-          className={cn(
-            'flex items-center justify-center',
-            defaultHandleWrapperClassName,
-            handleWrapperClassName,
-          )}
-          onClick={onHandleClick}
-          onPointerDown={handlePointerDown}
-          role="button"
-        >
-          {resolvedHandle}
-        </div>
-        {children}
+        <DragHandleContext.Provider value={dragHandleOnly ? handlePointerDown : null}>
+          <div
+            className={cn(
+              'flex items-center justify-center',
+              defaultHandleWrapperClassName,
+              handleWrapperClassName,
+            )}
+            onClick={onHandleClick}
+            onPointerDown={handlePointerDown}
+            role="button"
+          >
+            {resolvedHandle}
+          </div>
+          {children}
+        </DragHandleContext.Provider>
       </motion.div>
     </div>
   );
