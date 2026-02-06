@@ -7,6 +7,10 @@ import {
   MOCK_GENERAL_ELECTIVE,
   MOCK_GENERAL_REQUIRED,
   MOCK_MAJOR_ELECTIVE,
+  MOCK_MAJOR_ELECTIVE_GRADE_1,
+  MOCK_MAJOR_ELECTIVE_GRADE_3,
+  MOCK_MAJOR_ELECTIVE_GRADE_4,
+  MOCK_MAJOR_ELECTIVE_GRADE_5,
   MOCK_MAJOR_PREREQUISITE,
   MOCK_MAJOR_REQUIRED,
   MOCK_MINOR,
@@ -36,6 +40,10 @@ const buildSearchResult = (query: null | string) => {
     ...MOCK_GENERAL_ELECTIVE.result,
     ...MOCK_MAJOR_REQUIRED.result,
     ...MOCK_MAJOR_ELECTIVE.result,
+    ...MOCK_MAJOR_ELECTIVE_GRADE_1.result,
+    ...MOCK_MAJOR_ELECTIVE_GRADE_3.result,
+    ...MOCK_MAJOR_ELECTIVE_GRADE_4.result,
+    ...MOCK_MAJOR_ELECTIVE_GRADE_5.result,
     ...MOCK_MAJOR_PREREQUISITE.result,
     ...MOCK_DOUBLE_MAJOR.result,
     ...MOCK_MINOR.result,
@@ -76,7 +84,21 @@ export const handlers = [
   http.get(`${BASE_URL}/courses/teaching-certificate`, () =>
     HttpResponse.json(MOCK_TEACHING_CERTIFICATE),
   ),
-  http.get(`${BASE_URL}/courses/major/elective`, () => HttpResponse.json(MOCK_MAJOR_ELECTIVE)),
+  http.get(`${BASE_URL}/courses/major/elective`, ({ request }) => {
+    const url = new URL(request.url);
+    const grade = url.searchParams.get('grade');
+    const majorElectiveByGrade: Record<string, typeof MOCK_MAJOR_ELECTIVE> = {
+      '1': MOCK_MAJOR_ELECTIVE_GRADE_1,
+      '2': MOCK_MAJOR_ELECTIVE,
+      '3': MOCK_MAJOR_ELECTIVE_GRADE_3,
+      '4': MOCK_MAJOR_ELECTIVE_GRADE_4,
+      '5': MOCK_MAJOR_ELECTIVE_GRADE_5,
+    };
+    const mockData = grade
+      ? (majorElectiveByGrade[grade] ?? MOCK_MAJOR_ELECTIVE)
+      : MOCK_MAJOR_ELECTIVE;
+    return HttpResponse.json(mockData);
+  }),
   http.get(`${BASE_URL}/courses/major/elective/other`, () =>
     HttpResponse.json(MOCK_MAJOR_ELECTIVE),
   ),

@@ -9,6 +9,7 @@ import { useDelayedValue } from '@/hooks/useDelayedValue';
 import { ArrayState, useGetArrayState } from '@/hooks/useGetArrayState';
 import { CourseSelectionLayout } from '@/pages/CourseSelectionActivity/components/CourseSelectionLayout';
 import { CourseSelectionList } from '@/pages/CourseSelectionActivity/components/CourseSelectionList';
+import { CourseSelectionListLoading } from '@/pages/CourseSelectionActivity/components/CourseSelectionListLoading';
 import { CourseBySelectedGradesEmpty } from '@/pages/CourseSelectionActivity/components/CourseSelectionSteps/CourseBySelectedGradesEmpty';
 import {
   BaseStepProps,
@@ -61,7 +62,7 @@ const MajorElectiveContent = ({ selectedGrades }: { selectedGrades: StudentGrade
   return (
     <>
       <div className="bg-background sticky top-[183px] flex flex-col gap-3 pb-3">
-        <div className="bg-bg-layerDefault sticky top-0 flex w-full items-center rounded-xl">
+        <div className="sticky top-0 flex w-full items-center rounded-xl bg-white">
           <div className="py-2 pl-3">
             <IcMonoSearch className="text-brandPrimary" size={18} />
           </div>
@@ -165,7 +166,7 @@ export const MajorElectiveSelectionStep = ({ onNextClick }: MajorElectiveSelecti
             </SelectableChip>
           </div>
         </div>
-        <Suspense fallback={null}>
+        <Suspense fallback={<CourseSelectionListLoading withSearchBar />}>
           {isOtherMajorSelected ? (
             <OtherMajorElectiveContent />
           ) : (

@@ -1,4 +1,5 @@
 import { CourseSelectionLayout } from '@/pages/CourseSelectionActivity/components/CourseSelectionLayout';
+import { CourseSelectionListLoading } from '@/pages/CourseSelectionActivity/components/CourseSelectionListLoading';
 
 type CourseSelectionFallbackType = 'error' | 'pending';
 
@@ -33,6 +34,11 @@ const CourseSelectionFallback = ({ type }: CourseSelectionFallbackProps) => {
   return (
     <CourseSelectionLayout>
       <CourseSelectionLayout.Header description={description} title={title} />
+      {type === 'pending' && (
+        <CourseSelectionLayout.Body>
+          <CourseSelectionListLoading />
+        </CourseSelectionLayout.Body>
+      )}
       {image && <CourseSelectionLayout.ImageBody image={image} />}
     </CourseSelectionLayout>
   );

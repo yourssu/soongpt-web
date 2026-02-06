@@ -667,6 +667,149 @@ export const MOCK_MAJOR_ELECTIVE = {
   ],
 };
 
+export const MOCK_MAJOR_ELECTIVE_GRADE_1 = {
+  timestamp: '2026-02-06 01:30:11',
+  result: [
+    {
+      category: 'MAJOR_ELECTIVE' as const,
+      subCategory: '복선-글로벌미디어/부선-글로벌미디어',
+      field: '',
+      code: 2150451101,
+      name: '컴퓨팅사고',
+      professor: '홍지수',
+      department: '글로벌미디어학부',
+      division: null,
+      time: '3.0',
+      point: '3.0',
+      personeel: 0,
+      scheduleRoom:
+        '월 09:00-10:15 (정보과학관 21501-홍지수)\n수 09:00-10:15 (정보과학관 21501-홍지수)',
+      target: '1학년 글로벌미디어',
+      currentGrade: undefined,
+    },
+    {
+      category: 'MAJOR_ELECTIVE' as const,
+      subCategory: '복선-글로벌미디어/부선-글로벌미디어',
+      field: '',
+      code: 2150451201,
+      name: '디지털콘텐츠입문',
+      professor: '김유나',
+      department: '글로벌미디어학부',
+      division: null,
+      time: '3.0',
+      point: '3.0',
+      personeel: 0,
+      scheduleRoom:
+        '화 10:30-11:45 (정보과학관 21502-김유나)\n목 10:30-11:45 (정보과학관 21502-김유나)',
+      target: '1학년 글로벌미디어, 뉴미디어콘텐츠융합',
+      currentGrade: undefined,
+    },
+  ],
+};
+
+export const MOCK_MAJOR_ELECTIVE_GRADE_3 = {
+  timestamp: '2026-02-06 01:30:12',
+  result: [
+    {
+      category: 'MAJOR_ELECTIVE' as const,
+      subCategory: '복선-글로벌미디어/부선-글로벌미디어',
+      field: '',
+      code: 2150453201,
+      name: '데이터시각화',
+      professor: '박민준',
+      department: '글로벌미디어학부',
+      division: null,
+      time: '3.0',
+      point: '3.0',
+      personeel: 0,
+      scheduleRoom:
+        '화 13:00-14:15 (정보과학관 21602-박민준)\n목 13:00-14:15 (정보과학관 21602-박민준)',
+      target: '3학년 글로벌미디어',
+      currentGrade: undefined,
+    },
+    {
+      category: 'MAJOR_ELECTIVE' as const,
+      subCategory: '복선-글로벌미디어/부선-글로벌미디어',
+      field: '',
+      code: 2150453301,
+      name: '인터랙션디자인',
+      professor: '이소라',
+      department: '글로벌미디어학부',
+      division: null,
+      time: '3.0',
+      point: '3.0',
+      personeel: 0,
+      scheduleRoom:
+        '월 15:30-16:45 (정보과학관 21504-이소라)\n수 15:30-16:45 (정보과학관 21504-이소라)',
+      target: '3학년 글로벌미디어, 뉴미디어콘텐츠융합',
+      currentGrade: undefined,
+    },
+  ],
+};
+
+export const MOCK_MAJOR_ELECTIVE_GRADE_4 = {
+  timestamp: '2026-02-06 01:30:13',
+  result: [
+    {
+      category: 'MAJOR_ELECTIVE' as const,
+      subCategory: '복선-글로벌미디어/부선-글로벌미디어',
+      field: '',
+      code: 2150454101,
+      name: '캡스톤프로젝트A',
+      professor: '정수민',
+      department: '글로벌미디어학부',
+      division: null,
+      time: '3.0',
+      point: '3.0',
+      personeel: 0,
+      scheduleRoom:
+        '화 16:00-17:15 (정보과학관 21506-정수민)\n목 16:00-17:15 (정보과학관 21506-정수민)',
+      target: '4학년 글로벌미디어',
+      currentGrade: undefined,
+    },
+    {
+      category: 'MAJOR_ELECTIVE' as const,
+      subCategory: '복선-글로벌미디어/부선-글로벌미디어',
+      field: '',
+      code: 2150454201,
+      name: '디지털서비스기획',
+      professor: '최유리',
+      department: '글로벌미디어학부',
+      division: null,
+      time: '3.0',
+      point: '3.0',
+      personeel: 0,
+      scheduleRoom:
+        '월 13:00-14:15 (정보과학관 21603-최유리)\n수 13:00-14:15 (정보과학관 21603-최유리)',
+      target: '4학년 글로벌미디어',
+      currentGrade: undefined,
+    },
+  ],
+};
+
+export const MOCK_MAJOR_ELECTIVE_GRADE_5 = {
+  timestamp: '2026-02-06 01:30:14',
+  result: [
+    {
+      category: 'MAJOR_ELECTIVE' as const,
+      subCategory: '복선-글로벌미디어/부선-글로벌미디어',
+      field: '',
+      code: 2150455101,
+      name: '고급미디어기술',
+      professor: '신지훈',
+      department: '글로벌미디어학부',
+      division: null,
+      time: '3.0',
+      point: '3.0',
+      personeel: 0,
+      scheduleRoom:
+        '화 10:30-11:45 (정보과학관 21507-신지훈)\n금 10:30-11:45 (정보과학관 21507-신지훈)',
+      target: '5학년 글로벌미디어',
+      currentGrade: undefined,
+    },
+  ],
+};
+
 // ---------------------------------------------------------------------------
 // 복수전공 (이수한 과목에 currentGrade 포함)
 // ---------------------------------------------------------------------------
