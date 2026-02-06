@@ -11,6 +11,7 @@ import {
 } from '@/pages/CourseSelectionActivity/components/CourseSelectionSteps/type';
 import { SelectedCoursesContext } from '@/pages/CourseSelectionActivity/context';
 import { useSuspenseGetCourses } from '@/pages/CourseSelectionActivity/hooks/useSuspenseGetCourses';
+import { COURSE_SELECTION_PROGRESS } from '@/stackflow/progress';
 import { isSameCourse } from '@/utils/course';
 
 type RetakeSelectionStepProps = BaseStepProps;
@@ -26,7 +27,7 @@ export const RetakeSelectionStep = ({ onNextClick }: RetakeSelectionStepProps) =
 
   return (
     <CourseSelectionLayout>
-      <CourseSelectionLayout.Header progress={11} title={title} />
+      <CourseSelectionLayout.Header progress={COURSE_SELECTION_PROGRESS.RETAKE} title={title} />
 
       <CourseSelectionLayout.Body>
         <div className="flex flex-col gap-1.5">

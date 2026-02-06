@@ -13,6 +13,7 @@ import { useSuspenseGetGeneralElectiveCourses } from '@/pages/GeneralElectiveSel
 import { useSuspenseGetGeneralElectiveProgress } from '@/pages/GeneralElectiveSelectionActivity/hooks/useSuspenseGetGeneralElectiveProgress';
 import { CourseType } from '@/schemas/courseSchema';
 import { TimetableType } from '@/schemas/timetableSchema';
+import { FLOW_PROGRESS } from '@/stackflow/progress';
 import { isSameCourseCode } from '@/utils/course';
 import { mergeTimetableCourses, toTimetableCourse } from '@/utils/timetableSelection';
 
@@ -255,7 +256,7 @@ export const GeneralElectiveSelectionActivity = () => {
         }}
       >
         <ActivityLayout.Header>
-          <ProgressAppBar progress={35} />
+          <ProgressAppBar progress={FLOW_PROGRESS.general_elective_selection} />
           <div className="mt-6 flex w-full flex-col gap-4">
             <h2 className="text-[28px]/[normal] font-semibold">
               26-1에 이수할

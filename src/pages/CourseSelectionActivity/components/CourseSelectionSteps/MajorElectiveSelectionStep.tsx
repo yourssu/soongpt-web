@@ -22,6 +22,7 @@ import { useSuspenseGetMajorElectives } from '@/pages/CourseSelectionActivity/ho
 import { useSuspenseGetOtherMajorElectives } from '@/pages/CourseSelectionActivity/hooks/useSuspenseGetOtherMajorElectives';
 import { SelectedCourseType } from '@/pages/CourseSelectionActivity/type';
 import { CourseType } from '@/schemas/courseSchema';
+import { COURSE_SELECTION_PROGRESS } from '@/stackflow/progress';
 import { StudentGrade } from '@/types/student';
 
 type MajorElectiveSelectionStepProps = BaseStepProps;
@@ -119,7 +120,11 @@ export const MajorElectiveSelectionStep = ({ onNextClick }: MajorElectiveSelecti
 
   return (
     <CourseSelectionLayout>
-      <CourseSelectionLayout.Header description={description} progress={44} title={title} />
+      <CourseSelectionLayout.Header
+        description={description}
+        progress={COURSE_SELECTION_PROGRESS.MAJOR_ELECTIVE}
+        title={title}
+      />
 
       <CourseSelectionLayout.Body>
         <div className="flex flex-col gap-1.5">

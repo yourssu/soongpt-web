@@ -10,6 +10,7 @@ import { TimetableContent } from '@/pages/DraftTimetableActivity/components/Time
 import { TimetableError } from '@/pages/DraftTimetableActivity/components/TimetableError';
 import { TimetableList } from '@/pages/DraftTimetableActivity/components/TimetableList';
 import { getTimetableMutationStatus } from '@/pages/DraftTimetableActivity/hooks/useTimetableMutationStatus';
+import { FLOW_PROGRESS } from '@/stackflow/progress';
 import { TimetableMutationState } from '@/types/timetableMutation';
 
 interface TimetableActivityViewProps {
@@ -46,7 +47,7 @@ export const TimetableActivityView = ({ mutationState }: TimetableActivityViewPr
       >
         <ActivityLayout.ScrollArea>
           <ActivityLayout.Body>
-            <ProgressAppBar progress={100} />
+            <ProgressAppBar progress={FLOW_PROGRESS.draft_timetable} />
             <SwitchCase
               caseBy={{
                 pending: () => (

@@ -12,6 +12,7 @@ import {
 import { SelectedCoursesContext } from '@/pages/CourseSelectionActivity/context';
 import { useSuspenseGetCourses } from '@/pages/CourseSelectionActivity/hooks/useSuspenseGetCourses';
 import { useSuspenseGetCreditProgress } from '@/pages/CourseSelectionActivity/hooks/useSuspenseGetCreditProgress';
+import { COURSE_SELECTION_PROGRESS } from '@/stackflow/progress';
 
 const DOUBLE_MAJOR_TABS = ['필수', '선택'] as const;
 type DoubleMajorTab = (typeof DOUBLE_MAJOR_TABS)[number];
@@ -28,7 +29,10 @@ export const DoubleMajorSelectionStep = ({ onNextClick }: BaseStepProps) => {
 
   return (
     <CourseSelectionLayout>
-      <CourseSelectionLayout.Header progress={56} title={title} />
+      <CourseSelectionLayout.Header
+        progress={COURSE_SELECTION_PROGRESS.DOUBLE_MAJOR}
+        title={title}
+      />
 
       <CourseSelectionLayout.Body>
         <div className="flex flex-col gap-1.5">

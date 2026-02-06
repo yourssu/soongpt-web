@@ -12,6 +12,7 @@ import { useToast } from '@/hooks/useToast';
 import { SectionTitle } from '@/pages/TimetableSuggestActivity/components/SectionTitle';
 import { SuggestionCard } from '@/pages/TimetableSuggestActivity/components/SuggestionCard';
 import { TimetableSuggestItemType } from '@/schemas/timetableSuggestSchema';
+import { FLOW_PROGRESS } from '@/stackflow/progress';
 
 const getSelectedCount = (selectedActions: Record<string, string[]>) => {
   return Object.values(selectedActions).reduce((sum, list) => sum + list.length, 0);
@@ -101,7 +102,7 @@ export const TimetableSuggestActivity = () => {
     <ActivityLayout>
       <ActivityLayout.ScrollArea>
         <ActivityLayout.Header>
-          <ProgressAppBar progress={90} />
+          <ProgressAppBar progress={FLOW_PROGRESS.timetable_suggest} />
           <div className="mt-6 flex flex-1 flex-col items-start">
             <h2 className="text-[24px]/[normal] font-semibold">
               지금까지 선택한 과목들로

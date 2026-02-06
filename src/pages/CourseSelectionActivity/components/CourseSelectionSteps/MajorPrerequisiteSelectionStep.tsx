@@ -11,6 +11,7 @@ import {
 import { SelectedCoursesContext } from '@/pages/CourseSelectionActivity/context';
 import { useSuspenseGetCourses } from '@/pages/CourseSelectionActivity/hooks/useSuspenseGetCourses';
 import { useSuspenseGetCreditProgress } from '@/pages/CourseSelectionActivity/hooks/useSuspenseGetCreditProgress';
+import { COURSE_SELECTION_PROGRESS } from '@/stackflow/progress';
 
 type MajorPrerequisiteSelectionStepProps = BaseStepProps;
 
@@ -26,7 +27,10 @@ export const MajorPrerequisiteSelectionStep = ({
 
   return (
     <CourseSelectionLayout>
-      <CourseSelectionLayout.Header progress={22} title={title} />
+      <CourseSelectionLayout.Header
+        progress={COURSE_SELECTION_PROGRESS.MAJOR_PREREQUISITE}
+        title={title}
+      />
 
       <CourseSelectionLayout.Body>
         <div className="flex flex-col gap-1.5">

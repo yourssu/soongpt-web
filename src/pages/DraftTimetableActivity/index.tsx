@@ -16,6 +16,7 @@ import {
 import { useLatestTimetableMutationState } from '@/hooks/timetable/useLatestTimetableMutationState';
 import { TimetableError } from '@/pages/DraftTimetableActivity/components/TimetableError';
 import { getTimetableMutationStatus } from '@/pages/DraftTimetableActivity/hooks/useTimetableMutationStatus';
+import { FLOW_PROGRESS } from '@/stackflow/progress';
 
 export const DraftTimetableActivity = () => {
   const { replace, push } = useFlow();
@@ -105,7 +106,7 @@ export const DraftTimetableActivity = () => {
     <ActivityLayout>
       <ActivityLayout.ScrollArea>
         <ActivityLayout.Body className="items-start">
-          <ProgressAppBar progress={50} />
+          <ProgressAppBar progress={FLOW_PROGRESS.draft_timetable} />
 
           <div className="mt-6 flex w-full flex-col gap-4">
             <h2 className="text-[24px]/[24px] font-semibold tracking-[-0.48px] whitespace-pre-wrap">

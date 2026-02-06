@@ -7,6 +7,7 @@ import { ActivityLayout } from '@/components/ActivityLayout';
 import { ProgressAppBar } from '@/components/AppBar/ProgressAppBar';
 import { useStudentInfoContext } from '@/components/Providers/StudentInfoProvider/hook';
 import { useSafeActivityParams } from '@/hooks/stackflow/useSafeActivityParams';
+import { FLOW_PROGRESS } from '@/stackflow/progress';
 import {
   departments,
   schoolIds,
@@ -56,7 +57,7 @@ export const OnboardingActivity = () => {
     <ActivityLayout>
       <ActivityLayout.ScrollArea>
         <ActivityLayout.Header>
-          <ProgressAppBar progress={25} />
+          <ProgressAppBar progress={FLOW_PROGRESS.onboarding} />
           <div className="mt-6 flex w-full flex-col items-center">
             <div className="text-center text-[28px]/[normal] font-semibold break-keep">
               사용자 학적 정보

@@ -10,6 +10,7 @@ import { useSafeActivityParams } from '@/hooks/stackflow/useSafeActivityParams';
 import { useLatestTimetableMutationState } from '@/hooks/timetable/useLatestTimetableMutationState';
 import { useSuspenseGetChapelCourses } from '@/pages/ChapelSelectionActivity/hooks/useSuspenseGetChapelCourses';
 import { CourseType } from '@/schemas/courseSchema';
+import { FLOW_PROGRESS } from '@/stackflow/progress';
 import { formatCourseTimeSummary, parseCourseScheduleRoom } from '@/utils/courseTime';
 import { cn } from '@/utils/dom';
 import { mergeTimetableCourses, toTimetableCourse } from '@/utils/timetableSelection';
@@ -161,7 +162,7 @@ export const ChapelSelectionActivity = () => {
     <ActivityLayout>
       <ActivityLayout.ScrollArea>
         <ActivityLayout.Header>
-          <ProgressAppBar progress={34} />
+          <ProgressAppBar progress={FLOW_PROGRESS.chapel_selection} />
         </ActivityLayout.Header>
 
         <ActivityLayout.Body className="relative">

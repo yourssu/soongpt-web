@@ -13,6 +13,7 @@ import { SelectedCoursesContext } from '@/pages/CourseSelectionActivity/context'
 import { useSuspenseGetCourses } from '@/pages/CourseSelectionActivity/hooks/useSuspenseGetCourses';
 import { useSuspenseGetCreditProgress } from '@/pages/CourseSelectionActivity/hooks/useSuspenseGetCreditProgress';
 import { CourseType } from '@/schemas/courseSchema';
+import { COURSE_SELECTION_PROGRESS } from '@/stackflow/progress';
 
 type MajorRequiredSelectionStepProps = BaseStepProps;
 
@@ -41,7 +42,11 @@ export const MajorRequiredSelectionStep = ({ onNextClick }: MajorRequiredSelecti
 
   return (
     <CourseSelectionLayout>
-      <CourseSelectionLayout.Header description={description} progress={33} title={title} />
+      <CourseSelectionLayout.Header
+        description={description}
+        progress={COURSE_SELECTION_PROGRESS.MAJOR_REQUIRED}
+        title={title}
+      />
 
       <CourseSelectionLayout.Body>
         <div className="flex flex-col gap-1.5">
