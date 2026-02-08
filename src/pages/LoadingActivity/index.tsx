@@ -72,7 +72,7 @@ export const LoadingActivity = () => {
   return (
     <ActivityLayout>
       <ActivityLayout.ScrollArea>
-        <ActivityLayout.Body className="justify-center gap-4">
+        <ActivityLayout.Body variant="centered">
           <div className="text-brandPrimary text-2xl font-semibold">로그인 처리 중</div>
           <div className="text-neutralTextSecondary text-center text-lg font-medium whitespace-pre-line">
             유세인트 정보를 얻어오고 있어요.

@@ -4,12 +4,14 @@ import { useState } from 'react';
 
 import { postAvailableCourses } from '@/api/timetables';
 import { ActivityLayout } from '@/components/ActivityLayout';
+import { ActivityActionButton } from '@/components/ActivityLayout/ActivityActionButton';
+import { ActivityHeaderText } from '@/components/ActivityLayout/ActivityHeaderText';
+import { DotSectionTitle } from '@/components/ActivityLayout/DotSectionTitle';
 import { ProgressAppBar } from '@/components/AppBar/ProgressAppBar';
 import { BottomSheet, BottomSheetState } from '@/components/BottomSheet';
 import { useSelectedTimetableContext } from '@/components/Providers/SelectedTimetableProvider/hook';
 import { Timetable } from '@/components/Timetable';
 import { useToast } from '@/hooks/useToast';
-import { SectionTitle } from '@/pages/TimetableSuggestActivity/components/SectionTitle';
 import { SuggestionCard } from '@/pages/TimetableSuggestActivity/components/SuggestionCard';
 import { FLOW_PROGRESS } from '@/stackflow/progress';
 import { buildPartialSelectionFromTimetable } from '@/utils/timetablePartialSelection';
@@ -86,17 +88,22 @@ export const TimetableSuggestActivity = () => {
       >
         <ActivityLayout.Header>
           <ProgressAppBar progress={FLOW_PROGRESS.timetable_suggest} />
-          <div className="mt-6 flex flex-1 flex-col items-start">
-            <h2 className="text-[24px]/[normal] font-semibold">
-              지금까지 선택한 과목들로
-              <br />
-              만들어본 임시 시간표예요!
-            </h2>
-            <span className="text-neutralSubtle mt-2 text-sm font-light">
-              * 더 나은 시간표를 위한 제안이 있어요.
-              <br />* 교양선택 과목은 선택한 시간표에 추가할 수 있어요!
-            </span>
-          </div>
+          <ActivityHeaderText
+            description={
+              <>
+                * 더 나은 시간표를 위한 제안이 있어요.
+                <br />* 교양선택 과목은 선택한 시간표에 추가할 수 있어요!
+              </>
+            }
+            descriptionClassName="text-neutralSubtle"
+            title={
+              <>
+                지금까지 선택한 과목들로
+                <br />
+                만들어본 임시 시간표예요!
+              </>
+            }
+          />
         </ActivityLayout.Header>
 
         <ActivityLayout.Body>
@@ -107,7 +114,7 @@ export const TimetableSuggestActivity = () => {
       <BottomSheet onStateChange={setSheetState} peekHeight={200} state={sheetState}>
         <BottomSheet.Body>
           <div className="flex flex-col gap-4">
-            <SectionTitle dotClassName="bg-brandPrimary" title="더 나은 시간표를 위한 제안" />
+            <DotSectionTitle dotClassName="bg-brandPrimary" title="더 나은 시간표를 위한 제안" />
             <div className="flex flex-col gap-3">
               {recommendedAlternatives.map((item, index) => (
                 <SuggestionCard
@@ -130,16 +137,16 @@ export const TimetableSuggestActivity = () => {
         </BottomSheet.Body>
 
         <BottomSheet.Footer className="pt-4">
-          <button
-            className="bg-brandPrimary h-14 w-full rounded-2xl text-[16px] font-semibold text-white disabled:bg-[#f1f1f4] disabled:text-[#b5b9c4]"
+          <ActivityActionButton
             disabled={isPending}
             onClick={handleCtaClick}
+            size="large"
             type="button"
           >
             {selectedSuggestion
               ? `${selectedSuggestionIndex! + 1}번 제안으로 시간표 만들기`
               : '제안 반영 없이 시간표 만들기'}
-          </button>
+          </ActivityActionButton>
         </BottomSheet.Footer>
       </BottomSheet>
     </ActivityLayout>

@@ -2,6 +2,9 @@ import { useFlow } from '@stackflow/react/future';
 import { useMemo, useState } from 'react';
 
 import { ActivityLayout } from '@/components/ActivityLayout';
+import { ActivityActionButton } from '@/components/ActivityLayout/ActivityActionButton';
+import { ActivityHeaderText } from '@/components/ActivityLayout/ActivityHeaderText';
+import { DotSectionTitle } from '@/components/ActivityLayout/DotSectionTitle';
 import { ProgressAppBar } from '@/components/AppBar/ProgressAppBar';
 import { BottomSheet, BottomSheetState } from '@/components/BottomSheet';
 import { SelectableChip } from '@/components/Chip/SelectableChip';
@@ -139,7 +142,6 @@ export const GeneralElectiveSelectionActivity = () => {
   return (
     <ActivityLayout>
       <ActivityLayout.ScrollArea
-        className="bg-[#f9f9f9]"
         onScroll={(event) => {
           const target = event.currentTarget;
           if (target.scrollTop > 24 && !isSheetOpen) {
@@ -149,14 +151,17 @@ export const GeneralElectiveSelectionActivity = () => {
       >
         <ActivityLayout.Header>
           <ProgressAppBar progress={FLOW_PROGRESS.general_elective_selection} />
-          <div className="mt-6 flex w-full flex-col gap-4">
-            <h2 className="text-[28px]/[normal] font-semibold">
-              26-1에 이수할
-              <br />
-              교양선택 과목을 담아주세요!
-            </h2>
-            <GeneralElectiveProgressText progress={progress} />
-          </div>
+          <ActivityHeaderText
+            description={<GeneralElectiveProgressText progress={progress} />}
+            descriptionClassName="mt-4"
+            title={
+              <>
+                26-1에 이수할
+                <br />
+                교양선택 과목을 담아주세요!
+              </>
+            }
+          />
         </ActivityLayout.Header>
 
         <ActivityLayout.Body className="gap-6 pt-6 pb-[140px]">
@@ -170,10 +175,7 @@ export const GeneralElectiveSelectionActivity = () => {
         state={sheetState}
       >
         <BottomSheet.Header className="gap-2">
-          <div className="flex items-center gap-2">
-            <span className="bg-brandPrimary inline-block size-3 rounded-full" />
-            <span className="text-xl font-semibold">교양선택 과목</span>
-          </div>
+          <DotSectionTitle title="교양선택 과목" />
         </BottomSheet.Header>
 
         <BottomSheet.Body>
@@ -228,8 +230,7 @@ export const GeneralElectiveSelectionActivity = () => {
         </BottomSheet.Body>
 
         <BottomSheet.Footer className="pt-4">
-          <button
-            className="bg-brandPrimary w-full rounded-2xl py-3.5 font-semibold text-white"
+          <ActivityActionButton
             onClick={() => {
               const nextPartialSelection = buildPartialSelectionFromTimetable(
                 partialSelection,
@@ -249,7 +250,7 @@ export const GeneralElectiveSelectionActivity = () => {
             type="button"
           >
             채플 담으러 가기
-          </button>
+          </ActivityActionButton>
         </BottomSheet.Footer>
       </BottomSheet>
     </ActivityLayout>

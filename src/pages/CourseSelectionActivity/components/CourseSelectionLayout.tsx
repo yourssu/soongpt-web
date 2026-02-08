@@ -1,6 +1,8 @@
 import { motion, Variants } from 'motion/react';
 
 import { ActivityLayout } from '@/components/ActivityLayout';
+import { ActivityActionButton } from '@/components/ActivityLayout/ActivityActionButton';
+import { ActivityHeaderText } from '@/components/ActivityLayout/ActivityHeaderText';
 import { ProgressAppBar } from '@/components/AppBar/ProgressAppBar';
 import { cn } from '@/utils/dom';
 
@@ -45,12 +47,7 @@ export const CourseSelectionHeader = ({
   return (
     <ActivityLayout.Header>
       <ProgressAppBar progress={progress} />
-      <div className="mt-6 flex w-full flex-col">
-        <h2 className="text-[28px]/[normal] font-semibold whitespace-pre-wrap">{title}</h2>
-        {description && (
-          <div className="mt-2 text-sm font-light whitespace-pre-wrap">{description}</div>
-        )}
-      </div>
+      <ActivityHeaderText description={description} title={title} />
     </ActivityLayout.Header>
   );
 };
@@ -68,7 +65,7 @@ export const CourseSelectionBody = ({
   className,
 }: React.PropsWithChildren<{ className?: string }>) => {
   return (
-    <ActivityLayout.Body className={'py-2'}>
+    <ActivityLayout.Body className="py-2">
       <div className={cn('flex w-full flex-[1_1_0] flex-col gap-3', className)}>{children}</div>
     </ActivityLayout.Body>
   );
@@ -87,22 +84,24 @@ export const CourseSelectionFooter = ({
         </span>
         <div className="flex w-full items-center gap-1">
           {secondaryButtonProps && (
-            <button
+            <ActivityActionButton
               {...secondaryButtonProps}
-              className="bg-bg-brandLayerDefault text-brandSecondary flex-1 rounded-2xl py-3.5 font-semibold"
+              className={cn('flex-1', secondaryButtonProps.className)}
               type="button"
+              variant="secondary"
             >
               {secondaryButtonProps.children}
-            </button>
+            </ActivityActionButton>
           )}
-          <button
+          <ActivityActionButton
             {...primaryButtonProps}
-            className="bg-brandPrimary disabled:bg-bg-brandLayerDefault flex-1 rounded-2xl py-3.5 font-semibold text-white disabled:cursor-not-allowed"
+            className={cn('flex-1', primaryButtonProps.className)}
             disabled={primaryButtonProps.disabled || selectedCredit > MAX_COURSE_POINT}
             type="button"
+            variant="primary"
           >
             {primaryButtonProps.children}
-          </button>
+          </ActivityActionButton>
         </div>
       </div>
     </ActivityLayout.Footer>

@@ -4,6 +4,9 @@ import { useState } from 'react';
 
 import { postTimetableRecommendation } from '@/api/timetables';
 import { ActivityLayout } from '@/components/ActivityLayout';
+import { ActivityActionButton } from '@/components/ActivityLayout/ActivityActionButton';
+import { ActivityHeaderText } from '@/components/ActivityLayout/ActivityHeaderText';
+import { DotSectionTitle } from '@/components/ActivityLayout/DotSectionTitle';
 import { ProgressAppBar } from '@/components/AppBar/ProgressAppBar';
 import { BottomSheet, BottomSheetState } from '@/components/BottomSheet';
 import { useSelectedTimetableContext } from '@/components/Providers/SelectedTimetableProvider/hook';
@@ -89,17 +92,22 @@ export const TimetableDeleteActivity = () => {
       >
         <ActivityLayout.Header>
           <ProgressAppBar progress={FLOW_PROGRESS.timetable_delete} />
-          <div className="mt-6 flex flex-1 flex-col items-start">
-            <h2 className="text-[24px]/[normal] font-semibold">
-              지금까지 선택한 과목들로는
-              <br />
-              시간표를 만들 수 없어요ㅠㅠ
-            </h2>
-            <span className="text-neutralSubtle mt-2 text-sm font-light">
-              * 두 개 이상의 과목의 강의 시간이 겹쳐요.
-              <br />* 겹치는 과목을 삭제하면 아래 시간표를 만들 수 있어요!
-            </span>
-          </div>
+          <ActivityHeaderText
+            description={
+              <>
+                * 두 개 이상의 과목의 강의 시간이 겹쳐요.
+                <br />* 겹치는 과목을 삭제하면 아래 시간표를 만들 수 있어요!
+              </>
+            }
+            descriptionClassName="text-neutralSubtle"
+            title={
+              <>
+                지금까지 선택한 과목들로는
+                <br />
+                시간표를 만들 수 없어요ㅠㅠ
+              </>
+            }
+          />
         </ActivityLayout.Header>
 
         <ActivityLayout.Body>
@@ -110,10 +118,7 @@ export const TimetableDeleteActivity = () => {
       <BottomSheet onStateChange={setSheetState} peekHeight={200} state={sheetState}>
         <BottomSheet.Body>
           <div className="flex flex-col gap-4">
-            <div className="flex items-center gap-2 text-[20px] font-semibold">
-              <span className="inline-block size-4 rounded-full bg-red-500" />
-              <span>시간표 생성을 위한 삭제 제안</span>
-            </div>
+            <DotSectionTitle dotClassName="bg-red-500" title="시간표 생성을 위한 삭제 제안" />
             <div className="flex flex-col gap-3">
               {deletableConflictCourses.map(({ course }, index) => {
                 const isSelected = selectedCode === course.code;
@@ -143,21 +148,17 @@ export const TimetableDeleteActivity = () => {
 
         <BottomSheet.Footer className="pt-4">
           <div className="flex flex-col gap-2">
-            <button
-              className="bg-bg-brandLayerLight text-brandSecondary h-14 w-full rounded-2xl text-[16px] font-semibold"
-              onClick={() => pop()}
-              type="button"
-            >
+            <ActivityActionButton onClick={() => pop()} size="large" variant="secondary">
               과목 다시 담으러 가기
-            </button>
-            <button
-              className="bg-brandPrimary h-14 w-full rounded-2xl text-[16px] font-semibold text-white disabled:bg-[#f1f1f4] disabled:text-[#b5b9c4]"
+            </ActivityActionButton>
+            <ActivityActionButton
               disabled={selectedCode === null || isPending}
               onClick={handleDeleteAndCreate}
+              size="large"
               type="button"
             >
               겹치는 과목 삭제하고 시간표 만들기
-            </button>
+            </ActivityActionButton>
           </div>
         </BottomSheet.Footer>
       </BottomSheet>

@@ -1,32 +1,61 @@
 import { AppScreen } from '@stackflow/plugin-basic-ui';
+import { tv, type VariantProps } from 'tailwind-variants';
 
 import { Devtools } from '@/components/Devtools';
 import { cn } from '@/utils/dom';
 
-const Header = ({ children }: React.PropsWithChildren<unknown>) => {
-  return (
-    <div className="bg-background sticky top-0 z-[100] w-full px-[37.5px] pt-6 pb-4">
-      {children}
-    </div>
-  );
-};
+const body = tv({
+  base: 'bg-background flex w-full flex-[1_1_0] flex-col items-center px-[37.5px]',
+  variants: {
+    variant: {
+      default: 'py-6',
+      centered: 'justify-center gap-4 py-6',
+    },
+  },
+  defaultVariants: {
+    variant: 'default',
+  },
+});
 
-const Body = ({ children, className }: React.PropsWithChildren<{ className?: string }>) => {
+const Header = ({
+  children,
+  className,
+}: React.PropsWithChildren<{
+  className?: string;
+}>) => {
   return (
     <div
-      className={cn(
-        'bg-background flex w-full flex-[1_1_0] flex-col items-center px-[37.5px] py-6',
-        className,
-      )}
+      className={cn('bg-background sticky top-0 z-[100] w-full px-[37.5px] pt-6 pb-4', className)}
     >
       {children}
     </div>
   );
 };
 
-const Footer = ({ children }: React.PropsWithChildren<unknown>) => {
+const Body = ({
+  children,
+  className,
+  variant,
+}: React.PropsWithChildren<{
+  className?: string;
+  variant?: VariantProps<typeof body>['variant'];
+}>) => {
+  return <div className={cn(body({ variant }), className)}>{children}</div>;
+};
+
+const Footer = ({
+  children,
+  className,
+}: React.PropsWithChildren<{
+  className?: string;
+}>) => {
   return (
-    <div className="bg-background sticky bottom-0 z-[100] w-full px-[37.5px] pt-4 pb-6">
+    <div
+      className={cn(
+        'bg-background sticky bottom-0 z-[100] w-full px-[37.5px] pt-4 pb-6',
+        className,
+      )}
+    >
       {children}
     </div>
   );
@@ -48,7 +77,7 @@ const ScrollArea = ({
     <div className="h-dvh w-full overflow-y-hidden" data-activity-scroll-area>
       <div
         className={cn(
-          'bg-background flex h-[calc(100dvh+1px)] w-full flex-col items-center overflow-y-scroll overscroll-none',
+          'bg-background flex h-[calc(100dvh+1px)] w-full flex-col items-center overflow-y-auto overscroll-none',
           className,
         )}
         onScroll={onScroll}

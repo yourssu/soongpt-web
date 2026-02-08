@@ -26,6 +26,9 @@ const container = tv({
       false: 'border-neutralPlaceholder',
     },
   },
+  defaultVariants: {
+    isSelected: false,
+  },
 });
 
 export const Timetable = ({

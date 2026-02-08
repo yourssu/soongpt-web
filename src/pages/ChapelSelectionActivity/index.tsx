@@ -4,6 +4,9 @@ import { Suspense, useMemo, useState } from 'react';
 
 import { postFinalizeTimetable } from '@/api/timetables';
 import { ActivityLayout } from '@/components/ActivityLayout';
+import { ActivityActionButton } from '@/components/ActivityLayout/ActivityActionButton';
+import { ActivityHeaderText } from '@/components/ActivityLayout/ActivityHeaderText';
+import { DotSectionTitle } from '@/components/ActivityLayout/DotSectionTitle';
 import { ProgressAppBar } from '@/components/AppBar/ProgressAppBar';
 import { BottomSheet, BottomSheetState } from '@/components/BottomSheet';
 import { useSelectedTimetableContext } from '@/components/Providers/SelectedTimetableProvider/hook';
@@ -12,7 +15,6 @@ import { useToast } from '@/hooks/useToast';
 import { ChapelCourseList } from '@/pages/ChapelSelectionActivity/components/ChapelCourseList';
 import { ChapelCourseListFallback } from '@/pages/ChapelSelectionActivity/components/ChapelCourseListFallback';
 import { FLOW_PROGRESS } from '@/stackflow/progress';
-import { cn } from '@/utils/dom';
 import { hasCourseConflictWithAny } from '@/utils/timetableConflict';
 import { buildPartialSelectionFromTimetable } from '@/utils/timetablePartialSelection';
 import { mergeTimetableCourses, toTimetableCourse } from '@/utils/timetableSelection';
@@ -115,30 +117,30 @@ export const ChapelSelectionActivity = () => {
       >
         <ActivityLayout.Header>
           <ProgressAppBar progress={FLOW_PROGRESS.chapel_selection} />
+          <ActivityHeaderText
+            description={
+              <>
+                * 채플 <span className="font-medium">6회 중 4회</span> 이수했어요.
+              </>
+            }
+            title={
+              <>
+                26-1에 이수할
+                <br />
+                채플 과목을 담아주세요!
+              </>
+            }
+          />
         </ActivityLayout.Header>
 
         <ActivityLayout.Body>
           <div className="flex w-full flex-col gap-6 pb-[240px]">
-            <div className="text-neutral flex flex-col gap-4">
-              <h2 className="text-[24px]/[24px] font-semibold whitespace-pre-wrap">
-                26-1에 이수할
-                <br />
-                채플 과목을 담아주세요!
-              </h2>
-              <p className="text-sm font-light">
-                * 채플 <span className="font-medium">6회 중 4회</span> 이수했어요.
-              </p>
-            </div>
-
             <Timetable isSelected={false} timetable={renderedPreviewTimetable} />
           </div>
 
           <BottomSheet onStateChange={setSheetState} state={sheetState}>
             <BottomSheet.Header>
-              <div className="flex items-center gap-2 text-[20px]/[24px] font-semibold">
-                <span className="bg-brandPrimary inline-flex size-4 rounded-full" />
-                채플 과목
-              </div>
+              <DotSectionTitle title="채플 과목" />
             </BottomSheet.Header>
 
             <BottomSheet.Body>
@@ -157,17 +159,14 @@ export const ChapelSelectionActivity = () => {
             </BottomSheet.Body>
 
             <BottomSheet.Footer className="pt-4">
-              <button
-                className={cn(
-                  'h-14 w-full rounded-2xl text-base font-semibold text-white transition-colors',
-                  ctaDisabled ? 'text-text-buttonDisabled bg-bg-buttonDisabled' : 'bg-brandPrimary',
-                )}
+              <ActivityActionButton
                 disabled={ctaDisabled}
                 onClick={handleCTA}
+                size="large"
                 type="button"
               >
                 {ctaLabel}
-              </button>
+              </ActivityActionButton>
             </BottomSheet.Footer>
           </BottomSheet>
         </ActivityLayout.Body>

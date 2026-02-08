@@ -4,6 +4,8 @@ import { useState } from 'react';
 
 import { Mixpanel } from '@/bootstrap/mixpanel';
 import { ActivityLayout } from '@/components/ActivityLayout';
+import { ActivityActionButton } from '@/components/ActivityLayout/ActivityActionButton';
+import { ActivityHeaderText } from '@/components/ActivityLayout/ActivityHeaderText';
 import { ProgressAppBar } from '@/components/AppBar/ProgressAppBar';
 import { useStudentInfoContext } from '@/components/Providers/StudentInfoProvider/hook';
 import { FLOW_PROGRESS } from '@/stackflow/progress';
@@ -51,11 +53,7 @@ export const OnboardingActivity = () => {
       <ActivityLayout.ScrollArea>
         <ActivityLayout.Header>
           <ProgressAppBar progress={FLOW_PROGRESS.onboarding} />
-          <div className="mt-6 flex w-full flex-col items-center">
-            <div className="text-center text-[28px]/[normal] font-semibold break-keep">
-              사용자 학적 정보
-            </div>
-          </div>
+          <ActivityHeaderText align="center" title="사용자 학적 정보" />
         </ActivityLayout.Header>
 
         <ActivityLayout.Body>
@@ -239,13 +237,9 @@ export const OnboardingActivity = () => {
         </ActivityLayout.Body>
 
         <ActivityLayout.Footer>
-          <button
-            className="bg-brandPrimary w-full rounded-2xl py-3.5 font-semibold text-white"
-            onClick={handleClickButton}
-            type="button"
-          >
+          <ActivityActionButton onClick={handleClickButton} type="button">
             저장하기
-          </button>
+          </ActivityActionButton>
         </ActivityLayout.Footer>
       </ActivityLayout.ScrollArea>
     </ActivityLayout>

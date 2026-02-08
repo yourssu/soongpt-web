@@ -4,6 +4,8 @@ import { motion } from 'motion/react';
 import { ReactElement, ReactNode } from 'react';
 
 import { ActivityLayout } from '@/components/ActivityLayout';
+import { ActivityActionButton } from '@/components/ActivityLayout/ActivityActionButton';
+import { ActivityHeaderText } from '@/components/ActivityLayout/ActivityHeaderText';
 import { ProgressAppBar } from '@/components/AppBar/ProgressAppBar';
 import { handleError } from '@/utils/error';
 import { getKyHTTPErrorRange } from '@/utils/ky';
@@ -42,14 +44,12 @@ const SoongptErrorBoundary = ({
                     <ActivityLayout.ScrollArea>
                       <ActivityLayout.Header>
                         <ProgressAppBar progress={progress} />
-                        <div className="mt-6 flex w-full flex-col items-center overflow-y-auto">
-                          <h2 className="text-center text-[28px]/[normal] font-semibold whitespace-pre-wrap">
-                            {'서버와의 연결이\n원활하지 않아요.'}
-                          </h2>
-                          <span className="items mt-1 font-light">
-                            재요청 하더라도 사용자님의 정보는 기억할게요!
-                          </span>
-                        </div>
+                        <ActivityHeaderText
+                          align="center"
+                          description="재요청 하더라도 사용자님의 정보는 기억할게요!"
+                          descriptionClassName="mt-1 font-light"
+                          title={'서버와의 연결이\n원활하지 않아요.'}
+                        />
                       </ActivityLayout.Header>
                       <ActivityLayout.Body>
                         <img
@@ -60,13 +60,9 @@ const SoongptErrorBoundary = ({
                         />
                       </ActivityLayout.Body>
                       <ActivityLayout.Footer>
-                        <button
-                          className="bg-brandPrimary w-full flex-1 rounded-2xl py-3.5 font-semibold text-white"
-                          onClick={resetError}
-                          type="button"
-                        >
+                        <ActivityActionButton className="flex-1" onClick={resetError} type="button">
                           재요청 할래요
-                        </button>
+                        </ActivityActionButton>
                       </ActivityLayout.Footer>
                     </ActivityLayout.ScrollArea>
                   </motion.div>
