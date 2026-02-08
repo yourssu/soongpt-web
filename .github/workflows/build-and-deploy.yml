@@ -9,6 +9,10 @@ on:
         required: true
       VITE_MIXPANEL_TOKEN:
         required: true
+      VITE_PUBLIC_POSTHOG_KEY:
+        required: true
+      VITE_PUBLIC_POSTHOG_HOST:
+        required: true
       VITE_CHANNEL_TALK_PLUGIN_KEY:
         required: true
       VITE_SENTRY_DSN:
@@ -44,6 +48,8 @@ jobs:
         run: |
           echo "VITE_STAGE=${{ inputs.STAGE }}" >> $GITHUB_ENV
           echo "VITE_MIXPANEL_TOKEN=${{ secrets.VITE_MIXPANEL_TOKEN }}" >> $GITHUB_ENV
+          echo "VITE_PUBLIC_POSTHOG_KEY=${{ secrets.VITE_PUBLIC_POSTHOG_KEY }}" >> $GITHUB_ENV
+          echo "VITE_PUBLIC_POSTHOG_HOST=${{ secrets.VITE_PUBLIC_POSTHOG_HOST }}" >> $GITHUB_ENV
           echo "VITE_CHANNEL_TALK_PLUGIN_KEY=${{ secrets.VITE_CHANNEL_TALK_PLUGIN_KEY }}" >> $GITHUB_ENV
           echo "VITE_SENTRY_DSN=${{ secrets.VITE_SENTRY_DSN }}" >> $GITHUB_ENV
           echo "VITE_SENTRY_AUTH_TOKEN=${{ secrets.VITE_SENTRY_AUTH_TOKEN }}" >> $GITHUB_ENV
