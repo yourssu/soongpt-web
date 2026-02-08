@@ -4,6 +4,7 @@ import './index.css';
 import './bootstrap/channelTalk';
 import './bootstrap/mixpanel';
 import './bootstrap/sentry';
+import './bootstrap/posthog';
 
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
