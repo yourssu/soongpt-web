@@ -8,11 +8,13 @@ import { ProgressAppBar } from '@/components/AppBar/ProgressAppBar';
 import { BottomSheet, BottomSheetState } from '@/components/BottomSheet';
 import { useSelectedTimetableContext } from '@/components/Providers/SelectedTimetableProvider/hook';
 import { Timetable } from '@/components/Timetable';
+import { useToast } from '@/hooks/useToast';
 import { FLOW_PROGRESS } from '@/stackflow/progress';
 import { removeCodeFromPartialSelection } from '@/utils/timetablePartialSelection';
 
 export const TimetableDeleteActivity = () => {
   const { push, pop, replace } = useFlow();
+  const toast = useToast();
   const {
     selectedTimetable,
     partialSelection,
@@ -32,8 +34,8 @@ export const TimetableDeleteActivity = () => {
     mutationKey: ['timetables', 'final-recommendation', 'delete'],
     mutationFn: postTimetableRecommendation,
   });
-
   if (!selectedTimetable || !partialSelection) {
+    toast.error('삭제 대상 시간표 정보가 없어 처음 화면으로 이동했어요.');
     replace('landing', {}, { animate: false });
     return null;
   }

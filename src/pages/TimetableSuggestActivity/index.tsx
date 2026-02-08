@@ -36,8 +36,8 @@ export const TimetableSuggestActivity = () => {
     mutationKey: ['timetables', 'available-courses'],
     mutationFn: postAvailableCourses,
   });
-
   if (!recommendedPrimaryTimetable || !partialSelection) {
+    toast.error('추천 시간표를 만들 정보가 부족해서 처음 화면으로 이동했어요.');
     replace('landing', {}, { animate: false });
     return null;
   }

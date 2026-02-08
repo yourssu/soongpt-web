@@ -4,17 +4,20 @@ import { ActivityLayout } from '@/components/ActivityLayout';
 import { ProgressAppBar } from '@/components/AppBar/ProgressAppBar';
 import { useSelectedTimetableContext } from '@/components/Providers/SelectedTimetableProvider/hook';
 import { Timetable } from '@/components/Timetable';
+import { useToast } from '@/hooks/useToast';
 import { FLOW_PROGRESS } from '@/stackflow/progress';
 
 export const TimetableResultActivity = () => {
   const { replace } = useFlow();
+  const toast = useToast();
   const { finalizedTimetable, previewTimetable, selectedTimetable } = useSelectedTimetableContext();
 
   const timetableToRender = finalizedTimetable ?? previewTimetable ?? selectedTimetable;
 
   if (!timetableToRender) {
+    toast.error('완성된 시간표 정보가 없어 처음 화면으로 이동했어요.');
     replace('landing', {}, { animate: false });
-    return undefined;
+    return null;
   }
 
   return (

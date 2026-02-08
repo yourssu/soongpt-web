@@ -98,6 +98,7 @@ export const GeneralElectiveSelectionActivity = () => {
   ]);
 
   if (!selectedTimetable || !partialSelection) {
+    toast.error('교양선택에 필요한 시간표 정보가 없어 처음 화면으로 이동했어요.');
     replace('landing', {}, { animate: false });
     return null;
   }

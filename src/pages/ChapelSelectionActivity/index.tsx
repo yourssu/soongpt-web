@@ -8,6 +8,7 @@ import { ProgressAppBar } from '@/components/AppBar/ProgressAppBar';
 import { BottomSheet, BottomSheetState } from '@/components/BottomSheet';
 import { useSelectedTimetableContext } from '@/components/Providers/SelectedTimetableProvider/hook';
 import { Timetable } from '@/components/Timetable';
+import { useToast } from '@/hooks/useToast';
 import { ChapelCourseList } from '@/pages/ChapelSelectionActivity/components/ChapelCourseList';
 import { ChapelCourseListFallback } from '@/pages/ChapelSelectionActivity/components/ChapelCourseListFallback';
 import { FLOW_PROGRESS } from '@/stackflow/progress';
@@ -18,6 +19,7 @@ import { mergeTimetableCourses, toTimetableCourse } from '@/utils/timetableSelec
 
 export const ChapelSelectionActivity = () => {
   const { push, replace } = useFlow();
+  const toast = useToast();
   const {
     partialSelection,
     selectedTimetable,
@@ -36,7 +38,6 @@ export const ChapelSelectionActivity = () => {
     mutationKey: ['timetables', 'finalize'],
     mutationFn: postFinalizeTimetable,
   });
-
   const selectableChapels = useMemo(() => {
     return availableChapels.filter((course) => {
       if (selectedChapelCourse && selectedChapelCourse.code === course.code) {
@@ -55,6 +56,7 @@ export const ChapelSelectionActivity = () => {
   ]);
 
   if (!selectedTimetable || !partialSelection) {
+    toast.error('채플 선택에 필요한 시간표 정보가 없어 처음 화면으로 이동했어요.');
     replace('landing', {}, { animate: false });
     return null;
   }

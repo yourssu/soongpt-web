@@ -14,12 +14,14 @@ import {
   CarouselItem,
 } from '@/components/ui/carousel';
 import { useLatestTimetableMutationState } from '@/hooks/timetable/useLatestTimetableMutationState';
+import { useToast } from '@/hooks/useToast';
 import { TimetableError } from '@/pages/DraftTimetableActivity/components/TimetableError';
 import { getTimetableMutationStatus } from '@/pages/DraftTimetableActivity/hooks/useTimetableMutationStatus';
 import { FLOW_PROGRESS } from '@/stackflow/progress';
 
 export const DraftTimetableActivity = () => {
-  const { replace, push } = useFlow();
+  const { push, replace } = useFlow();
+  const toast = useToast();
   const latestMutation = useLatestTimetableMutationState();
   const {
     selectedTimetable,
@@ -115,6 +117,7 @@ export const DraftTimetableActivity = () => {
   ]);
 
   if (!latestMutation) {
+    toast.error('시간표 생성 결과를 찾지 못해 처음 화면으로 이동했어요.');
     replace('landing', {}, { animate: false });
     return null;
   }
