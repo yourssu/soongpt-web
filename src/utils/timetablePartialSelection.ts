@@ -45,15 +45,22 @@ const categoryToCodes = (courses: Pick<CourseType, 'category' | 'code'>[]) => {
 const pickStudentInfo = (
   source: Pick<
     TimetablePartialSelectionPayloadType,
-    'department' | 'grade' | 'schoolId' | 'semester' | 'subDepartment' | 'teachTrainingCourse'
+    | 'department'
+    | 'doubleMajorDepartment'
+    | 'grade'
+    | 'minorDepartment'
+    | 'schoolId'
+    | 'semester'
+    | 'teachTrainingCourse'
   >,
 ): StudentType => {
   return {
     department: source.department,
+    doubleMajorDepartment: source.doubleMajorDepartment,
     grade: source.grade,
+    minorDepartment: source.minorDepartment,
     schoolId: source.schoolId,
     semester: source.semester,
-    subDepartment: source.subDepartment,
     teachTrainingCourse: source.teachTrainingCourse,
   };
 };

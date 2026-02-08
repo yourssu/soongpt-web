@@ -1,36 +1,57 @@
 import { z } from 'zod/v4';
 
-import { semesters, StudentGrade } from '@/types/student';
+import { ResponseSchema } from '@/api/response';
+import { StudentGrade } from '@/types/student';
 
-const completedSyncStatusSchema = z.object({
-  status: z.literal('COMPLETED'),
+const syncStatusStudentInfoSchema = z.object({
   grade: StudentGrade,
-  semester: semesters,
-  schoolId: z.number(),
+  semester: z.number(),
+  year: z.number(),
   department: z.string(),
-  subDepartment: z.string().optional(),
-  teachTrainingCourse: z.boolean(),
+  doubleMajorDepartment: z.string().nullable(),
+  minorDepartment: z.string().nullable(),
+  teaching: z.boolean(),
 });
 
-const processingSyncStatusSchema = z.object({
+const processingSyncStatusResultSchema = z.object({
   status: z.literal('PROCESSING'),
+  reason: z.nullable(z.string()),
+  studentInfo: z.null(),
 });
 
-const failedSyncStatusSchema = z.object({
-  status: z.literal('FAILED'),
-  reason: z.string().optional(),
+const completedSyncStatusResultSchema = z.object({
+  status: z.literal('COMPLETED'),
+  reason: z.nullable(z.string()),
+  studentInfo: syncStatusStudentInfoSchema,
 });
 
-const requiresReauthSyncStatusSchema = z.object({
+const requiresReauthSyncStatusResultSchema = z.object({
   status: z.literal('REQUIRES_REAUTH'),
-  reason: z.string().optional(),
+  reason: z.nullable(z.string()),
+  studentInfo: z.null(),
 });
 
-export const syncStatusSchema = z.discriminatedUnion('status', [
-  processingSyncStatusSchema,
-  completedSyncStatusSchema,
-  requiresReauthSyncStatusSchema,
-  failedSyncStatusSchema,
+const failedSyncStatusResultSchema = z.object({
+  status: z.literal('FAILED'),
+  reason: z.nullable(z.string()),
+  studentInfo: z.null(),
+});
+
+const errorSyncStatusResultSchema = z.object({
+  status: z.literal('ERROR'),
+  reason: z.nullable(z.string()),
+  studentInfo: z.null(),
+});
+
+export const syncStatusResultSchema = z.discriminatedUnion('status', [
+  processingSyncStatusResultSchema,
+  completedSyncStatusResultSchema,
+  requiresReauthSyncStatusResultSchema,
+  failedSyncStatusResultSchema,
+  errorSyncStatusResultSchema,
 ]);
 
+export const syncStatusSchema = ResponseSchema(syncStatusResultSchema);
+
+export type SyncStatusResultType = z.infer<typeof syncStatusResultSchema>;
 export type SyncStatusType = z.infer<typeof syncStatusSchema>;

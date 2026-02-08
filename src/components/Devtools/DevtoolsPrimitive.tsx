@@ -79,7 +79,9 @@ const TimetableInjectionToolItem = ({ onMutateSuccess }: { onMutateSuccess: () =
           const department = data.department ?? studentInfo.department;
           const grade = data.grade ?? studentInfo.grade;
           const semester = data.semester ?? studentInfo.semester;
-          const subDepartment = data.subDepartment ?? studentInfo.subDepartment;
+          const doubleMajorDepartment =
+            data.doubleMajorDepartment ?? studentInfo.doubleMajorDepartment;
+          const minorDepartment = data.minorDepartment ?? studentInfo.minorDepartment;
           const teachTrainingCourse = data.teachTrainingCourse ?? studentInfo.teachTrainingCourse;
 
           assertNonNullish(schoolId);
@@ -87,8 +89,9 @@ const TimetableInjectionToolItem = ({ onMutateSuccess }: { onMutateSuccess: () =
           assertNonNullish(grade);
 
           await mutateAsync({
+            doubleMajorDepartment,
             semester,
-            subDepartment,
+            minorDepartment,
             teachTrainingCourse,
             schoolId,
             department,
@@ -139,9 +142,10 @@ export const DevtoolsPrimitive = () => {
   const buildDevPartialSelection = (): TimetablePartialSelectionPayloadType => ({
     schoolId: studentInfo.schoolId ?? 22,
     department: studentInfo.department ?? '법학과',
+    doubleMajorDepartment: studentInfo.doubleMajorDepartment,
     grade: studentInfo.grade ?? 2,
+    minorDepartment: studentInfo.minorDepartment,
     semester: studentInfo.semester ?? 1,
-    subDepartment: studentInfo.subDepartment,
     teachTrainingCourse: studentInfo.teachTrainingCourse ?? false,
     majorRequiredCodes: [2150545501],
     majorElectiveCodes: [2150143401, 2150225101],
@@ -295,9 +299,10 @@ export const DevtoolsPrimitive = () => {
                 setStudentInfo({
                   schoolId: 23,
                   department: '법학과',
+                  doubleMajorDepartment: '',
                   grade: 2,
+                  minorDepartment: '',
                   semester: 1,
-                  subDepartment: '',
                   teachTrainingCourse: false,
                 });
                 push('general_elective_selection', {});
@@ -312,9 +317,10 @@ export const DevtoolsPrimitive = () => {
                 setStudentInfo({
                   schoolId: 22,
                   department: '법학과',
+                  doubleMajorDepartment: '',
                   grade: 2,
+                  minorDepartment: '',
                   semester: 1,
-                  subDepartment: '',
                   teachTrainingCourse: false,
                 });
                 push('general_elective_selection', {});

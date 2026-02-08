@@ -31,8 +31,15 @@ import { toTimetableCourse } from '@/utils/timetableSelection';
 
 export const CourseSelectionActivity = () => {
   const { type } = useSafeActivityParams('course_selection');
-  const { grade, schoolId, department, subDepartment, teachTrainingCourse, semester } =
-    useAssertedStudentInfoContext();
+  const {
+    grade,
+    schoolId,
+    department,
+    doubleMajorDepartment,
+    minorDepartment,
+    teachTrainingCourse,
+    semester,
+  } = useAssertedStudentInfoContext();
 
   const [selectedCourses, setSelectedCourses] = useState<SelectedCourseType[]>([]);
 
@@ -74,10 +81,11 @@ export const CourseSelectionActivity = () => {
     const partialSelection = buildPartialSelectionFromCourses(
       {
         department,
+        doubleMajorDepartment,
         grade,
+        minorDepartment,
         schoolId,
         semester,
-        subDepartment,
         teachTrainingCourse,
       },
       selectedCourses,

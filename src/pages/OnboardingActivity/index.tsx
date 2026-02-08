@@ -1,7 +1,9 @@
 import { useFlow } from '@stackflow/react/future';
+import { useMutation } from '@tanstack/react-query';
 import { ChevronDown } from 'lucide-react';
 import { useState } from 'react';
 
+import { putStudentInfo } from '@/api/sso/put-student-info';
 import { Mixpanel } from '@/bootstrap/mixpanel';
 import { PostHog } from '@/bootstrap/posthog';
 import { ActivityLayout } from '@/components/ActivityLayout';
@@ -24,11 +26,16 @@ import { assertNonNullish } from '@/utils/assertion';
 export const OnboardingActivity = () => {
   const { studentInfo, setStudentInfo } = useStudentInfoContext();
   const { push } = useFlow();
-
   const [mainDeptDropdown, setMainDeptDropdown] = useState<string[]>([]);
-  const [subDeptDropdown, setSubDeptDropdown] = useState<string[]>([]);
+  const [doubleMajorDropdown, setDoubleMajorDropdown] = useState<string[]>([]);
+  const [minorDropdown, setMinorDropdown] = useState<string[]>([]);
 
-  const handleClickButton = () => {
+  const { mutateAsync: mutateStudentInfo, isPending } = useMutation({
+    mutationFn: putStudentInfo,
+    mutationKey: ['sync', 'student-info'],
+  });
+
+  const handleClickButton = async () => {
     assertNonNullish(studentInfo.grade);
     assertNonNullish(studentInfo.schoolId);
     assertNonNullish(studentInfo.semester);
@@ -37,13 +44,52 @@ export const OnboardingActivity = () => {
 
     const assertedStudentInfo = {
       ...studentInfo,
+      department: studentInfo.department,
+      doubleMajorDepartment: studentInfo.doubleMajorDepartment,
       grade: studentInfo.grade,
+      minorDepartment: studentInfo.minorDepartment,
       schoolId: studentInfo.schoolId,
       semester: studentInfo.semester,
-      department: studentInfo.department,
-      subDepartment: studentInfo.subDepartment,
       teachTrainingCourse: studentInfo.teachTrainingCourse,
     } satisfies StudentType;
+
+    try {
+      const response = await mutateStudentInfo({
+        department: assertedStudentInfo.department,
+        doubleMajorDepartment: assertedStudentInfo.doubleMajorDepartment?.trim()
+          ? assertedStudentInfo.doubleMajorDepartment
+          : null,
+        grade: assertedStudentInfo.grade,
+        minorDepartment: assertedStudentInfo.minorDepartment?.trim()
+          ? assertedStudentInfo.minorDepartment
+          : null,
+        semester: assertedStudentInfo.semester,
+        teaching: assertedStudentInfo.teachTrainingCourse,
+        year: 2000 + assertedStudentInfo.schoolId,
+      });
+
+      if (response.result.status === 'ERROR') {
+        if (
+          response.result.reason === 'invalid_session' ||
+          response.result.reason === 'session_expired'
+        ) {
+          push('retry_login', {});
+          return;
+        }
+
+        push('error', {
+          message: response.result.reason?.trim()
+            ? response.result.reason
+            : '학적 정보를 저장하지 못했어요. 잠시 후 다시 시도해주세요.',
+        });
+        return;
+      }
+    } catch {
+      push('error', {
+        message: '학적 정보를 저장하지 못했어요. 잠시 후 다시 시도해주세요.',
+      });
+      return;
+    }
 
     Mixpanel.setUser(assertedStudentInfo);
     PostHog.setUser(assertedStudentInfo);
@@ -72,7 +118,6 @@ export const OnboardingActivity = () => {
 
         <ActivityLayout.Body>
           <div className="flex w-full flex-col gap-4 px-5">
-            {/* 학년 */}
             <div>
               <label className="mb-1.5 block text-sm">학년</label>
               <div className="relative">
@@ -103,7 +148,6 @@ export const OnboardingActivity = () => {
               </div>
             </div>
 
-            {/* 학기 */}
             <div>
               <label className="mb-1.5 block text-sm">학기</label>
               <div className="relative">
@@ -134,7 +178,6 @@ export const OnboardingActivity = () => {
               </div>
             </div>
 
-            {/* 입학년도 */}
             <div>
               <label className="mb-1.5 block text-sm">입학년도</label>
               <div className="relative">
@@ -165,7 +208,6 @@ export const OnboardingActivity = () => {
               </div>
             </div>
 
-            {/* 학과(주전공) */}
             <div className="relative">
               <label className="mb-1.5 block text-sm">학과(주전공)</label>
               <input
@@ -185,9 +227,9 @@ export const OnboardingActivity = () => {
                       : [],
                   );
                   PostHog.trackFieldChanged('onboarding_department_input_changed', {
+                    dropdownCount,
                     hasValue: val.length > 0,
                     inputLength: val.length,
-                    dropdownCount,
                   });
                 }}
                 placeholder="학과(주전공)"
@@ -217,47 +259,33 @@ export const OnboardingActivity = () => {
               )}
             </div>
 
-            {/* 복수(부)전공 */}
             <div className="relative">
-              <label className="mb-1.5 block text-sm">복수(부)전공</label>
+              <label className="mb-1.5 block text-sm">복수전공</label>
               <input
-                className={`focus-visible:outline-borderRing w-full rounded-xl bg-white px-4 py-3 text-lg font-semibold ${studentInfo.subDepartment ? 'text-brandPrimary' : 'text-neutralPlaceholder'}`}
-                onBlur={() => setSubDeptDropdown([])}
+                className={`focus-visible:outline-borderRing w-full rounded-xl bg-white px-4 py-3 text-lg font-semibold ${studentInfo.doubleMajorDepartment ? 'text-brandPrimary' : 'text-neutralPlaceholder'}`}
+                onBlur={() => setDoubleMajorDropdown([])}
                 onChange={(e) => {
                   const val = e.target.value.trim();
-                  const dropdownCount =
-                    val !== ''
-                      ? departmentValues.filter((d) => d.toLowerCase().includes(val.toLowerCase()))
-                          .length
-                      : 0;
-                  setStudentInfo((prev) => ({ ...prev, subDepartment: val }));
-                  setSubDeptDropdown(
+                  setStudentInfo((prev) => ({ ...prev, doubleMajorDepartment: val }));
+                  setDoubleMajorDropdown(
                     val !== ''
                       ? departmentValues.filter((d) => d.toLowerCase().includes(val.toLowerCase()))
                       : [],
                   );
-                  PostHog.trackFieldChanged('onboarding_sub_department_input_changed', {
-                    hasValue: val.length > 0,
-                    inputLength: val.length,
-                    dropdownCount,
-                  });
                 }}
-                placeholder="복수(부)전공"
+                placeholder="복수전공"
                 type="text"
-                value={studentInfo.subDepartment}
+                value={studentInfo.doubleMajorDepartment ?? ''}
               />
-              {subDeptDropdown.length > 0 && (
+              {doubleMajorDropdown.length > 0 && (
                 <ul className="absolute z-10 mt-1 max-h-44 w-full overflow-y-auto rounded-xl border border-gray-200 bg-white shadow-sm">
-                  {subDeptDropdown.map((dept) => (
+                  {doubleMajorDropdown.map((dept) => (
                     <li key={dept}>
                       <button
                         className="text-neutralSubtle flex w-full items-center rounded-xl px-4 py-2 text-lg font-semibold hover:bg-gray-100"
                         onMouseDown={() => {
-                          setStudentInfo((prev) => ({ ...prev, subDepartment: dept }));
-                          setSubDeptDropdown([]);
-                          PostHog.trackFieldChanged('onboarding_sub_department_selected', {
-                            inputLength: dept.length,
-                          });
+                          setStudentInfo((prev) => ({ ...prev, doubleMajorDepartment: dept }));
+                          setDoubleMajorDropdown([]);
                         }}
                         type="button"
                       >
@@ -269,7 +297,44 @@ export const OnboardingActivity = () => {
               )}
             </div>
 
-            {/* 교직 이수 여부 */}
+            <div className="relative">
+              <label className="mb-1.5 block text-sm">부전공</label>
+              <input
+                className={`focus-visible:outline-borderRing w-full rounded-xl bg-white px-4 py-3 text-lg font-semibold ${studentInfo.minorDepartment ? 'text-brandPrimary' : 'text-neutralPlaceholder'}`}
+                onBlur={() => setMinorDropdown([])}
+                onChange={(e) => {
+                  const val = e.target.value.trim();
+                  setStudentInfo((prev) => ({ ...prev, minorDepartment: val }));
+                  setMinorDropdown(
+                    val !== ''
+                      ? departmentValues.filter((d) => d.toLowerCase().includes(val.toLowerCase()))
+                      : [],
+                  );
+                }}
+                placeholder="부전공"
+                type="text"
+                value={studentInfo.minorDepartment ?? ''}
+              />
+              {minorDropdown.length > 0 && (
+                <ul className="absolute z-10 mt-1 max-h-44 w-full overflow-y-auto rounded-xl border border-gray-200 bg-white shadow-sm">
+                  {minorDropdown.map((dept) => (
+                    <li key={dept}>
+                      <button
+                        className="text-neutralSubtle flex w-full items-center rounded-xl px-4 py-2 text-lg font-semibold hover:bg-gray-100"
+                        onMouseDown={() => {
+                          setStudentInfo((prev) => ({ ...prev, minorDepartment: dept }));
+                          setMinorDropdown([]);
+                        }}
+                        type="button"
+                      >
+                        {dept}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+
             <div>
               <label className="mb-1.5 block text-sm">교직 이수 여부</label>
               <button
@@ -295,7 +360,7 @@ export const OnboardingActivity = () => {
         </ActivityLayout.Body>
 
         <ActivityLayout.Footer>
-          <ActivityActionButton onClick={handleClickButton} type="button">
+          <ActivityActionButton disabled={isPending} onClick={handleClickButton} type="button">
             저장하기
           </ActivityActionButton>
         </ActivityLayout.Footer>

@@ -76,10 +76,11 @@ export type Department = z.infer<typeof departments>;
 
 export const StudentSchema = z.object({
   department: z.string(),
+  doubleMajorDepartment: z.string().optional(),
   grade: StudentGrade,
+  minorDepartment: z.string().optional(),
   schoolId: z.number(),
   semester: semesters,
-  subDepartment: z.string().optional(),
   teachTrainingCourse: z.boolean(),
 });
 export type StudentType = z.infer<typeof StudentSchema>;

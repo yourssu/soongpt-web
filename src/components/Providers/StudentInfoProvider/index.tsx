@@ -5,10 +5,11 @@ import { UnfilledStudentInfoType } from '@/components/Providers/StudentInfoProvi
 
 const defaultStudentInfo: UnfilledStudentInfoType = {
   department: '',
+  doubleMajorDepartment: '',
   grade: undefined,
+  minorDepartment: '',
   schoolId: undefined,
   semester: undefined,
-  subDepartment: '',
   teachTrainingCourse: false,
 };
 

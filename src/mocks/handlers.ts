@@ -28,7 +28,11 @@ import {
   MOCK_MINOR_PROGRESS,
   MOCK_TEACHING_CERTIFICATE_PROGRESS,
 } from '@/mocks/api/creditProgressData';
-import { getMockSyncStatusFromQuery, getNextMockSyncStatus } from '@/mocks/api/sso';
+import {
+  getMockPutStudentInfoResponse,
+  getMockSyncStatusFromQuery,
+  getNextMockSyncStatus,
+} from '@/mocks/api/sso';
 import {
   MOCK_FINAL_RECOMMENDATION_FAILURE,
   MOCK_FINAL_RECOMMENDATION_SINGLE_CONFLICT,
@@ -159,10 +163,20 @@ export const handlers = [
     const forcedStatus = getMockSyncStatusFromQuery(url.searchParams.get('mockStatus'));
 
     if (forcedStatus) {
-      return HttpResponse.json(forcedStatus);
+      return HttpResponse.json(forcedStatus.response, { status: forcedStatus.status });
     }
 
-    return HttpResponse.json(getNextMockSyncStatus());
+    const response = getNextMockSyncStatus();
+    return HttpResponse.json(response.response, { status: response.status });
+  }),
+  http.put(`${BASE_URL}/sync/student-info`, async ({ request }) => {
+    const url = new URL(request.url);
+    const payload = await request.json();
+    const response = getMockPutStudentInfoResponse(
+      payload as Parameters<typeof getMockPutStudentInfoResponse>[0],
+      url.searchParams.get('mockStatus'),
+    );
+    return HttpResponse.json(response.response, { status: response.status });
   }),
   http.get(`${BASE_URL}/timetables/suggest`, () => HttpResponse.json(MOCK_TIMETABLE_SUGGEST)),
   http.post(`${BASE_URL}/timetables/final-recommendation`, ({ request }) => {

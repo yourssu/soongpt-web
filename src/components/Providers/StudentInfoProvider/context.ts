@@ -10,10 +10,11 @@ interface StudentInfoContextProps {
 export const StudentInfoContext = createContext<StudentInfoContextProps>({
   studentInfo: {
     department: '',
+    doubleMajorDepartment: '',
     grade: undefined,
+    minorDepartment: '',
     schoolId: undefined,
     semester: undefined,
-    subDepartment: '',
     teachTrainingCourse: false,
   },
   setStudentInfo: () => {},

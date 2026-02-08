@@ -32,7 +32,7 @@ export const LoadingActivity = () => {
     queryFn: getSyncStatus,
     retry: false,
     refetchOnWindowFocus: false,
-    refetchInterval: (query) => (query.state.data?.status === 'PROCESSING' ? 1000 : false),
+    refetchInterval: (query) => (query.state.data?.result.status === 'PROCESSING' ? 1000 : false),
   });
 
   useEffect(() => {
@@ -40,25 +40,33 @@ export const LoadingActivity = () => {
       return;
     }
 
-    if (data.status === 'PROCESSING') {
+    if (data.result.status === 'PROCESSING') {
       return;
     }
 
-    if (data.status === 'COMPLETED') {
+    if (data.result.status === 'COMPLETED') {
+      const completedStudentInfo = data.result.studentInfo;
       hasNavigatedRef.current = true;
       setStudentInfo({
-        grade: data.grade,
-        semester: data.semester,
-        schoolId: data.schoolId,
-        department: data.department,
-        subDepartment: data.subDepartment,
-        teachTrainingCourse: data.teachTrainingCourse,
+        department: completedStudentInfo.department,
+        doubleMajorDepartment: completedStudentInfo.doubleMajorDepartment ?? '',
+        grade: completedStudentInfo.grade,
+        minorDepartment: completedStudentInfo.minorDepartment ?? '',
+        schoolId: completedStudentInfo.year % 100,
+        semester: completedStudentInfo.semester % 2 === 0 ? 2 : 1,
+        teachTrainingCourse: completedStudentInfo.teaching,
       });
       replace('onboarding', {});
       return;
     }
 
-    moveToError(data.reason);
+    if (data.result.status === 'REQUIRES_REAUTH' || data.result.status === 'ERROR') {
+      hasNavigatedRef.current = true;
+      replace('retry_login', {});
+      return;
+    }
+
+    moveToError(data.result.reason ?? undefined);
   }, [data, moveToError, replace, setStudentInfo]);
 
   useEffect(() => {
