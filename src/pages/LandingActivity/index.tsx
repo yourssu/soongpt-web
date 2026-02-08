@@ -6,8 +6,6 @@ import {
   type CarouselApi,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from '@/components/ui/carousel';
 
 const USAINT_LOGIN_URL = 'https://smartid.ssu.ac.kr/Symtra_sso/smln.asp?apiReturnUrl=example.com';
@@ -29,70 +27,79 @@ const carouselContents = [
 
 export const LandingActivity = () => {
   const [api, setApi] = useState<CarouselApi>();
-  const [current, setCurrent] = useState(0);
-  const [count, setCount] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     if (!api) {
       return;
     }
 
-    setCount(api.scrollSnapList().length);
-    setCurrent(api.selectedScrollSnap() + 1);
+    const syncCurrentIndex = () => {
+      setCurrentIndex(api.selectedScrollSnap());
+    };
 
-    api.on('select', () => {
-      setCurrent(api.selectedScrollSnap() + 1);
-    });
+    syncCurrentIndex();
+    api.on('select', syncCurrentIndex);
+    api.on('reInit', syncCurrentIndex);
+
+    return () => {
+      api.off('select', syncCurrentIndex);
+      api.off('reInit', syncCurrentIndex);
+    };
   }, [api]);
+
+  const activeSlide = carouselContents[currentIndex];
 
   return (
     <ActivityLayout>
       <ActivityLayout.ScrollArea>
-        <ActivityLayout.Body className={'justify-center'}>
-          <div className="text-brandPrimary mb-10 text-[50px] font-semibold">숭피티</div>
+        <ActivityLayout.Body className="flex w-full items-center justify-center">
+          <div className="flex w-full max-w-[390px] flex-col items-center justify-center">
+            <h1 className="text-brandPrimary text-center text-[50px]/[1] font-semibold tracking-[-1px]">
+              숭피티
+            </h1>
 
-          <Carousel setApi={setApi}>
-            <CarouselContent className={'h-full w-[340px] *:rounded-md'}>
-              {carouselContents.map((content, index) => (
-                <CarouselItem className="flex flex-col items-center gap-4" key={index}>
-                  <img
-                    alt={`landing-carousel-${index}`}
-                    className="h-[300px] w-[340px] bg-gray-200 object-cover"
-                    src={content.image}
-                  />
-                  <div
-                    className="text-neutralTextSecondary text-center text-lg font-medium"
-                    dangerouslySetInnerHTML={{ __html: content.description }}
-                  />
-                </CarouselItem>
+            <Carousel className={'mt-10'} setApi={setApi}>
+              <CarouselContent className={'h-full w-[340px] *:rounded-md'}>
+                {carouselContents.map((content, index) => (
+                  <CarouselItem className="flex flex-col items-center gap-4" key={index}>
+                    <img
+                      alt={`landing-carousel-${index}`}
+                      className="h-[340px] w-[300px] rounded-[40px] bg-gray-200 object-cover"
+                      src={content.image}
+                    />
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+            </Carousel>
+
+            <p
+              className={`mt-[23px] h-[60px] w-[300px] text-center text-[20px] leading-[30px] tracking-[-0.4px] text-black`}
+              dangerouslySetInnerHTML={{ __html: activeSlide.description }}
+            />
+
+            <div className={`mt-[23px] flex h-4 items-center gap-2`}>
+              {carouselContents.map((slide, index) => (
+                <div
+                  className={`rounded-full transition-all duration-200 ${
+                    index === currentIndex ? 'bg-brandPrimary size-4' : 'size-3 bg-[#c2c8ff]'
+                  }`}
+                  key={slide.image}
+                />
               ))}
-            </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
-          </Carousel>
+            </div>
 
-          <div className="mt-10 flex justify-center gap-2 py-2">
-            {Array.from({ length: count }).map((_, index) => (
-              <div
-                className={`h-2 w-2 rounded-full transition-colors ${
-                  index + 1 === current ? 'bg-brandPrimary' : 'bg-gray-300'
-                }`}
-                key={index}
-              />
-            ))}
+            <button
+              className="bg-brandPrimary mt-10 h-14 w-[300px] rounded-[16px] text-[16px]/[24px] font-semibold tracking-[-0.32px] text-white"
+              onClick={() => {
+                window.location.href = USAINT_LOGIN_URL;
+              }}
+              type="button"
+            >
+              유세인트 로그인 하기
+            </button>
           </div>
         </ActivityLayout.Body>
-        <ActivityLayout.Footer>
-          <button
-            className="bg-brandPrimary w-full rounded-2xl py-3.5 font-semibold text-white"
-            onClick={() => {
-              window.location.href = USAINT_LOGIN_URL;
-            }}
-            type="button"
-          >
-            유세인트 로그인 하기
-          </button>
-        </ActivityLayout.Footer>
       </ActivityLayout.ScrollArea>
     </ActivityLayout>
   );
