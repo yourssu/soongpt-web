@@ -8,6 +8,7 @@ const App = () => {
   useEffect(() => {
     // MixPanel 사용자 식별
     Mixpanel.identify();
+
     // ChannelTalk 채팅 초기화
     ChannelTalk.boot();
   }, []);

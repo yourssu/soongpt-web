@@ -3,6 +3,7 @@ import { ChevronDown } from 'lucide-react';
 import { useState } from 'react';
 
 import { Mixpanel } from '@/bootstrap/mixpanel';
+import { PostHog } from '@/bootstrap/posthog';
 import { ActivityLayout } from '@/components/ActivityLayout';
 import { ActivityActionButton } from '@/components/ActivityLayout/ActivityActionButton';
 import { ActivityHeaderText } from '@/components/ActivityLayout/ActivityHeaderText';
@@ -44,6 +45,7 @@ export const OnboardingActivity = () => {
     } satisfies StudentType;
 
     Mixpanel.setUser(assertedStudentInfo);
+    PostHog.setUser(assertedStudentInfo);
     Mixpanel.trackUserInformationClick();
     push('course_selection', { type: 'RETAKE' });
   };
