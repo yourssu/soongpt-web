@@ -2,7 +2,7 @@ import { api } from '@/api/client';
 import {
   TimetableFinalizeResponseSchema,
   TimetableFinalizeResponseType,
-} from '@/schemas/timetableFinalizeSchema';
+} from '@/api/timetables/post-finalize-timetable/response';
 import { FinalizeTimetablePayloadType } from '@/types/timetablePayload';
 
 export const postFinalizeTimetable = async (

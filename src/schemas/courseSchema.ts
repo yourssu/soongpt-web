@@ -1,6 +1,5 @@
 import { z } from 'zod/v4';
 
-import { PaginatedSchema, ResponseSchema } from '@/schemas/response';
 import { CourseClassification } from '@/types/course';
 
 export const CourseTimeSchema = z.object({
@@ -32,6 +31,3 @@ export const CourseSchema = z.object({
   recommendedGrade: z.number().optional(),
 });
 export type CourseType = z.infer<typeof CourseSchema>;
-
-export const courseResponseSchema = ResponseSchema(z.array(CourseSchema));
-export const paginatedCourseResponseSchema = ResponseSchema(PaginatedSchema(CourseSchema));

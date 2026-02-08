@@ -1,7 +1,7 @@
 import { z } from 'zod/v4';
 
+import { ResponseSchema } from '@/api/response';
 import { CourseSchema } from '@/schemas/courseSchema';
-import { ResponseSchema } from '@/schemas/response';
 
 export const TimetableAvailableCoursesSchema = z.object({
   generalElectives: z.array(CourseSchema),

@@ -1,6 +1,6 @@
 import { z } from 'zod/v4';
 
-import { ResponseSchema } from '@/schemas/response';
+import { ResponseSchema } from '@/api/response';
 
 export const TimetableFinalizeSchema = z.object({
   saved: z.boolean(),

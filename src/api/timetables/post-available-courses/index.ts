@@ -2,7 +2,7 @@ import { api } from '@/api/client';
 import {
   TimetableAvailableCoursesResponseSchema,
   TimetableAvailableCoursesResponseType,
-} from '@/schemas/timetableAvailableCoursesSchema';
+} from '@/api/timetables/post-available-courses/response';
 import { TimetablePartialSelectionPayloadType } from '@/types/timetablePayload';
 
 export const postAvailableCourses = async (

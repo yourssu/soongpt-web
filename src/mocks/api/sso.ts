@@ -1,4 +1,4 @@
-import { SyncStatusType } from '@/schemas/ssoSchema';
+import { SyncStatusType } from '@/api/sso/get-sync-status/response';
 
 const MOCK_SYNC_STATUS_PROCESSING: SyncStatusType = {
   status: 'PROCESSING',

@@ -1,5 +1,5 @@
 import { api } from '@/api/client';
-import { paginatedCourseResponseSchema } from '@/schemas/courseSchema';
+import { paginatedCourseResponseSchema } from '@/api/courses/_shared/response';
 
 export const getSearchedCourses = async (searchKeyword: string) => {
   if (searchKeyword === '') {

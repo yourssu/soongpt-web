@@ -2,7 +2,7 @@ import { api } from '@/api/client';
 import {
   FinalTimetableRecommendationResponseSchema,
   FinalTimetableRecommendationResponseType,
-} from '@/schemas/timetableRecommendationSchema';
+} from '@/api/timetables/post-timetable-recommendation/response';
 import {
   TimetablePartialSelectionPayloadType,
   TimetableRecommendationOptions,

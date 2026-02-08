@@ -1,8 +1,8 @@
+import { TimetableAvailableCoursesResponseInputType } from '@/api/timetables/post-available-courses/response';
+import { TimetableFinalizeResponseInputType } from '@/api/timetables/post-finalize-timetable/response';
+import { FinalTimetableRecommendationResponseInputType } from '@/api/timetables/post-timetable-recommendation/response';
 import { MOCK_CHAPEL, MOCK_GENERAL_ELECTIVE, MOCK_MAJOR_REQUIRED } from '@/mocks/api/courses';
 import { MOCK_DRAFT_TIMETABLES_INPUT, MOCK_TIMETABLE_INPUT } from '@/mocks/devtools/timetables';
-import { TimetableAvailableCoursesResponseInputType } from '@/schemas/timetableAvailableCoursesSchema';
-import { TimetableFinalizeResponseInputType } from '@/schemas/timetableFinalizeSchema';
-import { FinalTimetableRecommendationResponseInputType } from '@/schemas/timetableRecommendationSchema';
 
 export const MOCK_FINAL_RECOMMENDATION_SUCCESS: FinalTimetableRecommendationResponseInputType = {
   timestamp: '2026-02-06 12:00:00',
