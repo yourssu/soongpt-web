@@ -4,9 +4,11 @@ import { useCallback, useEffect, useRef } from 'react';
 
 import { getSyncStatus } from '@/api/sso';
 import { ActivityLayout } from '@/components/ActivityLayout';
+import { useStudentInfoContext } from '@/components/Providers/StudentInfoProvider/hook';
 
 export const LoadingActivity = () => {
   const { replace } = useFlow();
+  const { setStudentInfo } = useStudentInfoContext();
   const hasNavigatedRef = useRef(false); // 중복 화면 이동 방지
 
   const moveToError = useCallback(
@@ -44,7 +46,7 @@ export const LoadingActivity = () => {
 
     if (data.status === 'COMPLETED') {
       hasNavigatedRef.current = true;
-      replace('onboarding', {
+      setStudentInfo({
         grade: data.grade,
         semester: data.semester,
         schoolId: data.schoolId,
@@ -52,11 +54,12 @@ export const LoadingActivity = () => {
         subDepartment: data.subDepartment,
         teachTrainingCourse: data.teachTrainingCourse,
       });
+      replace('onboarding', {});
       return;
     }
 
     moveToError(data.reason);
-  }, [data, moveToError, replace]);
+  }, [data, moveToError, replace, setStudentInfo]);
 
   useEffect(() => {
     if (!error) {

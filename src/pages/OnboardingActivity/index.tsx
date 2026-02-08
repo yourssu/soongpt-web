@@ -1,12 +1,11 @@
 import { useFlow } from '@stackflow/react/future';
 import { ChevronDown } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { Mixpanel } from '@/bootstrap/mixpanel';
 import { ActivityLayout } from '@/components/ActivityLayout';
 import { ProgressAppBar } from '@/components/AppBar/ProgressAppBar';
 import { useStudentInfoContext } from '@/components/Providers/StudentInfoProvider/hook';
-import { useSafeActivityParams } from '@/hooks/stackflow/useSafeActivityParams';
 import { FLOW_PROGRESS } from '@/stackflow/progress';
 import {
   departments,
@@ -22,14 +21,8 @@ export const OnboardingActivity = () => {
   const { studentInfo, setStudentInfo } = useStudentInfoContext();
   const { push } = useFlow();
 
-  const activityParams = useSafeActivityParams('onboarding');
-
   const [mainDeptDropdown, setMainDeptDropdown] = useState<string[]>([]);
   const [subDeptDropdown, setSubDeptDropdown] = useState<string[]>([]);
-
-  useEffect(() => {
-    setStudentInfo(activityParams as StudentType);
-  }, [activityParams, setStudentInfo]);
 
   const handleClickButton = () => {
     assertNonNullish(studentInfo.grade);

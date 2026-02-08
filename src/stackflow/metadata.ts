@@ -31,14 +31,7 @@ export const activityDescription = {
     url: '/general-elective-selection',
   },
   onboarding: {
-    schema: z.object({
-      grade: zDecoder.num(),
-      semester: zDecoder.num(),
-      schoolId: zDecoder.num(),
-      department: zDecoder.str(),
-      subDepartment: zDecoder.str().optional(),
-      teachTrainingCourse: zDecoder.bool().default(false),
-    }),
+    schema: z.object({}),
     url: '/onboarding',
   },
   landing: {

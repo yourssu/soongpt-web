@@ -1,9 +1,11 @@
 import { z } from 'zod/v4';
 
+import { semesters, StudentGrade } from '@/types/student';
+
 const completedSyncStatusSchema = z.object({
   status: z.literal('COMPLETED'),
-  grade: z.number(),
-  semester: z.number(),
+  grade: z.literal(StudentGrade),
+  semester: z.literal(semesters),
   schoolId: z.number(),
   department: z.string(),
   subDepartment: z.string().optional(),
