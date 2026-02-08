@@ -7,8 +7,13 @@ import {
   CarouselContent,
   CarouselItem,
 } from '@/components/ui/carousel';
+import { config } from '@/config';
 
-const USAINT_LOGIN_URL = 'https://smartid.ssu.ac.kr/Symtra_sso/smln.asp?apiReturnUrl=example.com';
+const USAINT_LOGIN_BASE_URL = 'https://smartid.ssu.ac.kr/Symtra_sso/smln.asp';
+const SSO_CALLBACK_URL = import.meta.env.VITE_SSO_CALLBACK_URL ?? `${config.apiUrl}/sso/callback`;
+const USAINT_LOGIN_URL = `${USAINT_LOGIN_BASE_URL}?${new URLSearchParams({
+  apiReturnUrl: SSO_CALLBACK_URL,
+}).toString()}`;
 
 const carouselContents = [
   {

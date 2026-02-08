@@ -45,6 +45,10 @@ export const activityDescription = {
     schema: z.object({}),
     url: '/landing',
   },
+  loading: {
+    schema: z.object({}),
+    url: '/loading',
+  },
   timetable_suggest: {
     schema: z.object({
       source: zDecoder.enum(['mock', 'api']).optional(),

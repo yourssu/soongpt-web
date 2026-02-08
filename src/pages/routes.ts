@@ -14,6 +14,11 @@ export const routes: Record<ActivityName, ActivityComponentType<any>> = {
       default: module.LandingActivity,
     })),
   ),
+  loading: lazy(() =>
+    import('@/pages/LoadingActivity').then((module) => ({
+      default: module.LoadingActivity,
+    })),
+  ),
   course_selection: lazy(() =>
     import('@/pages/CourseSelectionActivity').then((module) => ({
       default: module.CourseSelectionActivity,

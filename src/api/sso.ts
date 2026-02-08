@@ -1,0 +1,8 @@
+import { api } from '@/api/client';
+import { syncStatusSchema } from '@/schemas/ssoSchema';
+
+export const getSyncStatus = async () => {
+  const response = await api.get('sync/status', { credentials: 'include', timeout: false }).json();
+
+  return syncStatusSchema.parse(response);
+};

@@ -28,6 +28,7 @@ import {
   MOCK_MINOR_PROGRESS,
   MOCK_TEACHING_CERTIFICATE_PROGRESS,
 } from '@/mocks/api/creditProgressData';
+import { getMockSyncStatusFromQuery, getNextMockSyncStatus } from '@/mocks/api/sso';
 import { MOCK_TIMETABLE_SUGGEST } from '@/mocks/api/timetableSuggest';
 import {
   MOCK_DRAFT_TIMETABLES_RESPONSE,
@@ -145,6 +146,16 @@ export const handlers = [
         ? MOCK_GENERAL_ELECTIVE_PROGRESS_AFTER_23
         : MOCK_GENERAL_ELECTIVE_PROGRESS_BEFORE_22;
     return HttpResponse.json(mockData);
+  }),
+  http.get(`${BASE_URL}/sync/status`, ({ request }) => {
+    const url = new URL(request.url);
+    const forcedStatus = getMockSyncStatusFromQuery(url.searchParams.get('mockStatus'));
+
+    if (forcedStatus) {
+      return HttpResponse.json(forcedStatus);
+    }
+
+    return HttpResponse.json(getNextMockSyncStatus());
   }),
   http.get(`${BASE_URL}/timetables/suggest`, () => HttpResponse.json(MOCK_TIMETABLE_SUGGEST)),
   http.get(`${BASE_URL}/timetables/:id`, ({ params }) => {
