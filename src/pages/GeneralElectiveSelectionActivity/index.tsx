@@ -159,11 +159,7 @@ export const GeneralElectiveSelectionActivity = () => {
         </ActivityLayout.Header>
 
         <ActivityLayout.Body className="gap-6 pt-6 pb-[140px]">
-          <div className="flex w-full justify-center">
-            <div className="w-[303px]">
-              <Timetable tagTitleOverride="시간표 이름" timetable={previewTimetableData} />
-            </div>
-          </div>
+          <Timetable timetable={previewTimetableData} />
         </ActivityLayout.Body>
       </ActivityLayout.ScrollArea>
 

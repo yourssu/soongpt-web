@@ -115,8 +115,8 @@ export const ChapelSelectionActivity = () => {
           <ProgressAppBar progress={FLOW_PROGRESS.chapel_selection} />
         </ActivityLayout.Header>
 
-        <ActivityLayout.Body className="relative">
-          <div className="flex w-full max-w-[303px] flex-col gap-6 pb-[240px]">
+        <ActivityLayout.Body>
+          <div className="flex w-full flex-col gap-6 pb-[240px]">
             <div className="text-neutral flex flex-col gap-4">
               <h2 className="text-[24px]/[24px] font-semibold whitespace-pre-wrap">
                 26-1에 이수할
@@ -128,9 +128,7 @@ export const ChapelSelectionActivity = () => {
               </p>
             </div>
 
-            <div className="w-full">
-              <Timetable isSelected={false} timetable={renderedPreviewTimetable} />
-            </div>
+            <Timetable isSelected={false} timetable={renderedPreviewTimetable} />
           </div>
 
           <BottomSheet onStateChange={setSheetState} state={sheetState}>

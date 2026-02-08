@@ -100,9 +100,7 @@ export const TimetableSuggestActivity = () => {
         </ActivityLayout.Header>
 
         <ActivityLayout.Body>
-          <div className="w-full pb-[260px]">
-            <Timetable isSelected timetable={previewTimetable} />
-          </div>
+          <Timetable isSelected timetable={previewTimetable} />
         </ActivityLayout.Body>
       </ActivityLayout.ScrollArea>
 

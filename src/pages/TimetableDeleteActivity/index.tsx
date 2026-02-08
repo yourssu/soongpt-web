@@ -101,9 +101,7 @@ export const TimetableDeleteActivity = () => {
         </ActivityLayout.Header>
 
         <ActivityLayout.Body>
-          <div className="w-full pb-[260px]">
-            <Timetable isSelected timetable={selectedTimetable} />
-          </div>
+          <Timetable isSelected timetable={selectedTimetable} />
         </ActivityLayout.Body>
       </ActivityLayout.ScrollArea>
 
