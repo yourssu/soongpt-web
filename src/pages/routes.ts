@@ -44,11 +44,6 @@ export const routes: Record<ActivityName, ActivityComponentType<any>> = {
       default: module.TimetableGuideActivity,
     })),
   ),
-  draft_timetable: lazy(() =>
-    import('@/pages/DraftTimetableActivity').then((module) => ({
-      default: module.DraftTimetableActivity,
-    })),
-  ),
   timetable_result: lazy(() =>
     import('@/pages/TimetableResultActivity').then((module) => ({
       default: module.TimetableResultActivity,

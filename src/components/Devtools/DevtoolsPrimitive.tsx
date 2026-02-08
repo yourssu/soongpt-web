@@ -16,13 +16,8 @@ import { useStudentInfoContext } from '@/components/Providers/StudentInfoProvide
 import { STAGE } from '@/config';
 import { useAlertDialog } from '@/hooks/useAlertDialog';
 import { useToast } from '@/hooks/useToast';
-import {
-  MOCK_DRAFT_TIMETABLES,
-  MOCK_TIMETABLE,
-  MOCK_TIMETABLE_ID,
-} from '@/mocks/devtools/timetables';
+import { MOCK_TIMETABLE, MOCK_TIMETABLE_ID } from '@/mocks/devtools/timetables';
 import { RecommendationStatusType } from '@/schemas/timetableRecommendationSchema';
-import { TimetableArrayResponseType } from '@/schemas/timetableSchema';
 import { assertNonNullish } from '@/utils/assertion';
 
 interface ToolItemProps {
@@ -141,16 +136,6 @@ export const DevtoolsPrimitive = () => {
     setFinalizedTimetable,
   } = useSelectedTimetableContext();
 
-  const { mutateAsync: mutateDraftTimetable } = useMutation({
-    mutationKey: ['timetables'],
-    mutationFn: async (): Promise<TimetableArrayResponseType> => ({
-      timestamp: '2026-02-06 10:00:00',
-      result: {
-        timetables: MOCK_DRAFT_TIMETABLES,
-      },
-    }),
-  });
-
   const buildDevPartialSelection = (): TimetablePartialSelectionPayloadType => ({
     schoolId: studentInfo.schoolId ?? 22,
     department: studentInfo.department ?? '법학과',
@@ -240,16 +225,6 @@ export const DevtoolsPrimitive = () => {
                 toast.success('시간표 페이지로 이동해요');
                 closeAsTrue();
               }}
-            />
-            <ToolItem
-              description="목 데이터로 1차 결과 화면을 열어요."
-              onClick={async () => {
-                await mutateDraftTimetable();
-                push('draft_timetable', {});
-                toast.success('1차 결과 화면으로 이동해요');
-                closeAsTrue();
-              }}
-              title="1차 결과 화면 보기"
             />
             <ToolItem
               description="목 데이터로 최종 결과 화면을 열어요."

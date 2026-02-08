@@ -56,10 +56,6 @@ export const activityDescription = {
     schema: z.object({}),
     url: '/timetable-guide',
   },
-  draft_timetable: {
-    schema: z.object({}),
-    url: '/draft-timetable',
-  },
   timetable_result: {
     schema: z.object({
       timetableId: zDecoder.num(),

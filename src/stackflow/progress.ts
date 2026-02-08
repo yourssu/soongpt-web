@@ -5,7 +5,6 @@ export const FLOW_PROGRESS = {
   timetable_suggest: 71,
   timetable_delete: 71,
   timetable_guide: 71,
-  draft_timetable: 79,
   general_elective_selection: 86,
   chapel_selection: 93,
   timetable_result: 100,
