@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 
+import { PostHog } from '@/bootstrap/posthog';
 import { SelectableCourseItem } from '@/components/CourseItem/SelectableCourseItem';
 import { useCombinedCourses } from '@/hooks/course/useCombinedCourses';
 import { ArrayState, useGetArrayState } from '@/hooks/useGetArrayState';
@@ -62,6 +63,12 @@ export const RetakeSelectionStep = ({ onNextClick }: RetakeSelectionStepProps) =
                   isSelected={isSelected}
                   key={course.code}
                   onClickCourseItem={() => {
+                    PostHog.trackCourseToggled('course_selection', {
+                      category: course.category,
+                      courseCode: course.code,
+                      credit: course.point,
+                      selected: !isSelected,
+                    });
                     setSelectedCourses((prev) =>
                       isSelected ? prev.filter((c) => !isSameCourse(c, course)) : [...prev, course],
                     );

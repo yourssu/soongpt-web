@@ -3,6 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 
 import { postAvailableCourses } from '@/api/timetables/post-available-courses';
+import { PostHog } from '@/bootstrap/posthog';
 import { ActivityLayout } from '@/components/ActivityLayout';
 import { ActivityActionButton } from '@/components/ActivityLayout/ActivityActionButton';
 import { ActivityHeaderText } from '@/components/ActivityLayout/ActivityHeaderText';
@@ -49,6 +50,10 @@ export const TimetableSuggestActivity = () => {
   const previewTimetable = selectedSuggestion?.timetable ?? recommendedPrimaryTimetable;
 
   const handleCtaClick = async () => {
+    PostHog.trackActivityCtaClicked('timetable_suggest', 'create_timetable_from_suggestion', {
+      selectedSuggestionIndex,
+    });
+
     const nextPartialSelection = buildPartialSelectionFromTimetable(
       partialSelection,
       previewTimetable,
@@ -72,6 +77,9 @@ export const TimetableSuggestActivity = () => {
     }
     setAvailableGeneralElectives(availableCourses.result.generalElectives);
     setAvailableChapels(availableCourses.result.chapels);
+    PostHog.trackFunnelStageCompleted('timetable_recommended', {
+      selectedSuggestionIndex,
+    });
     push('general_elective_selection', {});
     toast.default('교양선택 과목을 불러왔어요.');
   };
@@ -122,9 +130,14 @@ export const TimetableSuggestActivity = () => {
                   isSelected={selectedSuggestionIndex === index}
                   item={item}
                   key={`${item.description}-${index}`}
-                  onClick={() =>
-                    setSelectedSuggestionIndex((prev) => (prev === index ? null : index))
-                  }
+                  onClick={() => {
+                    const nextSelectedIndex = selectedSuggestionIndex === index ? null : index;
+                    PostHog.trackFieldChanged('timetable_suggestion_toggled', {
+                      selected: nextSelectedIndex !== null,
+                      selectedSuggestionIndex: nextSelectedIndex,
+                    });
+                    setSelectedSuggestionIndex(nextSelectedIndex);
+                  }}
                 />
               ))}
               {recommendedAlternatives.length === 0 && (

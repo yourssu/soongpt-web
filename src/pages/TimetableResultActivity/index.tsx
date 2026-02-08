@@ -1,5 +1,6 @@
 import { useFlow } from '@stackflow/react/future';
 
+import { PostHog } from '@/bootstrap/posthog';
 import { ActivityLayout } from '@/components/ActivityLayout';
 import { ActivityActionButton } from '@/components/ActivityLayout/ActivityActionButton';
 import { ActivityHeaderText } from '@/components/ActivityLayout/ActivityHeaderText';
@@ -51,7 +52,13 @@ export const TimetableResultActivity = () => {
           </div>
         </ActivityLayout.Body>
         <ActivityLayout.Footer>
-          <ActivityActionButton size="large" type="button">
+          <ActivityActionButton
+            onClick={() => {
+              PostHog.trackActivityCtaClicked('timetable_result', 'referral_event_click');
+            }}
+            size="large"
+            type="button"
+          >
             추천인 이벤트 참여하기
           </ActivityActionButton>
         </ActivityLayout.Footer>

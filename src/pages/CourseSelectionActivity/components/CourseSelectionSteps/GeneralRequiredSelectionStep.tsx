@@ -1,6 +1,7 @@
 import { motion } from 'motion/react';
 import { useContext, useState } from 'react';
 
+import { PostHog } from '@/bootstrap/posthog';
 import { SelectableCourseItem } from '@/components/CourseItem/SelectableCourseItem';
 import { useCombinedCourses } from '@/hooks/course/useCombinedCourses';
 import { useGroupedCoursesByField } from '@/hooks/course/useGroupedCoursesByField';
@@ -42,6 +43,13 @@ const GeneralRequiredCourseFieldGroup = ({
         const hasAnySelectedInGroup = selectedGroupCourse !== null;
 
         const handleClickCourseItem = () => {
+          PostHog.trackCourseToggled('course_selection', {
+            category: course.category,
+            courseCode: course.code,
+            credit: course.point,
+            selected: !isSelected,
+          });
+
           const unSelectCourse = (course: CourseType) => {
             setSelectedCourses((prev) => prev.filter((c) => !isSameCourse(c, course)));
             setSelectedGroupCourse(null);

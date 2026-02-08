@@ -1,5 +1,6 @@
 import { useFlow } from '@stackflow/react/future';
 
+import { PostHog } from '@/bootstrap/posthog';
 import { ActivityLayout } from '@/components/ActivityLayout';
 import { ActivityActionButton } from '@/components/ActivityLayout/ActivityActionButton';
 import { ActivityHeaderText } from '@/components/ActivityLayout/ActivityHeaderText';
@@ -35,7 +36,14 @@ export const TimetableGuideActivity = () => {
         <ActivityLayout.Body className="pb-[180px]" />
 
         <ActivityLayout.Footer>
-          <ActivityActionButton onClick={() => pop()} size="large" type="button">
+          <ActivityActionButton
+            onClick={() => {
+              PostHog.trackActivityCtaClicked('timetable_guide', 'back_to_course_selection');
+              pop();
+            }}
+            size="large"
+            type="button"
+          >
             과목 다시 담으러 가기
           </ActivityActionButton>
         </ActivityLayout.Footer>

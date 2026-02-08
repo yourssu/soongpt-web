@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 
+import { PostHog } from '@/bootstrap/posthog';
 import { CourseList } from '@/components/CourseItem/CourseList';
 import { SelectedCoursesContext } from '@/pages/CourseSelectionActivity/context';
 import { SelectedCourseType } from '@/pages/CourseSelectionActivity/type';
@@ -24,6 +25,12 @@ export const CourseSelectionList = ({
 
   const handleToggle = (course: CourseType) => {
     const selected = isSelected(course);
+    PostHog.trackCourseToggled('course_selection', {
+      category: course.category,
+      courseCode: course.code,
+      credit: course.point,
+      selected: !selected,
+    });
     const parsedCourse = parseSelectedCourseOnPush?.(course) ?? course;
     setSelectedCourses((prev) =>
       selected

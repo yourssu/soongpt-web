@@ -5,6 +5,7 @@ import { SwitchCase } from 'react-simplikit';
 
 import { postTimetableRecommendation } from '@/api/timetables/post-timetable-recommendation';
 import { Mixpanel } from '@/bootstrap/mixpanel';
+import { PostHog } from '@/bootstrap/posthog';
 import { ActivityLayout } from '@/components/ActivityLayout';
 import { useSelectedTimetableContext } from '@/components/Providers/SelectedTimetableProvider/hook';
 import { useAssertedStudentInfoContext } from '@/components/Providers/StudentInfoProvider/hook';
@@ -61,6 +62,15 @@ export const CourseSelectionActivity = () => {
   // Todo: 전필은 로딩시 무조건 선택되어야 함
 
   const handleCreateTimetable = async () => {
+    PostHog.trackActivityCtaClicked('course_selection', 'create_timetable_click', {
+      selectedCourseCount: selectedCourses.length,
+      selectedCredit: totalPoints,
+    });
+    PostHog.trackStepNextClicked('COURSE_SELECTION_RESULT', {
+      selectedCourseCount: selectedCourses.length,
+      selectedCredit: totalPoints,
+    });
+
     const partialSelection = buildPartialSelectionFromCourses(
       {
         department,
@@ -104,6 +114,11 @@ export const CourseSelectionActivity = () => {
     const { status, successResponse, singleConflictCourses } = response.result;
 
     setRecommendationStatus(status);
+    PostHog.trackFunnelStageCompleted('course_selection', {
+      selectedCourseCount: selectedCourses.length,
+      selectedCredit: totalPoints,
+      status,
+    });
 
     if (status === 'SUCCESS' && successResponse) {
       setRecommendedPrimaryTimetable(successResponse.primaryTimetable);
@@ -141,6 +156,10 @@ export const CourseSelectionActivity = () => {
                 RETAKE: () => (
                   <RetakeSelectionStep
                     onNextClick={() => {
+                      PostHog.trackStepNextClicked('RETAKE', {
+                        selectedCourseCount: selectedCourses.length,
+                        selectedCredit: totalPoints,
+                      });
                       pushStep({
                         type: 'MAJOR_PREREQUISITE',
                       });
@@ -150,6 +169,10 @@ export const CourseSelectionActivity = () => {
                 MAJOR_PREREQUISITE: () => (
                   <MajorPrerequisiteSelectionStep
                     onNextClick={() => {
+                      PostHog.trackStepNextClicked('MAJOR_PREREQUISITE', {
+                        selectedCourseCount: selectedCourses.length,
+                        selectedCredit: totalPoints,
+                      });
                       pushStep({
                         type: 'MAJOR_REQUIRED',
                       });
@@ -159,6 +182,10 @@ export const CourseSelectionActivity = () => {
                 MAJOR_REQUIRED: () => (
                   <MajorRequiredSelectionStep
                     onNextClick={() => {
+                      PostHog.trackStepNextClicked('MAJOR_REQUIRED', {
+                        selectedCourseCount: selectedCourses.length,
+                        selectedCredit: totalPoints,
+                      });
                       pushStep({
                         type: 'MAJOR_ELECTIVE',
                       });
@@ -174,6 +201,10 @@ export const CourseSelectionActivity = () => {
                 MAJOR_ELECTIVE: () => (
                   <MajorElectiveSelectionStep
                     onNextClick={() => {
+                      PostHog.trackStepNextClicked('MAJOR_ELECTIVE', {
+                        selectedCourseCount: selectedCourses.length,
+                        selectedCredit: totalPoints,
+                      });
                       pushStep({
                         type: 'DOUBLE_MAJOR',
                       });
@@ -191,6 +222,10 @@ export const CourseSelectionActivity = () => {
                 DOUBLE_MAJOR: () => (
                   <DoubleMajorSelectionStep
                     onNextClick={() => {
+                      PostHog.trackStepNextClicked('DOUBLE_MAJOR', {
+                        selectedCourseCount: selectedCourses.length,
+                        selectedCredit: totalPoints,
+                      });
                       pushStep({
                         type: 'MINOR',
                       });
@@ -200,6 +235,10 @@ export const CourseSelectionActivity = () => {
                 MINOR: () => (
                   <MinorSelectionStep
                     onNextClick={() => {
+                      PostHog.trackStepNextClicked('MINOR', {
+                        selectedCourseCount: selectedCourses.length,
+                        selectedCredit: totalPoints,
+                      });
                       pushStep({
                         type: 'TEACHING_CERTIFICATE',
                       });
@@ -209,6 +248,10 @@ export const CourseSelectionActivity = () => {
                 TEACHING_CERTIFICATE: () => (
                   <TeachingCertificateSelectionStep
                     onNextClick={() => {
+                      PostHog.trackStepNextClicked('TEACHING_CERTIFICATE', {
+                        selectedCourseCount: selectedCourses.length,
+                        selectedCredit: totalPoints,
+                      });
                       pushStep({
                         type: 'GENERAL_REQUIRED',
                       });
@@ -218,6 +261,10 @@ export const CourseSelectionActivity = () => {
                 GENERAL_REQUIRED: () => (
                   <GeneralRequiredSelectionStep
                     onNextClick={() => {
+                      PostHog.trackStepNextClicked('GENERAL_REQUIRED', {
+                        selectedCourseCount: selectedCourses.length,
+                        selectedCredit: totalPoints,
+                      });
                       pushStep({
                         type: 'COURSE_SELECTION_RESULT',
                       });

@@ -1,6 +1,7 @@
-import { Suspense, useContext, useMemo, useState } from 'react';
+import { Suspense, useContext, useEffect, useMemo, useState } from 'react';
 import { SwitchCase, useInputState } from 'react-simplikit';
 
+import { PostHog } from '@/bootstrap/posthog';
 import { SelectableChip } from '@/components/Chip/SelectableChip';
 import { IcMonoSearch } from '@/components/Icons/IcMonoSearch';
 import { useAssertedStudentInfoContext } from '@/components/Providers/StudentInfoProvider/hook';
@@ -49,6 +50,14 @@ const MajorElectiveContent = ({ selectedGrades }: { selectedGrades: StudentGrade
     };
     return combinedCourses.filter(matchKeyword);
   }, [combinedCourses, delayedSearchKeyword]);
+
+  useEffect(() => {
+    PostHog.trackSearchUpdated('major_elective', {
+      keywordLength: delayedSearchKeyword.length,
+      resultCount: searchedCombinedCourses.length,
+      selectedGrades: selectedGrades.join(','),
+    });
+  }, [delayedSearchKeyword, searchedCombinedCourses.length, selectedGrades]);
 
   const combinedCoursesState = useGetArrayState(combinedCourses);
 
@@ -153,13 +162,21 @@ export const MajorElectiveSelectionStep = ({ onNextClick }: MajorElectiveSelecti
                 }
                 key={grades.join(', ')}
                 onClickGradeChip={() => {
+                  PostHog.trackFieldChanged('major_elective_grade_chip_changed', {
+                    selectedGrades: grades.join(','),
+                  });
                   setSelectedGrades(grades);
                   setIsOtherMajorSelected(false);
                 }}
               />
             ))}
             <SelectableChip
-              onSelectChange={() => setIsOtherMajorSelected(true)}
+              onSelectChange={() => {
+                PostHog.trackFieldChanged('major_elective_other_major_toggled', {
+                  selected: true,
+                });
+                setIsOtherMajorSelected(true);
+              }}
               selected={isOtherMajorSelected}
             >
               타전공

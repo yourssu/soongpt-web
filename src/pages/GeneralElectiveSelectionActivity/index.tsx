@@ -1,6 +1,7 @@
 import { useFlow } from '@stackflow/react/future';
 import { useMemo, useState } from 'react';
 
+import { PostHog } from '@/bootstrap/posthog';
 import { ActivityLayout } from '@/components/ActivityLayout';
 import { ActivityActionButton } from '@/components/ActivityLayout/ActivityActionButton';
 import { ActivityHeaderText } from '@/components/ActivityLayout/ActivityHeaderText';
@@ -107,6 +108,11 @@ export const GeneralElectiveSelectionActivity = () => {
   }
 
   const handleChipClick = (value: string, selected: boolean) => {
+    PostHog.trackFieldChanged('general_elective_field_chip_toggled', {
+      selected,
+      valueLength: value.length,
+    });
+
     if (selected) {
       setSelectedFields((prev) => [...prev, value]);
       return;
@@ -118,6 +124,12 @@ export const GeneralElectiveSelectionActivity = () => {
   const handleCourseSelect = (course: CourseType) => {
     setSelectedGeneralElectives((prev) => {
       const exists = prev.some((item) => isSameCourseCode(item.code, course.code));
+      PostHog.trackCourseToggled('general_elective_selection', {
+        category: course.category,
+        courseCode: course.code,
+        credit: course.point,
+        selected: !exists,
+      });
       if (exists) {
         return prev.filter((item) => !isSameCourseCode(item.code, course.code));
       }
@@ -126,6 +138,9 @@ export const GeneralElectiveSelectionActivity = () => {
       const occupiedCourses = [...selectedTimetable.courses, ...prev];
 
       if (hasCourseConflictWithAny(candidate, occupiedCourses)) {
+        PostHog.trackActivityCtaClicked('general_elective_selection', 'course_conflict_blocked', {
+          courseCode: course.code,
+        });
         toast.error('현재 시간표와 겹치는 교양선택 과목은 담을 수 없어요.');
         return prev;
       }
@@ -232,6 +247,7 @@ export const GeneralElectiveSelectionActivity = () => {
         <BottomSheet.Footer className="pt-4">
           <ActivityActionButton
             onClick={() => {
+              PostHog.trackActivityCtaClicked('general_elective_selection', 'go_to_chapel');
               const nextPartialSelection = buildPartialSelectionFromTimetable(
                 partialSelection,
                 previewTimetableData,
@@ -245,6 +261,9 @@ export const GeneralElectiveSelectionActivity = () => {
 
               setPartialSelection(nextPartialSelection);
               setSelectedChapelCourse(null);
+              PostHog.trackFunnelStageCompleted('general_elective', {
+                selectedGeneralElectiveCount: selectedGeneralElectives.length,
+              });
               push('chapel_selection', { timetableId: previewTimetableData.timetableId });
             }}
             type="button"

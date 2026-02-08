@@ -1,7 +1,9 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
+import { useEffect } from 'react';
 
 import { getSearchedCourses } from '@/api/courses/get-searched-courses';
 import { Mixpanel } from '@/bootstrap/mixpanel';
+import { PostHog } from '@/bootstrap/posthog';
 import { SelectableCourseItem } from '@/components/CourseItem/SelectableCourseItem';
 import { useCombinedCourses } from '@/hooks/course/useCombinedCourses';
 import { useSend } from '@/hooks/stackflow/compat-await-push-hooks';
@@ -29,6 +31,13 @@ export const CourseSearchResult = ({ searchKeyword }: CourseSearchResultProps) =
   });
   const combinedCourses = useCombinedCourses(searchedCourses);
 
+  useEffect(() => {
+    PostHog.trackSearchUpdated('course_search_results', {
+      keywordLength: searchKeyword.length,
+      resultCount: combinedCourses.length,
+    });
+  }, [combinedCourses.length, searchKeyword.length]);
+
   const onClickCourseItem = async (course: CourseType, isSelected: boolean) => {
     const actionType = isSelected ? '삭제' : '추가';
 
@@ -53,13 +62,29 @@ export const CourseSearchResult = ({ searchKeyword }: CourseSearchResultProps) =
       secondaryButtonText: '아니요',
     });
 
+    PostHog.trackModalDecision('course_search_add_or_remove', accepted ? 'confirm' : 'cancel', {
+      actionType,
+      courseCode: course.code,
+    });
+
     if (accepted) {
       if (totalSelectedPoints + course.point > MAX_COURSE_POINT) {
+        PostHog.trackActivityCtaClicked('course_search', 'max_credit_blocked', {
+          courseCode: course.code,
+          currentCredit: totalSelectedPoints,
+          selectedCredit: course.point,
+        });
         toast.error(`최대 ${MAX_COURSE_POINT}학점까지만 고를 수 있어요`);
         return;
       }
 
       Mixpanel.trackSearchCourseAddClick(course.name);
+      PostHog.trackCourseToggled('course_search', {
+        category: course.category,
+        courseCode: course.code,
+        credit: course.point,
+        selected: actionType === '추가',
+      });
       popAndSend({ course, actionType });
     }
   };

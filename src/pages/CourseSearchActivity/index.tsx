@@ -1,6 +1,8 @@
+import { useEffect } from 'react';
 import { Suspense } from 'react';
 import { useInputState } from 'react-simplikit';
 
+import { PostHog } from '@/bootstrap/posthog';
 import { ActivityLayout } from '@/components/ActivityLayout';
 import { BaseAppBar } from '@/components/AppBar/BaseAppBar';
 import { useDelayedValue } from '@/hooks/useDelayedValue';
@@ -12,6 +14,12 @@ export const CourseSearchActivity = () => {
   const debouncedSearchKeyword = useDelayedValue(searchKeyword);
 
   const autoFocusRef = useStackflowInputAutoFocusEffect();
+
+  useEffect(() => {
+    PostHog.trackSearchUpdated('course_search', {
+      keywordLength: debouncedSearchKeyword.length,
+    });
+  }, [debouncedSearchKeyword]);
 
   return (
     <ActivityLayout>

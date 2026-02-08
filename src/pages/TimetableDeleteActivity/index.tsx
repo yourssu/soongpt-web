@@ -3,6 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 
 import { postTimetableRecommendation } from '@/api/timetables/post-timetable-recommendation';
+import { PostHog } from '@/bootstrap/posthog';
 import { ActivityLayout } from '@/components/ActivityLayout';
 import { ActivityActionButton } from '@/components/ActivityLayout/ActivityActionButton';
 import { ActivityHeaderText } from '@/components/ActivityLayout/ActivityHeaderText';
@@ -47,6 +48,9 @@ export const TimetableDeleteActivity = () => {
     if (selectedCode === null) {
       return;
     }
+    PostHog.trackActivityCtaClicked('timetable_delete', 'delete_conflict_course_and_create', {
+      selectedCourseCode: selectedCode,
+    });
 
     const nextPartialSelection = removeCodeFromPartialSelection(partialSelection, selectedCode);
     setPartialSelection(nextPartialSelection);
@@ -131,7 +135,14 @@ export const TimetableDeleteActivity = () => {
                     }`}
                     key={`${course.code}-${index}`}
                     onClick={() =>
-                      setSelectedCode((prev) => (prev === course.code ? null : course.code))
+                      setSelectedCode((prev) => {
+                        const nextValue = prev === course.code ? null : course.code;
+                        PostHog.trackFieldChanged('timetable_delete_course_toggled', {
+                          selected: nextValue !== null,
+                          selectedCourseCode: course.code,
+                        });
+                        return nextValue;
+                      })
                     }
                     type="button"
                   >
@@ -148,7 +159,14 @@ export const TimetableDeleteActivity = () => {
 
         <BottomSheet.Footer className="pt-4">
           <div className="flex flex-col gap-2">
-            <ActivityActionButton onClick={() => pop()} size="large" variant="secondary">
+            <ActivityActionButton
+              onClick={() => {
+                PostHog.trackActivityCtaClicked('timetable_delete', 'back_to_course_selection');
+                pop();
+              }}
+              size="large"
+              variant="secondary"
+            >
               과목 다시 담으러 가기
             </ActivityActionButton>
             <ActivityActionButton

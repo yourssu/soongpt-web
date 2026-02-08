@@ -2,6 +2,7 @@ import { motion } from 'motion/react';
 import { useContext, useMemo } from 'react';
 
 import { Mixpanel } from '@/bootstrap/mixpanel';
+import { PostHog } from '@/bootstrap/posthog';
 import { RemovableCourseListItem } from '@/components/CourseItem/RemovableCourseItem';
 import { useFilteredCoursesByCategory } from '@/hooks/course/useFilteredCoursesByCategory';
 import { useReceive } from '@/hooks/stackflow/compat-await-push-hooks';
@@ -42,6 +43,10 @@ export const CourseSelectionResultStep = ({ onNextClick }: CourseSelectionResult
 
   const onSearchButtonClick = async () => {
     Mixpanel.trackCourseSearchClick();
+    PostHog.trackActivityCtaClicked('course_selection', 'open_course_search', {
+      selectedCourseCount: selectedCourses.length,
+      selectedCredit,
+    });
 
     const result = await pushAndReceive('course_search', {
       selectedCourseCodes: selectedCourses.map((course) => course.code),
@@ -54,8 +59,22 @@ export const CourseSelectionResultStep = ({ onNextClick }: CourseSelectionResult
         const newCourse = { ...course, selectedBySearch: true };
         setSelectedCourses((prev) => [...prev, newCourse]);
         Mixpanel.trackSearchCourseAddConfirmClick(course.name);
+        PostHog.trackCourseToggled('course_selection', {
+          category: course.category,
+          courseCode: course.code,
+          credit: course.point,
+          selected: true,
+          source: 'course_search',
+        });
       } else {
         setSelectedCourses((prev) => prev.filter((c) => !isSameCourse(c, course)));
+        PostHog.trackCourseToggled('course_selection', {
+          category: course.category,
+          courseCode: course.code,
+          credit: course.point,
+          selected: false,
+          source: 'course_search',
+        });
       }
     }
   };
@@ -78,9 +97,23 @@ export const CourseSelectionResultStep = ({ onNextClick }: CourseSelectionResult
     });
 
     if (accepted) {
+      PostHog.trackModalDecision('course_remove', 'confirm', {
+        courseCode: course.code,
+      });
       Mixpanel.trackCourseDeleteConfirmClick(course.name);
+      PostHog.trackCourseToggled('course_selection', {
+        category: course.category,
+        courseCode: course.code,
+        credit: course.point,
+        selected: false,
+      });
       setSelectedCourses((prev) => prev.filter((c) => !isSameCourse(c, course)));
+      return;
     }
+
+    PostHog.trackModalDecision('course_remove', 'cancel', {
+      courseCode: course.code,
+    });
   };
 
   return (
@@ -114,6 +147,9 @@ export const CourseSelectionResultStep = ({ onNextClick }: CourseSelectionResult
                       key={course.code}
                       onClickRemove={() => {
                         Mixpanel.trackCourseDeleteClick(course.name);
+                        PostHog.trackActivityCtaClicked('course_selection', 'remove_course_click', {
+                          courseCode: course.code,
+                        });
                         onRemoveCourse(course);
                       }}
                     />
@@ -135,6 +171,9 @@ export const CourseSelectionResultStep = ({ onNextClick }: CourseSelectionResult
                       key={course.code}
                       onClickRemove={() => {
                         Mixpanel.trackCourseDeleteClick(course.name);
+                        PostHog.trackActivityCtaClicked('course_selection', 'remove_course_click', {
+                          courseCode: course.code,
+                        });
                         onRemoveCourse(course);
                       }}
                     />

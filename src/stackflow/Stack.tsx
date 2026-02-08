@@ -5,6 +5,7 @@ import { stackflow } from '@stackflow/react/future';
 
 import { routes } from '@/pages/routes';
 import { stackflowConfig } from '@/stackflow/config';
+import { posthogFunnelPlugin } from '@/stackflow/plugins/posthogFunnelPlugin';
 import { utmPreservePlugin } from '@/stackflow/plugins/utmPreservePlugin';
 
 export const { Stack } = stackflow({
@@ -25,5 +26,6 @@ export const { Stack } = stackflow({
      * historySyncPlugizn 이후에 utmPreservePlugin을 등록해야 함
      */
     utmPreservePlugin(),
+    posthogFunnelPlugin(),
   ],
 });

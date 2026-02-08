@@ -3,6 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 import { Suspense, useMemo, useState } from 'react';
 
 import { postFinalizeTimetable } from '@/api/timetables/post-finalize-timetable';
+import { PostHog } from '@/bootstrap/posthog';
 import { ActivityLayout } from '@/components/ActivityLayout';
 import { ActivityActionButton } from '@/components/ActivityLayout/ActivityActionButton';
 import { ActivityHeaderText } from '@/components/ActivityLayout/ActivityHeaderText';
@@ -71,9 +72,11 @@ export const ChapelSelectionActivity = () => {
 
   const handleCTA = async () => {
     if (!isExpanded) {
+      PostHog.trackActivityCtaClicked('chapel_selection', 'expand_chapel_sheet');
       setSheetState('open');
       return;
     }
+    PostHog.trackActivityCtaClicked('chapel_selection', 'finalize_timetable');
 
     const nextPartialSelection = buildPartialSelectionFromTimetable(
       partialSelection,
@@ -97,6 +100,13 @@ export const ChapelSelectionActivity = () => {
     }
 
     setFinalizedTimetable(renderedPreviewTimetable);
+    PostHog.trackFunnelStageCompleted('chapel', {
+      selectedChapel: !!selectedChapelCourse,
+    });
+    PostHog.trackFunnelStageCompleted('timetable_finalized', {
+      selectedChapel: !!selectedChapelCourse,
+      selectedGeneralElectiveCount: selectedGeneralElectives.length,
+    });
     push('timetable_result', {
       timetableId: renderedPreviewTimetable.timetableId,
     });
@@ -149,9 +159,16 @@ export const ChapelSelectionActivity = () => {
                   courses={selectableChapels}
                   isExpanded={isExpanded}
                   onSelect={(course) => {
-                    setSelectedChapelCourse((prev) =>
-                      prev && prev.code === course.code ? null : toTimetableCourse(course),
-                    );
+                    setSelectedChapelCourse((prev) => {
+                      const selected = !(prev && prev.code === course.code);
+                      PostHog.trackCourseToggled('chapel_selection', {
+                        category: course.category,
+                        courseCode: course.code,
+                        credit: course.point,
+                        selected,
+                      });
+                      return selected ? toTimetableCourse(course) : null;
+                    });
                   }}
                   selectedCode={selectedChapelCourse?.code}
                 />

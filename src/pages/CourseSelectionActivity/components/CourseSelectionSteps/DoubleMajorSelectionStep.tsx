@@ -1,5 +1,6 @@
 import { useContext, useState } from 'react';
 
+import { PostHog } from '@/bootstrap/posthog';
 import { SelectableChip } from '@/components/Chip/SelectableChip';
 import { ArrayState, useGetArrayState } from '@/hooks/useGetArrayState';
 import { CourseSelectionLayout } from '@/pages/CourseSelectionActivity/components/CourseSelectionLayout';
@@ -64,7 +65,12 @@ export const DoubleMajorSelectionStep = ({ onNextClick }: BaseStepProps) => {
           {DOUBLE_MAJOR_TABS.map((tab) => (
             <SelectableChip
               key={tab}
-              onSelectChange={() => setActiveTab(tab)}
+              onSelectChange={() => {
+                PostHog.trackFieldChanged('double_major_tab_changed', {
+                  tab,
+                });
+                setActiveTab(tab);
+              }}
               selected={activeTab === tab}
             >
               {tab}

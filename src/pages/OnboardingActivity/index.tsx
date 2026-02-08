@@ -48,6 +48,17 @@ export const OnboardingActivity = () => {
     Mixpanel.setUser(assertedStudentInfo);
     PostHog.setUser(assertedStudentInfo);
     Mixpanel.trackUserInformationClick();
+    PostHog.trackActivityCtaClicked('onboarding', 'save_user_information', {
+      grade: assertedStudentInfo.grade,
+      schoolId: assertedStudentInfo.schoolId,
+      semester: assertedStudentInfo.semester,
+      teachTrainingCourse: assertedStudentInfo.teachTrainingCourse,
+    });
+    PostHog.trackFunnelStageCompleted('onboarding', {
+      grade: assertedStudentInfo.grade,
+      schoolId: assertedStudentInfo.schoolId,
+      semester: assertedStudentInfo.semester,
+    });
     push('course_selection', { type: 'RETAKE' });
   };
 
@@ -68,10 +79,14 @@ export const OnboardingActivity = () => {
                 <select
                   className={`w-full appearance-none rounded-xl bg-white px-4 py-3 text-lg font-semibold ${studentInfo.grade !== undefined ? 'text-brandPrimary' : 'text-neutralPlaceholder'}`}
                   onChange={(e) => {
+                    const grade = Number(e.target.value) as StudentGrade;
                     setStudentInfo((prev) => ({
                       ...prev,
-                      grade: Number(e.target.value) as StudentGrade,
+                      grade,
                     }));
+                    PostHog.trackFieldChanged('onboarding_grade_changed', {
+                      grade,
+                    });
                   }}
                   value={studentInfo.grade ?? ''}
                 >
@@ -95,10 +110,14 @@ export const OnboardingActivity = () => {
                 <select
                   className={`w-full appearance-none rounded-xl bg-white px-4 py-3 text-lg font-semibold ${studentInfo.semester !== undefined ? 'text-brandPrimary' : 'text-neutralPlaceholder'}`}
                   onChange={(e) => {
+                    const semester = Number(e.target.value) as Semester;
                     setStudentInfo((prev) => ({
                       ...prev,
-                      semester: Number(e.target.value) as Semester,
+                      semester,
                     }));
+                    PostHog.trackFieldChanged('onboarding_semester_changed', {
+                      semester,
+                    });
                   }}
                   value={studentInfo.semester ?? ''}
                 >
@@ -122,10 +141,14 @@ export const OnboardingActivity = () => {
                 <select
                   className={`w-full appearance-none rounded-xl bg-white px-4 py-3 text-lg font-semibold ${studentInfo.schoolId !== undefined ? 'text-brandPrimary' : 'text-neutralPlaceholder'}`}
                   onChange={(e) => {
+                    const schoolId = Number(e.target.value);
                     setStudentInfo((prev) => ({
                       ...prev,
-                      schoolId: Number(e.target.value),
+                      schoolId,
                     }));
+                    PostHog.trackFieldChanged('onboarding_school_id_changed', {
+                      schoolId,
+                    });
                   }}
                   value={studentInfo.schoolId ?? ''}
                 >
@@ -150,12 +173,22 @@ export const OnboardingActivity = () => {
                 onBlur={() => setMainDeptDropdown([])}
                 onChange={(e) => {
                   const val = e.target.value.trim();
+                  const dropdownCount =
+                    val !== ''
+                      ? departmentValues.filter((d) => d.toLowerCase().includes(val.toLowerCase()))
+                          .length
+                      : 0;
                   setStudentInfo((prev) => ({ ...prev, department: val }));
                   setMainDeptDropdown(
                     val !== ''
                       ? departmentValues.filter((d) => d.toLowerCase().includes(val.toLowerCase()))
                       : [],
                   );
+                  PostHog.trackFieldChanged('onboarding_department_input_changed', {
+                    hasValue: val.length > 0,
+                    inputLength: val.length,
+                    dropdownCount,
+                  });
                 }}
                 placeholder="학과(주전공)"
                 type="text"
@@ -170,6 +203,9 @@ export const OnboardingActivity = () => {
                         onMouseDown={() => {
                           setStudentInfo((prev) => ({ ...prev, department: dept }));
                           setMainDeptDropdown([]);
+                          PostHog.trackFieldChanged('onboarding_department_selected', {
+                            inputLength: dept.length,
+                          });
                         }}
                         type="button"
                       >
@@ -189,12 +225,22 @@ export const OnboardingActivity = () => {
                 onBlur={() => setSubDeptDropdown([])}
                 onChange={(e) => {
                   const val = e.target.value.trim();
+                  const dropdownCount =
+                    val !== ''
+                      ? departmentValues.filter((d) => d.toLowerCase().includes(val.toLowerCase()))
+                          .length
+                      : 0;
                   setStudentInfo((prev) => ({ ...prev, subDepartment: val }));
                   setSubDeptDropdown(
                     val !== ''
                       ? departmentValues.filter((d) => d.toLowerCase().includes(val.toLowerCase()))
                       : [],
                   );
+                  PostHog.trackFieldChanged('onboarding_sub_department_input_changed', {
+                    hasValue: val.length > 0,
+                    inputLength: val.length,
+                    dropdownCount,
+                  });
                 }}
                 placeholder="복수(부)전공"
                 type="text"
@@ -209,6 +255,9 @@ export const OnboardingActivity = () => {
                         onMouseDown={() => {
                           setStudentInfo((prev) => ({ ...prev, subDepartment: dept }));
                           setSubDeptDropdown([]);
+                          PostHog.trackFieldChanged('onboarding_sub_department_selected', {
+                            inputLength: dept.length,
+                          });
                         }}
                         type="button"
                       >
@@ -226,10 +275,16 @@ export const OnboardingActivity = () => {
               <button
                 className="text-brandPrimary w-full rounded-xl bg-white px-4 py-3 text-left text-lg font-semibold"
                 onClick={() =>
-                  setStudentInfo((prev) => ({
-                    ...prev,
-                    teachTrainingCourse: !prev.teachTrainingCourse,
-                  }))
+                  setStudentInfo((prev) => {
+                    const nextValue = !prev.teachTrainingCourse;
+                    PostHog.trackFieldChanged('onboarding_teach_training_toggled', {
+                      selected: nextValue,
+                    });
+                    return {
+                      ...prev,
+                      teachTrainingCourse: nextValue,
+                    };
+                  })
                 }
                 type="button"
               >
