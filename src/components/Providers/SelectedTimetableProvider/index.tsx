@@ -2,14 +2,14 @@ import { useMemo, useState } from 'react';
 
 import { SelectedTimetableContext } from '@/components/Providers/SelectedTimetableProvider/context';
 import { SelectedTimetableContextValue } from '@/components/Providers/SelectedTimetableProvider/type';
-import { CourseType } from '@/schemas/courseSchema';
+import { CourseType } from '@/types/course';
+import { TimetableCourseType, TimetableType } from '@/types/timetable';
+import { TimetablePartialSelectionPayloadType } from '@/types/timetablePayload';
 import {
   DeletableCourseDtoType,
   RecommendationDtoType,
   RecommendationStatusType,
-} from '@/schemas/timetableRecommendationSchema';
-import { TimetableCourseType, TimetableType } from '@/schemas/timetableSchema';
-import { TimetablePartialSelectionPayloadType } from '@/types/timetablePayload';
+} from '@/types/timetableRecommendation';
 import { mergeTimetableCourses } from '@/utils/timetableSelection';
 
 export const SelectedTimetableProvider = ({ children }: React.PropsWithChildren<unknown>) => {

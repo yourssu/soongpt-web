@@ -1,6 +1,6 @@
-import { CourseType } from '@/schemas/courseSchema';
-import { TimetableType } from '@/schemas/timetableSchema';
+import { CourseType } from '@/types/course';
 import { StudentType } from '@/types/student';
+import { TimetableType } from '@/types/timetable';
 import { TimetablePartialSelectionPayloadType } from '@/types/timetablePayload';
 
 const dedupeCodes = (codes: number[]) => Array.from(new Set(codes));

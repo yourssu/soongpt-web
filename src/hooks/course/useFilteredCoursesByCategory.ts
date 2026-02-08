@@ -1,5 +1,4 @@
-import { CourseType } from '@/schemas/courseSchema';
-import { CourseClassification } from '@/types/course';
+import { CourseClassification, CourseClassificationValues, CourseType } from '@/types/course';
 import { Merge } from '@/utils/type';
 
 type CourseWithCategory<TCategory extends CourseClassification, TCourse extends CourseType> = Merge<
@@ -13,7 +12,7 @@ type FilteredCoursesMapType<TCourse extends CourseType> = {
 
 export const useFilteredCoursesByCategory = <TCourse extends CourseType>(courses: TCourse[]) => {
   return Object.fromEntries(
-    CourseClassification.map((category) => [
+    CourseClassificationValues.map((category) => [
       category,
       courses.filter((course) => course.category === category),
     ]),

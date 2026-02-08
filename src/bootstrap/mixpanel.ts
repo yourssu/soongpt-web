@@ -1,7 +1,7 @@
 import mixpanel from 'mixpanel-browser';
 
-import { TimetableType } from '@/schemas/timetableSchema';
 import { StudentType } from '@/types/student';
+import { TimetableType } from '@/types/timetable';
 
 const MIXPANEL_TOKEN = import.meta.env.VITE_MIXPANEL_TOKEN;
 

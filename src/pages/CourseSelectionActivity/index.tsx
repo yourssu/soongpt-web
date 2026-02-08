@@ -24,7 +24,7 @@ import { TeachingCertificateSelectionStep } from '@/pages/CourseSelectionActivit
 import SoongptErrorBoundary from '@/pages/CourseSelectionActivity/components/SoongptErrorBoundary';
 import { SelectedCoursesContext } from '@/pages/CourseSelectionActivity/context';
 import { SelectedCourseType } from '@/pages/CourseSelectionActivity/type';
-import { TimetableType } from '@/schemas/timetableSchema';
+import { TimetableType } from '@/types/timetable';
 import { buildPartialSelectionFromCourses } from '@/utils/timetablePartialSelection';
 import { toTimetableCourse } from '@/utils/timetableSelection';
 

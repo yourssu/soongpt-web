@@ -1,4 +1,4 @@
-import { TimetableCourseType } from '@/schemas/timetableSchema';
+import { TimetableCourseType } from '@/types/timetable';
 
 const toMinutes = (time: string) => {
   const [hours, minutes] = time.split(':').map(Number);

@@ -1,4 +1,4 @@
-import { TimetableCourseType } from '@/schemas/timetableSchema';
+import { TimetableCourseType } from '@/types/timetable';
 
 export const timetableBaseDays = ['월', '화', '수', '목', '금'];
 

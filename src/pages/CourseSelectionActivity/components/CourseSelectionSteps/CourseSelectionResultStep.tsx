@@ -9,7 +9,7 @@ import { useAlertDialog } from '@/hooks/useAlertDialog';
 import { CourseSelectionLayout } from '@/pages/CourseSelectionActivity/components/CourseSelectionLayout';
 import { BaseStepProps } from '@/pages/CourseSelectionActivity/components/CourseSelectionSteps/type';
 import { SelectedCoursesContext } from '@/pages/CourseSelectionActivity/context';
-import { CourseType } from '@/schemas/courseSchema';
+import { CourseType } from '@/types/course';
 import { isSameCourse } from '@/utils/course';
 
 type CourseSelectionResultStepProps = BaseStepProps;

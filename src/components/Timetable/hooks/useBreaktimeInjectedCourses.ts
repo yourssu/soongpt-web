@@ -1,6 +1,6 @@
 import { InjectedTimetableCourse } from '@/components/Timetable/type';
 import { parseCourseTime } from '@/components/Timetable/utils/parseCourseTime';
-import { TimetableCourseType } from '@/schemas/timetableSchema';
+import { TimetableCourseType } from '@/types/timetable';
 
 const MAX_BREAK_TIME_MINUTES = 15;
 

@@ -1,5 +1,5 @@
 import { CourseList } from '@/components/CourseItem/CourseList';
-import { CourseType } from '@/schemas/courseSchema';
+import { CourseType } from '@/types/course';
 import { formatCourseTimeSummary, parseCourseScheduleRoom } from '@/utils/courseTime';
 import { cn } from '@/utils/dom';
 

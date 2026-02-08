@@ -12,8 +12,8 @@ import {
 import { SelectedCoursesContext } from '@/pages/CourseSelectionActivity/context';
 import { useSuspenseGetCourses } from '@/pages/CourseSelectionActivity/hooks/useSuspenseGetCourses';
 import { useSuspenseGetCreditProgress } from '@/pages/CourseSelectionActivity/hooks/useSuspenseGetCreditProgress';
-import { CourseType } from '@/schemas/courseSchema';
 import { COURSE_SELECTION_PROGRESS } from '@/stackflow/progress';
+import { CourseType } from '@/types/course';
 
 type MajorRequiredSelectionStepProps = BaseStepProps;
 

@@ -1,7 +1,7 @@
 import { createContext, useContext } from 'react';
 
 import { InjectedTimetableCourse } from '@/components/Timetable/type';
-import { TimetableType } from '@/schemas/timetableSchema';
+import { TimetableType } from '@/types/timetable';
 
 interface TimetableContextProps {
   courses: InjectedTimetableCourse[];

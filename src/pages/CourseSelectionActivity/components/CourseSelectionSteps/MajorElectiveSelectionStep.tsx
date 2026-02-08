@@ -22,8 +22,8 @@ import { useSuspenseGetCreditProgress } from '@/pages/CourseSelectionActivity/ho
 import { useSuspenseGetMajorElectives } from '@/pages/CourseSelectionActivity/hooks/useSuspenseGetMajorElectives';
 import { useSuspenseGetOtherMajorElectives } from '@/pages/CourseSelectionActivity/hooks/useSuspenseGetOtherMajorElectives';
 import { SelectedCourseType } from '@/pages/CourseSelectionActivity/type';
-import { CourseType } from '@/schemas/courseSchema';
 import { COURSE_SELECTION_PROGRESS } from '@/stackflow/progress';
+import { CourseType } from '@/types/course';
 import { StudentGrade } from '@/types/student';
 
 type MajorElectiveSelectionStepProps = BaseStepProps;

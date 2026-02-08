@@ -3,7 +3,7 @@ import { useContext } from 'react';
 import { CourseList } from '@/components/CourseItem/CourseList';
 import { SelectedCoursesContext } from '@/pages/CourseSelectionActivity/context';
 import { SelectedCourseType } from '@/pages/CourseSelectionActivity/type';
-import { CourseType } from '@/schemas/courseSchema';
+import { CourseType } from '@/types/course';
 import { isSameCourse } from '@/utils/course';
 
 interface CourseSelectionListProps {

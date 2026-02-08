@@ -9,7 +9,7 @@ import { useBreaktimeInjectedCourses } from '@/components/Timetable/hooks/useBre
 import { useTimetableDayRange } from '@/components/Timetable/hooks/useTimetableDayRange';
 import { useTimetableHourRange } from '@/components/Timetable/hooks/useTimetableHourRange';
 import { useCoursesTotalPoint } from '@/hooks/course/useCoursesTotalPoint';
-import { TimetableType } from '@/schemas/timetableSchema';
+import { TimetableType } from '@/types/timetable';
 
 interface TimetableProps {
   isSelected?: boolean;

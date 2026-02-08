@@ -1,4 +1,4 @@
-import { CourseTimeType } from '@/schemas/courseSchema';
+import { CourseTimeType } from '@/types/course';
 
 const COURSE_TIME_REGEX = /([월화수목금토일])\s*(\d{1,2}:\d{2})\s*-\s*(\d{1,2}:\d{2})/;
 const CLASSROOM_REGEX = /\(([^)]+)\)/;

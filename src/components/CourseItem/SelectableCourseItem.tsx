@@ -4,7 +4,7 @@ import { ReactNode } from 'react';
 
 import { useCourseItemAnimationVariants } from '@/components/CourseItem/hook';
 import { useGetArrayState } from '@/hooks/useGetArrayState';
-import { CourseType } from '@/schemas/courseSchema';
+import { CourseType } from '@/types/course';
 
 interface SelectableCourseItemProps {
   className?: string;

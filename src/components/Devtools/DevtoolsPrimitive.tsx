@@ -13,11 +13,11 @@ import { STAGE } from '@/config';
 import { useAlertDialog } from '@/hooks/useAlertDialog';
 import { useToast } from '@/hooks/useToast';
 import { MOCK_TIMETABLE, MOCK_TIMETABLE_ID } from '@/mocks/devtools/timetables';
-import { RecommendationStatusType } from '@/schemas/timetableRecommendationSchema';
 import {
   TimetablePartialSelectionPayloadType,
   TimetablePayloadType,
 } from '@/types/timetablePayload';
+import { RecommendationStatusType } from '@/types/timetableRecommendation';
 import { assertNonNullish } from '@/utils/assertion';
 
 interface ToolItemProps {

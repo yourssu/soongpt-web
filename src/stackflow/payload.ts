@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 
-import { CourseType } from '@/schemas/courseSchema';
 import { ActivityName } from '@/stackflow/metadata';
+import { CourseType } from '@/types/course';
 
 type noopPayload = never;
 

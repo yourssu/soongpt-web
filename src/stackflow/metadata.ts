@@ -1,7 +1,7 @@
 import { z } from 'zod/v4';
 
 import { zDecoder } from '@/stackflow/utils/zDecoder';
-import { CourseSelectionStepType } from '@/types/course';
+import { CourseSelectionStepTypeValues } from '@/types/course';
 import { Prettify } from '@/utils/type';
 
 type ActivityDescriptionItem = {
@@ -22,7 +22,7 @@ export const activityDescription = {
   },
   course_selection: {
     schema: z.object({
-      type: zDecoder.enum(CourseSelectionStepType).optional(),
+      type: zDecoder.enum(CourseSelectionStepTypeValues).optional(),
     }),
     url: '/course-selection',
   },

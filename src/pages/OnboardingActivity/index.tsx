@@ -11,11 +11,12 @@ import { ProgressAppBar } from '@/components/AppBar/ProgressAppBar';
 import { useStudentInfoContext } from '@/components/Providers/StudentInfoProvider/hook';
 import { FLOW_PROGRESS } from '@/stackflow/progress';
 import {
-  departments,
-  schoolIds,
+  departmentValues,
+  schoolIdValues,
   Semester,
-  semesters,
+  semesterValues,
   StudentGrade,
+  StudentGradeValues,
   type StudentType,
 } from '@/types/student';
 import { assertNonNullish } from '@/utils/assertion';
@@ -77,7 +78,7 @@ export const OnboardingActivity = () => {
                   <option disabled value="">
                     학년
                   </option>
-                  {StudentGrade.map((g) => (
+                  {StudentGradeValues.map((g) => (
                     <option key={g} value={g}>
                       {g}
                     </option>
@@ -104,7 +105,7 @@ export const OnboardingActivity = () => {
                   <option disabled value="">
                     학기
                   </option>
-                  {semesters.map((s) => (
+                  {semesterValues.map((s) => (
                     <option key={s} value={s}>
                       {s}
                     </option>
@@ -131,7 +132,7 @@ export const OnboardingActivity = () => {
                   <option disabled value="">
                     입학년도
                   </option>
-                  {schoolIds.map((y) => (
+                  {schoolIdValues.map((y) => (
                     <option key={y} value={y}>
                       20{y}
                     </option>
@@ -152,7 +153,7 @@ export const OnboardingActivity = () => {
                   setStudentInfo((prev) => ({ ...prev, department: val }));
                   setMainDeptDropdown(
                     val !== ''
-                      ? departments.filter((d) => d.toLowerCase().includes(val.toLowerCase()))
+                      ? departmentValues.filter((d) => d.toLowerCase().includes(val.toLowerCase()))
                       : [],
                   );
                 }}
@@ -191,7 +192,7 @@ export const OnboardingActivity = () => {
                   setStudentInfo((prev) => ({ ...prev, subDepartment: val }));
                   setSubDeptDropdown(
                     val !== ''
-                      ? departments.filter((d) => d.toLowerCase().includes(val.toLowerCase()))
+                      ? departmentValues.filter((d) => d.toLowerCase().includes(val.toLowerCase()))
                       : [],
                   );
                 }}

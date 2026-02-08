@@ -1,6 +1,6 @@
 import { SLOT_HEIGHT } from '@/components/Timetable/type';
 import { parseCourseTime } from '@/components/Timetable/utils/parseCourseTime';
-import { CourseTimeType } from '@/schemas/courseSchema';
+import { CourseTimeType } from '@/types/course';
 
 const MINUTES_PER_SLOT = 5;
 

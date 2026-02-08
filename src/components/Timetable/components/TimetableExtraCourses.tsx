@@ -1,6 +1,6 @@
 import { useTimetableContext } from '@/components/Timetable/context';
 import { getGridTemplateCols } from '@/components/Timetable/utils/getTimetableGridStyle';
-import { TimetableCourseType } from '@/schemas/timetableSchema';
+import { TimetableCourseType } from '@/types/timetable';
 
 interface TimetableExtraCoursesProps {
   extraCourses: TimetableCourseType[];

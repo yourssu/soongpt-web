@@ -2,7 +2,7 @@ import { range } from 'es-toolkit';
 import { max } from 'es-toolkit/compat';
 
 import { parseCourseTime } from '@/components/Timetable/utils/parseCourseTime';
-import { TimetableCourseType } from '@/schemas/timetableSchema';
+import { TimetableCourseType } from '@/types/timetable';
 
 export const useTimetableHourRange = (courses: TimetableCourseType[]) => {
   const earliestHour = 9;

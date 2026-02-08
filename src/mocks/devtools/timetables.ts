@@ -1,6 +1,6 @@
 import { TimetableResponseInputType } from '@/api/timetables/get-timetable-by-id/response';
 import { TimetableArrayResponseInputType } from '@/api/timetables/post-timetable/response';
-import { type TimetableInputType, TimetableSchema, TimetableType } from '@/schemas/timetableSchema';
+import { type TimetableInputType, TimetableSchema, TimetableType } from '@/types/timetable';
 
 export const MOCK_TIMETABLE_ID = 9999;
 

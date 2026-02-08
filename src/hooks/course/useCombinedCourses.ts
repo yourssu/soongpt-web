@@ -1,6 +1,6 @@
 import { uniq, uniqBy } from 'es-toolkit';
 
-import { CourseType } from '@/schemas/courseSchema';
+import { CourseType } from '@/types/course';
 import { extractComparableCourseCode, isSameCourse } from '@/utils/course';
 
 /** 

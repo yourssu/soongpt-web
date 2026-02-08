@@ -1,4 +1,4 @@
-import { CourseType } from '@/schemas/courseSchema';
+import { CourseType } from '@/types/course';
 
 export type SelectedCourseType = CourseType & {
   fromOtherGrade?: boolean;

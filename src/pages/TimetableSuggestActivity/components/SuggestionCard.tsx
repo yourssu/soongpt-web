@@ -1,4 +1,4 @@
-import { RecommendationDtoType } from '@/schemas/timetableRecommendationSchema';
+import { RecommendationDtoType } from '@/types/timetableRecommendation';
 import { cn } from '@/utils/dom';
 
 interface SuggestionCardProps {

@@ -1,4 +1,4 @@
-import { CourseType } from '@/schemas/courseSchema';
+import { CourseType } from '@/types/course';
 
 export const extractComparableCourseCode = (code: number) => {
   return code.toString().slice(0, 8);

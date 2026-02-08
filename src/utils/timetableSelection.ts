@@ -1,5 +1,5 @@
-import { CourseType } from '@/schemas/courseSchema';
-import { TimetableCourseType, TimetableType } from '@/schemas/timetableSchema';
+import { CourseType } from '@/types/course';
+import { TimetableCourseType, TimetableType } from '@/types/timetable';
 import { parseCourseScheduleRoom } from '@/utils/courseTime';
 
 export const toTimetableCourse = (course: CourseType): TimetableCourseType => {

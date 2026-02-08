@@ -4,8 +4,8 @@ import { semesters, StudentGrade } from '@/types/student';
 
 const completedSyncStatusSchema = z.object({
   status: z.literal('COMPLETED'),
-  grade: z.literal(StudentGrade),
-  semester: z.literal(semesters),
+  grade: StudentGrade,
+  semester: semesters,
   schoolId: z.number(),
   department: z.string(),
   subDepartment: z.string().optional(),

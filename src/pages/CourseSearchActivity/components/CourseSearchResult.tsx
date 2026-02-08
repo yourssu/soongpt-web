@@ -8,7 +8,7 @@ import { useSend } from '@/hooks/stackflow/compat-await-push-hooks';
 import { useSafeActivityParams } from '@/hooks/stackflow/useSafeActivityParams';
 import { useAlertDialog } from '@/hooks/useAlertDialog';
 import { useToast } from '@/hooks/useToast';
-import { CourseType } from '@/schemas/courseSchema';
+import { CourseType } from '@/types/course';
 import { isSameCourseCode } from '@/utils/course';
 
 interface CourseSearchResultProps {

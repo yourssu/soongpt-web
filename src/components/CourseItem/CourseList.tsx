@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 
 import { SelectableCourseItem } from '@/components/CourseItem/SelectableCourseItem';
 import { useCombinedCourses } from '@/hooks/course/useCombinedCourses';
-import { CourseType } from '@/schemas/courseSchema';
+import { CourseType } from '@/types/course';
 
 interface CourseListProps {
   combineCourses?: boolean;

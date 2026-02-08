@@ -15,13 +15,13 @@ import { Timetable } from '@/components/Timetable';
 import { useToast } from '@/hooks/useToast';
 import { GeneralElectiveProgressText } from '@/pages/GeneralElectiveSelectionActivity/components/GeneralElectiveProgressText';
 import { useSuspenseGetGeneralElectiveProgress } from '@/pages/GeneralElectiveSelectionActivity/hooks/useSuspenseGetGeneralElectiveProgress';
-import { CourseType } from '@/schemas/courseSchema';
-import { TimetableCourseType } from '@/schemas/timetableSchema';
 import { FLOW_PROGRESS } from '@/stackflow/progress';
+import { CourseType } from '@/types/course';
 import {
-  GENERAL_ELECTIVE_FIELDS_AFTER_23,
-  GENERAL_ELECTIVE_FIELDS_BEFORE_22,
+  generalElectiveFieldsAfter23Values,
+  generalElectiveFieldsBefore22Values,
 } from '@/types/general';
+import { TimetableCourseType } from '@/types/timetable';
 import { isSameCourseCode } from '@/utils/course';
 import { hasCourseConflictWithAny } from '@/utils/timetableConflict';
 import { buildPartialSelectionFromTimetable } from '@/utils/timetablePartialSelection';
@@ -63,8 +63,8 @@ export const GeneralElectiveSelectionActivity = () => {
   const progress = useSuspenseGetGeneralElectiveProgress();
 
   const chipValues = isAfter23
-    ? GENERAL_ELECTIVE_FIELDS_AFTER_23
-    : GENERAL_ELECTIVE_FIELDS_BEFORE_22;
+    ? generalElectiveFieldsAfter23Values
+    : generalElectiveFieldsBefore22Values;
 
   const [selectedFields, setSelectedFields] = useState<string[]>([]);
   const [sheetState, setSheetState] = useState<BottomSheetState>('peek');

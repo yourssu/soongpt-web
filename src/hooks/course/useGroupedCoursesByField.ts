@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { CourseType } from '@/schemas/courseSchema';
+import { CourseType } from '@/types/course';
 
 type GroupedByFieldCourses = Record<string, CourseType[]>;
 

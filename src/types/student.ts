@@ -1,21 +1,18 @@
-export type StudentType = {
-  department: string;
-  grade: StudentGrade;
-  schoolId: number;
-  semester: Semester;
-  subDepartment: string | undefined;
-  teachTrainingCourse: boolean;
-};
+import { z } from 'zod/v4';
 
-export const StudentGrade = [1, 2, 3, 4, 5] as const;
-export type StudentGrade = (typeof StudentGrade)[number];
+export const StudentGradeValues = [1, 2, 3, 4, 5] as const;
+export const StudentGrade = z.literal(StudentGradeValues);
+export type StudentGrade = z.infer<typeof StudentGrade>;
 
-export const semesters = [1, 2] as const;
-export type Semester = (typeof semesters)[number];
+export const semesterValues = [1, 2] as const;
+export const semesters = z.literal(semesterValues);
+export type Semester = z.infer<typeof semesters>;
 
-export const schoolIds = [26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15] as const;
+export const schoolIdValues = [26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15] as const;
+export const schoolIds = z.literal(schoolIdValues);
+export type SchoolId = z.infer<typeof schoolIds>;
 
-export const departments = [
+export const departmentValues = [
   '차세대반도체학과',
   'AI융합학부',
   '글로벌미디어학부',
@@ -74,3 +71,15 @@ export const departments = [
   '정보통계보험수리학과',
   '화학과',
 ] as const;
+export const departments = z.literal(departmentValues);
+export type Department = z.infer<typeof departments>;
+
+export const StudentSchema = z.object({
+  department: z.string(),
+  grade: StudentGrade,
+  schoolId: z.number(),
+  semester: semesters,
+  subDepartment: z.string().optional(),
+  teachTrainingCourse: z.boolean(),
+});
+export type StudentType = z.infer<typeof StudentSchema>;

@@ -1,5 +1,5 @@
-import { CourseTimeType } from '@/schemas/courseSchema';
-import { TimetableCourseType } from '@/schemas/timetableSchema';
+import { CourseTimeType } from '@/types/course';
+import { TimetableCourseType } from '@/types/timetable';
 import { TimetableTagType } from '@/types/timetable';
 import { Merge } from '@/utils/type';
 
