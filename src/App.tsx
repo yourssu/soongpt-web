@@ -13,7 +13,7 @@ const App = () => {
   }, []);
 
   return (
-    <main className="font-pretendard">
+    <main className="font-paperlogy">
       <div className="relative mx-auto min-h-dvh w-full max-w-[500px]" data-app-container>
         <Stack />
       </div>

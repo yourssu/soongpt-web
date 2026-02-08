@@ -4,7 +4,7 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --font-pretendard: 'Pretendard Variable', sans-serif;
+  --font-paperlogy: 'Paperlogy', sans-serif;
 
   /* Brand Semantics */
   --color-brandPrimary: #6b5cff;
