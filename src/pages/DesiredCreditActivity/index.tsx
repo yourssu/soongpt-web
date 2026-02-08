@@ -1,12 +1,10 @@
 import * as Popover from '@radix-ui/react-popover';
 import { useFlow } from '@stackflow/react/future';
-import { useMutation } from '@tanstack/react-query';
 import { range } from 'es-toolkit';
 import { Check, ChevronDown } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { useState } from 'react';
 
-import { postTimetable } from '@/api/timetables';
 import { Mixpanel } from '@/bootstrap/mixpanel';
 import { ActivityLayout } from '@/components/ActivityLayout';
 import { ProgressAppBar } from '@/components/AppBar/ProgressAppBar';
@@ -23,7 +21,7 @@ const MAX_CREDIT = 22 + 3; // 최대 학점 22 + 이월학점 3
 export const DesiredCreditActivity = () => {
   const params = useSafeActivityParams('desired_credit');
 
-  const { grade, schoolId, department, isChapel } = useAssertedStudentInfoContext();
+  const { grade, schoolId, isChapel } = useAssertedStudentInfoContext();
 
   const chapelPoints = isChapel ? 0.5 : 0;
   const totalPoints = params.selectedTotalPoints + chapelPoints;
@@ -32,14 +30,6 @@ export const DesiredCreditActivity = () => {
   const [showGeneralElectiveDropdown, setShowGeneralElectiveDropdown] = useState(false);
   const [preferredGeneralElectives, setPreferredGeneralElectives] = useState<string[]>([]);
 
-  const { mutate: mutateTimetable } = useMutation({
-    mutationKey: ['timetables'],
-    mutationFn: postTimetable,
-    onSuccess: () => {
-      Mixpanel.incrementUserCount();
-      Mixpanel.trackTimetableGenerateComplete();
-    },
-  });
   const openDialog = useAlertDialog();
 
   const availableGeneralElective = range(MAX_CREDIT - totalPoints + 1);
@@ -84,11 +74,7 @@ export const DesiredCreditActivity = () => {
       fieldSelect: preferredGeneralElectives.length > 0,
     });
 
-    mutateTimetable({
-      schoolId,
-      department,
-      grade,
-      isChapel,
+    push('timetable_selection', {
       codes: params.codes,
       generalRequiredCodes: params.generalRequiredCodes,
       majorElectiveCodes: params.majorElectiveCodes,
@@ -96,8 +82,6 @@ export const DesiredCreditActivity = () => {
       generalElectivePoint: generalElective,
       preferredGeneralElectives,
     });
-
-    push('timetable_selection', {});
   };
 
   return (
