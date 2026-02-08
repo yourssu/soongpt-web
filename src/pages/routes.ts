@@ -34,6 +34,16 @@ export const routes: Record<ActivityName, ActivityComponentType<any>> = {
       default: module.TimetableSuggestActivity,
     })),
   ),
+  timetable_delete: lazy(() =>
+    import('@/pages/TimetableDeleteActivity').then((module) => ({
+      default: module.TimetableDeleteActivity,
+    })),
+  ),
+  timetable_guide: lazy(() =>
+    import('@/pages/TimetableGuideActivity').then((module) => ({
+      default: module.TimetableGuideActivity,
+    })),
+  ),
   draft_timetable: lazy(() =>
     import('@/pages/DraftTimetableActivity').then((module) => ({
       default: module.DraftTimetableActivity,

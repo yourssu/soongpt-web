@@ -3,9 +3,10 @@ import { useMutation } from '@tanstack/react-query';
 import { Suspense, useState } from 'react';
 import { SwitchCase } from 'react-simplikit';
 
-import { postTimetable } from '@/api/timetables';
+import { postTimetableRecommendation } from '@/api/timetables';
 import { Mixpanel } from '@/bootstrap/mixpanel';
 import { ActivityLayout } from '@/components/ActivityLayout';
+import { useSelectedTimetableContext } from '@/components/Providers/SelectedTimetableProvider/hook';
 import { useAssertedStudentInfoContext } from '@/components/Providers/StudentInfoProvider/hook';
 import { useCoursesTotalPoint } from '@/hooks/course/useCoursesTotalPoint';
 import { useFilteredCoursesByCategory } from '@/hooks/course/useFilteredCoursesByCategory';
@@ -23,6 +24,9 @@ import { TeachingCertificateSelectionStep } from '@/pages/CourseSelectionActivit
 import SoongptErrorBoundary from '@/pages/CourseSelectionActivity/components/SoongptErrorBoundary';
 import { SelectedCoursesContext } from '@/pages/CourseSelectionActivity/context';
 import { SelectedCourseType } from '@/pages/CourseSelectionActivity/type';
+import { TimetableType } from '@/schemas/timetableSchema';
+import { buildPartialSelectionFromCourses } from '@/utils/timetablePartialSelection';
+import { toTimetableCourse } from '@/utils/timetableSelection';
 
 export const CourseSelectionActivity = () => {
   const { type } = useSafeActivityParams('course_selection');
@@ -36,12 +40,91 @@ export const CourseSelectionActivity = () => {
 
   const filteredCoursesByCategory = useFilteredCoursesByCategory(selectedCourses);
   const totalPoints = useCoursesTotalPoint(selectedCourses);
-  const { mutate: mutateTimetable } = useMutation({
-    mutationKey: ['timetables'],
-    mutationFn: postTimetable,
+  const {
+    setPartialSelection,
+    setRecommendationStatus,
+    setRecommendedPrimaryTimetable,
+    setRecommendedAlternatives,
+    setDeletableConflictCourses,
+    setSelectedTimetable,
+    setSelectedGeneralElectives,
+    setSelectedChapelCourse,
+    setAvailableChapels,
+    setAvailableGeneralElectives,
+    setFinalizedTimetable,
+  } = useSelectedTimetableContext();
+  const { mutateAsync: mutateTimetableRecommendation } = useMutation({
+    mutationKey: ['timetables', 'final-recommendation'],
+    mutationFn: postTimetableRecommendation,
   });
 
   // Todo: 전필은 로딩시 무조건 선택되어야 함
+
+  const handleCreateTimetable = async () => {
+    const partialSelection = buildPartialSelectionFromCourses(
+      {
+        department,
+        grade,
+        schoolId,
+        semester,
+        subDepartment,
+        teachTrainingCourse,
+      },
+      selectedCourses,
+    );
+
+    const previewTimetable: TimetableType = {
+      timetableId: 0,
+      tag: '기본 태그',
+      score: null,
+      totalPoint: totalPoints,
+      courses: selectedCourses.map((course) => toTimetableCourse(course)),
+    };
+
+    setPartialSelection(partialSelection);
+    setRecommendationStatus(null);
+    setRecommendedPrimaryTimetable(null);
+    setRecommendedAlternatives([]);
+    setDeletableConflictCourses([]);
+    setSelectedGeneralElectives([]);
+    setSelectedChapelCourse(null);
+    setAvailableGeneralElectives([]);
+    setAvailableChapels([]);
+    setFinalizedTimetable(null);
+    setSelectedTimetable(previewTimetable);
+
+    let response;
+    try {
+      response = await mutateTimetableRecommendation(partialSelection);
+    } catch {
+      push('error', { message: '시간표 추천을 불러오지 못했어요.' });
+      return;
+    }
+
+    const { status, successResponse, singleConflictCourses } = response.result;
+
+    setRecommendationStatus(status);
+
+    if (status === 'SUCCESS' && successResponse) {
+      setRecommendedPrimaryTimetable(successResponse.primaryTimetable);
+      setRecommendedAlternatives(successResponse.alternativeSuggestions);
+      setSelectedTimetable(successResponse.primaryTimetable);
+      setDeletableConflictCourses([]);
+      push('timetable_suggest', {});
+      Mixpanel.trackCourseSelectionFinishClick(selectedCourses.map((course) => course.name));
+      return;
+    }
+
+    if (status === 'SINGLE_CONFLICT') {
+      setDeletableConflictCourses(singleConflictCourses ?? []);
+      push('timetable_delete', {});
+      Mixpanel.trackCourseSelectionFinishClick(selectedCourses.map((course) => course.name));
+      return;
+    }
+
+    push('timetable_guide', {});
+    Mixpanel.trackCourseSelectionFinishClick(selectedCourses.map((course) => course.name));
+  };
 
   return (
     <SelectedCoursesContext.Provider
@@ -149,36 +232,7 @@ export const CourseSelectionActivity = () => {
                 ),
                 // Todo: 검색뷰 및 액티비티 푸시
                 COURSE_SELECTION_RESULT: () => (
-                  <CourseSelectionResultStep
-                    onNextClick={() => {
-                      mutateTimetable({
-                        schoolId,
-                        department,
-                        grade,
-                        subDepartment,
-                        teachTrainingCourse,
-                        semester,
-                        codes: selectedCourses
-                          .filter((course) => !!course.selectedBySearch)
-                          .map((course) => course.code),
-                        generalRequiredCodes: filteredCoursesByCategory.GENERAL_REQUIRED.map(
-                          ({ code }) => code,
-                        ),
-                        majorElectiveCodes: filteredCoursesByCategory.MAJOR_ELECTIVE.map(
-                          ({ code }) => code,
-                        ),
-                        majorRequiredCodes: filteredCoursesByCategory.MAJOR_REQUIRED.map(
-                          ({ code }) => code,
-                        ),
-                        generalElectivePoint: 0,
-                        preferredGeneralElectives: [],
-                      });
-                      push('timetable_suggest', {});
-                      Mixpanel.trackCourseSelectionFinishClick(
-                        selectedCourses.map((course) => course.name),
-                      );
-                    }}
-                  />
+                  <CourseSelectionResultStep onNextClick={handleCreateTimetable} />
                 ),
               }}
               value={type}

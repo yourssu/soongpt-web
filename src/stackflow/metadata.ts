@@ -48,6 +48,14 @@ export const activityDescription = {
     }),
     url: '/timetable-suggest',
   },
+  timetable_delete: {
+    schema: z.object({}),
+    url: '/timetable-delete',
+  },
+  timetable_guide: {
+    schema: z.object({}),
+    url: '/timetable-guide',
+  },
   draft_timetable: {
     schema: z.object({}),
     url: '/draft-timetable',

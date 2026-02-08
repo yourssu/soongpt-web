@@ -1,72 +1,104 @@
 import { useFlow } from '@stackflow/react/future';
+import { useMutation } from '@tanstack/react-query';
 import { Suspense, useMemo, useState } from 'react';
 
+import { postFinalizeTimetable } from '@/api/timetables';
 import { ActivityLayout } from '@/components/ActivityLayout';
 import { ProgressAppBar } from '@/components/AppBar/ProgressAppBar';
 import { BottomSheet, BottomSheetState } from '@/components/BottomSheet';
 import { useSelectedTimetableContext } from '@/components/Providers/SelectedTimetableProvider/hook';
 import { Timetable } from '@/components/Timetable';
-import { useSafeActivityParams } from '@/hooks/stackflow/useSafeActivityParams';
-import { useLatestTimetableMutationState } from '@/hooks/timetable/useLatestTimetableMutationState';
 import { ChapelCourseList } from '@/pages/ChapelSelectionActivity/components/ChapelCourseList';
 import { ChapelCourseListFallback } from '@/pages/ChapelSelectionActivity/components/ChapelCourseListFallback';
 import { FLOW_PROGRESS } from '@/stackflow/progress';
 import { cn } from '@/utils/dom';
+import { hasCourseConflictWithAny } from '@/utils/timetableConflict';
+import { buildPartialSelectionFromTimetable } from '@/utils/timetablePartialSelection';
 import { mergeTimetableCourses, toTimetableCourse } from '@/utils/timetableSelection';
 
 export const ChapelSelectionActivity = () => {
-  const { push } = useFlow();
-  const { timetableId } = useSafeActivityParams('chapel_selection');
+  const { push, replace } = useFlow();
   const {
+    partialSelection,
     selectedTimetable,
     selectedGeneralElectives,
     selectedChapelCourse,
     setSelectedChapelCourse,
+    availableChapels,
+    previewTimetable,
+    setPartialSelection,
+    setFinalizedTimetable,
   } = useSelectedTimetableContext();
-
-  const latestMutation = useLatestTimetableMutationState();
-
-  const baseTimetable = useMemo(() => {
-    const timetables = latestMutation?.data?.result?.timetables ?? [];
-    if (selectedTimetable) {
-      return selectedTimetable;
-    }
-
-    if (timetables.length === 0) {
-      return undefined;
-    }
-
-    if (!timetableId) {
-      return timetables[0];
-    }
-
-    return timetables.find((timetable) => timetable.timetableId === timetableId) ?? timetables[0];
-  }, [latestMutation?.data?.result?.timetables, selectedTimetable, timetableId]);
 
   const [sheetState, setSheetState] = useState<BottomSheetState>('peek');
 
-  const previewTimetable = useMemo(
-    () =>
-      baseTimetable
-        ? mergeTimetableCourses(baseTimetable, selectedGeneralElectives, selectedChapelCourse)
-        : undefined,
-    [baseTimetable, selectedChapelCourse, selectedGeneralElectives],
-  );
+  const { mutateAsync: mutateFinalizeTimetable, isPending } = useMutation({
+    mutationKey: ['timetables', 'finalize'],
+    mutationFn: postFinalizeTimetable,
+  });
+
+  const selectableChapels = useMemo(() => {
+    return availableChapels.filter((course) => {
+      if (selectedChapelCourse && selectedChapelCourse.code === course.code) {
+        return true;
+      }
+
+      const candidate = toTimetableCourse(course);
+      const occupiedCourses = [...(selectedTimetable?.courses ?? []), ...selectedGeneralElectives];
+      return !hasCourseConflictWithAny(candidate, occupiedCourses);
+    });
+  }, [
+    availableChapels,
+    selectedChapelCourse,
+    selectedGeneralElectives,
+    selectedTimetable?.courses,
+  ]);
+
+  if (!selectedTimetable || !partialSelection) {
+    replace('landing', {}, { animate: false });
+    return null;
+  }
+
+  const renderedPreviewTimetable =
+    previewTimetable ??
+    mergeTimetableCourses(selectedTimetable, selectedGeneralElectives, selectedChapelCourse);
 
   const isExpanded = sheetState === 'open';
 
-  const handleCTA = () => {
+  const handleCTA = async () => {
     if (!isExpanded) {
       setSheetState('open');
       return;
     }
 
+    const nextPartialSelection = buildPartialSelectionFromTimetable(
+      partialSelection,
+      renderedPreviewTimetable,
+      {
+        selectedGeneralElectiveCodes: selectedGeneralElectives.map((course) => course.code),
+        selectedChapelCode: selectedChapelCourse?.code,
+      },
+    );
+
+    setPartialSelection(nextPartialSelection);
+
+    try {
+      await mutateFinalizeTimetable({
+        partialSelection: nextPartialSelection,
+        timetable: renderedPreviewTimetable,
+      });
+    } catch {
+      push('error', { message: '최종 시간표 저장에 실패했어요.' });
+      return;
+    }
+
+    setFinalizedTimetable(renderedPreviewTimetable);
     push('timetable_result', {
-      timetableId: selectedTimetable?.timetableId ?? baseTimetable?.timetableId ?? 0,
+      timetableId: renderedPreviewTimetable.timetableId,
     });
   };
 
-  const ctaDisabled = !baseTimetable;
+  const ctaDisabled = !selectedTimetable || isPending;
   const ctaLabel = isExpanded ? '시간표 완성하기' : '채플 담으러 가기';
 
   return (
@@ -97,11 +129,7 @@ export const ChapelSelectionActivity = () => {
             </div>
 
             <div className="w-full">
-              {previewTimetable ? (
-                <Timetable isSelected={false} timetable={previewTimetable} />
-              ) : (
-                <Timetable.Skeleton />
-              )}
+              <Timetable isSelected={false} timetable={renderedPreviewTimetable} />
             </div>
           </div>
 
@@ -116,8 +144,13 @@ export const ChapelSelectionActivity = () => {
             <BottomSheet.Body>
               <Suspense fallback={<ChapelCourseListFallback />}>
                 <ChapelCourseList
+                  courses={selectableChapels}
                   isExpanded={isExpanded}
-                  onSelect={(course) => setSelectedChapelCourse(toTimetableCourse(course))}
+                  onSelect={(course) => {
+                    setSelectedChapelCourse((prev) =>
+                      prev && prev.code === course.code ? null : toTimetableCourse(course),
+                    );
+                  }}
                   selectedCode={selectedChapelCourse?.code}
                 />
               </Suspense>

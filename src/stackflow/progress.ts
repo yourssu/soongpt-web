@@ -3,6 +3,8 @@ import { CourseSelectionStepType } from '@/types/course';
 export const FLOW_PROGRESS = {
   onboarding: 0,
   timetable_suggest: 71,
+  timetable_delete: 71,
+  timetable_guide: 71,
   draft_timetable: 79,
   general_elective_selection: 86,
   chapel_selection: 93,

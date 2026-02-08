@@ -29,6 +29,13 @@ import {
   MOCK_TEACHING_CERTIFICATE_PROGRESS,
 } from '@/mocks/api/creditProgressData';
 import { getMockSyncStatusFromQuery, getNextMockSyncStatus } from '@/mocks/api/sso';
+import {
+  MOCK_FINAL_RECOMMENDATION_FAILURE,
+  MOCK_FINAL_RECOMMENDATION_SINGLE_CONFLICT,
+  MOCK_FINAL_RECOMMENDATION_SUCCESS,
+  MOCK_TIMETABLE_AVAILABLE_COURSES,
+  MOCK_TIMETABLE_FINALIZE_RESPONSE,
+} from '@/mocks/api/timetableRecommendation';
 import { MOCK_TIMETABLE_SUGGEST } from '@/mocks/api/timetableSuggest';
 import {
   MOCK_DRAFT_TIMETABLES_RESPONSE,
@@ -158,6 +165,29 @@ export const handlers = [
     return HttpResponse.json(getNextMockSyncStatus());
   }),
   http.get(`${BASE_URL}/timetables/suggest`, () => HttpResponse.json(MOCK_TIMETABLE_SUGGEST)),
+  http.post(`${BASE_URL}/timetables/final-recommendation`, ({ request }) => {
+    const url = new URL(request.url);
+    const mockStatus = url.searchParams.get('mockStatus');
+
+    if (mockStatus === 'SINGLE_CONFLICT') {
+      return HttpResponse.json(MOCK_FINAL_RECOMMENDATION_SINGLE_CONFLICT);
+    }
+    if (mockStatus === 'FAILURE') {
+      return HttpResponse.json(MOCK_FINAL_RECOMMENDATION_FAILURE);
+    }
+
+    if (mockStatus === 'SUCCESS') {
+      return HttpResponse.json(MOCK_FINAL_RECOMMENDATION_SUCCESS);
+    }
+
+    return HttpResponse.json(MOCK_FINAL_RECOMMENDATION_SUCCESS);
+  }),
+  http.post(`${BASE_URL}/timetables/available-courses`, () =>
+    HttpResponse.json(MOCK_TIMETABLE_AVAILABLE_COURSES),
+  ),
+  http.post(`${BASE_URL}/timetables/finalize`, () =>
+    HttpResponse.json(MOCK_TIMETABLE_FINALIZE_RESPONSE),
+  ),
   http.get(`${BASE_URL}/timetables/:id`, ({ params }) => {
     const timetableId = Number(params.id);
     if (Number.isNaN(timetableId)) {

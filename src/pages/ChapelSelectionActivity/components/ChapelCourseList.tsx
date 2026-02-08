@@ -1,17 +1,21 @@
 import { CourseList } from '@/components/CourseItem/CourseList';
-import { useSuspenseGetChapelCourses } from '@/pages/ChapelSelectionActivity/hooks/useSuspenseGetChapelCourses';
 import { CourseType } from '@/schemas/courseSchema';
 import { formatCourseTimeSummary, parseCourseScheduleRoom } from '@/utils/courseTime';
 import { cn } from '@/utils/dom';
 
 interface ChapelCourseListProps {
+  courses: CourseType[];
   isExpanded: boolean;
   onSelect: (course: CourseType) => void;
   selectedCode?: number;
 }
 
-export const ChapelCourseList = ({ isExpanded, onSelect, selectedCode }: ChapelCourseListProps) => {
-  const courses = useSuspenseGetChapelCourses();
+export const ChapelCourseList = ({
+  courses,
+  isExpanded,
+  onSelect,
+  selectedCode,
+}: ChapelCourseListProps) => {
   const visibleCourses = isExpanded ? courses : courses.slice(0, 2);
 
   return (

@@ -4,33 +4,18 @@ import { ActivityLayout } from '@/components/ActivityLayout';
 import { ProgressAppBar } from '@/components/AppBar/ProgressAppBar';
 import { useSelectedTimetableContext } from '@/components/Providers/SelectedTimetableProvider/hook';
 import { Timetable } from '@/components/Timetable';
-import { useSafeActivityParams } from '@/hooks/stackflow/useSafeActivityParams';
-import { useLatestTimetableMutationState } from '@/hooks/timetable/useLatestTimetableMutationState';
 import { FLOW_PROGRESS } from '@/stackflow/progress';
-import { mergeTimetableCourses } from '@/utils/timetableSelection';
 
 export const TimetableResultActivity = () => {
-  const { timetableId } = useSafeActivityParams('timetable_result');
   const { replace } = useFlow();
-  const { selectedTimetable, selectedGeneralElectives, selectedChapelCourse } =
-    useSelectedTimetableContext();
-  const latestMutation = useLatestTimetableMutationState();
+  const { finalizedTimetable, previewTimetable, selectedTimetable } = useSelectedTimetableContext();
 
-  const timetables = latestMutation?.data?.result.timetables ?? [];
-  const timetableFromMutation = timetables.find(
-    (timetable) => timetable.timetableId === timetableId,
-  );
-  const baseTimetable = selectedTimetable ?? timetableFromMutation;
+  const timetableToRender = finalizedTimetable ?? previewTimetable ?? selectedTimetable;
 
-  if (!baseTimetable) {
+  if (!timetableToRender) {
     replace('landing', {}, { animate: false });
     return undefined;
   }
-
-  const timetableToRender =
-    selectedGeneralElectives.length > 0 || selectedChapelCourse
-      ? mergeTimetableCourses(baseTimetable, selectedGeneralElectives, selectedChapelCourse)
-      : baseTimetable;
 
   return (
     <ActivityLayout>

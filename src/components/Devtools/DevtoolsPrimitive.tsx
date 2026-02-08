@@ -3,7 +3,14 @@ import { useMutation } from '@tanstack/react-query';
 import { Code } from 'lucide-react';
 import { useState } from 'react';
 
-import { postTimetable, TimetablePayloadType } from '@/api/timetables';
+import {
+  postAvailableCourses,
+  postFinalizeTimetable,
+  postTimetable,
+  postTimetableRecommendation,
+  TimetablePartialSelectionPayloadType,
+  TimetablePayloadType,
+} from '@/api/timetables';
 import { useSelectedTimetableContext } from '@/components/Providers/SelectedTimetableProvider/hook';
 import { useStudentInfoContext } from '@/components/Providers/StudentInfoProvider/hook';
 import { STAGE } from '@/config';
@@ -14,6 +21,7 @@ import {
   MOCK_TIMETABLE,
   MOCK_TIMETABLE_ID,
 } from '@/mocks/devtools/timetables';
+import { RecommendationStatusType } from '@/schemas/timetableRecommendationSchema';
 import { TimetableArrayResponseType } from '@/schemas/timetableSchema';
 import { assertNonNullish } from '@/utils/assertion';
 
@@ -54,10 +62,10 @@ const TimetableInjectionToolItem = ({ onMutateSuccess }: { onMutateSuccess: () =
         department: '법학과',
         grade: 2,
         isChapel: true,
-        majorRequiredCodes: ['2150545501'],
-        majorElectiveCodes: ['2150143401', '2150225101'],
-        generalRequiredCodes: ['2150102701'],
-        codes: ['2150145301'],
+        majorRequiredCodes: [2150545501],
+        majorElectiveCodes: [2150143401, 2150225101],
+        generalRequiredCodes: [2150102701],
+        codes: [2150145301],
         generalElectivePoint: 6,
         preferredGeneralElectives: ['문화·예술'],
       },
@@ -117,12 +125,22 @@ export const DevtoolsPrimitive = () => {
   const toast = useToast();
   const { push } = useFlow();
   const { studentInfo, setStudentInfo } = useStudentInfoContext();
-  const { setSelectedTimetable, setSelectedGeneralElectives, setSelectedChapelCourse } =
-    useSelectedTimetableContext();
-  const { mutateAsync: mutateTimetable } = useMutation({
-    mutationKey: ['timetables'],
-    mutationFn: postTimetable,
-  });
+  const {
+    setSelectedTimetable,
+    setSelectedGeneralElectives,
+    setSelectedChapelCourse,
+    setPartialSelection,
+    setRecommendationStatus,
+    setRecommendedPrimaryTimetable,
+    setRecommendedAlternatives,
+    setDeletableConflictCourses,
+    setAvailableGeneralElectives,
+    setAvailableChapels,
+    previewTimetable,
+    partialSelection,
+    setFinalizedTimetable,
+  } = useSelectedTimetableContext();
+
   const { mutateAsync: mutateDraftTimetable } = useMutation({
     mutationKey: ['timetables'],
     mutationFn: async (): Promise<TimetableArrayResponseType> => ({
@@ -133,7 +151,7 @@ export const DevtoolsPrimitive = () => {
     }),
   });
 
-  const chapelMockPayload: TimetablePayloadType = {
+  const buildDevPartialSelection = (): TimetablePartialSelectionPayloadType => ({
     schoolId: studentInfo.schoolId ?? 22,
     department: studentInfo.department ?? '법학과',
     grade: studentInfo.grade ?? 2,
@@ -146,6 +164,50 @@ export const DevtoolsPrimitive = () => {
     codes: [2150145301],
     generalElectivePoint: 6,
     preferredGeneralElectives: ['문화·예술'],
+    selectedGeneralElectiveCodes: [],
+    selectedChapelCode: undefined,
+  });
+
+  const applyRecommendationResult = async (
+    status: RecommendationStatusType,
+    closeAsTrue: () => void,
+  ) => {
+    const payload = buildDevPartialSelection();
+    setPartialSelection(payload);
+    setRecommendationStatus(null);
+    setRecommendedPrimaryTimetable(null);
+    setRecommendedAlternatives([]);
+    setDeletableConflictCourses([]);
+    setSelectedTimetable(MOCK_TIMETABLE);
+    setSelectedGeneralElectives([]);
+    setSelectedChapelCourse(null);
+    setFinalizedTimetable(null);
+
+    const response = await postTimetableRecommendation(payload, { mockStatus: status });
+    const result = response.result;
+
+    setRecommendationStatus(result.status);
+    if (result.status === 'SUCCESS' && result.successResponse) {
+      setRecommendedPrimaryTimetable(result.successResponse.primaryTimetable);
+      setRecommendedAlternatives(result.successResponse.alternativeSuggestions);
+      setSelectedTimetable(result.successResponse.primaryTimetable);
+      push('timetable_suggest', {});
+      toast.success('09 제안 화면으로 이동해요');
+      closeAsTrue();
+      return;
+    }
+
+    if (result.status === 'SINGLE_CONFLICT') {
+      setDeletableConflictCourses(result.singleConflictCourses ?? []);
+      push('timetable_delete', {});
+      toast.success('09 삭제 화면으로 이동해요');
+      closeAsTrue();
+      return;
+    }
+
+    push('timetable_guide', {});
+    toast.success('09 안내 화면으로 이동해요');
+    closeAsTrue();
   };
 
   const showDevtools = () => {
@@ -171,6 +233,7 @@ export const DevtoolsPrimitive = () => {
             />
             <TimetableInjectionToolItem
               onMutateSuccess={() => {
+                setFinalizedTimetable(MOCK_TIMETABLE);
                 push('timetable_result', {
                   timetableId: 0,
                 });
@@ -194,6 +257,7 @@ export const DevtoolsPrimitive = () => {
                 setSelectedTimetable(MOCK_TIMETABLE);
                 setSelectedGeneralElectives([]);
                 setSelectedChapelCourse(null);
+                setFinalizedTimetable(MOCK_TIMETABLE);
                 push('timetable_result', { timetableId: MOCK_TIMETABLE_ID });
                 toast.success('최종 결과 화면으로 이동해요');
                 closeAsTrue();
@@ -201,41 +265,54 @@ export const DevtoolsPrimitive = () => {
               title="최종 결과 화면 보기"
             />
             <ToolItem
-              description="목 데이터로 시간표 제안 화면을 열어요."
-              onClick={() => {
-                push('timetable_suggest', {});
-                toast.success('시간표 제안 화면으로 이동해요');
-                closeAsTrue();
-              }}
-              title="시간표 제안 화면 보기"
+              description="추천 성공 응답으로 09 제안 화면을 열어요."
+              onClick={() => applyRecommendationResult('SUCCESS', closeAsTrue)}
+              title="09 제안(SUCCESS) 테스트"
             />
             <ToolItem
-              description="목 데이터로 채플 선택 화면을 열어요."
+              description="단일 충돌 응답으로 09 삭제 화면을 열어요."
+              onClick={() => applyRecommendationResult('SINGLE_CONFLICT', closeAsTrue)}
+              title="09 삭제(SINGLE_CONFLICT) 테스트"
+            />
+            <ToolItem
+              description="실패 응답으로 09 안내 화면을 열어요."
+              onClick={() => applyRecommendationResult('FAILURE', closeAsTrue)}
+              title="09 안내(FAILURE) 테스트"
+            />
+            <ToolItem
+              description="교양/채플 후보를 가져와 교양 선택 화면으로 이동해요."
               onClick={async () => {
-                assertNonNullish(chapelMockPayload.schoolId);
-                assertNonNullish(chapelMockPayload.department);
-                assertNonNullish(chapelMockPayload.grade);
+                const nextPartialSelection = partialSelection ?? buildDevPartialSelection();
+                setPartialSelection(nextPartialSelection);
 
-                await mutateTimetable({
-                  semester: chapelMockPayload.semester,
-                  subDepartment: chapelMockPayload.subDepartment,
-                  teachTrainingCourse: chapelMockPayload.teachTrainingCourse,
-                  schoolId: chapelMockPayload.schoolId,
-                  department: chapelMockPayload.department,
-                  grade: chapelMockPayload.grade,
-                  codes: chapelMockPayload.codes,
-                  generalRequiredCodes: chapelMockPayload.generalRequiredCodes,
-                  majorElectiveCodes: chapelMockPayload.majorElectiveCodes,
-                  majorRequiredCodes: chapelMockPayload.majorRequiredCodes,
-                  generalElectivePoint: chapelMockPayload.generalElectivePoint,
-                  preferredGeneralElectives: chapelMockPayload.preferredGeneralElectives,
-                });
+                const availableCourses = await postAvailableCourses(nextPartialSelection);
+                setAvailableGeneralElectives(availableCourses.result.generalElectives);
+                setAvailableChapels(availableCourses.result.chapels);
+                setSelectedTimetable((prev) => prev ?? MOCK_TIMETABLE);
 
-                push('chapel_selection', {});
-                toast.success('채플 선택 화면으로 이동해요');
+                push('general_elective_selection', {});
+                toast.success('교양 선택 화면으로 이동해요');
                 closeAsTrue();
               }}
-              title="채플 선택 화면 보기"
+              title="교양/채플 후보 로딩 테스트"
+            />
+            <ToolItem
+              description="현재 partial 시간표를 finalize API로 저장하고 결과로 이동해요."
+              onClick={async () => {
+                const nextPartialSelection = partialSelection ?? buildDevPartialSelection();
+                const timetable = previewTimetable ?? MOCK_TIMETABLE;
+
+                await postFinalizeTimetable({
+                  partialSelection: nextPartialSelection,
+                  timetable,
+                });
+
+                setFinalizedTimetable(timetable);
+                push('timetable_result', { timetableId: timetable.timetableId });
+                toast.success('최종 저장 후 결과 화면으로 이동해요');
+                closeAsTrue();
+              }}
+              title="최종 저장 테스트"
             />
             <ToolItem
               description="목 데이터로 교양선택 화면(23학번 이상)을 열어요."

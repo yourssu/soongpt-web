@@ -9,16 +9,19 @@ import { CourseList } from '@/components/CourseItem/CourseList';
 import { useSelectedTimetableContext } from '@/components/Providers/SelectedTimetableProvider/hook';
 import { useAssertedStudentInfoContext } from '@/components/Providers/StudentInfoProvider/hook';
 import { Timetable } from '@/components/Timetable';
+import { useToast } from '@/hooks/useToast';
 import { GeneralElectiveProgressText } from '@/pages/GeneralElectiveSelectionActivity/components/GeneralElectiveProgressText';
-import { useSuspenseGetGeneralElectiveCourses } from '@/pages/GeneralElectiveSelectionActivity/hooks/useSuspenseGetGeneralElectiveCourses';
 import { useSuspenseGetGeneralElectiveProgress } from '@/pages/GeneralElectiveSelectionActivity/hooks/useSuspenseGetGeneralElectiveProgress';
 import { CourseType } from '@/schemas/courseSchema';
+import { TimetableCourseType } from '@/schemas/timetableSchema';
 import { FLOW_PROGRESS } from '@/stackflow/progress';
 import {
   GENERAL_ELECTIVE_FIELDS_AFTER_23,
   GENERAL_ELECTIVE_FIELDS_BEFORE_22,
 } from '@/types/general';
 import { isSameCourseCode } from '@/utils/course';
+import { hasCourseConflictWithAny } from '@/utils/timetableConflict';
+import { buildPartialSelectionFromTimetable } from '@/utils/timetablePartialSelection';
 import { mergeTimetableCourses, toTimetableCourse } from '@/utils/timetableSelection';
 
 const getCourseField = (course: CourseType) => course.field ?? '';
@@ -39,13 +42,21 @@ const getScheduleText = (scheduleRoom: string) => {
 };
 
 export const GeneralElectiveSelectionActivity = () => {
-  const { push } = useFlow();
+  const toast = useToast();
+  const { push, replace } = useFlow();
   const { schoolId } = useAssertedStudentInfoContext();
   const isAfter23 = schoolId >= 23;
-  const { selectedTimetable, selectedGeneralElectives, setSelectedGeneralElectives } =
-    useSelectedTimetableContext();
+  const {
+    selectedTimetable,
+    selectedGeneralElectives,
+    setSelectedGeneralElectives,
+    availableGeneralElectives,
+    partialSelection,
+    setPartialSelection,
+    previewTimetable,
+    setSelectedChapelCourse,
+  } = useSelectedTimetableContext();
 
-  const courses = useSuspenseGetGeneralElectiveCourses();
   const progress = useSuspenseGetGeneralElectiveProgress();
 
   const chipValues = isAfter23
@@ -56,19 +67,48 @@ export const GeneralElectiveSelectionActivity = () => {
   const [sheetState, setSheetState] = useState<BottomSheetState>('peek');
 
   const filteredCourses = useMemo(() => {
-    if (selectedFields.length === 0) {
-      return courses;
-    }
+    const fieldFiltered =
+      selectedFields.length === 0
+        ? availableGeneralElectives
+        : availableGeneralElectives.filter((course) =>
+            selectedFields.includes(getCourseField(course)),
+          );
 
-    return courses.filter((course) => selectedFields.includes(getCourseField(course)));
-  }, [courses, selectedFields]);
+    return fieldFiltered.filter((course) => {
+      const alreadySelected = selectedGeneralElectives.some((item) =>
+        isSameCourseCode(item.code, course.code),
+      );
+      if (alreadySelected) {
+        return true;
+      }
+
+      const target = toTimetableCourse(course);
+      const occupiedCourses: TimetableCourseType[] = [
+        ...(selectedTimetable?.courses ?? []),
+        ...selectedGeneralElectives,
+      ];
+
+      return !hasCourseConflictWithAny(target, occupiedCourses);
+    });
+  }, [
+    availableGeneralElectives,
+    selectedFields,
+    selectedGeneralElectives,
+    selectedTimetable?.courses,
+  ]);
+
+  if (!selectedTimetable || !partialSelection) {
+    replace('landing', {}, { animate: false });
+    return null;
+  }
 
   const handleChipClick = (value: string, selected: boolean) => {
     if (selected) {
       setSelectedFields((prev) => [...prev, value]);
-    } else {
-      setSelectedFields((prev) => prev.filter((item) => item !== value));
+      return;
     }
+
+    setSelectedFields((prev) => prev.filter((item) => item !== value));
   };
 
   const handleCourseSelect = (course: CourseType) => {
@@ -77,16 +117,21 @@ export const GeneralElectiveSelectionActivity = () => {
       if (exists) {
         return prev.filter((item) => !isSameCourseCode(item.code, course.code));
       }
-      return [...prev, toTimetableCourse(course)];
+
+      const candidate = toTimetableCourse(course);
+      const occupiedCourses = [...selectedTimetable.courses, ...prev];
+
+      if (hasCourseConflictWithAny(candidate, occupiedCourses)) {
+        toast.error('현재 시간표와 겹치는 교양선택 과목은 담을 수 없어요.');
+        return prev;
+      }
+
+      return [...prev, candidate];
     });
   };
 
-  const previewTimetableData = useMemo(() => {
-    if (!selectedTimetable) {
-      return null;
-    }
-    return mergeTimetableCourses(selectedTimetable, selectedGeneralElectives);
-  }, [selectedGeneralElectives, selectedTimetable]);
+  const previewTimetableData =
+    previewTimetable ?? mergeTimetableCourses(selectedTimetable, selectedGeneralElectives);
 
   const isSheetOpen = sheetState === 'open';
 
@@ -116,13 +161,7 @@ export const GeneralElectiveSelectionActivity = () => {
         <ActivityLayout.Body className="gap-6 pt-6 pb-[140px]">
           <div className="flex w-full justify-center">
             <div className="w-[303px]">
-              {previewTimetableData ? (
-                <Timetable
-                  tagPointOverride={21}
-                  tagTitleOverride="시간표 이름"
-                  timetable={previewTimetableData}
-                />
-              ) : null}
+              <Timetable tagTitleOverride="시간표 이름" timetable={previewTimetableData} />
             </div>
           </div>
         </ActivityLayout.Body>
@@ -163,6 +202,11 @@ export const GeneralElectiveSelectionActivity = () => {
 
           <CourseList
             courses={filteredCourses}
+            emptyState={
+              <div className="text-neutralSubtle flex w-full items-center justify-center py-8 text-sm">
+                선택 가능한 교양선택 과목이 없어요.
+              </div>
+            }
             isSelected={(course) =>
               selectedGeneralElectives.some((item) => isSameCourseCode(item.code, course.code))
             }
@@ -189,9 +233,22 @@ export const GeneralElectiveSelectionActivity = () => {
         <BottomSheet.Footer className="pt-4">
           <button
             className="bg-brandPrimary w-full rounded-2xl py-3.5 font-semibold text-white"
-            onClick={() =>
-              push('chapel_selection', { timetableId: selectedTimetable?.timetableId })
-            }
+            onClick={() => {
+              const nextPartialSelection = buildPartialSelectionFromTimetable(
+                partialSelection,
+                previewTimetableData,
+                {
+                  selectedGeneralElectiveCodes: selectedGeneralElectives.map(
+                    (course) => course.code,
+                  ),
+                  selectedChapelCode: undefined,
+                },
+              );
+
+              setPartialSelection(nextPartialSelection);
+              setSelectedChapelCourse(null);
+              push('chapel_selection', { timetableId: previewTimetableData.timetableId });
+            }}
             type="button"
           >
             채플 담으러 가기
