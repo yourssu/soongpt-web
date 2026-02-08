@@ -6,6 +6,6 @@ export const config = {
     apiUrl: 'https://api.soongpt.yourssu.com/api',
   },
   alpha: {
-    apiUrl: 'https://api.dev25-2.soongpt.yourssu.com/api',
+    apiUrl: 'https://api.dev.soongpt.yourssu.com/api',
   },
 }[STAGE];
