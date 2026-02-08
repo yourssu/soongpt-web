@@ -40,6 +40,7 @@
     "mixpanel-browser": "^2.60.0",
     "motion": "^12.23.12",
     "msw": "^2.12.8",
+    "nanoid": "^5.1.6",
     "overlay-kit": "^1.8.4",
     "posthog-js": "^1.342.1",
     "radix-ui": "^1.4.3",

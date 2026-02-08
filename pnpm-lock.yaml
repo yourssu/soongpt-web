@@ -86,6 +86,9 @@ importers:
       msw:
         specifier: ^2.12.8
         version: 2.12.8(@types/node@24.0.15)(typescript@5.8.3)
+      nanoid:
+        specifier: ^5.1.6
+        version: 5.1.6
       overlay-kit:
         specifier: ^1.8.4
         version: 1.8.4(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
@@ -3490,6 +3493,11 @@ packages:
   nanoid@3.3.8:
     resolution: {integrity: sha512-WNLf5Sd8oZxOm+TzppcYk8gVOgP+l58xNy58D0nbUnOxOWRWvlcCV4kUF7ltmI6PsrLl/BgKEyS4mqsGChFN0w==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
+    hasBin: true
+
+  nanoid@5.1.6:
+    resolution: {integrity: sha512-c7+7RQ+dMB5dPwwCp4ee1/iV/q2P6aK1mTZcfr1BTuVlyW9hJYiMPybJCcnBlQtuSmTIWNeazm/zqNoZSSElBg==}
+    engines: {node: ^18 || >=20}
     hasBin: true
 
   natural-compare@1.4.0:
@@ -7800,6 +7808,8 @@ snapshots:
   mute-stream@2.0.0: {}
 
   nanoid@3.3.8: {}
+
+  nanoid@5.1.6: {}
 
   natural-compare@1.4.0: {}
 

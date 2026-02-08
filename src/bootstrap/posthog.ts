@@ -1,3 +1,4 @@
+import { nanoid } from 'nanoid';
 import posthog, { type PostHogConfig } from 'posthog-js';
 
 import type { ActivityName } from '@/stackflow/metadata';
@@ -48,7 +49,10 @@ export const PostHog = {
   capture,
 
   setUser: (student: StudentType) => {
-    posthog.identify(`${student.department}-${student.schoolId}-${student.grade}학년`, student);
+    posthog.identify(
+      `${student.department}-${student.schoolId}-${student.grade}학년-${nanoid()}`,
+      student,
+    );
   },
 
   trackActivityViewed: (activity: ActivityName, properties: EventProperties = {}) => {
