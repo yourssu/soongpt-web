@@ -3,7 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 import { Suspense, useState } from 'react';
 import { SwitchCase } from 'react-simplikit';
 
-import { postTimetableRecommendation } from '@/api/timetables';
+import { postTimetableRecommendation } from '@/api/timetables/post-timetable-recommendation';
 import { Mixpanel } from '@/bootstrap/mixpanel';
 import { ActivityLayout } from '@/components/ActivityLayout';
 import { useSelectedTimetableContext } from '@/components/Providers/SelectedTimetableProvider/hook';

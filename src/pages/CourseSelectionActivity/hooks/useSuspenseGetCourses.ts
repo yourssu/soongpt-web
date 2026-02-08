@@ -1,15 +1,13 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 
-import {
-  getDoubleMajorCourses,
-  getGeneralRequiredCourses,
-  getMajorElectiveCourses,
-  getMajorPrerequisiteCourses,
-  getMajorRequiredCourses,
-  getMinorCourses,
-  getRetakeCourses,
-  getTeachingCertificateCourses,
-} from '@/api/courses';
+import { getDoubleMajorCourses } from '@/api/courses/get-double-major-courses';
+import { getGeneralRequiredCourses } from '@/api/courses/get-general-required-courses';
+import { getMajorElectiveCourses } from '@/api/courses/get-major-elective-courses';
+import { getMajorPrerequisiteCourses } from '@/api/courses/get-major-prerequisite-courses';
+import { getMajorRequiredCourses } from '@/api/courses/get-major-required-courses';
+import { getMinorCourses } from '@/api/courses/get-minor-courses';
+import { getRetakeCourses } from '@/api/courses/get-retake-courses';
+import { getTeachingCertificateCourses } from '@/api/courses/get-teaching-certificate-courses';
 import { useAssertedStudentInfoContext } from '@/components/Providers/StudentInfoProvider/hook';
 import { CourseSelectionStepType } from '@/types/course';
 

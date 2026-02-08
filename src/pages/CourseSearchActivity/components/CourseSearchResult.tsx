@@ -1,6 +1,6 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 
-import { getSearchedCourses } from '@/api/courses';
+import { getSearchedCourses } from '@/api/courses/get-searched-courses';
 import { Mixpanel } from '@/bootstrap/mixpanel';
 import { SelectableCourseItem } from '@/components/CourseItem/SelectableCourseItem';
 import { useCombinedCourses } from '@/hooks/course/useCombinedCourses';

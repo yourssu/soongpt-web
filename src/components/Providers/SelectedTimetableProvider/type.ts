@@ -1,6 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
 
-import { TimetablePartialSelectionPayloadType } from '@/api/timetables';
 import { CourseType } from '@/schemas/courseSchema';
 import {
   DeletableCourseDtoType,
@@ -8,6 +7,7 @@ import {
   RecommendationStatusType,
 } from '@/schemas/timetableRecommendationSchema';
 import { TimetableCourseType, TimetableType } from '@/schemas/timetableSchema';
+import { TimetablePartialSelectionPayloadType } from '@/types/timetablePayload';
 
 export type SelectedTimetableContextValue = {
   availableChapels: CourseType[];

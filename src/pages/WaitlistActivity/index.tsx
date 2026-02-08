@@ -4,7 +4,7 @@ import { CircleCheck } from 'lucide-react';
 import { useState } from 'react';
 import { tv } from 'tailwind-variants';
 
-import { postContact } from '@/api/contacts';
+import { postContact } from '@/api/contacts/post-contact';
 import { ActivityLayout } from '@/components/ActivityLayout';
 import { useToast } from '@/hooks/useToast';
 import { toPhoneNumber } from '@/utils/string';

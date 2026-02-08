@@ -1,6 +1,6 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 
-import { getGeneralElectiveCreditProgress } from '@/api/creditProgress';
+import { getGeneralElectiveCreditProgress } from '@/api/credit-progress/get-general-elective-credit-progress';
 import { useAssertedStudentInfoContext } from '@/components/Providers/StudentInfoProvider/hook';
 
 export const useSuspenseGetGeneralElectiveProgress = () => {

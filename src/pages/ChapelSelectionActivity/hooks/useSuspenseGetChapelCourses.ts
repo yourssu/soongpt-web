@@ -1,6 +1,6 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 
-import { getChapelCourses } from '@/api/courses';
+import { getChapelCourses } from '@/api/courses/get-chapel-courses';
 import { useAssertedStudentInfoContext } from '@/components/Providers/StudentInfoProvider/hook';
 
 export const useSuspenseGetChapelCourses = () => {

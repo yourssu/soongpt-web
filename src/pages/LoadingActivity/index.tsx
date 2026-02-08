@@ -2,7 +2,7 @@ import { useFlow } from '@stackflow/react/future';
 import { useQuery } from '@tanstack/react-query';
 import { useCallback, useEffect, useRef } from 'react';
 
-import { getSyncStatus } from '@/api/sso';
+import { getSyncStatus } from '@/api/sso/get-sync-status';
 import { ActivityLayout } from '@/components/ActivityLayout';
 import { useStudentInfoContext } from '@/components/Providers/StudentInfoProvider/hook';
 

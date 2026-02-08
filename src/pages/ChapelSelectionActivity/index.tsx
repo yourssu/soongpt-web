@@ -2,7 +2,7 @@ import { useFlow } from '@stackflow/react/future';
 import { useMutation } from '@tanstack/react-query';
 import { Suspense, useMemo, useState } from 'react';
 
-import { postFinalizeTimetable } from '@/api/timetables';
+import { postFinalizeTimetable } from '@/api/timetables/post-finalize-timetable';
 import { ActivityLayout } from '@/components/ActivityLayout';
 import { ActivityActionButton } from '@/components/ActivityLayout/ActivityActionButton';
 import { ActivityHeaderText } from '@/components/ActivityLayout/ActivityHeaderText';

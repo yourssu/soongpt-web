@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react';
 
-import { TimetablePartialSelectionPayloadType } from '@/api/timetables';
 import { SelectedTimetableContext } from '@/components/Providers/SelectedTimetableProvider/context';
 import { SelectedTimetableContextValue } from '@/components/Providers/SelectedTimetableProvider/type';
 import { CourseType } from '@/schemas/courseSchema';
@@ -10,6 +9,7 @@ import {
   RecommendationStatusType,
 } from '@/schemas/timetableRecommendationSchema';
 import { TimetableCourseType, TimetableType } from '@/schemas/timetableSchema';
+import { TimetablePartialSelectionPayloadType } from '@/types/timetablePayload';
 import { mergeTimetableCourses } from '@/utils/timetableSelection';
 
 export const SelectedTimetableProvider = ({ children }: React.PropsWithChildren<unknown>) => {

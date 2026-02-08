@@ -8,15 +8,13 @@ import type {
   TeachingCertificateCreditProgress,
 } from '@/types/creditProgress';
 
-import {
-  getDoubleMajorCreditProgress,
-  getGeneralRequiredCreditProgress,
-  getMajorElectiveCreditProgress,
-  getMajorPrerequisiteCreditProgress,
-  getMajorRequiredCreditProgress,
-  getMinorCreditProgress,
-  getTeachingCertificateCreditProgress,
-} from '@/api/creditProgress';
+import { getDoubleMajorCreditProgress } from '@/api/credit-progress/get-double-major-credit-progress';
+import { getGeneralRequiredCreditProgress } from '@/api/credit-progress/get-general-required-credit-progress';
+import { getMajorElectiveCreditProgress } from '@/api/credit-progress/get-major-elective-credit-progress';
+import { getMajorPrerequisiteCreditProgress } from '@/api/credit-progress/get-major-prerequisite-credit-progress';
+import { getMajorRequiredCreditProgress } from '@/api/credit-progress/get-major-required-credit-progress';
+import { getMinorCreditProgress } from '@/api/credit-progress/get-minor-credit-progress';
+import { getTeachingCertificateCreditProgress } from '@/api/credit-progress/get-teaching-certificate-credit-progress';
 import { useAssertedStudentInfoContext } from '@/components/Providers/StudentInfoProvider/hook';
 
 type CreditProgressTypeMap = {

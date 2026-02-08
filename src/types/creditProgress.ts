@@ -1,5 +1,3 @@
-import { StudentGrade } from '@/types/student';
-
 export type CreditInfo = {
   completedCredits: number;
   totalCredits: number;
@@ -52,9 +50,3 @@ export type GeneralElectiveCreditProgress =
       requiredCredits: number;
       scheme: '23+';
     };
-
-export type CreditProgressSearchParams = {
-  department: string;
-  grade: StudentGrade;
-  schoolId: number;
-};

@@ -2,7 +2,7 @@ import { useFlow } from '@stackflow/react/future';
 import { useMutation } from '@tanstack/react-query';
 import { useState } from 'react';
 
-import { postTimetableRecommendation } from '@/api/timetables';
+import { postTimetableRecommendation } from '@/api/timetables/post-timetable-recommendation';
 import { ActivityLayout } from '@/components/ActivityLayout';
 import { ActivityActionButton } from '@/components/ActivityLayout/ActivityActionButton';
 import { ActivityHeaderText } from '@/components/ActivityLayout/ActivityHeaderText';
